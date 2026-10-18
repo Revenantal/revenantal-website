@@ -1,0 +1,65 @@
+# Dependencies and package-manager caches
+node_modules/
+.pnpm-store/
+
+# Build output and tooling caches
+dist/
+coverage/
+.vite/
+.cache/
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+
+# Local environment files; keep shareable examples
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.template
+!.env.*.template
+
+# Logs and browser-test artifacts
+*.log
+playwright-report/
+test-results/
+blob-report/
+
+# Python asset-tool environments and caches
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Generated snapshots; content/servers.json stays tracked
+/live.json
+/servers.json
+/public/live.json
+/public/site.json
+
+# Broadcast media stays in the media bucket; keep captions and licensing docs
+/media/**/*.mp4
+/media/**/*.m4v
+/media/**/*.webm
+/media/**/*.mov
+/media/**/*.mkv
+/media/**/*.avi
+/media/**/*.m3u8
+/media/**/*.ts
+/media/**/*.m4s
+
+# Temporary HTML produced by the reference renderer
+/docs/reference/prototypes/**/*.tmp.html
+
+# Machine-local settings and OS/editor files
+.claude/settings.local.json
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# Local reference renders (approved mockups remain tracked)
+/docs/reference/prototypes/renders/

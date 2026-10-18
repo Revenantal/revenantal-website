@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TV Guide C · Magazine listings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;700&amp;family=Archivo+Black&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.mg-t{font-family:'Archivo Black',sans-serif;font-size:13px;color:#c8141e}
+.mg-p{display:grid;grid-template-columns:52px 1fr;gap:2px 8px;padding:6px 0;border-bottom:1px solid #c9bfa8;font-size:14px;line-height:1.2}
+.mg-p b{font-family:'Archivo Black',sans-serif;font-weight:400;font-size:15px;color:#1a1612}
+.mg-i{display:inline-block;padding:0 3px;margin-left:4px;border:1.5px solid #1a1612;font-size:10px;font-weight:700;vertical-align:2px}
+</style>
+</helmet>
+<div style="position: relative; width: 760px; height: 570px; overflow: hidden; background: #f2ead8; font-family: 'Archivo Narrow', sans-serif; color: #2a241c">
+  <!-- masthead -->
+  <div style="display: flex; align-items: stretch; height: 74px; border-bottom: 4px solid #1a1612">
+    <div style="padding: 0 18px; display: flex; align-items: center; background: #c8141e; color: #fff; font-family: 'Archivo Black', sans-serif; font-size: 38px; letter-spacing: -.01em">REV GUIDE</div>
+    <div style="flex: 1; padding: 10px 16px; display: flex; flex-direction: column; justify-content: center">
+      <div style="font-family: 'Archivo Black', sans-serif; font-size: 18px; color: #1a1612">SUNDAY EVENING</div>
+      <div style="font-size: 14px">Listings for October 18 · every project, every server</div>
+    </div>
+    <div style="padding: 10px 16px; display: flex; flex-direction: column; justify-content: center; text-align: right; border-left: 1px solid #c9bfa8; font-size: 13px">VOL. 1 · NO. 4<br><b>FREE</b></div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 230px; gap: 0 18px; padding: 12px 18px">
+    <!-- column 1 -->
+    <div>
+      <div class="mg-t">7:00 PM</div>
+      <div class="mg-p"><span style="font-weight: 700">PRJA</span><span><b>Project A</b><span class="mg-i">LIVE</span><br>A one-line description of what it does.</span></div>
+      <div class="mg-p"><span style="font-weight: 700">PRJB</span><span><b>Project B</b><span class="mg-i">NEW</span><br>Tool for friends, added this week.</span></div>
+      <div class="mg-t" style="margin-top: 8px">7:30 PM</div>
+      <div class="mg-p"><span style="font-weight: 700">PRJC</span><span><b>Project C</b><br>Sandbox. Short description here.</span></div>
+      <div class="mg-p"><span style="font-weight: 700">PRJD</span><span><b>Project D</b><span class="mg-i">CC</span><br>A one-line description.</span></div>
+    </div>
+    <!-- column 2 -->
+    <div>
+      <div class="mg-t">8:00 PM</div>
+      <div class="mg-p"><span style="font-weight: 700">PRJE</span><span><b>Project E</b><br>A one-line description.</span></div>
+      <div class="mg-p"><span style="font-weight: 700">SRV1</span><span><b>Server 1</b> <span style="color: #2b7a3a; font-weight: 700">● running</span><br>3 of 20 players · up 4 days</span></div>
+      <div class="mg-t" style="margin-top: 8px">LATE NIGHT</div>
+      <div class="mg-p"><span style="font-weight: 700">CH 08</span><span><b>The Late Show</b><br>Nosferatu (1922). Silent classic.</span></div>
+      <div class="mg-p"><span style="font-weight: 700">CH 09</span><span><b>Paid Programming</b><br>Operators are not standing by.</span></div>
+    </div>
+    <!-- pick of the week -->
+    <div>
+      <div style="border: 3px solid #1a1612; background: #fff8e6">
+        <div style="padding: 4px 8px; background: #1a1612; color: #f2ead8; font-family: 'Archivo Black', sans-serif; font-size: 13px; letter-spacing: .08em">PICK OF THE WEEK</div>
+        <div style="height: 120px; background-color: #c8141e; background-image: radial-gradient(#7a0c12 1.6px, transparent 1.8px); background-size: 6px 6px; display: flex; align-items: flex-end; padding: 8px; box-sizing: border-box">
+          <span style="font-family: 'Archivo Black', sans-serif; font-size: 22px; line-height: .95; color: #fff; text-shadow: 2px 2px 0 #1a1612">PROJECT B</span>
+        </div>
+        <div style="padding: 8px; font-size: 14px; line-height: 1.3">Brand new and already a fan favourite. <b>Tune in at b.revenantal.com.</b></div>
+      </div>
+      <div style="margin-top: 12px; padding: 8px; border-top: 3px solid #1a1612; font-size: 13px; line-height: 1.35">
+        <div class="mg-t" style="margin-bottom: 2px">ALSO ON TONIGHT</div>
+        Now playing: <b>Transport Fever 3</b><br>Latest push: <b>hvrc-website</b>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; left: 18px; right: 18px; bottom: 10px; display: flex; justify-content: space-between; font-size: 11px; color: #6a604e; border-top: 1px solid #c9bfa8; padding-top: 5px"><span>LIVE = online now · NEW = added this week · CC = has a readme</span><span>Page 4</span></div>
+</div>
+</x-dc>
+</body>
+</html>

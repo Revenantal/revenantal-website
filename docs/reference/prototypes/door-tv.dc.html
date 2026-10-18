@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Revenantal TV</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&amp;family=Bungee&amp;family=Orbitron:wght@700;900&amp;family=Fredoka:wght@500;700&amp;family=JetBrains+Mono:wght@400;700&amp;family=Bodoni+Moda:wght@700&amp;family=Archivo+Narrow:wght@600;700&amp;family=Archivo+Black&amp;family=Yellowtail&amp;family=Cinzel:wght@700&amp;family=Michroma&amp;family=Syncopate:wght@700&amp;family=Big+Shoulders+Display:wght@900&amp;family=Permanent+Marker&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050505}
+a{color:inherit;text-decoration:none}
+.zone{background:transparent;border:0;padding:0;cursor:pointer}
+.zone:focus-visible,.press:focus-visible{outline:3px solid #ff2a36;outline-offset:3px}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid #ff2a36;outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:12px;z-index:50;padding:12px 18px;background:#ece6e6;color:#0b0b0c;font-family:'JetBrains Mono',monospace;font-size:14px;border-radius:6px}
+.skip:focus{left:12px}
+@keyframes hint-in{0%{opacity:0;transform:translateY(-14px)}100%{opacity:1;transform:none}}
+@keyframes hint-fall{0%{transform:none}14%{transform:rotate(-9deg) translate(-3px,4px)}24%{transform:rotate(-4deg) translate(-6px,10px)}100%{transform:translate(-110px,980px) rotate(58deg)}}
+@keyframes tape-peel{0%{transform:rotate(3deg);opacity:1}30%{transform:rotate(-14deg) translate(4px,-6px);opacity:0.9}100%{transform:rotate(-30deg) translate(10px,-20px);opacity:0}}
+@keyframes hint-nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+@keyframes osd-blink{0%,49%{opacity:1}50%,100%{opacity:0.25}}
+.dim{filter:brightness(var(--dim)) saturate(.85)}
+.press .face,.press .lab{transition:transform .06s ease-out, filter .06s ease-out}
+.press .face{filter:brightness(var(--dim)) saturate(.85)}
+.press:hover .face{filter:brightness(calc(var(--dim) + .1)) saturate(.85)}
+.press:active .face{transform:translateY(4px) scale(.975);filter:brightness(calc(var(--dim) * .7)) saturate(.85)}
+.press:active .lab{transform:translateY(4px) scale(.975);opacity:.4}
+@keyframes tv-warm{0%{transform:scale(1,0.004);filter:brightness(6)}8%{transform:scale(1,0.004);filter:brightness(6)}16%{transform:scale(1,1.02);filter:brightness(1.4) blur(1px)}24%{transform:none;filter:brightness(0.22) blur(2.5px) saturate(0.4)}70%{filter:brightness(0.8) blur(0.8px) saturate(0.85)}100%{transform:none;filter:none}}
+@keyframes tv-warm2{0%{transform:scale(1,0.004);filter:brightness(6)}8%{transform:scale(1,0.004);filter:brightness(6)}16%{transform:scale(1,1.02);filter:brightness(1.4) blur(1px)}24%{transform:none;filter:brightness(0.22) blur(2.5px) saturate(0.4)}70%{filter:brightness(0.8) blur(0.8px) saturate(0.85)}100%{transform:none;filter:none}}
+@keyframes tv-degauss{0%{transform:none;filter:none}12%{transform:skewX(2.5deg) scale(1.015);filter:hue-rotate(70deg) saturate(2.4)}30%{transform:skewX(-2deg) scale(0.99);filter:hue-rotate(-50deg) saturate(2)}50%{transform:skewX(1.2deg);filter:hue-rotate(30deg) saturate(1.5)}72%{transform:skewX(-0.5deg);filter:hue-rotate(-12deg)}100%{transform:none;filter:none}}
+@keyframes tv-degauss2{0%{transform:none;filter:none}12%{transform:skewX(2.5deg) scale(1.015);filter:hue-rotate(70deg) saturate(2.4)}30%{transform:skewX(-2deg) scale(0.99);filter:hue-rotate(-50deg) saturate(2)}50%{transform:skewX(1.2deg);filter:hue-rotate(30deg) saturate(1.5)}72%{transform:skewX(-0.5deg);filter:hue-rotate(-12deg)}100%{transform:none;filter:none}}
+@keyframes room-flicker{0%,100%{filter:brightness(1)}23%{filter:brightness(0.93)}24%{filter:brightness(1.05)}61%{filter:brightness(0.97)}78%{filter:brightness(1.03)}}
+@keyframes tv-afterglow{0%,20%{opacity:0;transform:translate(-50%,-50%) scale(1)}24%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(0.35)}}
+@keyframes tv-boot{0%{transform:scale(1,0.004);filter:brightness(6)}40%{transform:scale(1,0.004);filter:brightness(6)}70%{transform:scale(1,1.03);filter:brightness(1.8)}100%{transform:none;filter:none}}
+@keyframes tv-boot2{0%{transform:scale(1,0.004);filter:brightness(6)}40%{transform:scale(1,0.004);filter:brightness(6)}70%{transform:scale(1,1.03);filter:brightness(1.8)}100%{transform:none;filter:none}}
+@keyframes tv-off{0%{transform:scale(1,1);opacity:1}45%{transform:scale(1,0.006);opacity:1}80%{transform:scale(0.02,0.006);opacity:1}100%{transform:scale(0,0);opacity:0}}
+@keyframes tv-on{0%{transform:scale(1,0.012);filter:brightness(4)}55%{transform:scale(1,1.04);filter:brightness(1.6)}100%{transform:none;filter:none}}
+@keyframes tv-roll{0%{top:-30%}100%{top:110%}}
+@keyframes tv-flicker{0%,100%{opacity:.07}50%{opacity:.11}}
+@keyframes tv-ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes tv-dash{0%{background-position:0 0}100%{background-position:0 80px}}
+@keyframes tv-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes tv-led{0%,100%{opacity:1}50%{opacity:.55}}
+</style>
+</helmet>
+<div tabIndex="0" onKeyDown="{{onKey}}" onPointerDown="{{wake}}" aria-label="Revenantal TV. Turn the channel dial, or use up and down arrows." style="position: relative; width: 100%; height: 100vh; min-height: 480px; overflow: hidden; outline: none; background: #050505; font-family: 'VT323', monospace">
+  <a class="skip" href="#" onClick="{{skipToList}}">Skip to the simple list</a>
+
+  <sc-if value="{{notSimple}}" hint-placeholder-val="{{ true }}">
+  <div style="{{stageStyle}}">
+
+    <svg aria-hidden="true" width="0" height="0" style="position: absolute">
+      <filter id="crtPhos" x="-2%" y="-2%" width="104%" height="104%" color-interpolation-filters="sRGB">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"></feColorMatrix>
+        <feOffset in="r" dx="-0.9" dy="0" result="r2"></feOffset>
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"></feColorMatrix>
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"></feColorMatrix>
+        <feOffset in="b" dx="0.9" dy="0" result="b2"></feOffset>
+        <feBlend in="r2" in2="g" mode="screen" result="rg"></feBlend>
+        <feBlend in="rg" in2="b2" mode="screen" result="rgb"></feBlend>
+        <feGaussianBlur in="rgb" stdDeviation="2.4" result="bl"></feGaussianBlur>
+        <feComponentTransfer in="bl" result="bl2"><feFuncR type="linear" slope="0.55"></feFuncR><feFuncG type="linear" slope="0.55"></feFuncG><feFuncB type="linear" slope="0.55"></feFuncB></feComponentTransfer>
+        <feBlend in="rgb" in2="bl2" mode="screen"></feBlend>
+      </filter>
+    </svg>
+    <div style="{{screenBox}}">
+      <div aria-hidden="true" style="position: absolute; inset: 0; z-index: 6; pointer-events: none">
+        <div style="position: absolute; inset: 0; opacity: 0.22; mix-blend-mode: screen; -webkit-mask-image: radial-gradient(ellipse 55% 50% at 28% 24%, #000 0, transparent 75%); mask-image: radial-gradient(ellipse 55% 50% at 28% 24%, #000 0, transparent 75%)">
+          <svg width="1092" height="816" style="display: block"><filter id="glassDust"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="1" seed="11"></feTurbulence><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  10 0 0 0 -8.2"></feColorMatrix></filter><rect width="1092" height="816" filter="url(#glassDust)"></rect></svg>
+        </div>
+        <div style="position: absolute; left: 22%; top: 30%; width: 150px; height: 110px; border-radius: 50%; transform: rotate(-24deg); background: radial-gradient(ellipse, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.025) 45%, transparent 70%); filter: blur(4px); mix-blend-mode: screen"></div>
+      </div>
+      <sc-if value="{{powerOff}}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; inset: 0; z-index: 5; background: radial-gradient(ellipse 70% 65% at 46% 44%, #262b27 0, #161a17 55%, #0c0e0c 100%)"><div style="position: absolute; inset: 0; background: #e8f0ff; animation: tv-off .55s ease-in forwards"></div><div style="position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle, #ffffff 0, rgba(220,235,255,0.8) 30%, transparent 70%); box-shadow: 0 0 30px 10px rgba(200,220,255,0.35); opacity: 0; animation: tv-afterglow 3.2s ease-out forwards"></div></div>
+      </sc-if>
+      <div style="{{screenInner}}">
+        <div style="{{bootStyle}}">
+        <div style="{{degaussStyle}}">
+        <div style="{{tuneStyle}}">
+<sc-if value="{{is0}}" hint-placeholder-val="{{ true }}">
+          <div style="width: 760px; height: 570px; background: #1a2a78; color: #ffffff; font-family: 'VT323', monospace; display: flex; flex-direction: column; animation: tv-on .38s ease-out">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 18px 28px 8px; background: #0f1a52">
+              <span style="font-size: 36px; color: #ffe14d">REVENANTAL CABLE</span>
+              <span style="font-size: 24px; color: #9fd8ff">TV GUIDE · {{clock}}</span>
+            </div>
+            <div style="margin: 10px 28px; padding: 8px 14px; background: #ffe14d; color: #1a2a78; font-size: 24px">NOW ON STEAM: {{nowPlaying}}</div>
+            <div style="display: flex; padding: 0 28px; font-size: 20px; color: #9fd8ff"><span style="width: 70px">CH</span><span style="width: 220px">PROGRAM</span><span style="flex: 1">TONIGHT</span></div>
+            <div style="flex: 1; padding: 4px 28px; display: flex; flex-direction: column; gap: 3px; overflow: hidden">
+              <sc-for list="{{guideRows}}" as="r" hint-placeholder-count="8">
+                <a href="{{r.url}}" target="_blank" rel="noopener" style="{{r.style}}"><span style="width: 70px; color: #ffe14d">{{r.num}}</span><span style="width: 220px">{{r.name}}</span><span style="flex: 1; color: #d8e4ff">{{r.desc}} <span style="color: #9fd8ff">· {{r.type}}</span></span></a>
+              </sc-for>
+            </div>
+            <div style="overflow: hidden; background: #0f1a52; border-top: 3px solid #ffe14d; font-size: 22px; color: #ffe14d">
+              <div style="display: flex; width: max-content; animation: tv-ticker 26s linear infinite"><span style="padding: 8px 0; white-space: nowrap">{{ticker}}</span><span style="padding: 8px 0; white-space: nowrap">{{ticker}}</span></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{is1}}" hint-placeholder-val="{{ false }}">
+          <div style="width: 760px; height: 570px; box-sizing: border-box; background: #031a0a; color: #33ff66; font-family: 'VT323', monospace; font-size: 24px; line-height: 1.2; text-shadow: 0 0 6px rgba(51,255,102,0.7); padding: 30px 40px; display: flex; flex-direction: column; animation: tv-on .38s ease-out">
+            <div style="white-space: pre">REVENANTAL OS v1.0 · 640K OK · type a command or click one</div>
+            <div style="white-space: pre; color: #1f9a40">────────────────────────────────────────────────────</div>
+            <div style="white-space: pre"><span style="color: #b6ffc8">guest@revenantal:~$</span> {{termCmd}}</div>
+            <sc-for list="{{termLines}}" as="l" hint-placeholder-count="8">
+              <div style="white-space: pre">
+                <sc-if value="{{l.isLink}}" hint-placeholder-val="{{ false }}"><a href="{{l.url}}" target="_blank" rel="noopener" style="text-decoration: underline">{{l.text}}</a></sc-if>
+                <sc-if value="{{l.noLink}}" hint-placeholder-val="{{ true }}"><span>{{l.text}}</span></sc-if>
+              </div>
+            </sc-for>
+            <label style="display: flex; align-items: center; gap: 10px"><span style="color: #b6ffc8; white-space: pre">guest@revenantal:~$</span><input type="text" aria-label="Type a command" autocomplete="off" spellcheck="false" placeholder="type a command…" onKeyDown="{{termKey}}" style="flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #33ff66; caret-color: #33ff66; font-family: 'VT323', monospace; font-size: 24px; text-shadow: 0 0 6px rgba(51,255,102,0.7); padding: 0"></label>
+            <div style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 10px">
+              <sc-for list="{{termCmds}}" as="c" hint-placeholder-count="6">
+                <button type="button" onClick="{{c.run}}" style="{{c.style}}">{{c.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{is2}}" hint-placeholder-val="{{ false }}">
+          <div style="position: relative; width: 760px; height: 570px; background: #008080; font-family: Tahoma, Verdana, sans-serif; font-size: 13px; color: #000000; animation: tv-on .38s ease-out">
+            <div style="position: absolute; left: 14px; top: 14px; display: grid; grid-template-columns: repeat(2, 84px); gap: 14px 6px">
+              <sc-for list="{{deskIcons}}" as="d" hint-placeholder-count="8">
+                <button type="button" onClick="{{d.open}}" style="display: flex; flex-direction: column; align-items: center; gap: 5px; background: none; border: 0; padding: 4px; cursor: pointer; color: #ffffff; font: inherit">
+                  <span style="{{d.iconStyle}}"></span>
+                  <span style="{{d.labelStyle}}">{{d.name}}</span>
+                </button>
+              </sc-for>
+            </div>
+            <sc-if value="{{deskOpen}}" hint-placeholder-val="{{ true }}">
+              <div style="position: absolute; left: 230px; top: 50px; width: 480px; background: #c0c0c0; border: 2px solid; border-color: #ffffff #404040 #404040 #ffffff; box-shadow: 1px 1px 0 #000">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 3px; padding: 3px 4px; background: #000080; color: #ffffff; font-weight: bold">
+                  <span>{{desk.name}} — {{desk.host}}</span>
+                  <button type="button" aria-label="Close window" onClick="{{deskClose}}" style="width: 20px; height: 18px; padding: 0; background: #c0c0c0; border: 2px solid; border-color: #ffffff #404040 #404040 #ffffff; font: inherit; font-size: 12px; cursor: pointer">×</button>
+                </div>
+                <div style="margin: 6px; background: #ffffff; border: 2px solid; border-color: #404040 #ffffff #ffffff #404040; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-height: 200px">
+                  <span style="font-size: 26px; font-weight: bold">{{desk.name}}</span>
+                  <span>{{desk.desc}}</span>
+                  <span style="color: #555555">Type: {{desk.type}} · Status: {{desk.status}}</span>
+                  <a href="{{desk.url}}" target="_blank" rel="noopener" style="align-self: flex-start; margin-top: 10px; padding: 6px 16px; background: #c0c0c0; border: 2px solid; border-color: #ffffff #404040 #404040 #ffffff">Open site...</a>
+                </div>
+              </div>
+            </sc-if>
+            <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 36px; background: #c0c0c0; border-top: 2px solid #ffffff; display: flex; align-items: center; gap: 6px; padding: 0 4px">
+              <span style="height: 26px; padding: 0 10px; display: flex; align-items: center; gap: 6px; font-weight: bold; border: 2px solid; border-color: #ffffff #404040 #404040 #ffffff"><span style="width: 14px; height: 14px; background: #d4202a"></span>Start</span>
+              <span style="margin-left: auto; height: 26px; padding: 0 10px; display: flex; align-items: center; border: 2px solid; border-color: #404040 #ffffff #ffffff #404040">{{clock}}</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{is3}}" hint-placeholder-val="{{ false }}">
+          <div style="position: relative; width: 760px; height: 570px; overflow: hidden; font-family: 'Orbitron', sans-serif; color: #ffffff; background: linear-gradient(#0a0624 0 20%, #1c0f45 20% 34%, #3d1468 34% 44%, #7a1e78 44% 51%, #e0458f 51% 55%, #0b0716 55% 100%); animation: tv-on .38s ease-out">
+            <div aria-hidden="true" style="position: absolute; left: 50%; top: 18%; width: 170px; height: 170px; margin-left: -85px; border-radius: 50%; background: repeating-linear-gradient(#ffd23f 0 14px, transparent 14px 20px); clip-path: inset(0 0 50% 0)"></div>
+            <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 55%; bottom: 0; background-image: linear-gradient(#ff3cac 1px, transparent 1px), linear-gradient(90deg, #ff3cac 1px, transparent 1px); background-size: 60px 30px; opacity: 0.35"></div>
+            <div aria-hidden="true" style="position: absolute; inset: 0; background: #14101c; clip-path: polygon(48% 55%, 52% 55%, 92% 100%, 8% 100%)"></div>
+            <div aria-hidden="true" style="position: absolute; inset: 0; background-image: repeating-linear-gradient(#ffe066 0 30px, transparent 30px 80px); clip-path: polygon(49.8% 55%, 50.2% 55%, 51.4% 100%, 48.6% 100%); animation: tv-dash .4s linear infinite"></div>
+            <div style="position: absolute; right: 70px; top: 120px; display: flex; flex-direction: column; align-items: center">
+              <div style="background: #0b6b3a; border: 3px solid #ffffff; border-radius: 8px; padding: 10px 16px; min-width: 230px; display: flex; flex-direction: column; gap: 3px; box-shadow: 0 0 30px rgba(11,107,58,0.6)">
+                <span style="align-self: flex-start; background: #ffd200; color: #0b6b3a; font-size: 11px; padding: 2px 6px">EXIT {{drive.num}}</span>
+                <span style="font-size: 26px; font-weight: 900">{{drive.name}}</span>
+                <span style="font-family: 'VT323', monospace; font-size: 18px">{{drive.host}}</span>
+              </div>
+              <div style="display: flex; gap: 150px"><span style="width: 8px; height: 90px; background: #3a3a44"></span><span style="width: 8px; height: 90px; background: #3a3a44"></span></div>
+            </div>
+            <div aria-hidden="true" style="position: absolute; left: 270px; top: 400px; width: 220px; height: 110px">
+              <div style="position: absolute; left: 40px; top: 0; width: 140px; height: 44px; background: #2b1050; clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%)"></div>
+              <div style="position: absolute; left: 0; top: 44px; width: 220px; height: 54px; background: #4a1a7a; clip-path: polygon(3% 0, 97% 0, 100% 100%, 0 100%)"></div>
+              <div style="position: absolute; left: 14px; top: 56px; width: 60px; height: 12px; background: #ff2a6d; box-shadow: 0 0 22px 6px rgba(255,42,109,0.7)"></div>
+              <div style="position: absolute; right: 14px; top: 56px; width: 60px; height: 12px; background: #ff2a6d; box-shadow: 0 0 22px 6px rgba(255,42,109,0.7)"></div>
+            </div>
+            <span style="position: absolute; left: 24px; top: 20px; font-weight: 900; font-size: 22px; color: #ff9de2; text-shadow: 0 0 12px #ff3cac">NIGHT DRIVE</span>
+            <span style="position: absolute; right: 24px; top: 24px; font-family: 'VT323', monospace; font-size: 22px; color: #ffd23f">♪ RVN-FM · {{driveSpeed}} km/h</span>
+            <div style="position: absolute; left: 0; right: 0; bottom: 18px; display: flex; justify-content: center; gap: 12px">
+              <button type="button" onClick="{{drivePrev}}" style="font-family: 'Orbitron', sans-serif; font-size: 12px; padding: 0 16px; min-height: 44px; background: rgba(10,6,36,0.8); color: #ff9de2; border: 2px solid #ff3cac; cursor: pointer">◀ PREV EXIT</button>
+              <a href="{{drive.url}}" target="_blank" rel="noopener" style="display: flex; align-items: center; font-size: 12px; padding: 0 18px; min-height: 44px; background: #ff3cac; color: #0a0624">TAKE EXIT ↗</a>
+              <button type="button" onClick="{{driveNext}}" style="font-family: 'Orbitron', sans-serif; font-size: 12px; padding: 0 16px; min-height: 44px; background: rgba(10,6,36,0.8); color: #ff9de2; border: 2px solid #ff3cac; cursor: pointer">NEXT EXIT ▶</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{is4}}" hint-placeholder-val="{{ false }}">
+          <div style="width: 760px; height: 570px; box-sizing: border-box; background: #0f1419; color: #e6edf3; font-family: 'JetBrains Mono', monospace; font-size: 14px; padding: 26px 30px; display: flex; flex-direction: column; gap: 16px; animation: tv-on .38s ease-out">
+            <div style="display: flex; justify-content: space-between; align-items: baseline">
+              <span style="font-weight: 700; font-size: 20px">status.revenantal.com</span>
+              <span><span style="color: #4ade80">● {{up}} up</span> <span style="color: #fbbf24">● {{slow}} slow</span> <span style="color: #f87171">● {{down}} down</span></span>
+            </div>
+            <div style="display: flex; gap: 18px; flex: 1; min-height: 0">
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+                <sc-for list="{{statusRows}}" as="s" hint-placeholder-count="8">
+                  <button type="button" onClick="{{s.pick}}" style="{{s.style}}"><span style="{{s.dot}}"></span><span style="flex: 1; text-align: left">{{s.name}}</span><span style="color: #8b949e">{{s.info}}</span></button>
+                </sc-for>
+              </div>
+              <div style="width: 260px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+                <span style="color: #8b949e; font-size: 12px">{{stat.type}}</span>
+                <span style="font-size: 22px; font-weight: 700">{{stat.name}}</span>
+                <span style="color: #c9d1d9">{{stat.desc}}</span>
+                <span style="color: #8b949e">{{stat.host}}</span>
+                <span>status: <span style="{{stat.color}}">{{stat.status}}</span></span>
+                <span>players: {{stat.players}}</span>
+                <a href="{{stat.url}}" target="_blank" rel="noopener" style="margin-top: auto; display: flex; align-items: center; justify-content: center; min-height: 40px; background: #238636; color: #ffffff; border-radius: 6px; font-weight: 700">Open ↗</a>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{is5}}" hint-placeholder-val="{{ false }}">
+          <div style="width: 760px; height: 570px; box-sizing: border-box; background-color: #9ed37a; background-image: radial-gradient(#8bc468 2px, transparent 2.5px); background-size: 22px 22px; font-family: 'Fredoka', sans-serif; color: #4a3424; padding: 20px 30px; display: flex; flex-direction: column; gap: 12px; animation: tv-on .38s ease-out">
+            <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-weight: 700; font-size: 30px; color: #ffffff; text-shadow: 2px 2px 0 #4a3424">the house</span><span style="font-size: 16px">pick a room to wander in</span></div>
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 10px solid #7a5638; border-radius: 6px; background: #7a5638">
+              <sc-for list="{{rooms}}" as="r" hint-placeholder-count="8">
+                <button type="button" onClick="{{r.pick}}" style="{{r.style}}"><span style="{{r.furn}}"></span><span style="font-weight: 700; font-size: 15px">{{r.name}}</span><span style="font-size: 12px">{{r.type}}</span></button>
+              </sc-for>
+            </div>
+            <div style="background: #fff8ec; border: 4px solid #4a3424; border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; gap: 16px">
+              <span style="flex: 1; font-size: 18px">You step into <b>{{room.name}}</b>. {{room.desc}}</span>
+              <a href="{{room.url}}" target="_blank" rel="noopener" style="padding: 10px 18px; background: #f2a65a; border: 3px solid #4a3424; border-radius: 10px; font-weight: 700">Go in →</a>
+            </div>
+          </div>
+        </sc-if>
+
+
+        <sc-if value="{{isNone}}" hint-placeholder-val="{{ false }}">
+          <div style="position: relative; width: 760px; height: 570px; background: #2a2a2a; animation: tv-on .38s ease-out">
+            <svg width="760" height="570" style="display: block; opacity: 0.85"><filter id="noSig"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="{{seed}}"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="760" height="570" filter="url(#noSig)"></rect></svg>
+            <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #000000; color: #ffffff; font-family: 'VT323', monospace; font-size: 40px; padding: 6px 22px">NO SIGNAL</div>
+          </div>
+        </sc-if>
+        </div>
+        </div>
+        </div>
+      </div>
+      <div style="position: absolute; left: 0; top: 0; width: 760px; height: 570px; transform: scale(1.437); transform-origin: 0 0; pointer-events: none">
+        <sc-if value="{{tuning}}" hint-placeholder-val="{{ false }}">
+          <div style="{{tuneSnow}}"><svg width="760" height="570" style="display: block"><filter id="tuneNoise"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="{{seed}}"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="760" height="570" filter="url(#tuneNoise)"></rect></svg></div>
+        </sc-if>
+        <sc-if value="{{switching}}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; inset: 0; background: #777777">
+            <svg width="760" height="570" style="display: block"><filter id="tvnoise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="{{seed}}"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="760" height="570" filter="url(#tvnoise)"></rect></svg>
+            <div style="position: absolute; left: 0; right: 0; height: 22%; background: rgba(255,255,255,0.18); animation: tv-roll .5s linear infinite"></div>
+          </div>
+        </sc-if>
+        <div style="{{scanStyle}}"></div>
+        <sc-if value="{{flickerOn}}" hint-placeholder-val="{{ true }}">
+          <div style="position: absolute; inset: 0; background: #ffffff; animation: tv-flicker .15s steps(2) infinite"></div>
+        </sc-if>
+        <div style="{{vignette}}"></div>
+
+        <sc-if value="{{creditsOpen}}" hint-placeholder-val="{{ false }}">
+          <div role="dialog" aria-label="Sound credits" style="position: absolute; left: 70px; top: 60px; right: 70px; pointer-events: auto; background: rgba(4,8,30,0.92); border: 3px solid #e8e2d4; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px; font-family: 'VT323', monospace; color: #e8e2d4; box-shadow: 6px 6px 0 rgba(0,0,0,0.5)">
+            <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 30px; color: #5fff7a">SOUND CREDITS</span><button type="button" onClick="{{toggleCredits}}" style="font-family: 'VT323', monospace; font-size: 22px; color: #e8e2d4; background: transparent; border: 1px solid #e8e2d4; padding: 0 10px; cursor: pointer">CLOSE</button></div>
+            <sc-for list="{{creditRows}}" as="c" hint-placeholder-count="8">
+              <a href="{{c.url}}" target="_blank" rel="noopener" style="display: flex; justify-content: space-between; gap: 12px; font-size: 19px; line-height: 1.15; border-bottom: 1px dashed rgba(232,226,212,0.25); padding: 3px 0"><span>{{c.title}} <span style="color: #9fb3ff">by {{c.author}}</span></span><span style="color: #ffe14d; white-space: nowrap">{{c.license}}</span></a>
+            </sc-for>
+            <div style="font-size: 17px; color: #9a9aa2">via freesound.org · edited (trimmed / normalised)</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{osdCh}}" hint-placeholder-val="{{ false }}">
+          <div aria-live="polite" style="position: absolute; right: 44px; top: 34px; text-align: right; color: #5fff7a; text-shadow: 0 0 8px rgba(95,255,122,0.8), 2px 2px 0 #000000">
+            <div style="{{chNumStyle}}">CH {{chLabel}}</div>
+            <div style="font-size: 24px">{{chName}}</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{osdVol}}" hint-placeholder-val="{{ false }}">
+          <div aria-live="polite" style="position: absolute; left: 0; right: 0; bottom: 50px; display: flex; flex-direction: column; align-items: center; gap: 6px; color: #5fff7a; text-shadow: 0 0 8px rgba(95,255,122,0.8), 2px 2px 0 #000000">
+            <div style="font-size: 30px; letter-spacing: 0.1em">{{volWord}}</div>
+            <div style="display: flex; gap: 4px"><sc-for list="{{volSegs}}" as="v" hint-placeholder-count="10"><span style="{{v.style}}"></span></sc-for></div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <img src="/_blob/d7e27efaeb684bf368aab798fdabe1c8" alt="" aria-hidden="true" class="dim" style="position: absolute; left: 0; top: 0; width: 1536px; height: 1024px; pointer-events: none">
+    <div aria-hidden="true" style="{{spill}}"></div>
+    <sc-if value="{{showHint}}" hint-placeholder-val="{{ false }}">
+      <div role="note" style="{{hintStyle}}">
+        <button type="button" onClick="{{dismissNote}}" aria-label="Tip: turn the dial to change channel. Click to dismiss." style="display: block; text-align: left; border: 0; cursor: pointer; transform: rotate(-7deg); background: #f3ecd8; color: #2a1e18; padding: 10px 14px 12px; box-shadow: 3px 5px 10px rgba(0,0,0,0.55); font-family: 'Permanent Marker', cursive; font-size: 19px; line-height: 1.1; width: 146px; position: relative">
+          <span style="{{tapeStyle}}"></span>
+          turn the dial <span style="display: inline-block; color: #c4161f; animation: hint-nudge 1s ease-in-out infinite">→</span>
+        </button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{brand_enamel}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<div style="position: absolute; left: 1290px; top: 58px; width: 200px; height: 50px; border-radius: 6px; background: linear-gradient(#ececf0, #8a8a90 48%, #d8d8dc 52%, #a2a2a8); padding: 3px; box-sizing: border-box; box-shadow: 0 2px 4px rgba(0,0,0,0.55)">
+  <div style="width: 100%; height: 100%; border-radius: 4px; background: radial-gradient(ellipse at 28% 18%, #e33a43 0, #a8141c 55%, #6e0b12 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -3px 5px rgba(0,0,0,0.35)">
+    <span style="font-family: 'Bodoni Moda', serif; font-weight: 700; font-size: 19px; line-height: 1; letter-spacing: 0.14em; color: #f6efe6; text-shadow: 0 1px 0 rgba(0,0,0,0.45)">REVENANTAL</span>
+    <span style="font-family: 'Archivo Narrow', sans-serif; font-size: 8px; line-height: 1; letter-spacing: 0.32em; color: rgba(246,239,230,0.8)">SOLID STATE</span>
+  </div>
+</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{brand_chrome}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<div style="position: absolute; left: 496px; top: 964px; width: 290px; height: 42px; border-radius: 4px; background: linear-gradient(#f4f4f6 0%, #b8b8be 40%, #5c5c64 52%, #d9d9de 70%, #8c8c94 100%); box-shadow: 0 3px 4px rgba(0,0,0,0.75), 0 0 0 1px rgba(0,0,0,0.6); padding: 3px; box-sizing: border-box;"><div style="width: 100%; height: 100%; border-radius: 2px; background-color: #121214; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px); box-shadow: inset 0 2px 3px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(255,255,255,0.12); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px"><span style="font-family: 'Michroma', sans-serif; font-size: 14px; line-height: 1; letter-spacing: 0.26em; padding-left: 0.26em; background: linear-gradient(#ffffff 0%, #e2e2e6 35%, #6a6a72 52%, #f2f2f4 66%, #a6a6ae 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,0.95)) drop-shadow(0 -1px 0 rgba(255,255,255,0.2));">REVENANTAL</span><span style="font-family: 'Archivo Narrow', sans-serif; font-weight: 600; font-size: 7px; line-height: 1; letter-spacing: 0.4em; padding-left: 0.4em; color: #b8b8be">SOLID STATE · MODEL RV-404</span></div></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{brand_chromeb}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<span style="position: absolute; left: 100px; width: 1082px; text-align: center; line-height: 1; font-family: 'Syncopate', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: 0.32em; top: 970px; background: linear-gradient(#ffffff 0%, #d4d4d8 30%, #5e5e66 50%, #f0f0f2 62%, #9a9aa2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,0.9)) drop-shadow(0 -1px 0 rgba(255,255,255,0.25));">REVENANTAL</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{brand_chromec}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<span style="position: absolute; left: 100px; width: 1082px; text-align: center; line-height: 1; font-family: 'Archivo Black', sans-serif; font-size: 34px; letter-spacing: 0.03em; top: 966px; transform: skewX(-12deg); background: linear-gradient(#ffffff 0%, #d4d4d8 30%, #5e5e66 50%, #f0f0f2 62%, #9a9aa2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,0.9)) drop-shadow(0 -1px 0 rgba(255,255,255,0.25));">REVENANTAL</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{brand_chromed}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<span style="position: absolute; left: 100px; width: 1082px; text-align: center; line-height: 1; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 40px; letter-spacing: 0.16em; top: 963px; background: linear-gradient(#ffffff 0%, #d4d4d8 30%, #5e5e66 50%, #f0f0f2 62%, #9a9aa2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgba(0,0,0,0.9)) drop-shadow(0 -1px 0 rgba(255,255,255,0.25));">REVENANTAL</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{brand_silkscreen}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<span style="position: absolute; left: 100px; width: 1082px; top: 913px; text-align: center; font-family: 'Archivo Narrow', sans-serif; font-weight: 700; font-size: 14px; line-height: 1; letter-spacing: 0.55em; color: rgba(232,228,218,0.82); filter: blur(0.25px)">REVENANTAL</span>
+<span style="position: absolute; left: 960px; top: 915px; font-family: 'Archivo Narrow', sans-serif; font-weight: 600; font-size: 9px; letter-spacing: 0.3em; color: rgba(232,228,218,0.6)">SOLID STATE COLOR</span>
+<span style="position: absolute; left: 230px; top: 915px; width: 10px; height: 10px; border-radius: 50%; background: #c4161f; box-shadow: 0 0 0 2px rgba(0,0,0,0.4)"></span>
+      </div>
+    </sc-if>
+    <sc-if value="{{brand_embossed}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<span style="position: absolute; left: 1278px; width: 220px; top: 62px; text-align: center; font-family: 'Archivo Narrow', sans-serif; font-weight: 700; font-size: 24px; line-height: 1; letter-spacing: 0.12em; color: rgba(70,64,58,0.82); text-shadow: 0 1px 0 rgba(255,255,255,0.6), 0 -1px 0 rgba(0,0,0,0.4)">REVENANTAL</span>
+<span style="position: absolute; left: 1294px; width: 188px; top: 92px; height: 2px; background: #a3121a; box-shadow: 0 1px 0 rgba(255,255,255,0.4)"></span>
+<span style="position: absolute; left: 1278px; width: 220px; top: 99px; text-align: center; font-family: 'Archivo Narrow', sans-serif; font-weight: 600; font-size: 9px; letter-spacing: 0.34em; color: rgba(70,64,58,0.7); text-shadow: 0 1px 0 rgba(255,255,255,0.5)">MODEL RV-404</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{brand_decal}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<div style="position: absolute; left: 1296px; top: 646px; width: 182px; mix-blend-mode: multiply; opacity: 0.92; display: flex; flex-direction: column; gap: 4px">
+  <span style="font-family: 'Archivo Black', sans-serif; font-size: 15px; line-height: 1; letter-spacing: 0.04em; color: #1a1212; transform: skewX(-12deg); transform-origin: left">REVENANTAL</span>
+  <span style="height: 4px; background: #d4202a"></span>
+  <span style="height: 4px; background: #7a0c12"></span>
+  <span style="height: 4px; background: #1a1212"></span>
+</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{brand_brass}}" hint-placeholder-val="{{ false }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; filter: brightness(var(--dim2))">
+<div style="position: absolute; left: 1288px; top: 903px; width: 128px; height: 28px; border-radius: 3px; background: linear-gradient(#f0d488, #b08a3e 48%, #d9b866 55%, #a07a30); border: 1px solid #5e4618; box-shadow: 0 2px 3px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: space-between; padding: 0 5px; box-sizing: border-box">
+  <span style="width: 5px; height: 5px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff2c2, #6b5220)"></span>
+  <span style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 11px; letter-spacing: 0.12em; color: #3d2c0e; text-shadow: 0 1px 0 rgba(255,240,200,0.6)">REVENANTAL</span>
+  <span style="width: 5px; height: 5px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff2c2, #6b5220)"></span>
+</div>
+      </div>
+    </sc-if>
+
+    <img src="/_blob/f1e6a1cea3f5fb5cc4ec471434f88d94" alt="" aria-hidden="true" class="dim" style="{{knobStyle}}">
+    <button class="zone" type="button" aria-label="Channel dial, now {{chLabel}}. Click for next, scroll to turn." onClick="{{dialClick}}" onWheel="{{dialWheel}}" onPointerDown="{{dialDown}}" onPointerMove="{{dialMove}}" onPointerUp="{{dialUp}}" onPointerCancel="{{dialUp}}" style="position: absolute; left: 1336px; top: 156px; width: 110px; height: 110px; border-radius: 50%; cursor: grab; touch-action: none"></button>
+
+    <div aria-hidden="true" style="{{volRidges}}"></div>
+    <div aria-hidden="true" class="dim" style="{{volPointer}}"><span style="position: absolute; left: 50%; top: 4px; width: 3px; height: 10px; margin-left: -1.5px; border-radius: 2px; background: #f2ece0; box-shadow: 0 0 2px rgba(0,0,0,0.7), 0 1px 0 rgba(0,0,0,0.5)"></span></div>
+    <button class="zone" type="button" aria-label="Volume {{vol}} of 10. Arrow keys adjust. Click left side to lower, right side to raise, or scroll." onClick="{{volClick}}" onKeyDown="{{volKey}}" onWheel="{{volWheel}}" onPointerDown="{{volDown}}" onPointerMove="{{volMove}}" onPointerUp="{{volUp}}" onPointerCancel="{{volUp}}" style="touch-action: none; position: absolute; left: 1345px; top: 323px; width: 94px; height: 94px; border-radius: 50%"></button>
+
+    <sc-for list="{{buttons}}" as="b" hint-placeholder-count="3">
+      <div style="{{b.wrap}}">
+        <img src="/_blob/67a4260225169f0f569e9576f1cd7608" alt="" aria-hidden="true" class="dim" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block">
+        <a class="press" href="{{b.href}}" target="{{b.target}}" rel="noopener" aria-label="{{b.aria}}" onClick="{{b.click}}" onPointerDown="{{down}}" onPointerUp="{{up}}" style="position: absolute; left: 10.56%; top: 15.87%; width: 80.28%; height: 68.25%; display: block; cursor: pointer">
+          <img class="face" src="{{b.face}}" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block">
+          <span class="lab" style="{{b.labStyle}}">{{b.label}}</span>
+        </a>
+      </div>
+    </sc-for>
+
+    <div style="position: absolute; left: 1290px; top: 626px; width: 192px; height: 59px; display: flex; justify-content: space-around; align-items: center">
+      <sc-for list="{{opts}}" as="o" hint-placeholder-count="4">
+        <button type="button" onClick="{{o.flip}}" aria-label="{{o.label}}: {{o.val}}" style="display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 0; background: none; border: 0; cursor: pointer">
+          <span style="position: relative; width: 14px; height: 28px; border-radius: 3px; background: #050403; box-shadow: inset 0 0 0 1px #2a2622"><span style="{{o.lever}}"></span></span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 7px; letter-spacing: 0.04em; color: #cfc6b4; opacity: 0.8">{{o.short}}</span>
+          <span style="{{o.lamp}}"></span>
+        </button>
+      </sc-for>
+      <button type="button" onClick="{{toggleCredits}}" aria-label="Sound credits" aria-expanded="{{creditsOpen}}" style="display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 0; background: none; border: 0; cursor: pointer">
+        <span style="width: 18px; height: 18px; margin: 5px 0; border-radius: 2px; background: linear-gradient(#efe7d4, #b9b09c); box-shadow: 0 1px 2px rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: #3a2e22">i</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.06em; color: #cfc6b4; opacity: 0.8">CRD</span>
+      </button>
+    </div>
+    <div style="position: absolute; left: 1284px; top: 618px; width: 204px; height: 73px; perspective: 520px; pointer-events: none">
+      <img src="/_blob/9efb2dfb28cfdb857d40ffcd66b1a95f" alt="" style="{{doorStyle}}">
+    </div>
+    <button class="zone" type="button" aria-label="Settings door" aria-expanded="{{doorOpen}}" onClick="{{toggleDoor}}" style="{{doorZone}}"></button>
+
+    <div aria-hidden="true" style="{{ledStyle}}"></div>
+    <button class="zone" type="button" aria-label="Power" aria-pressed="{{powerOn}}" onClick="{{togglePower}}" style="position: absolute; left: 1433px; top: 886px; width: 44px; height: 44px; border-radius: 50%"></button>
+    <div aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 90% at 40% 48%, transparent 50%, rgba(0,0,0,0.6) 100%)"></div>
+  </div>
+  </sc-if>
+
+  <div aria-hidden="{{listHidden}}" style="{{listStyle}}">
+    <div style="max-width: 640px; margin: 0 auto; padding: 48px 20px 64px; display: flex; flex-direction: column; gap: 36px">
+      <header style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h1 style="margin: 0; font-family: 'Michroma', sans-serif; font-weight: 400; font-size: 26px; letter-spacing: 0.24em; color: #f2efe8">REVENANTAL</h1>
+          <span style="font-family: 'Archivo Narrow', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.4em; color: #8a8a90">SOLID STATE · MODEL RV-404</span>
+        </div>
+        <sc-if value="{{canTurnOn}}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{turnOn}}" style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid #3a2a2c; background: #141011; color: #ece6e6; font-family: 'JetBrains Mono', monospace; font-size: 13px; cursor: pointer"><span style="width: 9px; height: 9px; border-radius: 50%; background: #ff2a36; box-shadow: 0 0 8px #ff2a36"></span>Turn on the TV</button>
+        </sc-if>
+      </header>
+
+      <section aria-label="Right now" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px">
+        <div style="padding: 16px; border-radius: 10px; background: #131314; border: 1px solid #232326; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 11px; letter-spacing: 0.2em; color: #8a8a90">ON STEAM</span>
+          <span style="font-size: 17px; font-weight: 700; color: #f2efe8">{{live.playing}}</span>
+          <span style="font-size: 13px; color: #a59a9a">{{live.steamLine}}</span>
+        </div>
+        <div style="padding: 16px; border-radius: 10px; background: #131314; border: 1px solid #232326; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 11px; letter-spacing: 0.2em; color: #8a8a90">LATEST PUSH</span>
+          <span style="font-size: 17px; font-weight: 700; color: #f2efe8">{{live.lastRepo}}</span>
+          <span style="font-size: 13px; color: #a59a9a">{{live.lastAgo}}</span>
+        </div>
+      </section>
+
+      <section aria-labelledby="lst-projects" style="display: flex; flex-direction: column; gap: 10px">
+        <h2 id="lst-projects" style="margin: 0; font-size: 11px; font-weight: 400; letter-spacing: 0.24em; color: #ff3b44">PROJECTS</h2>
+        <sc-for list="{{simpleRows}}" as="r" hint-placeholder-count="8">
+          <a href="{{r.url}}" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 10px; background: #131314; border: 1px solid #232326"><span style="{{r.dot}}"></span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="font-weight: 700; color: #f2efe8">{{r.name}}</span><span style="color: #a59a9a; font-size: 12px">{{r.desc}} · {{r.host}}</span></span><span style="color: #8a8a90; font-size: 12px; white-space: nowrap">{{r.type}}</span></a>
+        </sc-for>
+      </section>
+
+      <section aria-labelledby="lst-find" style="display: flex; flex-direction: column; gap: 10px">
+        <h2 id="lst-find" style="margin: 0; font-size: 11px; font-weight: 400; letter-spacing: 0.24em; color: #ff3b44">FIND ME</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <sc-for list="{{findButtons}}" as="b" hint-placeholder-count="3">
+            <a href="{{b.href}}" target="{{b.target}}" rel="noopener" onClick="{{b.click}}" aria-label="{{b.aria}}" style="flex: 1 1 140px; min-height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: #1c1c1f; border: 1px solid #2c2c30; font-family: 'Michroma', sans-serif; font-size: 12px; letter-spacing: 0.16em; color: #ece6e6">{{b.label}}</a>
+          </sc-for>
+        </div>
+      </section>
+
+      <section aria-labelledby="lst-pushes" style="display: flex; flex-direction: column; gap: 8px">
+        <h2 id="lst-pushes" style="margin: 0; font-size: 11px; font-weight: 400; letter-spacing: 0.24em; color: #ff3b44">RECENT PUSHES</h2>
+        <sc-for list="{{live.repos}}" as="g" hint-placeholder-count="5">
+          <a href="{{g.url}}" target="_blank" rel="noopener" style="display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid #1e1e21; font-size: 13px"><span style="color: #d6d0d0">{{g.name}}</span><span style="color: #8a8a90">{{g.ago}}</span></a>
+        </sc-for>
+      </section>
+
+      <footer style="display: flex; flex-direction: column; gap: 10px; font-size: 12px; color: #8a8a90">
+        <details>
+          <summary style="cursor: pointer; min-height: 32px">Sound credits</summary>
+          <div style="display: flex; flex-direction: column; gap: 4px; padding-top: 6px">
+            <sc-for list="{{creditRows}}" as="c" hint-placeholder-count="8">
+              <a href="{{c.url}}" target="_blank" rel="noopener" style="color: #a59a9a">{{c.title}} — {{c.author}} ({{c.license}})</a>
+            </sc-for>
+          </div>
+        </details>
+        <span>{{live.note}}</span>
+      </footer>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"brand":{"editor":"enum","options":["none","chrome","chromeb","chromec","chromed","enamel","silkscreen","embossed","decal","brass"],"default":"chrome"},"darkness":{"editor":"range","min":0.2,"max":1,"step":0.05,"default":0.42},"$preview":{"width":1536,"height":1024}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    // ─── THE ONE DATA SOURCE ───
+    this.DATA = {
+      nowPlaying: 'Transport Fever 3',
+      links: { steam: 'https://steamcommunity.com/id/revenantal', github: 'https://github.com/Revenantal', discord: 'revenantal' },
+      pushes: ['hvrc-website · today', 'website-php · 1d', 'expense-calendar · 1d', 'godot-turret-prototype · 87d', 'eve-hyte-map · 194d'],
+      projects: [
+        { name: 'Project A', type: 'site', host: 'a.revenantal.com', url: '#', desc: '[one line about it]', status: 'up' },
+        { name: 'Project B', type: 'tool', host: 'b.revenantal.com', url: '#', desc: '[one line about it]', status: 'up' },
+        { name: 'Server C', type: 'game server', host: 'c.revenantal.com:[port]', url: '#', desc: '[which game]', status: 'up', players: '4/16' },
+        { name: 'Project D', type: 'sandbox', host: 'd.revenantal.com', url: '#', desc: '[one line about it]', status: 'up' },
+        { name: 'Project E', type: 'tool', host: 'e.revenantal.com', url: '#', desc: '[one line about it]', status: 'slow' },
+        { name: 'Server F', type: 'game server', host: 'f.revenantal.com:[port]', url: '#', desc: '[which game]', status: 'down', players: '0/8' },
+        { name: 'Project G', type: 'site', host: 'g.revenantal.com', url: '#', desc: '[one line about it]', status: 'up' },
+        { name: 'Project H', type: 'sandbox', host: 'h.revenantal.com', url: '#', desc: '[one line about it]', status: 'up' }
+      ]
+    };
+    this.DATA.credits = [
+        {
+                "title": "CRT TV Switches On",
+                "author": "Fission9",
+                "url": "https://freesound.org/people/Fission9/sounds/693860/",
+                "license": "CC0",
+                "edits": "trimmed"
+        },
+        {
+                "title": "Channel Switch.wav",
+                "author": "LimitSnap_Creations",
+                "url": "https://freesound.org/people/LimitSnap_Creations/sounds/279004/",
+                "license": "CC0",
+                "edits": ""
+        },
+        {
+                "title": "vcr_switch.wav",
+                "author": "joedeshon",
+                "url": "https://freesound.org/people/joedeshon/sounds/364202/",
+                "license": "CC BY 4.0",
+                "edits": "split into press and release, normalised"
+        },
+        {
+                "title": "electrical_switch_02.wav",
+                "author": "joedeshon",
+                "url": "https://freesound.org/people/joedeshon/sounds/139062/",
+                "license": "CC BY 4.0",
+                "edits": "normalised"
+        },
+        {
+                "title": "click_01.wav",
+                "author": "joedeshon",
+                "url": "https://freesound.org/people/joedeshon/sounds/266018/",
+                "license": "CC BY 4.0",
+                "edits": "normalised"
+        },
+        {
+                "title": "rocker_switch.wav",
+                "author": "joedeshon",
+                "url": "https://freesound.org/people/joedeshon/sounds/119415/",
+                "license": "CC BY 4.0",
+                "edits": "normalised"
+        },
+        {
+                "title": "push_button_switch_04.wav",
+                "author": "joedeshon",
+                "url": "https://freesound.org/people/joedeshon/sounds/134712/",
+                "license": "CC BY 4.0",
+                "edits": "normalised"
+        },
+        {
+                "title": "Tapedeck open and closing",
+                "author": "stecman",
+                "url": "https://freesound.org/people/stecman/sounds/376059/",
+                "license": "CC0",
+                "edits": "two takes cut out"
+        }
+];
+    this.SND = {"btn_down": "/_blob/bbaa373a90d56e196bc2b23421e5efc3", "btn_up": "/_blob/5ba5880564b39061048c94e70a012d21", "crt_on": "/_blob/b14d4ce5b8b1008ecb935ad5e0f6d11b", "dial": "/_blob/29b5d0eeb2612a24ac9f1c322250ce95", "door_close": "/_blob/c143ad2f459bc15091531550b3dc70ec", "door_open": "/_blob/2e84e0bc940cb07b5b3520a063e9bca8", "power_btn": "/_blob/539a8f9fd1bfb2f19e31866f5a452b15", "static": "/_blob/0d06cf46d569c549819652a3ac3e8df0", "toggle": "/_blob/80a90b5d06dc28fb4223d4f2df44a89e", "vol": "/_blob/3e7327724ae54b936a3d38366318ac29"};
+    this.buf = {};
+    // ─── LIVE DATA ─── loaded once on page load and exposed to every channel as this.LIVE.
+    // Source/fetching is defined in the dev spec; the mockup loads a snapshot taken 2026-10-18.
+    this.LIVE_SNAPSHOT = {
+      fetchedAt: '2026-10-18T13:00:00-04:00',
+      steam: {
+        profile: 'https://steamcommunity.com/id/revenantal', status: 'online', level: 45,
+        gamesOwned: 1965, achievements: 10704, perfectGames: 57, hoursPast2Weeks: 23.8,
+        recent: [
+          { name: 'Transport Fever 3', hoursTotal: 40, lastPlayed: '2026-10-16' },
+          { name: 'Wallpaper Engine', hoursTotal: 23, lastPlayed: '2026-10-16' },
+          { name: 'One Million Coins', hoursTotal: 1.8, lastPlayed: '2026-10-16' }
+        ]
+      },
+      github: {
+        profile: 'https://github.com/Revenantal',
+        repos: [
+          { name: 'hvrc-website', pushedAt: '2026-10-18', lang: 'PHP' },
+          { name: 'website-php', pushedAt: '2026-10-17', lang: 'PHP' },
+          { name: 'expense-calendar', pushedAt: '2026-10-17', lang: 'TypeScript' },
+          { name: 'godot-turret-prototype', pushedAt: '2026-07-23', lang: 'GDScript' },
+          { name: 'atm10-sfm-scripts', pushedAt: '2026-05-27', lang: '' },
+          { name: 'eve-hyte-map', pushedAt: '2026-04-07', lang: 'JavaScript' }
+        ]
+      }
+    };
+    this.LIVE = null;
+    // Panel buttons: add/remove entries and the stack re-spaces itself. face: cream | grey | dark
+    this.BUTTONS = [
+      { label: 'STEAM', face: 'cream', href: 'https://steamcommunity.com/id/revenantal' },
+      { label: 'GITHUB', face: 'grey', href: 'https://github.com/Revenantal' },
+      { label: 'DISCORD', face: 'dark', action: 'copy', copied: 'COPIED!' },
+      // tune: jumps the dial to the named channel instead of linking out (TV only; hidden in List mode)
+      { label: 'SERVERS', face: 'cream', action: 'tune', channel: 'STATUS' }
+    ];
+    // Channels: content + whether the channel wants the title-safe inset and stronger edge falloff.
+    // Each channel: look + display profile. display can switch effects off or tone them down,
+    // but never re-enables something the viewer turned off in the settings door.
+    //   scan: 0..1 or false · flicker: bool · glow: 0..1 or false · transition: 'static' | 'cut'
+    this.CH = [
+      { name: 'TV GUIDE', bg: '#1a2a78', glow: 'rgba(60,90,220,0.5)', safe: true, display: { scan: 1, flicker: true, glow: 0.8 } },
+      { name: 'TERMINAL', bg: '#031a0a', glow: 'rgba(51,255,102,0.35)', safe: true, display: { scan: 1, flicker: true, glow: 0.7 } },
+      { name: 'DESKTOP', bg: '#008080', glow: 'rgba(0,170,170,0.5)', safe: true, display: { scan: 0.35, flicker: false, glow: 0.8 } },
+      { name: 'NIGHT DRIVE', bg: '#0b0716', glow: 'rgba(255,60,172,0.5)', safe: false, display: { scan: 0.8, flicker: true, glow: 1 } },
+      { name: 'STATUS', bg: '#0f1419', glow: 'rgba(90,200,140,0.3)', safe: true, display: { scan: false, flicker: false, glow: 0.4, transition: 'cut' } },
+      { name: 'THE HOUSE', bg: '#9ed37a', glow: 'rgba(170,220,130,0.5)', safe: false, display: { scan: false, flicker: false, glow: 0.7 } }
+    ];
+    // Reference slots map to existing demo panels; null slots demonstrate blank reception.
+    this.slots = [0, 1, null, 2, 3, null, 4, 5];
+    this.stepAngle = 360 / this.slots.length;
+    this.NOSIG = { name: 'NO SIGNAL', bg: '#2a2a2a', glow: 'rgba(200,200,200,0.25)', safe: false, display: { scan: 1, flicker: true, glow: 0.5 } };
+    this.disp = (c) => Object.assign({ scan: 1, flicker: true, glow: 1, transition: 'static' }, (c && c.display) || {});
+    this.state = { ch: 0, shown: 0, power: true, bootKey: 1, switching: false, seed: 1, osd: 'ch', vol: 5, termCmd: 'help', desk: 0, drive: 0, stat: 2, room: 0, copied: false, doorOpen: false, scan: true, flicker: true, fx: true, snd: true, glow: true };
+    this.timers = [];
+    this.lastWheel = 0;
+    this.turn = this.stepAngle;
+  }
+  channelAt(index) {
+    const panel = this.slots[index];
+    return panel == null ? this.NOSIG : this.CH[panel];
+  }
+  loadLive() {
+    // Production: replace with the real data call from the dev spec.
+    return Promise.resolve(this.LIVE_SNAPSHOT);
+  }
+  applyLive(L) {
+    const days = (d) => Math.max(0, Math.round((Date.now() - new Date(d + 'T12:00:00').getTime()) / 864e5));
+    const ago = (d) => { const n = days(d); return n === 0 ? 'today' : n + 'd'; };
+    this.LIVE = L;
+    this.DATA.nowPlaying = L.steam.recent[0] ? L.steam.recent[0].name : '—';
+    this.DATA.pushes = L.github.repos.slice(0, 5).map((r) => r.name + ' · ' + ago(r.pushedAt));
+    this.setState({ liveReady: true });
+  }
+  componentDidMount() {
+    this.loadLive().then((L) => this.applyLive(L)).catch(() => {});
+    let start = true;
+    try { if (localStorage.getItem('rv-tv') === 'off') start = false; } catch (e) {}
+    try { if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { start = false; this.reduced = true; } } catch (e) {}
+    if (!start) this.setState({ power: false });
+    // deep link (#ch3) or last channel
+    let ch0 = null;
+    try { const m = (window.location.hash || '').match(/^#ch([1-9]\d*)$/); if (m) ch0 = +m[1] - 1; } catch (e) {}
+    if (ch0 == null) { try { const v = localStorage.getItem('rv-ch'); if (v != null) ch0 = +v; } catch (e) {} }
+    if (ch0 != null && ch0 >= 0 && Number.isSafeInteger(ch0) && ch0 < this.slots.length) { this.turn = (ch0 + 1) * this.stepAngle; this.setState({ ch: ch0, shown: ch0 }); }
+    this.onHash = () => { try { const m = (window.location.hash || '').match(/^#ch([1-9]\d*)$/); if (m) { const position = Number(m[1]); if (Number.isSafeInteger(position) && position <= this.slots.length) this.setCh(position - 1); } } catch (e) {} };
+    window.addEventListener('hashchange', this.onHash);
+    // first-visit hint
+    let seen = false; try { seen = localStorage.getItem('rv-hint') === '1'; } catch (e) {}
+    if (!seen) this.hintT = setTimeout(() => { if (this.state.power) this.setState({ hint: true }); }, 1600);
+    // performance safety net: measure fps after boot, step effects down if slow
+    this.perfProbe(1200);
+    this.onResize = () => this.setState({ vw: window.innerWidth, vh: window.innerHeight });
+    window.addEventListener('resize', this.onResize); this.onResize();
+    this.flash('ch');
+    this.clockT = setInterval(() => this.forceUpdate(), 20000);
+    this.loadSounds();
+  }
+  componentWillUnmount() {
+    clearInterval(this.clockT); clearTimeout(this.hintT); clearTimeout(this.hintFallT); clearTimeout(this.perfT); cancelAnimationFrame(this.perfRaf);
+    window.removeEventListener('hashchange', this.onHash);
+    try { if (this.amb) { this.amb.out.disconnect(); this.amb = null; } } catch (e) {}
+    window.removeEventListener('resize', this.onResize);
+    this.timers.forEach((t) => { clearTimeout(t); clearInterval(t); });
+    clearTimeout(this.osdT); clearTimeout(this.copyT);
+  }
+  // ── sounds: layered thump + filtered noise click, all synthesized ──
+  hit(t, f0, f1, dur, gain, type) {
+    const C = this.ac; const o = C.createOscillator(); const g = C.createGain();
+    o.type = type || 'sine'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur * 0.8);
+    g.gain.setValueAtTime(gain, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(C.destination); o.start(t); o.stop(t + dur + 0.02);
+  }
+  click(t, len, freq, q, gain) {
+    const C = this.ac; const n = Math.floor(C.sampleRate * len);
+    const buf = C.createBuffer(1, n, C.sampleRate); const d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 4);
+    const s = C.createBufferSource(); s.buffer = buf;
+    const f = C.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q;
+    const g = C.createGain(); g.gain.value = gain;
+    s.connect(f); f.connect(g); g.connect(C.destination); s.start(t);
+  }
+  loadSounds() {
+    try {
+      this.ac = this.ac || new (window.AudioContext || window.webkitAudioContext)();
+      Object.entries(this.SND).forEach(([k, u]) => {
+        fetch(u).then((r) => r.arrayBuffer())
+          .then((b) => new Promise((res, rej) => this.ac.decodeAudioData(b, res, rej)))
+          .then((d) => { this.buf[k] = d; }).catch(() => {});
+      });
+    } catch (e) {}
+  }
+  startAmbient() {
+    if (this.amb) return;
+    try {
+      this.ac = this.ac || new (window.AudioContext || window.webkitAudioContext)();
+      if (this.ac.state === 'suspended') this.ac.resume();
+      const C = this.ac, out = C.createGain(); out.gain.value = 1; out.connect(C.destination);
+      const hum = C.createGain(); hum.gain.value = 0; hum.connect(out);
+      [[60, 1], [120, 0.6], [180, 0.35], [240, 0.2]].forEach(([f, g]) => { const o = C.createOscillator(); o.frequency.value = f; const og = C.createGain(); og.gain.value = g; o.connect(og); og.connect(hum); o.start(); });
+      const whine = C.createGain(); whine.gain.value = 0; whine.connect(out);
+      const w = C.createOscillator(); w.frequency.value = 15625; w.connect(whine); w.start();
+      const n = Math.floor(C.sampleRate * 2), buf = C.createBuffer(1, n, C.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      const src = C.createBufferSource(); src.buffer = buf; src.loop = true;
+      const bp = C.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 3000; bp.Q.value = 0.4;
+      const hiss = C.createGain(); hiss.gain.value = 0;
+      src.connect(bp); bp.connect(hiss); hiss.connect(out); src.start();
+      this.amb = { hum, whine, hiss, out };
+      this.updateAmbient();
+    } catch (e) {}
+  }
+  updateAmbient() {
+    const A = this.amb; if (!A || !this.ac) return;
+    const s = this.state, t = this.ac.currentTime;
+    const on = s.power && s.snd && s.vol > 0, v = s.vol / 10;
+    const off = s.dragAngle != null ? Math.abs(s.dragAngle - Math.round(s.dragAngle / this.stepAngle) * this.stepAngle) / (this.stepAngle / 2) : 0;
+    const noSig = this.channelAt(s.shown) === this.NOSIG;
+    A.hum.gain.setTargetAtTime(on ? 0.006 * v : 0, t, on ? 0.6 : 0.15);
+    A.whine.gain.setTargetAtTime(on ? 0.0018 * v : 0, t, on ? 0.9 : 0.12);
+    A.hiss.gain.setTargetAtTime(on ? ((noSig ? 0.035 : 0) + off * 0.06) * v : 0, t, 0.08);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    this.updateAmbient();
+    if (prevState && prevState.ch !== this.state.ch) {
+      try { localStorage.setItem('rv-ch', String(this.state.ch)); } catch (e) {}
+      try { history.replaceState(null, '', '#ch' + (this.state.ch + 1)); } catch (e) {}
+      if (this.state.hint) this.dismissHint();
+    }
+  }
+  dismissHint() {
+    this.setState({ hint: false, hintFall: true });
+    try { localStorage.setItem('rv-hint', '1'); } catch (e) {}
+    clearTimeout(this.hintFallT); this.hintFallT = setTimeout(() => this.setState({ hintFall: false }), 1500);
+  }
+  perfProbe(delay) {
+    this.perfT = setTimeout(() => {
+      let frames = 0; const t0 = performance.now();
+      const tick = (now) => {
+        frames++;
+        if (now - t0 < 1500) { this.perfRaf = requestAnimationFrame(tick); return; }
+        const fps = frames / ((now - t0) / 1000);
+        const lvl = this.state.perf || 0;
+        if (fps < 42 && lvl < 2) { this.setState({ perf: lvl + 1 }); this.perfProbe(800); }
+      };
+      this.perfRaf = requestAnimationFrame(tick);
+    }, delay);
+  }
+  play(key, mul) {
+    const b = this.buf[key]; if (!b || !this.ac) return false;
+    const v = (this.state.vol / 10) * 0.9 * mul;
+    const s = this.ac.createBufferSource(); s.buffer = b;
+    const g = this.ac.createGain(); g.gain.value = v;
+    s.connect(g); g.connect(this.ac.destination); s.start();
+    return true;
+  }
+  sfx(kind) {
+    this.startAmbient();
+    if (!this.state.snd || !this.state.vol) return;
+    try { this.ac = this.ac || new (window.AudioContext || window.webkitAudioContext)(); if (this.ac.state === 'suspended') this.ac.resume(); } catch (e) { return; }
+    const MAP = { down: ['btn_down', 1], up: ['btn_up', 0.8], dial: ['dial', 0.9], vol: ['vol', 0.55], toggle: ['toggle', 0.75], static: ['static', 0.7], door_open: ['door_open', 1], door_close: ['door_close', 1], power: ['power_btn', 1], crt: ['crt_on', 0.85] };
+    const m = MAP[kind];
+    if (m && this.play(m[0], m[1])) return;
+    const FB = { toggle: 'vol', door_open: 'door', door_close: 'door', power: 'down', crt: 'static' };
+    this.synth(FB[kind] || kind);
+  }
+  synth(kind) {
+    if (!this.state.snd || !this.state.vol) return;
+    const v = 0.05 + (this.state.vol / 10) * 0.22;
+    try {
+      this.ac = this.ac || new (window.AudioContext || window.webkitAudioContext)();
+      const t = this.ac.currentTime;
+      if (kind === 'down') { this.hit(t, 95, 38, 0.2, v * 2.6); this.hit(t, 220, 90, 0.06, v * 0.8, 'triangle'); this.click(t, 0.05, 700, 1.1, v * 3); }
+      if (kind === 'up') { this.click(t, 0.02, 2300, 2, v * 2); this.hit(t, 150, 80, 0.05, v * 0.9); }
+      if (kind === 'dial') { this.click(t, 0.025, 2600, 2.5, v * 2.4); this.click(t + 0.035, 0.03, 1900, 2, v * 2.6); this.hit(t + 0.035, 170, 60, 0.12, v * 1.8); }
+      if (kind === 'vol') { this.click(t, 0.012, 3600, 3, v * 1.6); }
+      if (kind === 'door') { this.hit(t, 70, 30, 0.28, v * 2.4); this.click(t, 0.09, 500, 0.8, v * 2); this.click(t + 0.18, 0.03, 1400, 2, v * 1.6); }
+      if (kind === 'static') {
+        const C = this.ac; const n = Math.floor(C.sampleRate * 0.5);
+        const buf = C.createBuffer(1, n, C.sampleRate); const d = buf.getChannelData(0);
+        for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+        const s = C.createBufferSource(); s.buffer = buf;
+        const f = C.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 700;
+        const g = C.createGain(); g.gain.value = v * 0.6;
+        s.connect(f); f.connect(g); g.connect(C.destination); s.start(t);
+      }
+    } catch (e) {}
+  }
+  flash(osd) {
+    clearTimeout(this.osdT);
+    this.setState({ osd });
+    this.osdT = setTimeout(() => this.setState({ osd: null }), 1700);
+  }
+  setCh(n) {
+    if (!Number.isSafeInteger(n)) return;
+    const count = this.slots.length;
+    n = ((n % count) + count) % count;
+    if (n === this.state.ch || !this.state.power) return;
+    let delta = ((n - this.state.ch) % count + count) % count; if (delta > count / 2) delta -= count;
+    this.turn += delta * this.stepAngle;
+    this.timers.forEach((t) => { clearTimeout(t); clearInterval(t); }); this.timers = [];
+    this.sfx('dial');
+    this.flash('ch');
+    const target = this.channelAt(n);
+    if (!this.state.fx || this.disp(target).transition === 'cut') { this.setState({ ch: n, shown: n, switching: false }); return; }
+    this.sfx('static');
+    this.setState({ switching: true, ch: n });
+    const noise = setInterval(() => this.setState({ seed: Math.floor(Math.random() * 999) }), 55);
+    this.timers.push(noise);
+    this.timers.push(setTimeout(() => {
+      clearInterval(noise);
+      this.setState({ switching: false, shown: n });
+      if (this.channelAt(n) === this.NOSIG) { const ns = setInterval(() => this.setState({ seed: Math.floor(Math.random() * 999) }), 70); this.timers.push(ns); }
+    }, 460));
+  }
+  setPower(on) {
+    this.timers.forEach((t) => { clearTimeout(t); clearInterval(t); }); this.timers = [];
+    this.setState({ power: on, switching: false, shown: this.state.ch, bootKey: this.state.bootKey + 1, osd: null, doorOpen: false, creditsOpen: false });
+    try { localStorage.setItem('rv-tv', on ? 'on' : 'off'); } catch (e) {}
+    this.sfx('power');
+    if (on) { this.sfx('crt'); this.timers.push(setTimeout(() => this.flash('ch'), 600)); }
+  }
+  setVol(v) { v = Math.max(0, Math.min(10, v)); this.setState({ vol: v }, () => this.sfx('vol')); this.flash('vol'); }
+  renderVals() {
+    const s = this.state, D = this.DATA, P = D.projects;
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+    const SC = { up: '#4ade80', slow: '#fbbf24', down: '#f87171' };
+
+    const guideRows = P.map((p, i) => ({
+      num: pad(i + 2), name: p.name, desc: p.desc, type: p.type, url: p.url,
+      style: 'display: flex; align-items: center; padding: 6px 10px; font-size: 22px; background: ' + (i % 2 ? '#22339a' : '#2a3fb0') + ';'
+    }));
+    const ticker = '   ★ FRESH PUSHES: ' + D.pushes.join('   ★   ') + '   ★ STEAM · GITHUB · DISCORD: ' + D.links.discord + '   ';
+
+    const T = {
+      help: [['commands:'], ['  ls        list projects'], ['  servers   game server status'], ['  links     where to find me'], ['  git log   recent pushes'], ['  playing   what is on steam'], ['  credits   sound credits']],
+      ls: P.map((p) => [(p.name + '            ').slice(0, 12) + (p.type + '            ').slice(0, 13) + p.host, p.url]),
+      servers: P.filter((p) => p.type === 'game server').map((p) => [(p.name + '          ').slice(0, 12) + (p.status.toUpperCase() + '      ').slice(0, 7) + (p.players || '') + '  ' + p.host, p.url]),
+      links: [['steam    /id/revenantal', D.links.steam], ['github   /Revenantal', D.links.github], ['discord  ' + D.links.discord]],
+      'git log': D.pushes.map((x) => ['* pushed ' + x]),
+      playing: this.LIVE ? [['steam · ' + this.LIVE.steam.status + ' · ' + this.LIVE.steam.hoursPast2Weeks + ' hrs past 2 weeks']].concat(this.LIVE.steam.recent.map((g) => ['  ' + g.name + ' — ' + g.hoursTotal + ' hrs'])) : [['loading…']],
+      credits: [['sound credits:']].concat(D.credits.map((c) => ['  ' + c.title + ' — ' + c.author + ' — ' + c.license, c.url]))
+    };
+    const termLines = (T[s.termCmd] || (s.termCmd ? [['command not found: ' + s.termCmd + "   (try 'help')"]] : [])).map(([text, url]) => ({ text, url: url || '#', isLink: !!url, noLink: !url }));
+    const termCmds = Object.keys(T).map((k) => ({
+      label: k, run: () => this.setState({ termCmd: k }),
+      style: 'font-family: \'VT323\', monospace; font-size: 20px; padding: 4px 12px; cursor: pointer; background: ' + (k === s.termCmd ? '#33ff66' : 'transparent') + '; color: ' + (k === s.termCmd ? '#031a0a' : '#33ff66') + '; border: 1px solid #33ff66;'
+    }));
+
+    const ICON = { site: '#ffffff', tool: '#ffd27a', 'game server': '#7cc4ff', sandbox: '#ffb3d1' };
+    const deskIcons = P.map((p, i) => ({
+      name: p.name, open: () => this.setState({ desk: i }),
+      iconStyle: 'width: 40px; height: 32px; background: ' + ICON[p.type] + '; border: 2px solid #000000; border-top-width: 7px;',
+      labelStyle: 'padding: 0 3px; ' + (s.desk === i ? 'background: #000080; outline: 1px dotted #ffffff;' : '')
+    }));
+    const desk = s.desk != null ? P[s.desk] : P[0];
+
+    const drive = { ...P[s.drive], num: s.drive + 7 };
+
+    const statusRows = P.map((p, i) => ({
+      name: p.name, info: p.players ? p.players + ' players' : (p.status === 'slow' ? '2.1s' : '200 OK'),
+      pick: () => this.setState({ stat: i }),
+      dot: 'width: 10px; height: 10px; border-radius: 50%; background: ' + SC[p.status] + '; box-shadow: 0 0 8px ' + SC[p.status] + ';',
+      style: 'display: flex; align-items: center; gap: 12px; padding: 9px 12px; font: inherit; color: #e6edf3; cursor: pointer; border-radius: 6px; border: 1px solid ' + (s.stat === i ? '#58a6ff' : '#30363d') + '; background: ' + (s.stat === i ? '#1c2a3a' : '#161b22') + ';'
+    }));
+    const sp = P[s.stat];
+    const stat = { ...sp, players: sp.players || '—', color: 'color: ' + SC[sp.status] };
+
+    const FLOOR = ['#f6d7b0', '#cfe8d5', '#f3c4c4', '#cddff5', '#efe3a8', '#e3d0f0', '#fbe0c8', '#d6ecc4'];
+    const FURN = {
+      site: 'width: 46px; height: 30px; border-radius: 50%; background: #e86a5b;',
+      tool: 'width: 56px; height: 22px; border-radius: 3px; background: #8a6040;',
+      'game server': 'width: 20px; height: 40px; background: #4a5a6a; box-shadow: 26px 0 0 #4a5a6a;',
+      sandbox: 'width: 44px; height: 34px; background: #f2d36b; border: 3px solid #b98a2e;'
+    };
+    const rooms = P.map((p, i) => ({
+      name: p.name, type: p.type, pick: () => this.setState({ room: i }),
+      furn: FURN[p.type],
+      style: 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 150px; padding: 8px; cursor: pointer; font-family: \'Fredoka\', sans-serif; color: #4a3424; border: 3px solid #7a5638; background: ' + FLOOR[i % FLOOR.length] + ';' + (s.room === i ? ' box-shadow: inset 0 0 0 4px #f2a65a; filter: brightness(1.05);' : '')
+    }));
+    const room = P[s.room];
+
+
+    const vw = s.vw || 1536, vh = s.vh || 1024;
+    const scale = Math.min(vw / 1536, vh / 1024);
+    const simple = vw < 900;
+    const ch = s.ch, sh = this.slots[s.shown], C = this.channelAt(s.shown), live = C !== this.NOSIG;
+    const DP = this.disp(C);
+    const scanAmt = s.scan ? (DP.scan === false ? 0 : DP.scan) : 0;
+    const perf = s.perf || 0;
+    const flickerOn = s.flicker && DP.flicker !== false && perf < 2;
+    const glowAmt = s.glow && s.power ? (DP.glow === false ? 0 : DP.glow) : 0;
+    const lumOf = (hex) => { const n = parseInt(hex.slice(1), 16); const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+    const light = s.switching ? 1.35 : Math.min(1.3, 0.55 + Math.sqrt(lumOf(C.bg)) * 1.3);
+    const overridden = { scan: s.scan && scanAmt < 1, flicker: s.flicker && !flickerOn, glow: s.glow && (DP.glow === false || DP.glow < 1), fx: s.fx && DP.transition === 'cut', snd: false };
+    const CC = this.channelAt(ch);
+    const now = new Date(); const clock = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).toUpperCase();
+    const ptrAngle = (e) => { const r = e.currentTarget.getBoundingClientRect(); const x = e.clientX - (r.left + r.width / 2), y = e.clientY - (r.top + r.height / 2); return Math.atan2(x, -y) * 180 / Math.PI; };
+    const dim = this.props.darkness ?? 0.42;
+    const wheelOk = () => { const now = Date.now(); if (now - this.lastWheel < 140) return false; this.lastWheel = now; return true; };
+    const brand = this.props.brand ?? 'chrome';
+    const OPTS = [['scan', 'SCANLINES', 'SCAN'], ['flicker', 'FLICKER', 'FLK'], ['fx', 'STATIC FX', 'FX'], ['snd', 'SOUND', 'SND'], ['glow', 'ROOM GLOW', 'GLOW']];
+    const DR = [1284, 618, 1488, 691];
+    const V = {
+      brand_enamel: brand === 'enamel', brand_chrome: brand === 'chrome', brand_chromeb: brand === 'chromeb', brand_chromec: brand === 'chromec', brand_chromed: brand === 'chromed', brand_silkscreen: brand === 'silkscreen', brand_embossed: brand === 'embossed', brand_decal: brand === 'decal', brand_brass: brand === 'brass',
+      simple, notSimple: !simple,
+      simpleRows: P.map((p) => ({ name: p.name, type: p.type, desc: p.desc, host: p.host, url: p.url, dot: 'width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: ' + SC[p.status] + ';' })),
+      stageStyle: '--dim: ' + dim + '; --dim2: ' + Math.min(1, dim + 0.15) + '; position: absolute; left: 50%; top: 50%; width: 1536px; height: 1024px; transform: translate(-50%, -50%) scale(' + (scale * (s.power ? 1 : 0.97)).toFixed(4) + '); ' + (s.power ? 'opacity: 1; transition: opacity .35s ease, transform .6s cubic-bezier(.2,.7,.3,1);' : 'opacity: 0; pointer-events: none; transition: opacity .7s ease .5s, transform .9s ease .5s;'),
+      listStyle: 'position: absolute; inset: 0; overflow-y: auto; background: #0b0b0c; color: #ece6e6; font-family: \'JetBrains Mono\', monospace; font-size: 14px; ' + ((!s.power || simple) ? 'opacity: 1; visibility: visible; transition: opacity .6s ease ' + (simple ? '0s' : '.9s') + ', visibility 0s;' : 'opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .25s ease, visibility 0s linear .25s;'),
+      wake: () => this.startAmbient(),
+      listHidden: !(!s.power || simple),
+      canTurnOn: !simple,
+      turnOn: () => this.setPower(true),
+      live: (() => {
+        const L = this.LIVE; if (!L) return { playing: 'loading…', steamLine: '', lastRepo: 'loading…', lastAgo: '', repos: [], note: '' };
+        const days = (d) => Math.max(0, Math.round((Date.now() - new Date(d + 'T12:00:00').getTime()) / 864e5));
+        const ago = (d) => { const n = days(d); return n === 0 ? 'pushed today' : 'pushed ' + n + 'd ago'; };
+        const g0 = L.steam.recent[0], r0 = L.github.repos[0];
+        return {
+          playing: g0 ? g0.name : '—',
+          steamLine: L.steam.status + ' · ' + L.steam.hoursPast2Weeks + ' hrs in the past 2 weeks',
+          lastRepo: r0 ? r0.name : '—', lastAgo: r0 ? ago(r0.pushedAt) : '',
+          repos: L.github.repos.slice(0, 5).map((r) => ({ name: r.name, ago: ago(r.pushedAt).replace('pushed ', ''), url: L.github.profile + '/' + r.name })),
+          note: 'Live data loaded ' + new Date(L.fetchedAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+        };
+      })(),
+      screenBox: 'position: absolute; left: 96px; top: 88px; width: 1092px; height: 816px; overflow: hidden; background: ' + C.bg + ';',
+      screenInner: C.safe
+        ? 'position: absolute; left: 52px; top: 38px; width: 760px; height: 570px; transform: scale(1.30); transform-origin: 0 0; overflow: hidden;'
+        : 'position: absolute; left: 0; top: 0; width: 760px; height: 570px; transform: scale(1.437); transform-origin: 0 0; overflow: hidden;',
+      vignette: 'position: absolute; inset: 0; border-radius: 70px / 56px; box-shadow: ' + (C.safe ? 'inset 0 0 40px 14px rgba(0,0,0,0.85), inset 0 0 140px 30px rgba(0,0,0,0.45)' : 'inset 0 0 60px rgba(0,0,0,0.7)') + ';',
+      spill: glowAmt > 0
+        ? 'position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: ' + (glowAmt * light).toFixed(3) + '; background: radial-gradient(ellipse 52% 60% at 42% 48%, ' + C.glow + ' 0, transparent 78%), radial-gradient(ellipse 22% 55% at 88% 45%, ' + C.glow.replace(/[\d.]+\)$/, '0.22)') + ' 0, transparent 80%); transition: background .4s, opacity ' + (s.switching ? '.08s' : '.5s') + ';' + (flickerOn ? ' animation: room-flicker 3.7s ease-in-out infinite;' : '')
+        : 'display: none;',
+      scanStyle: 'position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.28) 0 1px, transparent 1px 3px); transition: opacity .3s; opacity: ' + scanAmt + ';',
+      flickerOn, switching: s.switching, seed: s.seed,
+      is0: sh === 0, is1: sh === 1, is2: sh === 2, is3: sh === 3, is4: sh === 4, is5: sh === 5, isNone: !live,
+      powerOff: !s.power, powerOn: s.power, clock,
+      bootStyle: !s.power ? 'width: 760px; height: 570px; visibility: hidden;'
+        : s.bootKey > 1
+          ? 'width: 760px; height: 570px; animation: ' + (s.bootKey % 2 ? 'tv-warm' : 'tv-warm2') + ' 3.3s ease-out;'
+          : 'width: 760px; height: 570px; animation: tv-boot .9s ease-out;',
+      degaussStyle: 'width: 760px; height: 570px;' + (s.power && s.bootKey > 1 ? ' animation: ' + (s.bootKey % 2 ? 'tv-degauss' : 'tv-degauss2') + ' .6s ease-out 3.0s;' : ''),
+      tuning: s.dragAngle != null,
+      showHint: (!!s.hint || !!s.hintFall) && s.power,
+      dismissNote: () => { if (s.hint) { this.dismissHint(); this.sfx('toggle'); } },
+      hintStyle: 'position: absolute; left: 1150px; top: 150px; z-index: 4; transform-origin: 75% 0; ' + (s.hintFall ? 'pointer-events: none; ' : '') + (s.hintFall ? 'animation: hint-fall 1.4s cubic-bezier(.5,0,.85,.4) forwards;' : 'animation: hint-in .5s ease-out both;'),
+      tapeStyle: 'position: absolute; left: 50%; top: -8px; width: 46px; height: 16px; margin-left: -23px; background: rgba(230,220,180,0.75); transform: rotate(3deg);' + (s.hintFall ? ' animation: tape-peel .35s ease-out forwards;' : ''),
+      chNumStyle: 'font-size: 54px; line-height: 1;' + (s.hint ? ' animation: osd-blink 1s steps(1) infinite;' : ''),
+      skipToList: (e) => { e.preventDefault(); this.setPower(false); },
+      volKey: (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); this.setVol(s.vol + 1); }
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { e.preventDefault(); e.stopPropagation(); this.setVol(s.vol - 1); }
+      },
+      tuneStyle: (() => {
+        const bloom = DP.bloom !== false && perf < 1;
+        let f = bloom ? 'url(#crtPhos)' : '';
+        let tr = '';
+        if (s.dragAngle != null) {
+          const off = Math.abs(s.dragAngle - Math.round(s.dragAngle / this.stepAngle) * this.stepAngle) / (this.stepAngle / 2);
+          f += ' blur(' + (off * 3).toFixed(2) + 'px) contrast(' + (1 - off * 0.35).toFixed(2) + ')';
+          tr = ' transform: translateX(' + ((s.seed % 2 ? 1 : -1) * off * 7).toFixed(1) + 'px);';
+        }
+        return 'width: 760px; height: 570px;' + (f ? ' filter: ' + f + ';' : '') + tr;
+      })(),
+      tuneSnow: (() => {
+        const off = s.dragAngle != null ? Math.abs(s.dragAngle - Math.round(s.dragAngle / this.stepAngle) * this.stepAngle) / (this.stepAngle / 2) : 0;
+        return 'position: absolute; inset: 0; mix-blend-mode: screen; opacity: ' + (0.15 + off * 0.75).toFixed(2) + ';';
+      })(),
+      ledStyle: 'position: absolute; left: 1444px; top: 897px; width: 22px; height: 22px; border-radius: 50%; pointer-events: none; transition: background .2s; background: ' + (s.power ? 'radial-gradient(circle, rgba(255,60,60,0.55), transparent 70%)' : 'radial-gradient(circle, rgba(10,0,0,0.85) 45%, transparent 75%)') + ';',
+      togglePower: () => this.setPower(!s.power),
+      termKey: (e) => { e.stopPropagation(); if (e.key !== 'Enter') return; const v = e.currentTarget.value.trim().toLowerCase(); e.currentTarget.value = ''; this.setState({ termCmd: v === 'clear' ? '' : v }); this.sfx('vol'); },
+      osdCh: s.osd === 'ch' || (!!s.hint && s.power), osdVol: s.osd === 'vol',
+      chLabel: pad(ch + 1), chName: CC.name,
+      volWord: s.vol ? 'VOLUME' : 'MUTE',
+      volSegs: Array.from({ length: 10 }, (_, k) => ({ style: 'width: 16px; height: 24px; background: ' + (k < s.vol ? '#5fff7a' : 'rgba(95,255,122,0.15)') + '; box-shadow: ' + (k < s.vol ? '0 0 8px rgba(95,255,122,0.7)' : 'none') + ';' })),
+      nowPlaying: D.nowPlaying, guideRows, ticker,
+      termCmd: s.termCmd, termLines, termCmds,
+      deskIcons, deskOpen: s.desk != null, desk, deskClose: () => this.setState({ desk: null }),
+      drive, driveSpeed: 88 + s.drive * 3,
+      drivePrev: () => this.setState({ drive: (s.drive + P.length - 1) % P.length }),
+      driveNext: () => this.setState({ drive: (s.drive + 1) % P.length }),
+      statusRows, stat,
+      up: P.filter((p) => p.status === 'up').length, slow: P.filter((p) => p.status === 'slow').length, down: P.filter((p) => p.status === 'down').length,
+      rooms, room,
+      knobStyle: 'position: absolute; left: 1335px; top: 155px; width: 112px; height: 112px; pointer-events: none; transform: rotate(' + ((s.dragAngle != null ? s.dragAngle : this.turn) + 33.3).toFixed(1) + 'deg); transition: ' + (s.dragAngle != null ? 'none' : 'transform .32s cubic-bezier(.3,1.7,.5,1)') + ';',
+      next: () => this.setCh(ch + 1),
+      dialClick: () => { if (this.dragged) { this.dragged = false; return; } this.setCh(ch + 1); },
+      dialDown: (e) => { this.dragging = { a0: ptrAngle(e), moved: false }; if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); },
+      dialMove: (e) => {
+        if (!this.dragging) return;
+        const a = ptrAngle(e);
+        if (!this.dragging.moved && Math.abs(((a - this.dragging.a0 + 540) % 360) - 180) < 6) return;
+        this.dragging.moved = true;
+        const base = Math.round(this.turn / 360) * 360; let ang = base + a;
+        while (ang - this.turn > 180) ang -= 360; while (this.turn - ang > 180) ang += 360;
+        const steps = Math.round(ang / this.stepAngle); const near = ((steps - 1) % this.slots.length + this.slots.length) % this.slots.length;
+        const upd = { dragAngle: ang, seed: Math.floor(Math.random() * 999) };
+        if (near !== this.state.shown && this.state.power) { upd.shown = near; this.sfx('dial'); }
+        this.setState(upd);
+      },
+      dialUp: () => {
+        if (!this.dragging) return;
+        const moved = this.dragging.moved; this.dragging = null;
+        if (!moved) return;
+        this.dragged = true;
+        const ang = this.state.dragAngle; const steps = Math.round(ang / this.stepAngle);
+        const target = ((steps - 1) % this.slots.length + this.slots.length) % this.slots.length;
+        this.setState({ dragAngle: null });
+        this.turn = steps * this.stepAngle;
+        if (!this.state.power) { this.forceUpdate(); return; }
+        this.timers.forEach((t) => { clearTimeout(t); clearInterval(t); }); this.timers = [];
+        this.setState({ ch: target, shown: target, switching: false });
+        this.flash('ch');
+        if (this.channelAt(target) === this.NOSIG) { const ns = setInterval(() => this.setState({ seed: Math.floor(Math.random() * 999) }), 70); this.timers.push(ns); }
+      },
+      volDown: (e) => { this.vdrag = { y: e.clientY, acc: 0, moved: false }; if (e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); },
+      volMove: (e) => { if (!this.vdrag) return; const dy = this.vdrag.y - e.clientY; this.vdrag.y = e.clientY; this.vdrag.acc += dy; if (Math.abs(this.vdrag.acc) >= 14) { this.vdrag.moved = true; const st = Math.trunc(this.vdrag.acc / 14); this.vdrag.acc -= st * 14; this.setVol(this.state.vol + st); } },
+      volUp: () => { if (this.vdrag && this.vdrag.moved) this.vdragged = true; this.vdrag = null; },
+      dialWheel: (e) => { if (!wheelOk()) return; this.setCh(ch + (e.deltaY > 0 ? 1 : -1)); },
+      vol: s.vol,
+      volStyle: 'position: absolute; left: 1355px; top: 333px; width: 74px; height: 74px; pointer-events: none; transform: rotate(' + ((s.vol - 5) * 27) + 'deg); transition: transform .18s ease-out;',
+      volRidges: 'position: absolute; left: 1354.5px; top: 333px; width: 72px; height: 72px; border-radius: 50%; pointer-events: none; mix-blend-mode: overlay; opacity: 0.85; background: repeating-conic-gradient(rgba(255,255,255,0.18) 0deg 2deg, rgba(0,0,0,0.25) 2deg 5deg); -webkit-mask: radial-gradient(circle, transparent 0 27.5px, #000 28.5px 35px, transparent 36px); mask: radial-gradient(circle, transparent 0 27.5px, #000 28.5px 35px, transparent 36px); transform: rotate(' + ((s.vol - 5) * 27) + 'deg); transition: transform .2s ease-out;',
+      volPointer: 'position: absolute; left: 1364.7px; top: 342px; width: 54px; height: 54px; pointer-events: none; transform: rotate(' + ((s.vol - 5) * 27) + 'deg); transition: transform .2s cubic-bezier(.3,1.4,.5,1);',
+      volClick: (e) => { if (this.vdragged) { this.vdragged = false; return; } const r = e.currentTarget.getBoundingClientRect(); this.setVol(s.vol + (e.clientX < r.left + r.width / 2 ? -1 : 1)); },
+      volWheel: (e) => { if (!wheelOk()) return; this.setVol(s.vol + (e.deltaY < 0 ? 1 : -1)); },
+      down: () => this.sfx('down'), up: () => this.sfx('up'),
+      discordLabel: s.copied ? 'COPIED!' : 'DISCORD',
+      copyDiscord: () => { try { navigator.clipboard.writeText(D.links.discord); } catch (e) {} this.setState({ copied: true }); clearTimeout(this.copyT); this.copyT = setTimeout(() => this.setState({ copied: false }), 1400); },
+      opts: OPTS.map(([k, label, short]) => ({
+        label, short, val: (s[k] ? 'ON' : 'OFF') + (overridden[k] ? ', limited by this channel' : ''),
+        lamp: 'width: 4px; height: 4px; border-radius: 50%; background: ' + (overridden[k] ? '#ffb02e' : '#2a2622') + '; box-shadow: ' + (overridden[k] ? '0 0 4px #ffb02e' : 'none') + ';',
+        lever: 'position: absolute; left: 2px; width: 10px; height: 13px; border-radius: 2px; background: linear-gradient(#f2efe6, #9a958a); box-shadow: 0 1px 2px rgba(0,0,0,0.6); transition: top .12s; top: ' + (s[k] ? '2px' : '13px') + ';',
+        flip: () => { this.setState({ [k]: !s[k] }); this.sfx('toggle'); }
+      })),
+      buttons: (() => {
+        const FACE = {
+          cream: ['/_blob/a15fd6c746def7579d5756421b636bfd', 'color: #3a2e22; mix-blend-mode: multiply; opacity: 0.82;'],
+          grey: ['/_blob/b1d312750029cfa805abd07b1d2b163e', 'color: #1e1e20; mix-blend-mode: multiply; opacity: 0.78;'],
+          dark: ['/_blob/d7116760a9b407e5afc7bd8330a4edc9', 'color: #d6d6da; opacity: 0.6;']
+        };
+        const N = this.BUTTONS.length, AREA = 190, TOP = 424;
+        const pitch = Math.min(64, AREA / N), sc = Math.min(1, (pitch - 2) / 63);
+        const w = 142 * sc, h = 63 * sc;
+        return this.BUTTONS.map((b, i) => {
+          const f = FACE[b.face] || FACE.grey;
+          const copy = b.action === 'copy';
+          const tune = b.action === 'tune';
+          return {
+            tune,
+            label: copy && s.copied ? b.copied : b.label,
+            aria: copy ? 'Copy Discord username' : tune ? 'Tune to the ' + b.channel + ' channel' : b.label,
+            href: b.href || '#', target: b.href ? '_blank' : '_self',
+            face: f[0],
+            click: tune ? (e) => { e.preventDefault(); const n = this.CH.findIndex((c) => c.name === b.channel); if (n >= 0) this.setCh(this.slots.indexOf(n)); } : copy ? (e) => { e.preventDefault(); try { navigator.clipboard.writeText(D.links.discord); } catch (er) {} this.setState({ copied: true }); clearTimeout(this.copyT); this.copyT = setTimeout(() => this.setState({ copied: false }), 1400); } : () => {},
+            wrap: 'position: absolute; left: ' + (1386 - w / 2).toFixed(1) + 'px; top: ' + (TOP + (AREA - N * pitch) / 2 + i * pitch + (pitch - h) / 2).toFixed(1) + 'px; width: ' + w.toFixed(1) + 'px; height: ' + h.toFixed(1) + 'px;',
+            labStyle: 'position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: \'Bungee\', sans-serif; font-size: ' + (15 * sc).toFixed(1) + 'px; letter-spacing: 0.04em; pointer-events: none; ' + f[1]
+          };
+        });
+      })(),
+      doorOpen: s.doorOpen,
+      creditsOpen: !!s.creditsOpen,
+      creditRows: D.credits,
+      toggleCredits: () => { this.setState({ creditsOpen: !s.creditsOpen }); this.sfx('toggle'); },
+      toggleDoor: () => { this.sfx(s.doorOpen ? 'door_close' : 'door_open'); this.setState({ doorOpen: !s.doorOpen, creditsOpen: false }); },
+      doorStyle: 'position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform-origin: 50% 100%; transition: transform .45s cubic-bezier(.5,1.6,.6,1), filter .45s; transform: ' + (s.doorOpen ? 'rotateX(-82deg)' : 'rotateX(0deg)') + '; filter: brightness(' + (s.doorOpen ? dim * 1.6 : dim) + ') saturate(0.85);',
+      doorZone: 'position: absolute; left: ' + DR[0] + 'px; width: ' + (DR[2] - DR[0]) + 'px; top: ' + (s.doorOpen ? DR[3] - 8 : DR[1]) + 'px; height: ' + (s.doorOpen ? 16 : DR[3] - DR[1]) + 'px;',
+      onKey: (e) => {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') { e.preventDefault(); this.setCh(ch + 1); }
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { e.preventDefault(); this.setCh(ch - 1); }
+        else if (e.key === '+' || e.key === '=') this.setVol(s.vol + 1);
+        else if (e.key === '-') this.setVol(s.vol - 1);
+      }
+    };
+    // List mode only shows buttons that go somewhere; tune buttons need the TV.
+    V.findButtons = V.buttons.filter((b) => !b.tune);
+    return V;
+  }
+}
+</script>
+</body>
+</html>

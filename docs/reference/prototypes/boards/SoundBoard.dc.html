@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sound board</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Michroma&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#0b0b0c}</style>
+</helmet>
+<div style="width: 1280px; box-sizing: border-box; padding: 48px 56px; background: #0b0b0c; color: #ece6e6; font-family: 'JetBrains Mono', monospace; font-size: 14px; display: flex; flex-direction: column; gap: 28px">
+  <header style="display: flex; flex-direction: column; gap: 8px">
+    <span style="font-family: 'Michroma', sans-serif; font-size: 28px; letter-spacing: 0.18em">SOUND BOARD</span>
+    <span style="color: #9a9aa2">Click to audition. Left column is what the Door TV uses now; right column is everything else you sent (trimmed + normalised).</span>
+  </header>
+  <div style="display: flex; gap: 40px; align-items: flex-start">
+    <section style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+      <h2 style="margin: 0 0 6px; font-size: 13px; letter-spacing: 0.2em; color: #ff3b44">IN USE</h2>
+      <sc-for list="{roles}" as="r" hint-placeholder-count="10">
+        <button type="button" onClick="{r.play}" style="{r.style}"><span style="display: flex; flex-direction: column; gap: 2px; text-align: left"><span style="font-weight: 700">{r.title}</span><span style="color: #9a9aa2; font-size: 12px">{r.src}</span></span><span style="color: #ff3b44">▶</span></button>
+      </sc-for>
+    </section>
+    <section style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+      <h2 style="margin: 0 0 6px; font-size: 13px; letter-spacing: 0.2em; color: #9a9aa2">ALTERNATES</h2>
+      <sc-for list="{alts}" as="r" hint-placeholder-count="17">
+        <button type="button" onClick="{r.play}" style="{r.style}"><span style="display: flex; gap: 10px; text-align: left"><span style="color: #7a7a82">{r.title}</span><span>{r.src}</span></span><span style="color: #9a9aa2">▶</span></button>
+      </sc-for>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.ROLES = [{"title": "Push button \u00b7 press", "src": "vcr_switch (first half)", "url": "/_blob/bbaa373a90d56e196bc2b23421e5efc3"}, {"title": "Push button \u00b7 release", "src": "vcr_switch (second half)", "url": "/_blob/5ba5880564b39061048c94e70a012d21"}, {"title": "Channel dial detent", "src": "electrical_switch_02", "url": "/_blob/29b5d0eeb2612a24ac9f1c322250ce95"}, {"title": "Volume tick", "src": "click_01", "url": "/_blob/3e7327724ae54b936a3d38366318ac29"}, {"title": "Settings toggle", "src": "rocker_switch", "url": "/_blob/80a90b5d06dc28fb4223d4f2df44a89e"}, {"title": "Channel static", "src": "LimitSnap channel switch", "url": "/_blob/0d06cf46d569c549819652a3ac3e8df0"}, {"title": "Power button", "src": "push_button_switch_04", "url": "/_blob/539a8f9fd1bfb2f19e31866f5a452b15"}, {"title": "CRT power-on", "src": "Fission9 CRT TV switches on", "url": "/_blob/b14d4ce5b8b1008ecb935ad5e0f6d11b"}, {"title": "Door open", "src": "stecman tapedeck, take 1", "url": "/_blob/2e84e0bc940cb07b5b3520a063e9bca8"}, {"title": "Door close", "src": "stecman tapedeck, take 2", "url": "/_blob/c143ad2f459bc15091531550b3dc70ec"}]; this.ALTS = [{"title": "#117413", "src": "wooden_ball_against_wooden_window_shade", "url": "/_blob/b796769ff7f1c3c4dc1f168d8fdc14a0"}, {"title": "#119413", "src": "push_button_switch_01", "url": "/_blob/2932e045179889f95f2f502c28e6e721"}, {"title": "#119414", "src": "push_button_switch_02", "url": "/_blob/c0c308a23c88bf5ad37280cbd6a47fe6"}, {"title": "#119415", "src": "rocker_switch", "url": "/_blob/fbe4407b9e4135bfc554ad83dddc870b"}, {"title": "#121811", "src": "push_button_switch_03", "url": "/_blob/4c5378e0f492998cd82a3911ef8a9795"}, {"title": "#134711", "src": "push_button_switch_05", "url": "/_blob/dc079c991652292c35291f820810778e"}, {"title": "#134712", "src": "push_button_switch_04", "url": "/_blob/e3333d6dd3001d4ed21f605296913106"}, {"title": "#134713", "src": "pull_chain_switch", "url": "/_blob/05d1afb844013a8759a3fd7b3aa671f0"}, {"title": "#134714", "src": "push_button_switch_06", "url": "/_blob/bb54a5f27470772761bd19c2024fe478"}, {"title": "#139061", "src": "push_button_switch_07", "url": "/_blob/5020036f8f8090e77858b70825965918"}, {"title": "#139062", "src": "electrical_switch_02", "url": "/_blob/df4a982b504648d49741c6a632f9a67e"}, {"title": "#145804", "src": "pull_chain_switch_02", "url": "/_blob/03d6a1ab38a5357d7bf8dc529ac00419"}, {"title": "#266017", "src": "a_click_01", "url": "/_blob/d85936732463b4c3e35e3952533f8c50"}, {"title": "#266018", "src": "click_01", "url": "/_blob/b8e62518a8cf00d50d0c1f15e614c117"}, {"title": "#279004", "src": "channel-switch (LimitSnap)", "url": "/_blob/86d0a63a83c857b14332c471803f2b54"}, {"title": "#364200", "src": "electrical_switch_03", "url": "/_blob/d89233d86422deadee78554e37de0985"}, {"title": "#364202", "src": "vcr_switch", "url": "/_blob/c1a213e7224b33b11884a5a47025c825"}]; this.buf = {}; this.state = { playing: null }; }
+  async playUrl(u) {
+    try {
+      this.ac = this.ac || new (window.AudioContext || window.webkitAudioContext)();
+      if (this.ac.state === 'suspended') await this.ac.resume();
+      if (!this.buf[u]) { const b = await (await fetch(u)).arrayBuffer(); this.buf[u] = await new Promise((res, rej) => this.ac.decodeAudioData(b, res, rej)); }
+      const s = this.ac.createBufferSource(); s.buffer = this.buf[u];
+      const g = this.ac.createGain(); g.gain.value = 0.6; s.connect(g); g.connect(this.ac.destination); s.start();
+      this.setState({ playing: u }); clearTimeout(this.t); this.t = setTimeout(() => this.setState({ playing: null }), Math.max(300, this.buf[u].duration * 1000));
+    } catch (e) {}
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const mk = (r) => ({ ...r, play: () => this.playUrl(r.url), style: 'display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 8px 14px; border-radius: 6px; cursor: pointer; font: inherit; color: #ece6e6; border: 1px solid ' + (this.state.playing === r.url ? '#ff3b44' : '#2a2a2e') + '; background: ' + (this.state.playing === r.url ? '#2a0c10' : '#151517') + ';' });
+    return { roles: this.ROLES.map(mk), alts: this.ALTS.map(mk) };
+  }
+}
+</script>
+</body>
+</html>

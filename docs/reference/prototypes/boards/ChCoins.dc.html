@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CH 07 · Coin Drop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&amp;family=Archivo+Narrow:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+@keyframes c-pop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-26px);opacity:0}}
+@keyframes c-rail{0%,100%{transform:translateX(0)}50%{transform:translateX(150px)}}
+.c-coin{fill:url(#c-gold);stroke:#7a4a00;stroke-width:2}
+.c-up{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:8px 10px;background:#22113a;border:2px solid #4a2a7a;border-radius:6px}
+.c-up b{font-family:'Bungee',sans-serif;font-weight:400;font-size:13px;color:#fff}
+.c-up span{font-size:12px;color:#b9a8d8}
+.c-up em{grid-row:span 2;align-self:center;font-style:normal;font-family:'Bungee',sans-serif;font-size:13px;color:#ffd400;padding:4px 8px;background:#14081c;border:2px solid #ffd400;border-radius:4px}
+</style>
+</helmet>
+<div style="position: relative; width: 760px; height: 570px; overflow: hidden; background: radial-gradient(ellipse at 30% 20%, #2a1240, #0e0614 70%); font-family: 'Archivo Narrow', sans-serif; color: #fff">
+
+  <!-- Playfield -->
+  <div style="position: absolute; left: 14px; top: 14px; width: 472px; height: 542px; border-radius: 14px; background: linear-gradient(#1d0f2a, #140a20); border: 3px solid #6a4a9a; box-shadow: 0 0 24px rgba(160,90,255,.35), inset 0 0 30px rgba(0,0,0,.6); overflow: hidden">
+    <svg viewBox="0 0 472 542" width="472" height="542" style="position: absolute; inset: 0" aria-hidden="true">
+      <defs><radialGradient id="c-gold" cx="40%" cy="35%" r="65%"><stop offset="0" stop-color="#fff6a8"/><stop offset=".55" stop-color="#ffc21a"/><stop offset="1" stop-color="#c27a00"/></radialGradient></defs>
+      <!-- dropper rail -->
+      <rect x="20" y="40" width="432" height="6" rx="3" fill="#4a2a7a"/>
+      <!-- pegs and bumpers -->
+      <circle cx="40" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="86" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="132" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="178" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="224" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="270" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="316" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="362" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="408" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="454" cy="110" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="63" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="109" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="155" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="201" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="247" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="293" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="339" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="385" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="431" cy="150" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="40" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="86" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="132" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="178" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <g><circle cx="224" cy="190" r="17" fill="#c8141e" stroke="#fff" stroke-width="3"/><circle cx="224" cy="190" r="23" fill="none" stroke="#c8141e" stroke-opacity=".45" stroke-width="2"/><text x="224" y="195" text-anchor="middle" font-size="13" font-family="Bungee" fill="#fff">×2</text></g>
+      <circle cx="270" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="316" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="362" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="408" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="454" cy="190" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="63" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="109" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="155" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="201" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="247" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="293" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="339" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="385" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="431" cy="230" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="40" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="86" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="132" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="178" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="224" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="270" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="316" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="362" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="408" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="454" cy="270" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="63" cy="310" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="109" cy="310" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="155" cy="310" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="201" cy="310" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="247" cy="310" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="293" cy="310" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <g><circle cx="339" cy="310" r="17" fill="#d9a800" stroke="#fff" stroke-width="3"/><circle cx="339" cy="310" r="23" fill="none" stroke="#d9a800" stroke-opacity=".45" stroke-width="2"/><text x="339" y="315" text-anchor="middle" font-size="13" font-family="Bungee" fill="#fff">×3</text></g>
+      <circle cx="385" cy="310" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="431" cy="310" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="40" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="86" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <g><circle cx="132" cy="350" r="17" fill="#c8141e" stroke="#fff" stroke-width="3"/><circle cx="132" cy="350" r="23" fill="none" stroke="#c8141e" stroke-opacity=".45" stroke-width="2"/><text x="132" y="355" text-anchor="middle" font-size="13" font-family="Bungee" fill="#fff">×2</text></g>
+      <circle cx="178" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="224" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="270" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="316" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="362" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="408" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="454" cy="350" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="63" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="109" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="155" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="201" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="247" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="293" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="339" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="385" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="431" cy="390" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="40" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="86" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="132" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="178" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="224" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="270" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="316" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="362" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="408" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <circle cx="454" cy="430" r="5" fill="#e9dcff" stroke="#6a4a9a" stroke-width="2"/>
+      <!-- spinner -->
+      <g transform="translate(392 250) rotate(-18)"><rect x="-38" y="-5" width="76" height="10" rx="5" fill="#2fd3a0" stroke="#fff" stroke-width="2"/><circle r="6" fill="#fff"/></g>
+      <!-- falling coins with trails -->
+      <g><circle cx="196" cy="80" r="9" fill="#ffc21a" opacity=".28"/><circle cx="187" cy="58" r="8" fill="#ffc21a" opacity=".12"/><circle cx="118" cy="222" r="9" fill="#ffc21a" opacity=".28"/><circle cx="105" cy="200" r="8" fill="#ffc21a" opacity=".12"/><circle cx="300" cy="338" r="9" fill="#ffc21a" opacity=".28"/><circle cx="311" cy="316" r="8" fill="#ffc21a" opacity=".12"/><circle cx="402" cy="406" r="9" fill="#ffc21a" opacity=".28"/><circle cx="410" cy="384" r="8" fill="#ffc21a" opacity=".12"/><circle cx="236" cy="448" r="9" fill="#ffc21a" opacity=".28"/><circle cx="236" cy="426" r="8" fill="#ffc21a" opacity=".12"/></g>
+      <circle class="c-coin" cx="205" cy="102" r="10"/>
+      <circle class="c-coin" cx="131" cy="244" r="10"/>
+      <circle class="c-coin" cx="289" cy="360" r="10"/>
+      <circle class="c-coin" cx="394" cy="428" r="10"/>
+      <circle class="c-coin" cx="236" cy="470" r="10"/>
+    </svg>
+    <!-- dropper -->
+    <div style="position: absolute; left: 150px; top: 16px; width: 70px; height: 30px; animation: c-rail 3s ease-in-out infinite">
+      <div style="position: absolute; inset: 0; background: linear-gradient(#c8141e, #7a0c12); clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%); border-radius: 4px"></div>
+      <div style="position: absolute; left: 24px; top: 4px; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff6a8, #ffc21a 55%, #c27a00); border: 2px solid #7a4a00; box-sizing: border-box"></div>
+    </div>
+    <!-- popups -->
+    <div style="position: absolute; left: 196px; top: 150px; font-family: 'Bungee', sans-serif; font-size: 16px; color: #ff5a64; text-shadow: 0 2px 0 #000; animation: c-pop 1.2s ease-out infinite">×2!</div>
+    <div style="position: absolute; left: 352px; top: 206px; font-family: 'Bungee', sans-serif; font-size: 14px; color: #2fd3a0; text-shadow: 0 2px 0 #000; animation: c-pop 1.2s ease-out .4s infinite">SPIN +3</div>
+    <div style="position: absolute; left: 214px; top: 446px; font-family: 'Bungee', sans-serif; font-size: 18px; color: #ffd400; text-shadow: 0 2px 0 #000; animation: c-pop 1.2s ease-out .8s infinite">+120</div>
+    <!-- bins -->
+    <div style="position: absolute; left: 15px; right: 15px; bottom: 0; height: 52px; display: flex; font-family: 'Bungee', sans-serif; font-size: 14px; border-top: 3px solid #6a4a9a; border-right: 3px solid #6a4a9a"><div style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;border-left:3px solid #6a4a9a;color:#e9dcff">×1</div><div style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;border-left:3px solid #6a4a9a;color:#e9dcff">×2</div><div style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;border-left:3px solid #6a4a9a;color:#e9dcff">×5</div><div style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;border-left:3px solid #6a4a9a;background:linear-gradient(transparent,rgba(255,212,0,.35));color:#ffd400">×10</div><div style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;border-left:3px solid #6a4a9a;color:#e9dcff">×5</div><div style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;border-left:3px solid #6a4a9a;color:#e9dcff">×2</div><div style="flex:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;border-left:3px solid #6a4a9a;color:#e9dcff">×1</div></div>
+  </div>
+
+  <!-- Side panel -->
+  <div style="position: absolute; left: 500px; top: 14px; width: 246px; height: 542px; display: flex; flex-direction: column; gap: 10px">
+    <div style="padding: 12px 14px; background: #14081c; border: 3px solid #ffd400; border-radius: 10px; box-shadow: 0 0 18px rgba(255,212,0,.25)">
+      <div style="font-size: 12px; letter-spacing: .3em; color: #b9a8d8">COINS</div>
+      <div style="font-family: 'Bungee', sans-serif; font-size: 34px; line-height: 1.05; color: #ffd400">12,480</div>
+      <div style="font-size: 13px; color: #2fd3a0">+38 / sec · best drop ×30</div>
+    </div>
+    <div style="font-size: 12px; letter-spacing: .3em; color: #b9a8d8; margin-top: 2px">UPGRADES</div>
+    <div class="c-up"><b>Add ×2 bumper</b><em>250</em><span>Place it anywhere on the board</span></div>
+    <div class="c-up"><b>Faster dropper</b><em>600</em><span>1 coin every 0.8 s</span></div>
+    <div class="c-up"><b>Spinner</b><em>1.2K</em><span>Flings coins sideways, +3 each</span></div>
+    <div class="c-up" style="opacity: .45"><b>Auto-drop</b><em>5K</em><span>Keeps dropping while you browse</span></div>
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px">
+      <div style="padding: 12px; text-align: center; font-family: 'Bungee', sans-serif; font-size: 22px; color: #fff; background: linear-gradient(#ff3b44, #a3121a); border: 3px solid #fff; border-radius: 10px; box-shadow: 0 5px 0 #5a0a10">DROP</div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #8a7aa8"><span>SPACE to drop · saved on this device</span><span style="text-decoration: underline">Reset</span></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

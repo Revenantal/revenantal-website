@@ -1,0 +1,30 @@
+{
+  "name": "revenantal-reference-tools",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Local rendering tools for design references",
+  "scripts": {
+    "render": "node render-boards.js --all",
+    "render:scene": "node render-boards.js --scene",
+    "check": "node render-boards.js --all --check",
+    "format:check": "prettier --check render-boards.js package.json"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@fontsource/archivo-black": "5.3.0",
+    "@fontsource/archivo-narrow": "5.3.0",
+    "@fontsource/bungee": "5.3.0",
+    "@fontsource/im-fell-english": "5.3.0",
+    "@fontsource/im-fell-english-sc": "5.3.0",
+    "@fontsource/pixelify-sans": "5.3.0",
+    "@fontsource/press-start-2p": "5.3.0",
+    "@fontsource/vt323": "5.3.0",
+    "playwright": "1.64.1",
+    "prettier": "3.9.10",
+    "three": "0.186.1"
+  },
+  "type": "commonjs",
+  "packageManager": "pnpm@11.9.0"
+}

@@ -1,0 +1,53 @@
+# TV Art and Asset Pipeline
+
+All TV graphics come from one AI-generated photo (1536×1024, flip-down door version), processed by a repeatable script so a new source photo can be dropped in later. Source photo: `docs/reference/assets/tv/`.
+
+## Image Pipeline (`tools/assets/`)
+
+Python + Pillow/NumPy, run by hand.
+
+1. **Key the screen:** alpha = 1 − clamp((G − max(R,B) − 30) / 70); despill green on the edges. Screen box: x 100–1182, y 92–900.
+2. **Repaint the dial face:** black disc to r 81 with a subtle radial gradient, inner groove at r 48, 60 tick marks. No numerals are baked or drawn; tick marks are decorative and do not define channel capacity.
+3. **Cut the dial knob:** disc r 46 plus the pointer-bar sectors out to r 55 (±12° around −33.3° and 146.7°); red index dot on the pointer end.
+4. **Clear the button area** (x 1311–1461, y 421–615): per-row tone interpolated between the clean panel edges, plus tiled high-pass brushing from those edges.
+5. **Cut sprites:** button housing (1315,425 → 1457,488, rounded alpha), three faces (cream, grey, dark), settings door (1284,618 → 1488,691).
+6. Export WebP (quality 86–92). Sizes: frame ~100 KB, sprites 1–5 KB each.
+
+## Anchor Points
+
+Stage coordinates, kept in `tv/geometry.ts`.
+
+| Part                                            | Position                                      |
+| ----------------------------------------------- | --------------------------------------------- |
+| Screen box                                      | left 96, top 88, 1092×816                     |
+| Dial centre / knob radius                       | (1391, 211) / 56 sprite                       |
+| Volume knob centre / cap radius / ridge annulus | (1390.5, 369) / 27 / 28–35                    |
+| Button stack area                               | x centre 1386, y 424–614 (190 px)             |
+| Settings door                                   | 1284,618 → 1488,691; hinge on the bottom edge |
+| Power LED                                       | centre (1455, 908)                            |
+| Badge                                           | 290×42 at (496, 964)                          |
+
+## Sound Pipeline
+
+ffmpeg + Python: mono 44.1 kHz → cut → trim silence at 1% of peak → 2–3 ms fade-in, 10–60 ms fade-out → normalise to −1 dBFS → AAC 96 kbps. Keep originals and the source link next to each file.
+
+## Fonts
+
+Self-hosted WOFF2 in `public/assets/fonts/`, Latin subset, `font-display: swap`. No Google Fonts requests. Each channel preloads only its own.
+
+| Font                                | Used by                                       |
+| ----------------------------------- | --------------------------------------------- |
+| Michroma, Archivo Narrow            | TV badge, UI, List mode                       |
+| Archivo Black                       | TV Guide, Night Drive                         |
+| Pixelify Sans                       | Revscape                                      |
+| Press Start 2P                      | Side Quest, Night Drive HUD, Status LED signs |
+| VT323                               | Terminal, Status displays                     |
+| Bungee                              | Coin Drop, Paid Programming                   |
+| IM Fell English, IM Fell English SC | The Late Show                                 |
+| JetBrains Mono                      | Status readouts                               |
+| Permanent Marker                    | Hint note                                     |
+| System Tahoma / Segoe UI stack      | Rev OS                                        |
+
+## Channel Art
+
+Per-channel art pipelines (rack sprites, Revscape fallback still, Guide "Coming up" stills) are in each channel's doc.

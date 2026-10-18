@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CH 06 · Revscape</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+@keyframes s-xp{0%{transform:translateY(0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(-60px);opacity:0}}
+@keyframes s-x{0%,49%{opacity:1}50%,100%{opacity:.35}}
+.s-sh{text-shadow:1px 1px 0 #000}
+.s-tab{width:31px;height:32px;box-sizing:border-box;background:linear-gradient(#5a4c3a,#43382a);border:1px solid #1e1912;border-top-color:#6e5e48;display:flex;align-items:center;justify-content:center}
+.s-tab.on{background:linear-gradient(#7a2a1a,#5a1e12)}
+.s-slot{position:relative;width:42px;height:36px;display:flex;align-items:center;justify-content:center}
+.s-q{position:absolute;left:1px;top:-2px;font-size:11px;color:#ffff00;text-shadow:1px 1px 0 #000}
+.s-orb{display:flex;align-items:center;gap:3px;font-size:12px}
+.s-orb b{width:26px;height:26px;border-radius:50%;border:3px solid #2a2218;box-sizing:border-box;display:block}
+.s-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;font-size:11px;background:linear-gradient(#5a4c3a,#3e3428);border-right:1px solid #1e1912}
+</style>
+</helmet>
+<div style="position: relative; width: 760px; height: 570px; overflow: hidden; font-family: 'Pixelify Sans', sans-serif; color: #fff; background: #3e3529; background-image: radial-gradient(rgba(0,0,0,.18) 1px, transparent 1px); background-size: 5px 5px">
+
+  <!-- 3D world viewport (real low-poly render) -->
+  <div style="position: absolute; left: 4px; top: 4px; width: 512px; height: 334px; overflow: hidden; border: 2px solid #1e1912; box-sizing: border-box; background: #000">
+    <img src="/_blob/0e13339baf8a268a5254a4032e286b11" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block">
+
+    <!-- hover text -->
+    <div class="s-sh" style="position: absolute; left: 5px; top: 3px; font-size: 13px">Visit <span style="color: #00ffff">Project C</span> / 3 more options</div>
+
+    <!-- XP tracker + drop -->
+    <div class="s-sh" style="position: absolute; right: 6px; top: 4px; padding: 2px 7px; background: rgba(30,25,18,.82); border: 1px solid #1e1912; font-size: 12px; display: flex; align-items: center; gap: 5px"><span style="width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff36b, #c08000); display: inline-block"></span>Exploring <span style="color: #fff">1,250</span></div>
+    <div class="s-sh" style="position: absolute; right: 18px; top: 70px; font-size: 14px; display: flex; align-items: center; gap: 4px; animation: s-xp 2.6s linear infinite"><span style="width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff36b, #c08000); display: inline-block"></span>25</div>
+
+    <!-- overhead chat above the guide -->
+    <div style="position: absolute; left: 160px; top: 82px; width: 120px; text-align: center; font-size: 13px; font-weight: 600; color: #ffff00; text-shadow: 1px 1px 0 #000">Welcome to Revscape!</div>
+
+    <!-- walk marker -->
+    <svg width="14" height="14" style="position: absolute; left: 318px; top: 212px; animation: s-x .5s steps(1) infinite" aria-hidden="true"><path d="M2 2L12 12M12 2L2 12" stroke="#ffff00" stroke-width="3"/></svg>
+
+    <!-- right-click menu at Project C's door -->
+    <div style="position: absolute; left: 300px; top: 222px; width: 176px; background: #5d5447; border: 1px solid #000; font-size: 13px; box-shadow: 0 0 0 1px #5d5447">
+      <div style="background: #000; color: #5d5447; padding: 1px 4px">Choose Option</div>
+      <div class="s-sh" style="padding: 1px 4px">Visit <span style="color: #00ffff">Project C</span></div>
+      <div class="s-sh" style="padding: 1px 4px">Examine <span style="color: #00ffff">Project C</span></div>
+      <div class="s-sh" style="padding: 1px 4px">Walk here</div>
+      <div class="s-sh" style="padding: 1px 4px">Cancel</div>
+    </div>
+  </div>
+
+  <!-- Minimap + orbs -->
+  <div style="position: absolute; left: 520px; top: 4px; width: 236px; height: 166px">
+    <div style="position: absolute; left: 76px; top: 2px; width: 156px; height: 156px; border-radius: 50%; border: 4px solid #2a2218; box-sizing: border-box; overflow: hidden; background: #4a7a26">
+      <div style="position: absolute; left: 66px; top: 0; width: 18px; height: 100%; background: #9a8460"></div>
+      <div style="position: absolute; left: 0; top: 68px; width: 100%; height: 16px; background: #9a8460"></div>
+      <span style="position: absolute; left: 30px; top: 30px; width: 26px; height: 20px; background: #c8c0a8"></span>
+      <span style="position: absolute; left: 98px; top: 28px; width: 28px; height: 20px; background: #c8c0a8"></span>
+      <span style="position: absolute; left: 96px; top: 98px; width: 26px; height: 20px; background: #c8c0a8"></span>
+      <span style="position: absolute; left: 22px; top: 96px; width: 34px; height: 22px; background: #c8c0a8"></span>
+      <span style="position: absolute; left: 62px; top: 62px; width: 14px; height: 14px; border-radius: 50%; background: #3f78b8; border: 2px solid #8a8a90"></span>
+      <span style="position: absolute; left: 76px; top: 82px; width: 4px; height: 4px; background: #fff"></span>
+      <span style="position: absolute; left: 56px; top: 54px; width: 4px; height: 4px; border-radius: 50%; background: #ffff00"></span>
+      <span style="position: absolute; left: 104px; top: 74px; width: 4px; height: 4px; border-radius: 50%; background: #ffff00"></span>
+      <span style="position: absolute; left: 40px; top: 84px; width: 4px; height: 4px; border-radius: 50%; background: #ffff00"></span>
+      <span style="position: absolute; left: 108px; top: 104px; width: 12px; height: 12px; border-radius: 50%; background: #c8141e; border: 1px solid #000"></span>
+    </div>
+    <!-- compass -->
+    <div style="position: absolute; left: 66px; top: 0; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(#c8b890, #8a7a58); border: 3px solid #2a2218; box-sizing: border-box; display: flex; align-items: center; justify-content: center"><span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 14px solid #c8141e; transform: rotate(-20deg)"></span></div>
+    <!-- orbs -->
+    <div style="position: absolute; left: 6px; top: 34px; display: flex; flex-direction: column; gap: 6px">
+      <div class="s-orb"><span class="s-sh" style="width: 26px; text-align: right; color: #00ff00">99</span><b style="background: radial-gradient(circle at 40% 35%, #ff6a6a, #8a0a0a)"></b></div>
+      <div class="s-orb"><span class="s-sh" style="width: 26px; text-align: right; color: #00ffff">45</span><b style="background: radial-gradient(circle at 40% 35%, #9ff, #0a5a8a)"></b></div>
+      <div class="s-orb"><span class="s-sh" style="width: 26px; text-align: right; color: #ffff00">100</span><b style="background: radial-gradient(circle at 40% 35%, #ffe680, #a87a00)"></b></div>
+      <div class="s-orb"><span class="s-sh" style="width: 26px; text-align: right; color: #ff9040">6</span><b style="background: radial-gradient(circle at 40% 35%, #9f8, #1e6a1e)"></b></div>
+    </div>
+  </div>
+
+  <!-- Side panel -->
+  <div style="position: absolute; left: 520px; top: 172px; width: 236px; height: 394px; background: #3e3529; border: 2px solid #1e1912; box-sizing: border-box; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: space-between; padding: 2px">
+      <span class="s-tab">⚔</span><span class="s-tab">📊</span><span class="s-tab">📜</span><span class="s-tab on">🎒</span><span class="s-tab">🛡</span><span class="s-tab">🙏</span><span class="s-tab">✨</span>
+    </div>
+    <div style="flex: 1; margin: 2px 6px; background: rgba(0,0,0,.18); border: 1px solid #2a2218; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 38px; padding: 6px 4px; align-content: start">
+      <div class="s-slot"><span class="s-q">1965</span><span style="width: 18px; height: 10px; border-radius: 50%; background: #e8c040; box-shadow: 0 -3px 0 #c8a020, 0 -6px 0 #e8c040, 3px -2px 0 #b89018"></span></div>
+      <div class="s-slot"><span style="width: 26px; height: 14px; background: linear-gradient(#9a6a34, #6a4420); border-radius: 7px; box-shadow: 0 6px 0 -1px #7a5028, inset -5px 0 0 #c8a070"></span></div>
+      <div class="s-slot"><span style="width: 22px; height: 26px; background: #e8dcb8; border: 2px solid #8a7a50; border-radius: 3px 3px 8px 8px; box-shadow: inset 0 4px 0 #c8b890"></span></div>
+      <div class="s-slot"><span style="width: 22px; height: 26px; background: #e8dcb8; border: 2px solid #8a7a50; border-radius: 3px 3px 8px 8px; box-shadow: inset 0 4px 0 #c8b890"></span></div>
+      <div class="s-slot"><span style="width: 22px; height: 26px; background: #e8dcb8; border: 2px solid #8a7a50; border-radius: 3px 3px 8px 8px; box-shadow: inset 0 4px 0 #c8b890; outline: 1px solid #fff"></span></div>
+      <div class="s-slot"><span style="width: 20px; height: 20px; background: #6a6a74; border: 2px solid #2a2a30; border-radius: 4px; color: #9ff; font-size: 13px; line-height: 16px; text-align: center">ᚱ</span></div>
+      <div class="s-slot"><span style="width: 24px; height: 8px; background: #b8b8c0; border: 2px solid #4a4a50; border-radius: 4px 0 0 4px; box-shadow: 8px 4px 0 -2px #b8b8c0"></span></div>
+      <div class="s-slot"><span style="width: 20px; height: 22px; background: linear-gradient(#8a8a94, #5a5a64); border: 2px solid #2a2a30; border-radius: 0 0 6px 6px; box-shadow: inset 0 6px 0 #3f78b8"></span></div>
+      <div class="s-slot"><span class="s-q">3</span><span style="width: 22px; height: 22px; background: radial-gradient(circle at 40% 35%, #ff7a7a, #a01010); border-radius: 50%; border: 2px solid #4a0a0a"></span></div>
+      <div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div>
+      <div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div>
+      <div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div>
+      <div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div>
+      <div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div><div class="s-slot"></div>
+    </div>
+    <div class="s-sh" style="margin: 0 6px 2px; padding: 3px 6px; background: rgba(0,0,0,.25); font-size: 11px; color: #ff9040">Project scroll: <span style="color: #fff">Use to visit a project.</span></div>
+    <div style="display: flex; justify-content: space-between; padding: 2px">
+      <span class="s-tab">👥</span><span class="s-tab">🙂</span><span class="s-tab">💬</span><span class="s-tab">🚪</span><span class="s-tab">⚙</span><span class="s-tab">🕺</span><span class="s-tab">🎵</span>
+    </div>
+  </div>
+
+  <!-- Chatbox -->
+  <div style="position: absolute; left: 4px; top: 342px; width: 512px; height: 190px; background: linear-gradient(#d8caa6, #c8b88e); border: 2px solid #1e1912; box-sizing: border-box; color: #000; font-size: 13px; line-height: 1.38">
+    <div style="position: absolute; left: 6px; top: 4px; right: 6px">
+      <div>Welcome to Revscape.</div>
+      <div><span style="color: #7f0000">News:</span> Project D has been released! Visit it east of the fountain.</div>
+      <div style="color: #6a0d8a">Revenantal is now playing Transport Fever 3.</div>
+      <div style="color: #0000c0">GitHub: hvrc-website was pushed 2 hours ago.</div>
+      <div style="color: #006000">Server Hall: Server 1 is online with 3 players.</div>
+      <div>It's a sturdy little building. The sign says <i>Project C</i>.</div>
+      <div style="color: #7f0000">Congratulations, you just advanced an Exploring level.</div>
+    </div>
+    <div style="position: absolute; left: 6px; right: 6px; bottom: 4px; border-top: 1px solid #8a7a58; padding-top: 2px">Revenantal: <span style="color: #0000ff">*</span></div>
+  </div>
+  <div style="position: absolute; left: 4px; top: 534px; width: 512px; height: 32px; display: flex; border: 2px solid #1e1912; box-sizing: border-box">
+    <span class="s-btn s-sh" style="background: linear-gradient(#7a6a50, #5a4c3a)"><span>All</span></span>
+    <span class="s-btn s-sh"><span>Game</span><span style="color: #00ff00">On</span></span>
+    <span class="s-btn s-sh"><span>Public</span><span style="color: #00ff00">On</span></span>
+    <span class="s-btn s-sh"><span>Private</span><span style="color: #ffff00">Friends</span></span>
+    <span class="s-btn s-sh"><span>Channel</span><span style="color: #00ff00">On</span></span>
+    <span class="s-btn s-sh"><span>Clan</span><span style="color: #00ff00">On</span></span>
+    <span class="s-btn s-sh"><span>Trade</span><span style="color: #ff0000">Off</span></span>
+    <span class="s-btn s-sh" style="background: linear-gradient(#7a2a1a, #5a1e12); border-right: none"><span>Report</span></span>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

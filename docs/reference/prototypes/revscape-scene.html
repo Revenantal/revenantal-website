@@ -1,0 +1,106 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>body{margin:0;background:#000}canvas{display:block}</style></head>
+<body>
+<script type="module">
+import * as THREE from './node_modules/three/build/three.module.js';
+
+// Revscape test scene: low-poly, flat-shaded, OSRS-like camera and black fog edge.
+const W = 1024, H = 668;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+scene.fog = new THREE.Fog(0x000000, 27, 42);
+
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const lam = (c) => new THREE.MeshLambertMaterial({ color: c, flatShading: true, vertexColors: false });
+
+// Ground: per-tile colours, gentle height noise, a dirt crossroads.
+const N = 44, S = 1;
+const isPath = (i, j) => (Math.abs(j - 22) <= 1) || (Math.abs(i - 21) <= 1 && j < 34) || (i > 21 && i < 31 && Math.abs(j - 12) <= 0);
+const hgt = {};
+const h = (i, j) => { const k = i + ',' + j; if (!(k in hgt)) hgt[k] = (Math.abs(i - 22) < 9 && Math.abs(j - 22) < 9) ? (rnd() * 0.08) : (rnd() * 0.5 + Math.max(0, (Math.abs(i - 22) - 12) * 0.12)); return hgt[k]; };
+const pos = [], col = [];
+const c = new THREE.Color();
+for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+  const x0 = (i - N / 2) * S, z0 = (j - N / 2) * S, x1 = x0 + S, z1 = z0 + S;
+  const a = [x0, h(i, j), z0], b = [x1, h(i + 1, j), z0], d = [x0, h(i, j + 1), z1], e = [x1, h(i + 1, j + 1), z1];
+  const p = isPath(i, j);
+  const base = p ? [0.56, 0.45, 0.3] : [0.26 + rnd() * 0.05, 0.42 + rnd() * 0.08, 0.13 + rnd() * 0.04];
+  for (const tri of [[a, d, b], [b, d, e]]) {
+    const v = p ? 0.92 + rnd() * 0.12 : 0.9 + rnd() * 0.15;
+    for (const q of tri) { pos.push(...q); col.push(base[0] * v, base[1] * v, base[2] * v); }
+  }
+}
+const gg = new THREE.BufferGeometry();
+gg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+gg.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+gg.computeVertexNormals();
+scene.add(new THREE.Mesh(gg, new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true })));
+
+// Helpers
+function box(w, hh, d, color, x, y, z, ry = 0) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, hh, d), lam(color)); m.position.set(x, y + hh / 2, z); m.rotation.y = ry; scene.add(m); return m; }
+function roof(w, d, hh, color, x, y, z, ry = 0) {
+  const sh = new THREE.Shape(); sh.moveTo(-w / 2 - 0.3, 0); sh.lineTo(w / 2 + 0.3, 0); sh.lineTo(0, hh); sh.lineTo(-w / 2 - 0.3, 0);
+  const g = new THREE.ExtrudeGeometry(sh, { depth: d + 0.6, bevelEnabled: false }); g.translate(0, 0, -(d + 0.6) / 2);
+  const m = new THREE.Mesh(g, lam(color)); m.position.set(x, y, z); m.rotation.y = ry; scene.add(m); return m;
+}
+function house(x, z, w, d, wall, roofC, ry = 0, tall = 2.2) {
+  box(w, tall, d, wall, x, 0, z, ry);
+  roof(w, d, 1.6, roofC, x, tall, z, ry);
+  const dx = Math.sin(ry), dz = Math.cos(ry);
+  box(0.9, 1.5, 0.1, 0x3a2410, x + dx * (d / 2 + 0.02), 0, z + dz * (d / 2 + 0.02), ry);
+  box(0.6, 0.55, 0.1, 0x16202a, x + dx * (d / 2 + 0.02) + dz * 1.4, 1.1, z + dz * (d / 2 + 0.02) - dx * 1.4, ry);
+  box(0.6, 0.55, 0.1, 0x16202a, x + dx * (d / 2 + 0.02) - dz * 1.4, 1.1, z + dz * (d / 2 + 0.02) + dx * 1.4, ry);
+}
+function tree(x, z, s = 1) {
+  box(0.3 * s, 1.1 * s, 0.3 * s, 0x5a3a1a, x, 0, z);
+  const f = new THREE.Mesh(new THREE.IcosahedronGeometry(1.0 * s, 0), lam([0x2f5a1a, 0x3c7024, 0x335f1c][Math.floor(rnd() * 3)]));
+  f.position.set(x, 1.7 * s, z); f.rotation.set(rnd(), rnd(), rnd()); scene.add(f);
+}
+function person(x, z, shirt, ry = 0) {
+  const g = new THREE.Group();
+  const add = (w, hh, d, color, px, py, pz) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, hh, d), lam(color)); m.position.set(px, py, pz); g.add(m); };
+  add(0.18, 0.5, 0.18, 0x3a2a1a, -0.12, 0.25, 0); add(0.18, 0.5, 0.18, 0x3a2a1a, 0.12, 0.25, 0.05);
+  add(0.5, 0.55, 0.3, shirt, 0, 0.78, 0); add(0.14, 0.5, 0.14, shirt, -0.33, 0.8, 0.05); add(0.14, 0.5, 0.14, shirt, 0.33, 0.8, -0.05);
+  add(0.32, 0.32, 0.32, 0xe0aa80, 0, 1.22, 0); add(0.34, 0.1, 0.34, 0x3a2414, 0, 1.4, 0);
+  g.position.set(x, 0, z); g.rotation.y = ry; scene.add(g); return g;
+}
+
+// Buildings (projects) around the crossroads
+house(-6.2, -5.5, 5, 4, 0xb8a888, 0x7a4a22, 0);           // Project A (thatch)
+house(6.4, -6.0, 5.6, 4.2, 0xa8a8a8, 0x8e2a1e, 0);        // Project B (red roof)
+house(6.6, 5.2, 5, 4, 0xbcae90, 0x7a4a22, 0);       // Project C
+house(-7.6, 5.4, 6.4, 4.4, 0x8e8e94, 0x3e3e4a, 0, 2.8); // Server Hall
+// Fountain
+const f1 = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.7, 0.5, 10), lam(0x8a8a90)); f1.position.set(-0.5, 0.25, 0.5); scene.add(f1);
+const f2 = new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.35, 0.06, 10), lam(0x3f78b8)); f2.position.set(-0.5, 0.5, 0.5); scene.add(f2);
+const f3 = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.25, 1.3, 6), lam(0xa0a0a8)); f3.position.set(-0.5, 0.6, 0.5); scene.add(f3);
+// Trees, fence, stall, crates
+[[-11, -1], [-12, 3], [11, 1.5], [12.5, -2], [-2.5, -10], [3, -11], [-13, -8], [13, 10], [-3, 11], [1.5, 12.5], [14, -9], [-15, 12]].forEach(([x, z]) => tree(x, z, 0.9 + rnd() * 0.4));
+for (let k = 0; k < 9; k++) box(0.12, 0.8, 0.12, 0x6a4a28, 9 + k * 0.8, 0, -11);
+box(7.2, 0.08, 0.08, 0x6a4a28, 12.2, 0.6, -11);
+box(1.8, 1.0, 1.0, 0x8a5a2a, 2.6, 0, -2.4); box(2.0, 0.08, 1.2, 0xc8141e, 2.6, 1.7, -2.4); box(0.08, 0.7, 0.08, 0x5a3a1a, 1.7, 1.0, -1.9); box(0.08, 0.7, 0.08, 0x5a3a1a, 3.5, 1.0, -1.9);
+box(0.6, 0.6, 0.6, 0x9a6a34, -3.4, 0, -2.6); box(0.5, 0.5, 0.5, 0x8a5a2a, -3.0, 0, -3.1);
+// People: player (red) + guide + two others
+person(1.6, 2.2, 0xc8141e, -0.6);
+person(-2.6, -1.4, 0x2a6ab8, 0.8);
+person(4.4, 0.4, 0x6a8a2a, 2.4);
+person(-4.4, 3.4, 0x8a2a8a, -2.2);
+
+// Light + OSRS-style camera
+scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x3a3020, 0.9));
+const sun = new THREE.DirectionalLight(0xfff2dd, 1.1); sun.position.set(-8, 14, 6); scene.add(sun);
+const cam = new THREE.PerspectiveCamera(46, W / H, 0.1, 100);
+cam.position.set(4.0, 14.5, 19.5); cam.lookAt(0.4, 0, 1.6);
+renderer.render(scene, cam);
+
+// Report screen positions of labelled points for the HTML overlay (in 512x334 space)
+const pts = { A: [-6.2, 4.4, -5.5], B: [6.4, 4.4, -6.0], C: [6.6, 4.2, 5.2], Hall: [-7.6, 5.0, 5.4], player: [1.6, 1.9, 2.2], guide: [-2.6, 1.9, -1.4], doorC: [6.6, 0.2, 7.4], fountain: [-0.5, 1.6, 0.5], stall: [2.6, 2.2, -2.4] };
+const out = {};
+for (const [k, v] of Object.entries(pts)) { const p = new THREE.Vector3(...v).project(cam); out[k] = [Math.round((p.x + 1) / 2 * 512), Math.round((1 - p.y) / 2 * 334)]; }
+console.log('PTS ' + JSON.stringify(out));
+window.__done = true;
+</script>
+</body></html>

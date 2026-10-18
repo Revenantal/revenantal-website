@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CH 01 · TV Guide (forecast)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;700&amp;family=Archivo+Black&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+@keyframes g-scroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@keyframes g-pan{from{background-position:0 0}to{background-position:0 64px}}
+.g-row{display:grid;grid-template-columns:118px 1fr 1fr 1fr;height:46px;border-bottom:2px solid #050a2a}
+.g-ch{display:flex;flex-direction:column;justify-content:center;padding:0 10px;background:linear-gradient(#c8141e,#8e0c14);color:#fff;border-right:2px solid #050a2a}
+.g-ch b{font-family:'Archivo Black',sans-serif;font-size:15px;letter-spacing:.04em;line-height:1}
+.g-ch span{font-size:11px;color:#ffd7d9;line-height:1.2}
+.g-c{display:flex;flex-direction:column;justify-content:center;padding:0 10px;border-right:2px solid #050a2a;color:#fff;overflow:hidden;white-space:nowrap}
+.g-c b{font-size:17px;line-height:1.05}
+.g-c span{font-size:12px;color:#c9d3ff;line-height:1.2}
+.g-tag{display:inline-block;margin-left:6px;padding:0 4px;background:#ffd400;color:#0b1650;font-size:11px;font-weight:700;vertical-align:2px}
+</style>
+</helmet>
+<div style="position: relative; width: 760px; height: 570px; overflow: hidden; background: #0b1650; font-family: 'Archivo Narrow', sans-serif; color: #fff">
+
+  <!-- Promo window: local forecast segment -->
+  <div style="position: absolute; left: 0; top: 0; width: 452px; height: 262px; overflow: hidden; background: linear-gradient(#1d4fa8, #0e2a6a)">
+    <div style="position: absolute; left: 14px; top: 12px; padding: 3px 8px; background: #ffd400; color: #0b1650; font-family: 'Archivo Black', sans-serif; font-size: 12px; letter-spacing: .06em">LOCAL FORECAST</div>
+    <div style="position: absolute; right: 14px; top: 12px; font-size: 15px; color: #c9d3ff">Springfield</div>
+    <div style="position: absolute; left: 18px; top: 48px; display: flex; align-items: center; gap: 14px">
+      <svg viewBox="0 0 60 60" width="72" height="72" aria-hidden="true"><circle cx="24" cy="24" r="13" fill="#ffd400"/><g stroke="#ffd400" stroke-width="3" stroke-linecap="round"><path d="M24 3v5M24 40v5M3 24h5M40 24h5M9 9l4 4M35 35l4 4M9 39l4-4M35 13l4-4"/></g><path d="M22 48a10 10 0 0 1 2-20a13 13 0 0 1 25 4a8 8 0 0 1-1 16z" fill="#f4f6ff"/></svg>
+      <div><div style="font-family: 'Archivo Black', sans-serif; font-size: 52px; line-height: .9">12°</div><div style="font-size: 16px; color: #c9d3ff">Partly cloudy · feels like 10°</div></div>
+    </div>
+    <div style="position: absolute; left: 14px; right: 14px; bottom: 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px">
+      <div style="padding: 6px 8px; background: rgba(11,22,80,.6); border: 2px solid #050a2a; text-align: center"><div style="font-family: 'Archivo Black', sans-serif; font-size: 13px; color: #ffd400">TONIGHT</div><div style="font-size: 15px">Clear · 4°</div></div>
+      <div style="padding: 6px 8px; background: rgba(11,22,80,.6); border: 2px solid #050a2a; text-align: center"><div style="font-family: 'Archivo Black', sans-serif; font-size: 13px; color: #ffd400">MON</div><div style="font-size: 15px">Rain · 9° / 3°</div></div>
+      <div style="padding: 6px 8px; background: rgba(11,22,80,.6); border: 2px solid #050a2a; text-align: center"><div style="font-family: 'Archivo Black', sans-serif; font-size: 13px; color: #ffd400">TUE</div><div style="font-size: 15px">Sun · 14° / 6°</div></div>
+    </div>
+  </div>
+
+  <!-- Station panel -->
+  <div style="position: absolute; left: 452px; top: 0; width: 308px; height: 262px; background: linear-gradient(#18287e, #0b1650); border-left: 3px solid #050a2a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px">
+    <div style="padding: 8px 14px; background: #ffd400; color: #0b1650; box-shadow: 4px 4px 0 #050a2a; text-align: center">
+      <div style="font-family: 'Archivo Black', sans-serif; font-size: 24px; line-height: 1; letter-spacing: .02em">REVENANTAL</div>
+      <div style="font-weight: 700; font-size: 13px; letter-spacing: .5em; margin-right: -.5em">GUIDE</div>
+    </div>
+    <div style="font-family: 'Archivo Black', sans-serif; font-size: 46px; line-height: 1; letter-spacing: .02em">7:42<span style="font-size: 22px"> PM</span></div>
+    <div style="font-size: 15px; letter-spacing: .2em; color: #c9d3ff">SUNDAY · OCT 18</div>
+    <div style="margin-top: 4px; font-size: 13px; color: #ffd400">● 8 projects on air · 6 servers up</div>
+  </div>
+
+  <!-- Time header -->
+  <div style="position: absolute; left: 0; top: 262px; width: 760px; height: 30px; display: grid; grid-template-columns: 118px 1fr 1fr 1fr; background: #ffd400; color: #0b1650; font-family: 'Archivo Black', sans-serif; font-size: 14px; border-top: 3px solid #050a2a; border-bottom: 3px solid #050a2a; box-sizing: border-box">
+    <div style="padding: 4px 10px">SUN 10/18</div><div style="padding: 4px 10px">7:30 PM</div><div style="padding: 4px 10px">8:00 PM</div><div style="padding: 4px 10px">8:30 PM</div>
+  </div>
+
+  <!-- Listings grid: rows are projects (call sign + host), cells are "programmes" -->
+  <div style="position: absolute; left: 0; top: 292px; width: 760px; height: 278px; overflow: hidden">
+    <div style="animation: g-scroll 26s linear infinite">
+      <div class="g-row" style="background: #1b2f8f"><div class="g-ch"><b>PRJA</b><span>a.revenantal.com</span></div><div class="g-c" style="grid-column: span 2"><b>Project A<span class="g-tag">LIVE</span></b><span>A one-line description of what this does.</span></div><div class="g-c"><b>Project A</b><span>(cont'd)</span></div></div>
+      <div class="g-row" style="background: #16277a"><div class="g-ch"><b>PRJB</b><span>b.revenantal.com</span></div><div class="g-c"><b>Project B</b><span>Tool for friends.</span></div><div class="g-c" style="grid-column: span 2"><b>Project B<span class="g-tag">NEW</span></b><span>Added this week. One-line description.</span></div></div>
+      <div class="g-row" style="background: #1b2f8f"><div class="g-ch"><b>PRJC</b><span>c.revenantal.com</span></div><div class="g-c" style="grid-column: span 3"><b>Project C</b><span>Sandbox · a one-line description that runs a little longer than the others.</span></div></div>
+      <div class="g-row" style="background: #16277a"><div class="g-ch"><b>SRV1</b><span>game server</span></div><div class="g-c" style="grid-column: span 3"><b>Server 1 · running<span class="g-tag">3/20</span></b><span>Players on now · up 4 days</span></div></div>
+      <div class="g-row" style="background: #1b2f8f"><div class="g-ch"><b>PRJD</b><span>d.revenantal.com</span></div><div class="g-c" style="grid-column: span 2"><b>Project D</b><span>A one-line description.</span></div><div class="g-c"><b>Project E</b><span>Starts 8:30</span></div></div>
+      <div class="g-row" style="background: #16277a"><div class="g-ch" style="background: linear-gradient(#ffd400, #d9a800); color: #0b1650"><b>CH 08</b><span style="color: #0b1650">on the dial</span></div><div class="g-c" style="grid-column: span 3"><b>The Late Show</b><span>Tonight's feature from the public domain.</span></div></div>
+      <div class="g-row" style="background: #1b2f8f"><div class="g-ch"><b>GIT</b><span>latest push</span></div><div class="g-c" style="grid-column: span 3"><b>hvrc-website</b><span>Pushed 2 hours ago</span></div></div>
+      <div class="g-row" style="background: #16277a"><div class="g-ch"><b>STM</b><span>now playing</span></div><div class="g-c" style="grid-column: span 3"><b>Transport Fever 3</b><span>23.8 hours in the past two weeks</span></div></div>
+      <!-- duplicate for seamless scroll -->
+      <div class="g-row" style="background: #1b2f8f"><div class="g-ch"><b>PRJA</b><span>a.revenantal.com</span></div><div class="g-c" style="grid-column: span 2"><b>Project A<span class="g-tag">LIVE</span></b><span>A one-line description of what this does.</span></div><div class="g-c"><b>Project A</b><span>(cont'd)</span></div></div>
+      <div class="g-row" style="background: #16277a"><div class="g-ch"><b>PRJB</b><span>b.revenantal.com</span></div><div class="g-c"><b>Project B</b><span>Tool for friends.</span></div><div class="g-c" style="grid-column: span 2"><b>Project B<span class="g-tag">NEW</span></b><span>Added this week. One-line description.</span></div></div>
+      <div class="g-row" style="background: #1b2f8f"><div class="g-ch"><b>PRJC</b><span>c.revenantal.com</span></div><div class="g-c" style="grid-column: span 3"><b>Project C</b><span>Sandbox · a one-line description that runs a little longer than the others.</span></div></div>
+      <div class="g-row" style="background: #16277a"><div class="g-ch"><b>SRV1</b><span>game server</span></div><div class="g-c" style="grid-column: span 3"><b>Server 1 · running<span class="g-tag">3/20</span></b><span>Players on now · up 4 days</span></div></div>
+      <div class="g-row" style="background: #1b2f8f"><div class="g-ch"><b>PRJD</b><span>d.revenantal.com</span></div><div class="g-c" style="grid-column: span 2"><b>Project D</b><span>A one-line description.</span></div><div class="g-c"><b>Project E</b><span>Starts 8:30</span></div></div>
+      <div class="g-row" style="background: #16277a"><div class="g-ch" style="background: linear-gradient(#ffd400, #d9a800); color: #0b1650"><b>CH 08</b><span style="color: #0b1650">on the dial</span></div><div class="g-c" style="grid-column: span 3"><b>The Late Show</b><span>Tonight's feature from the public domain.</span></div></div>
+      <div class="g-row" style="background: #1b2f8f"><div class="g-ch"><b>GIT</b><span>latest push</span></div><div class="g-c" style="grid-column: span 3"><b>hvrc-website</b><span>Pushed 2 hours ago</span></div></div>
+      <div class="g-row" style="background: #16277a"><div class="g-ch"><b>STM</b><span>now playing</span></div><div class="g-c" style="grid-column: span 3"><b>Transport Fever 3</b><span>23.8 hours in the past two weeks</span></div></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CH 09 · Paid Programming</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&amp;family=Archivo+Black&amp;family=Archivo+Narrow:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+@keyframes p-burst{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(-8deg) scale(1.06)}}
+@keyframes p-stripes{from{background-position:0 0}to{background-position:80px 0}}
+</style>
+</helmet>
+<div style="position: relative; width: 760px; height: 570px; overflow: hidden; font-family: 'Archivo Narrow', sans-serif; color: #fff; background: linear-gradient(160deg, #0fb5b0 0%, #1a6fd1 45%, #6a1fb8 100%)">
+
+  <!-- Studio set: diagonal stripes, floor, glowing grid -->
+  <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(115deg, rgba(255,255,255,.08) 0 40px, transparent 40px 80px); animation: p-stripes 3s linear infinite"></div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 170px; background: linear-gradient(#ff3ca0, #8a1060); clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%)"></div>
+  <div style="position: absolute; left: 60px; top: 70px; width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, #fff36b, #ffb800 60%, transparent 62%); opacity: .9"></div>
+
+  <!-- Presenter: a generic, original silhouette (no real person) -->
+  <svg viewBox="-40 0 300 360" width="300" height="360" style="position: absolute; left: 430px; top: 150px" aria-hidden="true">
+    <ellipse cx="130" cy="352" rx="110" ry="12" fill="rgba(0,0,0,.25)"/>
+    <path d="M40 360 C40 250 70 210 130 210 C190 210 220 250 220 360Z" fill="#1c1c3a"/>
+    <path d="M112 212 L130 270 L148 212Z" fill="#fff"/><path d="M126 222 L134 222 L138 290 L130 300 L122 290Z" fill="#c8141e"/>
+    <rect x="114" y="176" width="32" height="40" rx="10" fill="#e9b48c"/>
+    <ellipse cx="130" cy="140" rx="46" ry="54" fill="#e9b48c"/>
+    <path d="M84 132 C84 84 176 80 176 130 C168 108 150 100 130 100 C110 100 92 108 84 132Z" fill="#3a2414"/>
+    <path d="M108 164 Q130 186 152 164" stroke="#5a1a14" stroke-width="5" fill="#fff" stroke-linecap="round"/>
+    <circle cx="112" cy="136" r="5" fill="#222"/><circle cx="148" cy="136" r="5" fill="#222"/>
+    <!-- pointing arm -->
+    <path d="M60 260 C20 230 0 200 -10 186" stroke="#1c1c3a" stroke-width="34" stroke-linecap="round" fill="none"/>
+    <circle cx="-12" cy="182" r="16" fill="#e9b48c"/>
+  </svg>
+
+  <!-- Headline -->
+  <div style="position: absolute; left: 36px; top: 108px; width: 470px; transform: rotate(-3deg)">
+    <div style="font-family: 'Bungee', sans-serif; font-size: 66px; line-height: .95; color: #fff36b; text-shadow: 4px 4px 0 #c8141e, 8px 8px 0 #2a0a4a">REVENANTAL!</div>
+    <div style="margin-top: 14px; font-family: 'Archivo Black', sans-serif; font-size: 28px; line-height: 1.1; text-shadow: 3px 3px 0 #2a0a4a">Hosting so good,<br>your friends will ask<br>who set it up.</div>
+  </div>
+
+  <!-- Starburst -->
+  <div style="position: absolute; left: 372px; top: 262px; width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; text-align: center; color: #c8141e; font-family: 'Bungee', sans-serif; font-size: 15px; line-height: 1.05; background: #fff36b; clip-path: polygon(50% 0, 61% 18%, 82% 10%, 80% 32%, 100% 40%, 86% 56%, 98% 76%, 76% 78%, 70% 100%, 52% 86%, 32% 100%, 26% 78%, 4% 76%, 16% 56%, 0 40%, 20% 32%, 18% 10%, 39% 18%); animation: p-burst 1.2s ease-in-out infinite">AS SEEN<br>ON CH 09</div>
+
+  <!-- Closed captions -->
+  <div style="position: absolute; left: 50%; bottom: 74px; transform: translateX(-50%); white-space: nowrap; padding: 6px 12px; background: #000; font-family: 'Courier New', monospace; font-size: 18px; line-height: 1.3; text-align: center; color: #fff">He's the best, isn't he? Folks, I've<br>never seen uptime like it.</div>
+
+  <!-- Chrome: clip counter, parody tag, programme bug -->
+  <div style="position: absolute; left: 18px; top: 16px; padding: 3px 8px; background: rgba(0,0,0,.55); font-size: 13px; letter-spacing: .1em">CLIP 3 / 8 · 0:12</div>
+  <div style="position: absolute; right: 18px; top: 16px; padding: 3px 8px; border: 1px solid rgba(255,255,255,.7); font-size: 11px; letter-spacing: .2em">PARODY · AI-ALTERED</div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; background: rgba(0,0,0,.72); font-size: 15px">
+    <span style="font-family: 'Archivo Black', sans-serif; letter-spacing: .12em">PAID PROGRAMMING</span>
+    <span style="color: #fff36b">Operators are <u>not</u> standing by.</span>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
