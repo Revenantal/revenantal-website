@@ -7,7 +7,7 @@ Where code goes and what may import what. Code is grouped by what it is: content
 ```txt
 revenantal/
 ├─ AGENTS.md / CLAUDE.md   # agent entry points
-├─ README.md               # setup, scripts, add a project, add a channel
+├─ README.md               # TV operating manual
 ├─ docs/                   # all project documentation
 ├─ content/                # hand-edited JSON only; the build merges it into site.json
 │  ├─ projects.json
@@ -85,3 +85,7 @@ Never:
 ## Adding a Project
 
 Add an entry to `content/projects.json`. Every channel picks it up. No code changes.
+
+## Current Scaffold (2026-10-18)
+
+`src/main.tsx` mounts `src/App.tsx`, a temporary branded holding screen with adjacent CSS Module. The documented module folders contain ownership READMEs; content, services, TV and channels are not implemented. Build/configuration lives at the root, repository policy checks under `tools/checks/`, and the existing reference package remains independent. See [local development](local-development.md) for commands.

@@ -77,3 +77,7 @@ Laptop, cold cache, good connection. size-limit fails the build on the JS budget
 ## Authorship
 
 No AI attribution in commits, PRs, release notes, `CREDITS.md` or the site. The `commit-msg` hook and the CI attribution check both fail on `Co-Authored-By` AI trailers, "Generated with" footers and session links. See `docs/development/git-workflow.md`.
+
+## Implementation Status (2026-10-18)
+
+The local feature branch now contains `ci.yml` with pinned actions, frozen-lockfile install, formatting/lint/type/test/build-size checks and commit/PR attribution validation. Dependabot is configured. CI has not run remotely. No deploy workflow, service image, webhook, secret or remote branch protection has been provisioned; the hosting sections above remain requirements for task 1.3. Temporary CI push triggers include the existing `master` baseline alongside `main`.

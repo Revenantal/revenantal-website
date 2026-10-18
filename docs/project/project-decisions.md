@@ -106,6 +106,13 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Remove accidental root `settings.json` (duplicate Markdown PR template), resolving F12. Preserve `.github/pull_request_template.md` and `.claude/settings.json`.
 - Film selection remains deferred to The Late Show review. No individual channel build is approved; accessibility, performance and deployment gates remain pending.
 
+### Foundation implementation (2026-10-18)
+
+- Build begins with tasks 1.1–1.2 on `feat/1.1-foundation`, branching from the committed `master` baseline. No channel implementation is approved.
+- Use Node 24, pnpm 11.9.0, Vite/Preact and exact package versions with a root lockfile. Keep the reference package independent. Pin TypeScript 6.0 while typescript-eslint supports versions below 6.1; ESLint 9 matches the declared peer support of jsx-a11y. Revisit tool versions together when peers support newer majors.
+- A minimal static holding screen proves the application mount/build; shared content and List mode follow after CI/deployment setup. No project data is invented.
+- CI is authored for PRs and pushes to main/master, with immutable action pins and no deployment side effects. Service images, deployment workflow and remote branch settings remain task 1.3 work.
+
 ## Clarifications
 
 - **README tone (2026-10-18, revised).** The root README is a vintage TV user manual, written as the finished visitor experience. Use operating instructions rather than channel listings or development status. Actual implementation progress remains in `status.md`; the manual does not mark any build task complete.

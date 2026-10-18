@@ -1,0 +1,2 @@
+pnpm exec commitlint --edit "$1"
+pnpm exec node tools/checks/check-attribution.ts --file "$1"

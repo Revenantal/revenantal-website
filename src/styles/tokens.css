@@ -1,0 +1,19 @@
+:root {
+  color-scheme: dark;
+
+  --color-background: #100b0d;
+  --color-text: #f1ebe7;
+  --color-muted: #bfb2b6;
+  --color-accent: #aa253e;
+  --font-body: system-ui, sans-serif;
+  --font-small: 0.75rem;
+  --line-body: 1.6;
+  --line-heading: 1;
+  --tracking-label: 0.15em;
+  --tracking-heading: -0.06em;
+  --space-item: 1rem;
+  --space-section: 2rem;
+  --space-page: clamp(1.25rem, 5vw, 4rem);
+  --content-width: 48rem;
+  --border-width: 2px;
+}

@@ -1,0 +1,64 @@
+{
+  "name": "revenantal",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "preview": "vite preview --host 127.0.0.1",
+    "build": "vite build && size-limit",
+    "lint": "eslint . --max-warnings 0 && stylelint \"src/**/*.css\"",
+    "lint:fix": "eslint . --fix && stylelint \"src/**/*.css\" --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "prepare": "husky",
+    "check:attribution": "node tools/checks/check-attribution.ts"
+  },
+  "size-limit": [
+    {
+      "name": "Initial JavaScript",
+      "path": "dist/assets/*.js",
+      "limit": "90 kB",
+      "gzip": true
+    }
+  ],
+  "dependencies": {
+    "preact": "11.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.29.7",
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
+    "@eslint/js": "9.39.5",
+    "@preact/preset-vite": "2.10.6",
+    "@size-limit/file": "14.2.0",
+    "@testing-library/preact": "3.2.4",
+    "@types/node": "24.19.2",
+    "eslint": "9.39.5",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-import-resolver-typescript": "4.4.5",
+    "eslint-plugin-boundaries": "7.2.0",
+    "eslint-plugin-jsdoc": "65.3.11",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "husky": "9.1.7",
+    "jsdom": "30.1.3",
+    "lint-staged": "17.6.0",
+    "prettier": "3.9.10",
+    "size-limit": "14.2.0",
+    "stylelint": "17.16.0",
+    "stylelint-config-standard": "40.0.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.2",
+    "vite": "8.3.4",
+    "vitest": "5.0.5"
+  }
+}

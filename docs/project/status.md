@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 1, task 1.1: scaffold the repo.
+**Current focus:** Review the local foundation (1.1–1.2), then complete task 1.3 deployment/CI setup before content/data work.
 
 **Last updated:** 2026-10-18
 
@@ -19,9 +19,9 @@ What is built and where things are. Tick an item when its task has reached `main
 
 ## Phase 1 — Foundation, Data and List Mode
 
-- [ ] 1.1 Scaffold repo
-- [ ] 1.2 Tooling and pre-commit hooks
-- [ ] 1.3 CI, deploy, branch protection
+- [ ] 1.1 Scaffold repo — implemented locally; awaiting PR/merge
+- [ ] 1.2 Tooling and pre-commit hooks — implemented locally; awaiting PR/merge
+- [ ] 1.3 CI, deploy, branch protection — CI checks/Dependabot authored; deployment and remote settings pending
 - [ ] 1.4 Content schemas and files
 - [ ] 1.5 Store and shared UI actions
 - [ ] 1.6 Live job
@@ -71,6 +71,14 @@ What is built and where things are. Tick an item when its task has reached `main
 - [ ] 5.2 Night Drive
 - [ ] 5.3 Revscape
 - [ ] **Gate 5 — v1 complete**
+
+## Foundation Build (2026-10-18)
+
+Started on `feat/1.1-foundation` from baseline `7b03e00`. Added Preact/Vite, strict TypeScript, module aliases and ownership READMEs, CSS Modules/tokens, a static holding screen, pinned dependencies/lockfile, lint/format/test/size checks, Husky/lint-staged/commitlint, attribution enforcement and CI/Dependabot definitions. No real content, services, TV shell or individual channels are implemented.
+
+Local lint, type-check and 18 policy tests pass. The initial production JavaScript is about 5.2 kB gzipped against the 90 kB budget. Browser checks at 1280×650 and 390×844 with reduced motion show HTTP 200, the expected main/heading, no horizontal overflow, no console errors and no external requests. The installed commit-msg hook accepts a valid message and rejects a co-author trailer. The full `pnpm check` command and the installed pre-commit hook passed; staged whitespace checks are clean.
+
+No task is checked off because the feature has not reached `main`; no remote CI result, deployment or phase gate is claimed.
 
 ## Channel Build Approvals
 
