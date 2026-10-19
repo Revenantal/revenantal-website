@@ -29,6 +29,7 @@ export function RoomBackdrop({ color, opacity }: RoomBackdropProps) {
         className={styles.photo}
         src="/assets/tv/room.webp"
         alt=""
+        draggable={false}
         width={1536}
         height={1024}
       />

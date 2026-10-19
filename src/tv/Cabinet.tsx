@@ -39,6 +39,7 @@ export function Cabinet({ picture, glow, children, controls }: CabinetProps) {
         className={styles.photo}
         src={`${ASSETS}/frame.webp`}
         alt=""
+        draggable={false}
         width={STAGE.width}
         height={STAGE.height}
         style={boxStyle({ left: 0, top: 0, ...STAGE })}
@@ -47,6 +48,7 @@ export function Cabinet({ picture, glow, children, controls }: CabinetProps) {
         className={styles.photo}
         src={`${ASSETS}/door.webp`}
         alt=""
+        draggable={false}
         style={boxStyle(DOOR)}
       />
       {controls}

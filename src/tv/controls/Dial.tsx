@@ -120,6 +120,7 @@ export function Dial({ position, slots, label, onTune, onDrag }: DialProps) {
         className={styles.knob}
         src="/assets/tv/knob.webp"
         alt=""
+        draggable={false}
         style={{
           left: `${String(DIAL.x - DIAL.sprite / 2)}px`,
           top: `${String(DIAL.y - DIAL.sprite / 2)}px`,

@@ -52,8 +52,10 @@ describe("TV view", () => {
       "/assets/tv/vol.webp",
       "/assets/tv/cap.webp",
     ]);
-    for (const image of container.querySelectorAll("img"))
+    for (const image of container.querySelectorAll("img")) {
       expect(image.getAttribute("alt")).toBe("");
+      expect(image.draggable).toBe(false);
+    }
     expect(container.textContent).toContain("SOLID STATE · MODEL RV-404");
   });
 
@@ -139,5 +141,26 @@ describe("TV view", () => {
     expect(store.getSnapshot().settings.volume).toBe(4);
     fireEvent.click(slider, { clientX: 90 });
     expect(store.getSnapshot().settings.volume).toBe(5);
+  });
+
+  it("turns volume by dragging round the knob, 27° per step, from where it was grabbed", () => {
+    const { store } = renderTv();
+    const slider = screen.getByRole("slider", { name: "Volume" });
+    vi.spyOn(slider, "getBoundingClientRect").mockReturnValue({
+      left: 0,
+      top: 0,
+      width: 100,
+      height: 100,
+    } as DOMRect);
+    Object.assign(slider, { setPointerCapture: vi.fn() });
+
+    fireEvent.pointerDown(slider, { clientX: 50, clientY: 10, pointerId: 1 });
+    fireEvent.pointerMove(slider, { clientX: 90, clientY: 50, pointerId: 1 });
+    expect(store.getSnapshot().settings.volume).toBe(8);
+    fireEvent.pointerMove(slider, { clientX: 50, clientY: 90, pointerId: 1 });
+    expect(store.getSnapshot().settings.volume).toBe(10);
+    fireEvent.pointerMove(slider, { clientX: 10, clientY: 50, pointerId: 1 });
+    expect(store.getSnapshot().settings.volume).toBe(10);
+    fireEvent.pointerUp(slider, { pointerId: 1 });
   });
 });

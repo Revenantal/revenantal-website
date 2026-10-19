@@ -6,6 +6,7 @@ import type {
   TargetedWheelEvent,
 } from "preact";
 import { VOLUME } from "../geometry";
+import { pointerAngle } from "./dial-math";
 import styles from "./VolumeKnob.module.css";
 
 /** Volume is 0–10, owned by the store. */
@@ -15,13 +16,12 @@ export type VolumeKnobProps = {
 };
 
 const WHEEL_MS = 140;
-const DRAG_PX = 14;
 const HIT = 94;
 const DEGREES_PER_STEP = 27;
 
 /**
- * The volume knob: click the left or right half, scroll, drag up or down, or use the keys.
- * The ring's index notch turns ±135°; the cap stays still.
+ * The volume knob: turn it by dragging round (27° per step), click the left or right
+ * half, scroll, or use the keys. The knob photo stays still; its index tick turns ±135°.
  *
  * @param props - Current volume and change action.
  * @param props.volume - Volume 0–10.
@@ -29,9 +29,12 @@ const DEGREES_PER_STEP = 27;
  * @returns The knob sprites and its slider hit zone.
  */
 export function VolumeKnob({ volume, onChange }: VolumeKnobProps) {
-  const dragRef = useRef<{ y: number; acc: number; moved: boolean } | null>(
-    null,
-  );
+  const dragRef = useRef<{
+    angle: number;
+    acc: number;
+    volume: number;
+    moved: boolean;
+  } | null>(null);
   const draggedRef = useRef(false);
   const lastWheelRef = useRef(0);
   const set = (next: number) => {
@@ -73,22 +76,34 @@ export function VolumeKnob({ volume, onChange }: VolumeKnobProps) {
     set(volume + (event.deltaY < 0 ? 1 : -1));
   };
 
+  const angleOf = (event: TargetedPointerEvent<HTMLDivElement>) => {
+    const box = event.currentTarget.getBoundingClientRect();
+    return pointerAngle(
+      event.clientX - (box.left + box.width / 2),
+      event.clientY - (box.top + box.height / 2),
+    );
+  };
+
   const onPointerDown = (event: TargetedPointerEvent<HTMLDivElement>) => {
-    dragRef.current = { y: event.clientY, acc: 0, moved: false };
+    dragRef.current = { angle: angleOf(event), acc: 0, volume, moved: false };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
+  // Turning is relative to where the knob was grabbed, so pressing never jumps the volume.
   const onPointerMove = (event: TargetedPointerEvent<HTMLDivElement>) => {
     const current = dragRef.current;
     if (!current) return;
-    const acc = current.acc + current.y - event.clientY;
-    const steps = Math.trunc(acc / DRAG_PX);
+    const angle = angleOf(event);
+    const acc = current.acc + ((angle - current.angle + 540) % 360) - 180;
+    const steps = Math.trunc(acc / DEGREES_PER_STEP);
+    const next = Math.max(0, Math.min(10, current.volume + steps));
     dragRef.current = {
-      y: event.clientY,
-      acc: acc - steps * DRAG_PX,
+      angle,
+      acc: acc - steps * DEGREES_PER_STEP,
+      volume: next,
       moved: current.moved || steps !== 0,
     };
-    if (steps !== 0) set(volume + steps);
+    if (next !== current.volume) onChange(next);
   };
 
   const onPointerUp = () => {
@@ -105,20 +120,29 @@ export function VolumeKnob({ volume, onChange }: VolumeKnobProps) {
   return (
     <>
       <img
-        className={styles.ring}
+        className={styles.photo}
         src="/assets/tv/vol.webp"
         alt=""
+        draggable={false}
+        style={box(VOLUME.ring)}
+      />
+      <img
+        className={styles.photo}
+        src="/assets/tv/cap.webp"
+        alt=""
+        draggable={false}
+        style={box(VOLUME.cap)}
+      />
+      <div
+        className={styles.indicator}
+        aria-hidden="true"
         style={{
           ...box(VOLUME.ring),
           transform: `rotate(${String((volume - 5) * DEGREES_PER_STEP)}deg)`,
         }}
-      />
-      <img
-        className={styles.cap}
-        src="/assets/tv/cap.webp"
-        alt=""
-        style={box(VOLUME.cap)}
-      />
+      >
+        <span className={styles.tick} />
+      </div>
       <div
         className={styles.zone}
         role="slider"
