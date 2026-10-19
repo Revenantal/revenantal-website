@@ -8,7 +8,7 @@ The image runs as UID/GID 10001 on port 8080 with no root privileges. Use the re
 
 ## Preparing Hosting Later
 
-1. Complete the PR and migrate the production branch to main deliberately. The existing remote default is master; this work does not rename or push it.
+1. The production branch is `main` (renamed from `master` on 2026-10-18).
 2. Configure main protection to prevent force pushes/deletion and require Checks on PRs while preserving the approved small-fix path. Do not claim protection exists before checking it.
 3. Create a Coolify prebuilt-image application for ghcr.io/revenantal/revenantal-site, port 8080, with GHCR pull credentials if private, and the runtime mount above. Use a reviewed SHA tag for manual deploys/rollback. Automatic deploys use latest, promoted only from successful main CI.
 4. Configure the GitHub production environment and its protection rules. Store COOLIFY_WEBHOOK and COOLIFY_TOKEN there; never paste them into project files. The workflow calls the configured HTTPS webhook without logging its response body.

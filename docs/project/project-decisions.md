@@ -145,6 +145,11 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 - The owner accepts Factorio servers without player counts. The real server is not on Factorio's public listing, and the owner chose not to list it publicly. Factorio servers still show state, uptime, CPU, memory and network rates. Keep the GameDig Factorio query; if a server is ever listed, counts appear without code changes.
 
+### Hosting deferred and main branch (2026-10-18)
+
+- The owner deferred hosting until the project is complete. Coolify, image publication, the scheduled live job on a host and branch protection move to the launch check (task 3.7). Tasks 1.3 and 1.6 close on their in-repo work; Gate 1 does not wait for hosting.
+- The repository default branch was renamed from `master` to `main`, and the merged `feat/1.1-foundation` branch was deleted. CI push triggers target `main` only.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

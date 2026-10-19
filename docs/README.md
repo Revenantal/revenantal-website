@@ -2,7 +2,7 @@
 
 This folder is the source of truth for revenantal.com: requirements, decisions, design, technical specs, the build plan and progress.
 
-**Status:** Phase 1 is merged to `master` (PR #1). Hosting, the scheduler and branch protection are deferred; Gate 1 is open. Track reviewed build progress in `project/status.md`.
+**Status:** Phase 1 is merged to `main` (PR #1). Hosting is deferred to the launch check; Gate 1 waits on owner review of the project content. Track reviewed build progress in `project/status.md`.
 
 ## Reading Order
 

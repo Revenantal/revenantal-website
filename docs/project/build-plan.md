@@ -68,7 +68,7 @@ Follow [Before Building a Channel](../channels/channel-rules.md#before-building-
 | 3.4  | Channel 1 — TV Guide: listings, ticker, clock, coming up                                                                                            | `channels/01-tv-guide.md`               |
 | 3.5  | TV Guide forecast/radar panel with visible attribution, bundled Natural Earth base map and privacy/failure checks                                   | `channels/01-tv-guide.md`               |
 | 3.6  | Channel 11 — Credits: movie-style roll, settings-door tune button, shared credits props, reduced-motion list; credits in List mode and `CREDITS.md` | `channels/11-credits.md`, `tv/audio.md` |
-| 3.7  | Launch check: budgets, cross-browser, axe, privacy review                                                                                           | `architecture/hosting-and-ci.md`        |
+| 3.7  | Launch check: hosting setup (deploy, scheduler, branch protection), budgets, cross-browser, axe, privacy review                                     | `architecture/hosting-and-ci.md`        |
 
 **Gate 3 — launch:** live on revenantal.com with TV Guide (1), Status (10) and Credits (11); every other position shows NO SIGNAL.
 
