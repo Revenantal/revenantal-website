@@ -73,7 +73,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - **Loop:** the roll starts below the picture and rises into view. After the last line rolls off it cuts to static for about a second and starts again, instead of holding the final frame.
 - **Controls:** a VCR-style bar (◀◀ REWIND, ❚❚ PAUSE / ▶ PLAY) fades in while the pointer moves over the picture and hides two seconds after it stops; it stays while a control has focus. REWIND winds back to the top in about a second with a tracking band; a corner VCR display shows PAUSE or REW. The owner chose this over always-visible buttons.
 - **Focus:** the Credits button hands focus to Pause. Generic host step: after a panel tune, the frame focuses the channel's `[data-focus-first]` element (or its first control) once it is loaded and active; any other tune cancels it.
-- **Music:** the owner raised channel music for the Guide and Credits on 2026-10-19; it follows as its own reviewed step with sourced tracks.
+- **Music (2026-10-19):** the owner chose "Weather Forecast Type Beat" by YellowTree for the TV Guide and "Epic Finale (loop)" by X3nus for Credits (Freesound, CC BY 4.0, credited in the Sound Department), replacing "no extra channel music" for Credits. Both are mono AAC at 36 kbps to stay within the 300 KB loop budget. The Guide track plays to its natural ending and restarts, because a mid-track loop point could not be verified. On Credits, PAUSE fades the music out and REWIND plays it at double speed.
 
 ### Per-channel plan review (2026-10-18)
 

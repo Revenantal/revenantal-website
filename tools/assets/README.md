@@ -7,4 +7,6 @@ Needs Python 3.12 with `pip install -r tools/assets/requirements.txt`, and ffmpe
 - `pnpm assets:sprites` runs `tv_sprites.py`: keys the screen, repaints the dial without numerals, cuts the knob, volume ring/cap, button housing/faces and door, and writes WebP to `public/assets/tv/`.
 - `pnpm assets:sounds` runs `tv_sounds.py`: cuts, trims, fades and normalises each TV sound, then writes AAC `.m4a` to `public/assets/sounds/`. Pass `--wav` to check the processing without ffmpeg.
 
-Both take `--out DIR` to write elsewhere for comparison. When a shipped asset is added or removed, update `content/credits.json` in the same change; `tools/checks/asset-credits.test.ts` checks the sound sources and TV artwork.
+- `pnpm assets:music` runs `channel_music.py`: cuts each channel's music to its loop, fades the join, matches levels and writes mono AAC `.m4a` within 300 KB to `public/assets/music/`.
+
+All take `--out DIR` to write elsewhere for comparison. When a shipped asset is added or removed, update `content/credits.json` in the same change; `tools/checks/asset-credits.test.ts` checks the sound sources and TV artwork.

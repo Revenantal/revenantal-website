@@ -7,8 +7,13 @@ const credits = JSON.parse(readFileSync("content/credits.json", "utf8")) as {
 }[];
 
 describe("shipped asset credits", () => {
-  it("credits every freesound source the sound pipeline ships", () => {
-    const pipeline = readFileSync("tools/assets/tv_sounds.py", "utf8");
+  it("credits every freesound source the sound and music pipelines ship", () => {
+    const pipeline = [
+      "tools/assets/tv_sounds.py",
+      "tools/assets/channel_music.py",
+    ]
+      .map((file) => readFileSync(file, "utf8"))
+      .join("\n");
     const ids = new Set(
       [...pipeline.matchAll(/"(\d+)__[\w-]+\.wav"/g)].map((match) => match[1]),
     );

@@ -233,6 +233,27 @@ describe("Credits channel", () => {
     ).toBe(true);
   });
 
+  it("fades the music out on PAUSE and plays it fast while rewinding", () => {
+    const { props } = show();
+    const loop = vi.mocked(props.setLoop);
+    expect(loop).toHaveBeenLastCalledWith("music", true, { gain: 1, rate: 1 });
+    wait(5000);
+    fireEvent.click(screen.getByRole("button", { name: "Rewind" }));
+    expect(loop).toHaveBeenLastCalledWith("music", true, {
+      gain: 0.6,
+      rate: 2,
+    });
+    wait(2000);
+    expect(loop).toHaveBeenLastCalledWith("music", true, { gain: 1, rate: 1 });
+    fireEvent.click(screen.getByRole("button", { name: "Pause" }));
+    expect(loop).toHaveBeenLastCalledWith("music", true, { gain: 0, rate: 1 });
+    // A hover pause leaves the music alone.
+    fireEvent.click(screen.getByRole("button", { name: "Play" }));
+    const calls = loop.mock.calls.length;
+    fireEvent.pointerEnter(screen.getByRole("region", { name: "Credits" }));
+    expect(loop.mock.calls.length).toBe(calls);
+  });
+
   it("says so when there are no credits", () => {
     show({ credits: [] });
     expect(screen.getByText("No credits yet.")).toBeTruthy();

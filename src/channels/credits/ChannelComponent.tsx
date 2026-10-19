@@ -176,9 +176,18 @@ function topWithin(element: HTMLElement, track: HTMLElement): number {
  * @param props - Credits and activity.
  * @param props.groups - Credits grouped by department.
  * @param props.active - Whether the channel is tuned in and visible.
+ * @param props.setLoop - The host's loop control, for the music.
  * @returns The roll.
  */
-function Roll({ groups, active }: { groups: CreditGroup[]; active: boolean }) {
+function Roll({
+  groups,
+  active,
+  setLoop,
+}: {
+  groups: CreditGroup[];
+  active: boolean;
+  setLoop: ChannelProps["setLoop"];
+}) {
   const trackRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(0);
   const [paused, setPaused] = useState(false);
@@ -270,6 +279,17 @@ function Roll({ groups, active }: { groups: CreditGroup[]; active: boolean }) {
       window.cancelAnimationFrame(frame);
     };
   }, [active, phase, place]);
+
+  // Like a VCR: PAUSE fades the music out (hover and focus pauses do not), and REWIND plays it
+  // at double speed.
+  const rewinding = phase === "rewind";
+  useEffect(() => {
+    if (!active) return;
+    setLoop("music", true, {
+      gain: paused ? 0 : rewinding ? 0.6 : 1,
+      rate: rewinding ? 2 : 1,
+    });
+  }, [active, paused, rewinding, setLoop]);
 
   // The cut to static between loops; it waits while the channel is inactive.
   useEffect(() => {
@@ -371,12 +391,14 @@ function Roll({ groups, active }: { groups: CreditGroup[]; active: boolean }) {
  * @param props.credits - The shared credit entries.
  * @param props.active - Whether the channel is tuned in and visible.
  * @param props.reducedMotion - Show the static list instead of the roll.
+ * @param props.setLoop - The host's loop control, for the music.
  * @returns The credits channel.
  */
 export function ChannelComponent({
   credits,
   active,
   reducedMotion,
+  setLoop,
 }: ChannelProps) {
   const groups = useMemo(() => groupCredits(credits), [credits]);
   if (reducedMotion)
@@ -387,5 +409,5 @@ export function ChannelComponent({
         </div>
       </div>
     );
-  return <Roll groups={groups} active={active} />;
+  return <Roll groups={groups} active={active} setLoop={setLoop} />;
 }

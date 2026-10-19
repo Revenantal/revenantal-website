@@ -37,7 +37,7 @@ White text rises from below the picture and scrolls steadily upward over black. 
 
 ## Sound
 
-No channel music or new sound assets. The normal TV ambient bed and control sounds follow volume and SND as usual.
+Music: "Epic Finale (loop)" by X3nus (CC BY 4.0), a seamless orchestral loop chosen by the owner (`public/assets/music/credits.m4a`). Like a VCR, PAUSE fades it out (hover and focus pauses do not) and REWIND plays it at double speed. It follows volume and SND as usual; no other sound assets.
 
 ## Build Notes
 

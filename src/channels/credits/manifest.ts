@@ -9,6 +9,12 @@ export const manifest: ChannelManifest = {
   glow: "rgba(255,255,255,0.18)",
   safe: true,
   display: { scan: false, flicker: false, glow: 0.3, transition: "cut" },
+  // "Epic Finale (loop)" by X3nus (CC BY 4.0), credited in content/credits.json.
+  audio: {
+    loops: {
+      music: { src: "/assets/music/credits.m4a", kind: "music", gain: 0.4 },
+    },
+  },
   load: async () => ({
     ChannelComponent: (await import("./ChannelComponent")).ChannelComponent,
   }),

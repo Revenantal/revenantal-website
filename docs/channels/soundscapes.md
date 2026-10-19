@@ -5,7 +5,7 @@ Music and sound effects for each channel. The TV's own sounds are in `docs/tv/au
 ## Rules
 
 - Each channel can bring a music loop and its own sound effects, loaded with the channel. Music fades in 0.6 s after the static clears, ducks to 30% under the OSD, and follows the volume knob and SND switch.
-- Nothing plays before the viewer's first interaction. Loops are 30–90 s, AAC 96 kbps, ≤ 300 KB each. Prefer CC0; CC BY is fine with credit in `CREDITS.md` and the Credits channel.
+- Nothing plays before the viewer's first interaction. Loops are 30–90 s, mono AAC, ≤ 300 KB each (about 36 kbps for a one-minute music loop; short effects use 96 kbps). `pnpm assets:music` builds the music loops. Prefer CC0; CC BY is fine with credit in `CREDITS.md` and the Credits channel.
 - Many uploads of silent films carry modern, copyrighted scores: clear a film's audio separately from its picture.
 
 One-shots and loops are declared in each manifest’s `audio` metadata. Channels request playback through `play` and `setLoop`; the host owns the fade, ducking, mute/unlock and lifecycle behavior. See [the audio contract](host-interface.md#audio).
@@ -25,7 +25,7 @@ One-shots and loops are declared in each manifest’s `audio` metadata. Channels
 | Paid Programming | Cheesy 80s jingle bumper between clips                                              | New narration per clip, cash-register ding, applause                                                              | Original or AI narration; Freesound CC0 applause                                     |
 | Status           | None                                                                                | Quiet server-room hum (pending approval)                                                                          | Freesound CC0                                                                        |
 
-Credits has no additional music or effects; only the existing TV ambient bed and control sounds apply.
+Shipped music: TV Guide plays "Weather Forecast Type Beat" by YellowTree and Credits plays "Epic Finale (loop)" by X3nus (both CC BY 4.0, chosen by the owner on 2026-10-19). On Credits, PAUSE fades the music out and REWIND plays it at double speed; it has no other effects.
 
 ## Audio File List
 

@@ -31,6 +31,7 @@
     "fetch:dbip": "node tools/build/fetch-dbip.ts",
     "assets:sprites": "python tools/assets/tv_sprites.py",
     "assets:sounds": "python tools/assets/tv_sounds.py",
+    "assets:music": "python tools/assets/channel_music.py",
     "live:run": "node jobs/live/main.ts",
     "live:preview": "node tools/build/run-local-live.ts",
     "test:pelican": "node tools/checks/check-pelican.ts"
