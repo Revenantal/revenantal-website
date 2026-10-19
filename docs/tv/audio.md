@@ -51,4 +51,4 @@ One `credits` array in `site.json` feeds four places:
 
 The Credits channel uses the same entries through `ChannelProps.credits`; it replaces the old settings-door overlay. List mode retains its static credits section.
 
-Format: title, author, link, licence, edits, used for. joedeshon files are CC BY 4.0 (credit required); the rest are CC0. The same list carries weather, radar, font, film and clip credits.
+Format: title, author, link, licence, edits, used for. joedeshon files are CC BY 4.0; the rest are CC0. Every external asset is credited, CC0 included, but only once it ships: add its entry in the same change that adds the file. Sourced but unshipped assets stay in `docs/reference/sound-credits.md`. The same list carries weather, radar, font, film and clip credits.

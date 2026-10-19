@@ -1,73 +1,17 @@
 [
   {
-    "title": "CRT TV Switches On",
-    "url": "https://freesound.org/people/Fission9/sounds/693860/",
-    "author": "Fission9",
-    "license": "CC0 1.0",
-    "usedFor": "power-on",
-    "edits": "trimmed"
+    "title": "Michroma",
+    "url": "https://github.com/googlefonts/Michroma-font",
+    "author": "The Michroma Project Authors",
+    "license": "OFL 1.1",
+    "usedFor": "display font"
   },
   {
-    "title": "Channel Switch.wav",
-    "url": "https://freesound.org/people/LimitSnap_Creations/sounds/279004/",
-    "author": "LimitSnap_Creations",
-    "license": "CC0 1.0",
-    "usedFor": "channel change static"
-  },
-  {
-    "title": "vcr_switch.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/364202/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "push buttons (press / release)",
-    "edits": "split into press and release, normalised"
-  },
-  {
-    "title": "electrical_switch_02.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/139062/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "channel dial detent",
-    "edits": "normalised"
-  },
-  {
-    "title": "click_01.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/266018/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "volume tick",
-    "edits": "normalised"
-  },
-  {
-    "title": "rocker_switch.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/119415/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "settings toggles",
-    "edits": "normalised"
-  },
-  {
-    "title": "push_button_switch_04.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/134712/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "power button",
-    "edits": "normalised"
-  },
-  {
-    "title": "Tapedeck open and closing",
-    "url": "https://freesound.org/people/stecman/sounds/376059/",
-    "author": "stecman",
-    "license": "CC0 1.0",
-    "usedFor": "settings door open / close",
-    "edits": "two takes cut out"
-  },
-  {
-    "title": "TV photograph",
-    "author": "revenantal",
-    "url": "https://revenantal.com/",
-    "license": "Owner-supplied",
-    "edits": "green screen keyed out; controls cut into separate layers",
-    "usedFor": "TV cabinet"
+    "title": "Archivo Narrow",
+    "url": "https://github.com/Omnibus-Type/ArchivoNarrow",
+    "author": "The Archivo Narrow Project Authors",
+    "license": "OFL 1.1",
+    "usedFor": "body font",
+    "edits": "Latin subset, weights 400 and 700"
   }
 ]

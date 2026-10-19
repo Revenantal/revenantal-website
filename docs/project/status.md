@@ -118,6 +118,8 @@ PR #1 squash-merged to `master` as 04c8ae3 after CI passed on its final commit. 
 
 Later the same day the owner deferred hosting until the project is complete. Renamed `master` to `main` on GitHub (open Dependabot PRs retargeted automatically), deleted `feat/1.1-foundation`, and limited CI push triggers to `main`. Ticked 1.3 and 1.6 for their in-repo work; host setup moved to 3.7.
 
+Credits now list only shipped external assets: the two OFL fonts. Sound and TV-image credits return when those assets ship. The AI-generated image credit wording awaits an owner decision.
+
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 
 ## Channel Build Approvals

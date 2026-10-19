@@ -28,7 +28,9 @@ describe("shared content compilation", () => {
     expect(site.broadcast).toEqual({});
     expect(site.buttons[0]?.href).toBe(site.links.steam);
     expect(site.buttons[2]?.copyValue).toBe(site.links.discord);
-    expect(site.credits).toHaveLength(9);
+    expect(site.credits).toEqual(
+      JSON.parse(await readFile(resolve("content/credits.json"), "utf8")),
+    );
   });
 
   it("excludes hidden projects from the public payload", async () => {

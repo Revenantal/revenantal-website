@@ -151,6 +151,12 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - The repository default branch was renamed from `master` to `main`, and the merged `feat/1.1-foundation` branch was deleted. CI push triggers target `main` only.
 - The GitHub repository was renamed from `Revenantal/revenantal` to `Revenantal/revenantal-website`, because a repository named after the account is shown as its profile README. Image names under `ghcr.io/revenantal/` are unchanged.
 
+### Credits cover shipped external assets (2026-10-18)
+
+- Every external asset the site uses is credited, including CC0 sounds that do not legally require it. Credit only what ships: an entry is added in the same change that adds the asset. Sourced but unshipped sounds stay recorded in `docs/reference/sound-credits.md`.
+- The credits list now holds the two shipped fonts (Michroma and Archivo Narrow, OFL 1.1). The sound and TV-image entries were removed until those assets ship in phase 2.
+- Pending owner decision: how to credit the AI-generated TV and rack images, given the AGENTS.md ban on AI attribution in credits.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.
