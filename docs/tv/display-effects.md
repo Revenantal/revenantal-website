@@ -43,6 +43,10 @@ The fifth switch, SND, is sound (see `audio.md`).
 
 If the TV is turned on with reduced motion: no flicker, static becomes a cut, no warm-up wait.
 
+## Build Notes
+
+Built in task 2.5: `src/tv/effects/resolve.ts` (precedence, override lamps), `ScreenEffects` (scanlines, flicker, vignette, glass dust), `BloomFilter` and `controls/perf-monitor.ts`. The flicker overlay runs at 3–5% opacity rather than the prototype's 7–11% (owner decision).
+
 ## Removed — Do Not Reintroduce
 
 Window reflection, oval glare highlight, mouse tilt.

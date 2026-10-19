@@ -218,6 +218,12 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - The owner found the channel-change flash too aggressive, twice. Measured, the scale-from-line "power-on" of each new picture dropped the screen to about 45% brightness and then overshot to 130%. Channel changes no longer use it: the static burst is a soft, blurred crackle (#3a3a3a base, snow at 50%, roll bar at 5%, 1.5 px blur) and the new picture snaps in from a 6 px blur over 0.22 s, with no dark frame or brightness spike. The 460 ms static timing is unchanged. Page-load boot, warm-up, degauss and power-off keep the prototype animations, which the owner likes.
 - Reduced-motion viewers in TV mode get no static bursts, boot, warm-up or power-off collapse.
 
+### Display effects (2026-10-19)
+
+- `resolveEffects` implements the precedence table (viewer OFF > channel OFF > channel strength > default); reduced motion and the performance fallback can only remove effects. NO SIGNAL uses the prototype's profile (scan 1, flicker on, glow 0.5), so its GLOW lamp lights.
+- The flicker overlay is 3–5% white instead of the prototype's 7–11%, because the owner is sensitive to flashing. FLK still turns it off.
+- The OSD and NO SIGNAL card are softened (owner request): slightly see-through, softer glow and a faint blur, so they read as part of the broadcast.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

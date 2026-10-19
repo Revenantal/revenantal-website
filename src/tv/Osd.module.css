@@ -6,8 +6,12 @@
   color: var(--color-osd);
   font-family: var(--font-osd);
   text-shadow:
-    0 0 8px rgb(95 255 122 / 80%),
-    2px 2px 0 #000;
+    0 0 10px rgb(95 255 122 / 70%),
+    2px 2px 1px rgb(0 0 0 / 60%);
+
+  /* Light from the tube, not a sticker on it: slightly see-through and soft-edged. */
+  filter: blur(0.7px);
+  opacity: 0.82;
   pointer-events: none;
 }
 

@@ -14,3 +14,30 @@
     background 0.4s,
     opacity 0.5s;
 }
+
+.spill[data-breathe="true"] {
+  animation: room-flicker 3.7s ease-in-out infinite;
+}
+
+@keyframes room-flicker {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  23% {
+    filter: brightness(0.93);
+  }
+
+  24% {
+    filter: brightness(1.05);
+  }
+
+  61% {
+    filter: brightness(0.97);
+  }
+
+  78% {
+    filter: brightness(1.03);
+  }
+}
