@@ -205,6 +205,14 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - The owner changed the hint note to appear on every page load (2026-10-19), not only on a first visit. Dismissal lasts until the next load; the `rv-hint` storage key is dropped.
 - The on-screen display uses VT323 (`@fontsource/vt323`, credited) and sits in the 760×570 channel space scaled into the glass. Channel and volume changes are announced through one polite live region.
 
+### TV accessibility pass (2026-10-19)
+
+- Keyboard-only run at the 1280×650 minimum and at 1920×1080: Tab order is skip link, dial, hint note (while shown), volume, panel buttons, door, switches (when open), power; every stop shows the 3 px red outline; axe reports nothing on the TV.
+- The dial's name follows the spec ("Channel dial, now CH 03, TV GUIDE"); how to turn it moved to its description. Volume stays a slider rather than a button, which reads its value directly.
+- Focus no longer drops to the page: dismissing the hint note focuses the dial, and turning the TV on from List mode focuses the dial.
+- Reduced motion in TV mode also drops the 0.22 s tune snap and freezes the NO SIGNAL snow on one frame.
+- Door switches now fill their share of the compartment (20×37 screen px at 1280×650, 29×53 at 1920×1080). **Open:** at the minimum viewport their centres are 20 px apart, under WCAG 2.2 AA target size (24 px). They pass from about 1150×770 up. Six controls cannot reach 24 px in the door's width at that scale; closing the gap needs a layout change (for example moving Credits out of the switch row, which gives five switches about 24 px each). Owner to decide.
+
 ### Dependency review (2026-10-19)
 
 - Every dependency is on its latest version except these, held back deliberately. Revisit when the blocker clears; Dependabot raises the updates.

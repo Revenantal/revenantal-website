@@ -1,15 +1,17 @@
+/* Each switch's hit area fills its share of the compartment, beyond the small lever. */
 .compartment {
   position: absolute;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+  align-items: stretch;
 }
 
 .switch {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 3px;
   align-items: center;
+  justify-content: center;
   padding: 2px;
   border: 0;
   background: none;
@@ -18,7 +20,7 @@
 }
 
 .switch:focus-visible {
-  outline: 2px solid var(--color-tv-focus);
+  outline: var(--focus-width) solid var(--color-tv-focus);
   outline-offset: 1px;
 }
 

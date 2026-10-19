@@ -73,7 +73,10 @@ describe("TV view", () => {
 
     fireEvent.click(dial);
     expect(store.getSnapshot().channel).toBe(2);
-    expect(dial.getAttribute("aria-label")).toContain("CH 02, NO SIGNAL");
+    expect(dial.getAttribute("aria-label")).toBe(
+      "Channel dial, now CH 02, NO SIGNAL",
+    );
+    expect(dial.getAttribute("aria-describedby")).toBeTruthy();
     expect(screen.getByText("CH 02, NO SIGNAL")).toBeTruthy();
 
     void act(() => {
@@ -220,7 +223,7 @@ describe("TV view", () => {
     );
   });
 
-  it("shows the note after a moment and drops it when clicked", () => {
+  it("shows the note after a moment and drops it when clicked, moving focus to the dial", () => {
     vi.useFakeTimers();
     renderTv();
     expect(screen.queryByRole("note")).toBeNull();
@@ -231,7 +234,11 @@ describe("TV view", () => {
     const note = screen.getByRole("button", { name: /Tip: turn the dial/ });
     expect(screen.getByText("CH 01")).toBeTruthy();
 
+    note.focus();
     fireEvent.click(note);
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: /Channel dial/ }),
+    );
     void act(() => {
       vi.advanceTimersByTime(1400);
     });
