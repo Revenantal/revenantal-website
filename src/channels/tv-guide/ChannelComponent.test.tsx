@@ -9,10 +9,14 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { channelProps, fixtureProjects } from "../_shared/testing/fixtures";
 import { ChannelComponent } from "./ChannelComponent";
+import { forgetForecast } from "./weather";
 
 afterEach(() => {
   cleanup();
   vi.useRealTimers();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  forgetForecast();
 });
 
 describe("TV Guide", () => {
@@ -36,11 +40,96 @@ describe("TV Guide", () => {
     expect(props.host.tune).toHaveBeenCalledWith("status");
   });
 
-  it("shows soft static in the forecast window until weather is available, never a fixed city", () => {
+  it("shows soft static while the forecast is unavailable, never a fixed city", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => Promise.resolve(new Response(null, { status: 503 }))),
+    );
     render(<ChannelComponent {...channelProps()} />);
     const window = screen.getByRole("region", { name: "Local forecast" });
-    expect(window.textContent).toContain("Forecast not available");
+    expect(await screen.findByText("Forecast not available")).toBeTruthy();
     expect(window.querySelector("canvas")).not.toBeNull();
+  });
+
+  it("skips weather entirely for Do Not Track", async () => {
+    const fetch = vi.fn();
+    vi.stubGlobal("fetch", fetch);
+    Object.defineProperty(navigator, "doNotTrack", {
+      value: "1",
+      configurable: true,
+    });
+    try {
+      render(<ChannelComponent {...channelProps()} />);
+      expect(await screen.findByText("Forecast not available")).toBeTruthy();
+      expect(fetch).not.toHaveBeenCalled();
+    } finally {
+      Reflect.deleteProperty(navigator, "doNotTrack");
+    }
+  });
+
+  it("shows the forecast with readable, keyboard-reachable credits and the privacy note", async () => {
+    const forecast = {
+      city: "Toronto",
+      country: "CA",
+      units: "C",
+      windUnit: "km/h",
+      latitude: 43.65,
+      longitude: -79.38,
+      observedAt: "2026-10-19T18:15:00.000Z",
+      current: {
+        temperature: 12,
+        feelsLike: 10,
+        humidity: 64,
+        weatherCode: 2,
+        windSpeed: 14,
+        windDirection: 315,
+        isDay: true,
+      },
+      daily: [
+        {
+          date: "2026-10-19",
+          high: 13,
+          low: 5,
+          weatherCode: 3,
+          precipitationChance: 10,
+        },
+        {
+          date: "2026-10-20",
+          high: 9,
+          low: 3,
+          weatherCode: 61,
+          precipitationChance: 80,
+        },
+      ],
+    };
+    const fetch = vi.fn((url: string) =>
+      Promise.resolve(
+        url === "/api/forecast"
+          ? new Response(JSON.stringify(forecast), { status: 200 })
+          : new Response(null, { status: 503 }),
+      ),
+    );
+    vi.stubGlobal("fetch", fetch);
+    render(<ChannelComponent {...channelProps()} />);
+    expect(
+      await screen.findByText(
+        /^Local forecast for Toronto: 12 degrees Celsius, partly cloudy\. Feels like 10\. Humidity 64 percent\. Wind NW 14 km\/h\./,
+      ),
+    ).toBeTruthy();
+    for (const name of [
+      "Open-Meteo.com",
+      "RainViewer",
+      "DB-IP",
+      "Natural Earth",
+    ])
+      expect(screen.getByRole("link", { name }).getAttribute("target")).toBe(
+        "_blank",
+      );
+    fireEvent.click(screen.getByRole("button", { name: "Privacy" }));
+    expect(screen.getByRole("note").textContent).toContain(
+      "We do not save it.",
+    );
+    expect(fetch.mock.calls.every(([url]) => url.startsWith("/"))).toBe(true);
   });
 
   it("drifts the listings only while active and not hovered, and keeps a second copy out of reach", () => {
@@ -56,7 +145,7 @@ describe("TV Guide", () => {
       vi.advanceTimersByTime(1000);
     });
     const moved = track.style.transform;
-    expect(moved).toMatch(/translateY\(-\d/);
+    expect(moved).toMatch(/translate3d\(0(px)?, -\d/);
 
     const copy = container.querySelector("[data-copy]");
     expect(copy?.getAttribute("aria-hidden")).toBe("true");

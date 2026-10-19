@@ -30,8 +30,11 @@ const openMeteo = {
   current: {
     time: "2026-10-19T14:15",
     temperature_2m: 11.6,
+    apparent_temperature: 9.7,
+    relative_humidity_2m: 64,
     weather_code: 3,
     wind_speed_10m: 14.2,
+    wind_direction_10m: 315,
     is_day: 1,
   },
   daily: {
@@ -94,7 +97,15 @@ describe("forecast", () => {
       latitude: 43.65,
       longitude: -79.38,
       observedAt: "2026-10-19T18:15:00.000Z",
-      current: { temperature: 12, weatherCode: 3, windSpeed: 14, isDay: true },
+      current: {
+        temperature: 12,
+        feelsLike: 10,
+        humidity: 64,
+        weatherCode: 3,
+        windSpeed: 14,
+        windDirection: 315,
+        isDay: true,
+      },
       daily: [
         {
           date: "2026-10-19",

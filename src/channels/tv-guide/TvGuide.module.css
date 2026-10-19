@@ -112,6 +112,263 @@
   font-weight: 700;
 }
 
+/* Forecast panel: radar map, conditions, three days, credits. */
+.radar {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  background: #081633;
+}
+
+.land {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Water dark navy, land a lighter blue-grey, coasts bright, borders dashed. */
+.map-land {
+  fill: #2b4776;
+  stroke: #a9c4f5;
+  stroke-width: 1;
+}
+
+.map-lakes {
+  fill: #081633;
+  stroke: #a9c4f5;
+  stroke-width: 0.8;
+}
+
+.map-states {
+  fill: none;
+  stroke: #7d97c8;
+  stroke-dasharray: 3 3;
+  stroke-width: 0.7;
+}
+
+.map-borders {
+  fill: none;
+  stroke: #d6e2ff;
+  stroke-dasharray: 5 3;
+  stroke-width: 1.1;
+}
+
+.tile {
+  position: absolute;
+  opacity: 0.85;
+}
+
+.marker {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.ping,
+.dot {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.ping {
+  top: -6px;
+  left: -6px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+  animation: ping 2s ease-out infinite;
+}
+
+.dot {
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  box-shadow: 0 0 6px #fff;
+}
+
+.city-name {
+  position: absolute;
+  top: -9px;
+  left: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.radar-off {
+  position: absolute;
+  right: 10px;
+  bottom: 70px;
+  color: #dfe8ff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.forecast-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(5 12 50 / 78%) 0%,
+      rgb(5 12 50 / 25%) 52%,
+      rgb(5 12 50 / 0%) 70%
+    ),
+    linear-gradient(transparent 62%, rgb(5 12 50 / 70%));
+  pointer-events: none;
+}
+
+.radar-label {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  color: #dfe8ff;
+  font-size: 12px;
+}
+
+.legend {
+  width: 110px;
+  height: 8px;
+  border: 1px solid rgb(255 255 255 / 60%);
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    #0a7326,
+    #26cc33,
+    #f2e626,
+    #ff8010,
+    #d90d1a
+  );
+}
+
+.legend-text {
+  display: flex;
+  justify-content: space-between;
+  width: 110px;
+  font-size: 10px;
+}
+
+.now {
+  position: absolute;
+  top: 34px;
+  left: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.temp {
+  font-size: 54px;
+  line-height: 0.9;
+}
+
+.condition {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.details {
+  color: #dfe8ff;
+  font-size: 12px;
+}
+
+.days {
+  position: absolute;
+  bottom: 24px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.day {
+  position: relative;
+  width: 116px;
+  padding: 4px;
+  text-align: center;
+}
+
+.day-name {
+  color: #ffd400;
+  font-size: 11px;
+}
+
+.day-text {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Visible credits: stationary, readable and keyboard reachable. */
+.credits {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  align-items: center;
+  padding: 3px 8px;
+  background: rgb(5 12 50 / 88%);
+  color: #c9d6ff;
+  font-size: 9.5px;
+}
+
+.credits a,
+.privacy a {
+  color: #fff;
+}
+
+.privacy-button {
+  margin-left: auto;
+  padding: 0 4px;
+  border: 1px solid rgb(201 214 255 / 60%);
+  border-radius: 3px;
+  background: none;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.privacy {
+  position: absolute;
+  inset: 30px 30px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid rgb(170 200 255 / 60%);
+  border-radius: 6px;
+  background: rgb(5 12 50 / 95%);
+  color: #dfe8ff;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.privacy p {
+  margin: 0;
+}
+
+.privacy .privacy-button {
+  align-self: flex-end;
+  font-size: 11px;
+}
+
+.credits a:focus-visible,
+.privacy a:focus-visible,
+.privacy-button:focus-visible {
+  outline: 2px solid #ffd400;
+  outline-offset: 1px;
+}
+
 /* Station: logo, the viewer's clock, the next promo. */
 .station {
   top: 8px;
@@ -261,6 +518,8 @@
   overflow: auto;
 }
 
+/* Its own GPU layer, so the drift glides at sub-pixel steps instead of hopping a whole pixel
+   at a time. Sharp because the Guide has no bloom filter (a filter would enlarge the layer). */
 .track {
   will-change: transform;
 }
@@ -445,12 +704,14 @@ button.cell {
 }
 
 .root[data-active="false"] .shine,
-.root[data-active="false"] .crawl {
+.root[data-active="false"] .crawl,
+.root[data-active="false"] .ping {
   animation-play-state: paused;
 }
 
 .root[data-motion="reduced"] .shine,
-.root[data-motion="reduced"] .crawl {
+.root[data-motion="reduced"] .crawl,
+.root[data-motion="reduced"] .ping {
   animation: none;
 }
 
@@ -462,6 +723,18 @@ button.cell {
 
   100% {
     transform: translateX(320%) skewX(-20deg);
+  }
+}
+
+@keyframes ping {
+  0% {
+    opacity: 1;
+    transform: scale(0.6);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
   }
 }
 

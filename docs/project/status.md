@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 3, launch: 3.4 the TV Guide (approved 2026-10-19) in review, then the forecast panel (3.5). Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. Status and the TV Guide are approved; Status is built.
+**Current focus:** Phase 3, launch: 3.6 Credits (plan review first). Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Status and the TV Guide are built; Credits still needs its plan review.
 
 **Last updated:** 2026-10-19
 
@@ -48,8 +48,8 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 3.1 Channel contract and tests
 - [x] 3.2 Channel 10 — Status
 - [x] 3.3 Forecast endpoint
-- [ ] 3.4 Channel 1 — TV Guide — approved by the owner 2026-10-19; on `feat/3.4-tv-guide`, in review
-- [ ] 3.5 TV Guide forecast and radar
+- [x] 3.4 Channel 1 — TV Guide
+- [x] 3.5 TV Guide forecast and radar — local forecast over live radar with Natural Earth geography; static when unavailable
 - [ ] 3.6 Channel 11 — Credits and shared attributions
 - [ ] 3.7 Launch check
 - [ ] **Gate 3 — launch**
@@ -238,4 +238,6 @@ Task 3.2 (merged in #25): the Status rack at position 10, built from data (patch
 
 Task 3.3 (merged in #26): the private weather service in `api/forecast/` (trusted-peer address, DB-IP city lookup, Open-Meteo forecast, RainViewer frames and tiles, per-client and global limits, LRU caches, coalescing, deadlines, size caps, fixed hosts, no logging), its bundled build and image, Caddy routing that stays closed until `FORECAST_UPSTREAM` is set, the compose example and deploy workflow steps, and a CI container check. Verified locally end to end with the real database, providers and Caddy 2.11.7, including spoofing, untrusted-edge and DNT cases. 342 tests. Weather stays off until the 3.7 hosting checks.
 
-Task 3.4 on `feat/3.4-tv-guide`: the TV Guide at position 1. The large Local Forecast window (soft static and "Forecast not available" until 3.5 or while unavailable), the station box with the viewer's own clock and date and the channels on the dial, the half-hour time header, auto-drifting listings (projects with LIVE badges, game servers, Steam, latest GitHub push, other channels) that pause on hover, focus and when inactive, and a current-state LIVE ticker read once to screen readers. Full bleed with padded content and no Coming up, by owner request. Archivo Black credited. Browser check on real data: axe clean, no errors. 336 tests; Guide chunk about 5 kB of 30 kB. The forecast panel follows in 3.5.
+Task 3.4 (merged in #27): the TV Guide at position 1. The large Local Forecast window (soft static and "Forecast not available" until 3.5 or while unavailable), the station box with the viewer's own clock and date and the channels on the dial, the half-hour time header, auto-drifting listings (projects with LIVE badges, game servers, Steam, latest GitHub push, other channels) that pause on hover, focus and when inactive, and a current-state LIVE ticker read once to screen readers. Full bleed with padded content and no Coming up, by owner request. Archivo Black credited. Browser check on real data: axe clean, no errors. 336 tests; Guide chunk about 5 kB of 30 kB. The forecast panel follows in 3.5.
+
+Task 3.5 on `feat/3.5-guide-forecast`: the Guide's forecast window. Current conditions with feels-like, humidity and wind (new service fields), three days, recent RainViewer radar over the bundled Natural Earth map with a city marker, a stationary credits footer (Open-Meteo, RainViewer, DB-IP, Natural Earth) and a privacy note, and a spoken summary. It fetches only while active, aborts on tune-away, keeps results in memory only, and skips entirely for Do Not Track or Save-Data. Soft static while unavailable. The four weather sources are in the shared credits. `pnpm dev` shows real weather with `FORECAST_DEV_IP` set. Browser check through the real service and providers: weather and radar render, axe clean, no errors. Owner review fixes: bloom off for the Guide (it blurred text), lakes, borders and state/province lines on the radar map at zoom 5, and the channel overlay now flashes briefly on load instead of holding while the hint note shows. Bloom became opt-in for every channel, which also sharpens Status, and the Guide's listings glide on their own GPU layer.

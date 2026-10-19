@@ -11,10 +11,12 @@ const eff = {
   scan: viewer.scan ? (p.scan === false ? 0 : (p.scan ?? 1)) : 0,
   flicker: viewer.flicker && p.flicker !== false && perf < 2,
   glow: viewer.glow && power ? (p.glow === false ? 0 : (p.glow ?? 1)) : 0,
-  bloom: p.bloom !== false && perf < 1,
+  bloom: p.bloom === true && perf < 1, // opt-in
   static: viewer.fx && (target.display?.transition ?? "static") === "static",
 };
 ```
+
+Bloom is opt-in (2026-10-19): as an SVG filter it makes the browser render the picture at its 760×570 authoring size and enlarge it, so text turns soft and colour-fringed. Only channels without small text, such as films or toys, should set `bloom: true`.
 
 `p` is the current channel's `DisplayProfile` (see `docs/architecture/data-model.md`). Each channel's profile is listed in `docs/channels/README.md`.
 
@@ -26,7 +28,7 @@ const eff = {
 | Flicker           | Faint white flicker over the picture; also makes the room light breathe                          | FLK                         |
 | Static transition | Snow + roll bar between channels                                                                 | FX                          |
 | Room glow         | Screen-coloured light on the bezel and control panel; level = glow × picture brightness          | GLOW                        |
-| Phosphor bloom    | SVG filter: ±0.9 px red/blue split + 2.4 px glow                                                 | none (channel or perf only) |
+| Phosphor bloom    | SVG filter: ±0.9 px red/blue split + 2.4 px glow. Off unless the channel sets `bloom: true`      | none (channel or perf only) |
 | Safe area         | Content scaled to 1.30 with a 52/38 px inset, plus heavy edge falloff; off = full-bleed at 1.437 | none (channel only)         |
 
 The fifth switch, SND, is sound (see `audio.md`).

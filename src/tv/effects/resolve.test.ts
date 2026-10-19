@@ -24,12 +24,12 @@ const resolve = (
   });
 
 describe("display effect precedence", () => {
-  it("defaults every effect on at full strength", () => {
+  it("defaults every effect on at full strength, except bloom, which channels opt into", () => {
     expect(resolve(undefined)).toMatchObject({
       scan: 1,
       flicker: true,
       glow: 1,
-      bloom: true,
+      bloom: false,
       static: true,
       limited: { scan: false, flicker: false, fx: false, glow: false },
     });
@@ -92,7 +92,7 @@ describe("display effect precedence", () => {
     for (const perf of [0, 1, 2])
       it(`bloom: channel ${String(channel)}, perf ${String(perf)}`, () => {
         expect(resolve({ bloom: channel }, {}, perf).bloom).toBe(
-          channel !== false && perf < 1,
+          channel === true && perf < 1,
         );
       });
 

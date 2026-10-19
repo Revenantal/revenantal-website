@@ -150,6 +150,24 @@ export function TvView({
     setHint(hint === "shown" ? "falling" : "gone");
   };
 
+  // When the picture comes on (page load or power on), the channel shows briefly, like a tune.
+  const tunedRef = useRef(channel);
+  useEffect(() => {
+    tunedRef.current = channel;
+  });
+  useEffect(() => {
+    if (!power) return;
+    window.clearTimeout(timerRef.current);
+    setOsd({
+      kind: "channel",
+      label: channelLabel(tunedRef.current),
+      name: channelName(tunedRef.current),
+    });
+    timerRef.current = window.setTimeout(() => {
+      setOsd(null);
+    }, OSD_MS);
+  }, [power]);
+
   const flash = (next: OsdState, message: string) => {
     window.clearTimeout(timerRef.current);
     setOsd(next);
@@ -263,15 +281,6 @@ export function TvView({
     : manifest
       ? { background: manifest.bg, glow: manifest.glow, level: effects.glow }
       : { ...NO_SIGNAL, level: effects.glow };
-  const shownOsd: OsdState =
-    hint === "shown"
-      ? {
-          kind: "channel",
-          label: channelLabel(channel),
-          name: channelName(channel),
-          blink: true,
-        }
-      : osd;
   const glowOpacity = roomGlowOpacity(picture, power, switching);
   const noSignal = power && !manifest && !switching;
   useEffect(() => {
@@ -417,7 +426,7 @@ export function TvView({
               safe={Boolean(manifest?.safe) && !switching}
               power={power}
             />
-            {power ? <Osd osd={shownOsd} /> : null}
+            {power ? <Osd osd={osd} /> : null}
           </Cabinet>
         </Stage>
       </div>

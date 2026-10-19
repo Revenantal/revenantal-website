@@ -57,3 +57,5 @@ Self-hosted through pinned `@fontsource` packages: import the Latin-subset CSS f
 ## Channel Art
 
 Per-channel art pipelines (rack sprites, Revscape fallback still) are in each channel's doc.
+
+**TV Guide base map:** `public/assets/tv-guide/base-map.json`, built by `python tools/assets/natural_earth.py` from Natural Earth release v5.1.2 (`nvkelso/natural-earth-vector`, public domain: https://www.naturalearthdata.com/about/terms-of-use/): 1:110m land, lakes and country boundary lines, and 1:50m state and province lines (1:110m covers US states only). Processing: Douglas-Peucker simplification per layer (0.04° land and lakes, 0.06° borders, 0.12° states), coordinates rounded to 0.01° and stored as flat integer arrays; about 128 kB raw, 55 kB gzipped. Served as a static file and fetched once per visit when the forecast shows, so it stays out of the channel's JavaScript.

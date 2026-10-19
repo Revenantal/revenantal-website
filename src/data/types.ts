@@ -90,7 +90,7 @@ export type DisplayProfile = {
   scan?: number | false; // 0..1, default 1
   flicker?: boolean; // default true
   glow?: number | false; // 0..1, default 1
-  bloom?: boolean; // default true
+  bloom?: boolean; // default false: opt in only for channels without small text
   transition?: "static" | "cut"; // how the TV changes INTO this channel
 };
 
@@ -206,8 +206,11 @@ export type Forecast = {
   observedAt: string; // ISO time of the current conditions
   current: {
     temperature: number;
+    feelsLike: number;
+    humidity: number; // percent
     weatherCode: number; // WMO code
     windSpeed: number;
+    windDirection: number; // degrees the wind comes from, 0 = north
     isDay: boolean;
   };
   daily: {

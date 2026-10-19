@@ -8,7 +8,11 @@ pnpm live:preview
 pnpm dev
 ```
 
-Open the URL printed by Vite. List mode is currently the site at every width. The preview command runs the real scheduled job once and writes ignored .cache/live-preview files. It fetches public GitHub repositories; Steam and server sources remain unavailable unless configured. The browser reads local snapshots and never calls GitHub. Run the command again, then reload, to obtain newer data. Without a local snapshot the directory still opens with unavailable live sections.
+Open the URL printed by Vite. Desktop windows get the TV; narrow windows get List mode. The preview command runs the real scheduled job once and writes ignored .cache/live-preview files. It fetches public GitHub repositories; Steam and server sources remain unavailable unless configured. The browser reads local snapshots and never calls GitHub. Run the command again, then reload, to obtain newer data. Without a local snapshot the directory still opens with unavailable live sections.
+
+Live data does not refresh by itself locally: load `deploy/.env.live` into the shell and run `pnpm live:preview` again, then reload. Stale data shows as unknown, as it would on the site.
+
+**Weather locally.** Run `pnpm fetch:dbip` once, copy `.env.local.example` to `.env.local` and set `FORECAST_DEV_IP` to a public address (your own for your city). `pnpm dev` then runs the forecast service and proxies the weather routes to it, naming that address the way the production Caddy names the visitor's. Without both, the Guide's forecast window shows "Forecast not available". `.env.local` is git-ignored.
 
 Static content is validated from content/*.json during development and build. Set content/directory.json to curated to use content/projects.json instead of the scheduled GitHub project list. Shared credits also generate CREDITS.md with pnpm credits:write; the build checks that it matches.
 
