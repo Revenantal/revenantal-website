@@ -15,7 +15,7 @@ Pelican's standard resource response has no player counts. Looping over it yield
 
 ## Factorio
 
-GameDig's Factorio adapter queries Factorio's public multiplayer listing service using the resolved game address and allocation port. A server must be listed there for this method to work. It returns counts and password presence; raw player identities are stripped. Its measured ping is a listing-service request time, so do not expose it as game-server ping. No RCON access, command permission or game-server password is required.
+GameDig's Factorio adapter queries Factorio's public multiplayer listing service using the resolved game address and allocation port. A server must be listed there for this method to work. It returns counts and password presence; raw player identities are stripped. Its measured ping is a listing-service request time, so do not expose it as game-server ping. No RCON access, command permission or game-server password is required. The owner's Factorio servers are not publicly listed, so they publish no counts; this is accepted.
 
 Source: [GameDig Factorio adapter](https://github.com/gamedig/node-gamedig/blob/master/protocols/factorio.js). Other games use their direct status/query protocols. Use the same scheduled host rather than adding a service to the Wings machine.
 

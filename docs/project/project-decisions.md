@@ -141,6 +141,10 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Persist only numeric counter baselines privately under /data/pelican-state.json for average rates between ten-minute executions. Never serve that file. Preserve fifteen-minute server freshness and all current address opt-in/privacy rules.
 - Hosting stays disconnected; actual scheduled-host authentication and public game-query checks remain pending runtime setup. The previously generated Wings host-test archive is obsolete and withdrawn. No individual channel implementation is authorized.
 
+### Factorio player counts (2026-10-18)
+
+- The owner accepts Factorio servers without player counts. The real server is not on Factorio's public listing, and the owner chose not to list it publicly. Factorio servers still show state, uptime, CPU, memory and network rates. Keep the GameDig Factorio query; if a server is ever listed, counts appear without code changes.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

@@ -112,7 +112,7 @@ Opened PR #1 (feat/1.1-foundation → master). The first CI run failed only at t
 
 Added deploy/.env.example (SITE_TAG) and completed deploy/.env.live.example with every live-job variable, including optional paths. A test fails when the job reads a variable missing from the example. Runtime credentials are configured locally; the scheduled host is not set up.
 
-Local runtime check with owner credentials in ignored deploy/.env.live: GitHub, project status, Steam and Pelican all succeed. Discovery found four assigned servers; the running one reports uptime, CPU and memory, and a second run produced network rates from the persisted baseline. Two servers report the panel state "missing", published as unknown. The Factorio player count is absent: the public listing service returns "no game for given host_address" for games.revenantal.com and its IP on port 34197, so the server is not publicly listed. Minecraft player counts are untested because no Minecraft server was running. Runs were local, not on the scheduled host.
+Local runtime check with owner credentials in ignored deploy/.env.live: GitHub, project status, Steam and Pelican all succeed. Discovery found four assigned servers; the running one reports uptime, CPU and memory, and a second run produced network rates from the persisted baseline. Two servers report the panel state "missing", published as unknown. The Factorio player count is absent: the public listing service returns "no game for given host_address" for games.revenantal.com and its IP on port 34197, so the server is not publicly listed. The owner accepts Factorio without counts. Minecraft player counts are untested because no Minecraft server was running. Runs were local, not on the scheduled host.
 
 ## Channel Build Approvals
 
