@@ -8,9 +8,16 @@ import type { ChannelRegistry } from "./_shared/types";
  */
 export const registry: ChannelRegistry = { 11: null };
 
+/** Approved launch positions; internal buttons can tune to them before the channel exists. */
+export const LAUNCH_POSITIONS = {
+  "tv-guide": 1,
+  status: 10,
+  credits: 11,
+} as const;
+
 /** The validated lineup the TV reads. */
 export const lineup = createLineup(registry, {
   // Phase 2 only: allow an empty lineup until the first channel is approved and registered.
   allowNoChannels: true,
-  reserved: { "tv-guide": 1, status: 10, credits: 11 },
+  reserved: LAUNCH_POSITIONS,
 });

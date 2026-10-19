@@ -44,17 +44,20 @@ describe("channel lineup", () => {
     },
   );
 
-  it("rejects duplicate and malformed IDs and missing loaders", () => {
+  it("rejects duplicate IDs and invalid manifests", () => {
     expect(() => createLineup({ 1: manifest("a"), 2: manifest("a") })).toThrow(
       /Duplicate/,
     );
     expect(() => createLineup({ 1: manifest("Bad ID") })).toThrow(
-      /Invalid channel ID/,
+      /invalid channel ID/,
     );
     const noLoader = { ...manifest("a"), load: undefined };
     expect(() =>
       createLineup({ 1: noLoader as unknown as ChannelManifest }),
-    ).toThrow(/no loader/);
+    ).toThrow(/load must be a function/);
+    expect(() =>
+      createLineup({ 1: { ...manifest("a"), display: { scan: 1.5 } } }),
+    ).toThrow(/position 1: display.scan/);
   });
 
   it("rejects empty and all-null registries unless the phase 2 option allows them", () => {

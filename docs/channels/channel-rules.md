@@ -87,4 +87,24 @@ For the launch lineup, the registry is `{ 1: tvGuide, 10: status, 11: credits }`
 
 Each channel has its own test suite inside its folder, and it must run on its own: `pnpm test:channel <id>` runs only `src/channels/<id>/`, so building one channel never needs the full suite. That suite covers the channel's own logic and runs the shared contract checks against that channel alone, using the shared fixtures. The full `pnpm test` still runs everything in CI and before merging.
 
-Every channel passes the shared contract tests (task 3.1): renders from fixtures, renders with `live = null`, renders with stale sources, renders with 0, 1 and 30 projects, declares a valid profile, and pauses when `active` is false. Registry tests cover the launch positions (1, 10 and 11), gaps, omitted channels, stable hashes, the SERVERS button and the settings-door Credits button.
+Every channel passes the shared contract tests (task 3.1). Add `src/channels/<id>/contract.test.tsx`:
+
+```tsx
+// @vitest-environment jsdom
+import { describeChannelContract } from "../_shared/testing/contract";
+import { manifest } from "./manifest";
+
+describeChannelContract(manifest);
+```
+
+The contract (`src/channels/_shared/testing/`) loads the channel through its manifest and checks that it:
+
+- declares a valid manifest (ID, kind, colours, display profile, `/assets/` audio) and keeps `manifest.ts` free of static imports of its own code;
+- renders from the shared fixtures, with `live = null`, stale sources, 0, 1 and 30 projects, no credits, reduced motion and zero volume, without mutating its props;
+- links every project in a new tab (directory and game channels);
+- adds no window or document listeners, makes no network requests (unless allowed with `allowNetwork`, for the TV Guide forecast), never touches storage directly and creates no audio of its own;
+- leaves no timers or animation frames scheduled, and plays, tunes, captures and saves nothing, while inactive or after unmounting.
+
+`channelProps()` and `FIXTURE_CASES` in `fixtures.ts` give the channel's own tests the same data. `sample/` is a minimal reference channel that passes the contract. Lint keeps these test-only files out of application code. Capture, PRESS START and save checks join the contract with task 4.3, and caption and media checks with the broadcast player (4.5).
+
+Registry tests (`src/tv/lineup.test.ts`, `src/channels/_shared/lineup.test.ts`) cover the launch positions (1, 10 and 11), gaps, omitted channels, stable hashes, the SERVERS button and the settings-door Credits button. `src/tv/host-actions.test.tsx` runs `host.tune` and `host.powerOff` through the real TV and store.
