@@ -1,0 +1,75 @@
+.glass {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 65% at 46% 44%,
+    #262b27 0,
+    #161a17 55%,
+    #0c0e0c 100%
+  );
+}
+
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #e8f0ff;
+  animation: tv-off 0.55s ease-in forwards;
+}
+
+.afterglow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #fff 0,
+    rgb(220 235 255 / 80%) 30%,
+    transparent 70%
+  );
+  box-shadow: 0 0 30px 10px rgb(200 220 255 / 35%);
+  opacity: 0;
+  animation: tv-afterglow 3.2s ease-out forwards;
+}
+
+@keyframes tv-off {
+  0% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+
+  45% {
+    opacity: 1;
+    transform: scale(1, 0.006);
+  }
+
+  80% {
+    opacity: 1;
+    transform: scale(0.02, 0.006);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0, 0);
+  }
+}
+
+@keyframes tv-afterglow {
+  0%,
+  20% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  24% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+}

@@ -213,6 +213,11 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
   - Node 24 and `@types/node` 24 (not 26): Node 26 is not LTS yet. Move the runtime, CI, Docker image and types together once it is.
 - The live-job image moved to Node 24.22.0, and Dependabot now watches both Dockerfiles (Node majors ignored, like `@types/node`). Caddy 2.11.7 and the reference tools were already current.
 
+### Picture transitions (2026-10-19)
+
+- The owner found the channel-change flash too aggressive. The static burst is darker than the prototype (#4a4a4a base, snow at 60%, roll bar at 9%), and a new picture's scale-from-line power-on peaks at 1.8× brightness instead of 4×. The 460 ms and 380 ms timings are unchanged. Page-load boot, warm-up, degauss and power-off keep the prototype values.
+- Reduced-motion viewers in TV mode get no static bursts, boot, warm-up or power-off collapse.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

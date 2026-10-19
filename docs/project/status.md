@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 2, the TV shell: 2.4 screen and channel host (part 1 in review), then part 2 (warm-up, power-off collapse, drag-tuning picture). Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
+**Current focus:** Phase 2, the TV shell: 2.4 part 2 (power and drag-tuning picture) in review, then 2.5 display effects. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
 
 **Last updated:** 2026-10-18
 
@@ -36,7 +36,7 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 2.1 Asset tools (sprites, sounds, fonts)
 - [x] 2.2 Stage and cabinet
 - [x] 2.3 Controls and compact dial
-- [ ] 2.4 Screen and channel host — registry, host and NO SIGNAL/static on `feat/2.4-channel-host`; warm-up, power-off and drag-tuning picture next
+- [ ] 2.4 Screen and channel host — registry, host, NO SIGNAL and static merged (#16); power and drag-tuning picture on `feat/2.4-power-tuning`
 - [ ] 2.5 Display effects
 - [ ] 2.6 Audio engine
 - [ ] 2.7 Persistence, URLs and TV/List transitions
@@ -137,6 +137,8 @@ Task 2.3, part 2 on `feat/2.3-panel-door-power`: panel buttons from content (lin
 Task 2.3, part 3 on `feat/2.3-hint-note`: first-visit "turn the dial →" note (Permanent Marker) appears after 1.6 s with a blinking CH number; clicking it or any channel change peels the tape and drops it over 1.4 s. By owner request it returns on every page load (no `rv-hint` key). Also merged #11 (pnpm/action-setup 6.1.0) with a clean squash message, and the Credits button now tunes to position 11 by owner decision. Browser check: note appears, falls, stays gone after reload, axe clean, no errors. 135 tests; initial JS 43.6 kB.
 
 Task 2.4, part 1 on `feat/2.4-channel-host`: shared channel types from the host-interface spec, validated position-keyed registry (`createLineup`: canonical safe-integer keys, unique IDs, loaders, slot count from the highest key, reserved IDs), the screen host in 760×570 channel space (safe inset or full bleed), lazy named loaders with stale results discarded, scoped `tune`/`powerOff` that die with the scope or while inactive, recoverable load/render errors, NO SIGNAL with animated snow and the 460 ms static burst (cut and FX-off skip it). Snow is drawn on a canvas from six pre-made noise frames: the first SVG-turbulence version only repainted on mouse movement in the owner's Chrome (screenshots force repaints, so automated checks missed it); the canvas frames change on their own and pause while the tab is hidden. Browser check: snow animates, static then NO SIGNAL on tune, axe clean, no errors. 154 tests; initial JS 45.5 kB.
+
+Task 2.4, part 2 on `feat/2.4-power-tuning`: 0.9 s boot on page load; 3.3 s warm-up with the degauss wobble at 3 s when the viewer powers on; power off collapses the picture to a line and point with a 3.2 s afterglow dot; drag-tuning shows the nearest channel live with blur, contrast loss, ghost jitter and snow by distance from the detent, and releasing on a detent settles with no static. Reduced motion skips static, boot, warm-up and collapse. The hint note hides while the TV is off. Channel-change flash toned down by owner request. Browser check covers each stage with no console errors. 156 tests.
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 

@@ -11,7 +11,7 @@ import styles from "./Screen.module.css";
 export function StaticBurst({ running }: { running: boolean }) {
   return (
     <div className={styles.picture} data-anim="static">
-      <Snow interval={55} running={running} />
+      <Snow interval={55} running={running} opacity={0.6} />
       <div className={styles.roll} />
     </div>
   );

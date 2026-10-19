@@ -22,10 +22,11 @@ const cut: ChannelManifest = {
 };
 const manifestAt = (position: number) => (position === 3 ? cut : null);
 
-let latest: Tuning = { shown: 0, switching: false };
-const capture = (tuning: Tuning) => {
-  latest = tuning;
+let tuning: Tuning | null = null;
+const capture = (next: Tuning) => {
+  tuning = next;
 };
+const state = () => ({ shown: tuning?.shown, switching: tuning?.switching });
 function Harness(props: { channel: number; fx: boolean; power: boolean }) {
   capture(useTuning(props.channel, props.fx, props.power, manifestAt));
   return null;
@@ -36,21 +37,21 @@ describe("tuning", () => {
     vi.useFakeTimers();
     const { rerender } = render(<Harness channel={1} fx power />);
     rerender(<Harness channel={2} fx power />);
-    expect(latest).toEqual({ shown: 1, switching: true });
+    expect(state()).toEqual({ shown: 1, switching: true });
 
     void act(() => {
       vi.advanceTimersByTime(STATIC_MS);
     });
-    expect(latest).toEqual({ shown: 2, switching: false });
+    expect(state()).toEqual({ shown: 2, switching: false });
   });
 
   it("cuts straight to a cut-transition channel, and to anything with FX off", () => {
     const { rerender } = render(<Harness channel={1} fx power />);
     rerender(<Harness channel={3} fx power />);
-    expect(latest).toEqual({ shown: 3, switching: false });
+    expect(state()).toEqual({ shown: 3, switching: false });
 
     rerender(<Harness channel={4} fx={false} power />);
-    expect(latest).toEqual({ shown: 4, switching: false });
+    expect(state()).toEqual({ shown: 4, switching: false });
   });
 
   it("lets a newer tune replace a pending one, and power off drops it", () => {
@@ -61,10 +62,31 @@ describe("tuning", () => {
     void act(() => {
       vi.advanceTimersByTime(STATIC_MS);
     });
-    expect(latest).toEqual({ shown: 4, switching: false });
+    expect(state()).toEqual({ shown: 4, switching: false });
 
     rerender(<Harness channel={5} fx power />);
     rerender(<Harness channel={5} fx power={false} />);
-    expect(latest).toEqual({ shown: 5, switching: false });
+    expect(state()).toEqual({ shown: 5, switching: false });
+  });
+
+  it("shows the nearest channel live while dragging and settles there with no static", () => {
+    vi.useFakeTimers();
+    const { rerender } = render(<Harness channel={1} fx power />);
+    void act(() => {
+      tuning?.preview(2);
+    });
+    expect(state()).toEqual({ shown: 2, switching: false });
+
+    void act(() => {
+      tuning?.preview(null);
+    });
+    rerender(<Harness channel={2} fx power />);
+    expect(state()).toEqual({ shown: 2, switching: false });
+
+    void act(() => {
+      tuning?.preview(4);
+      tuning?.preview(null);
+    });
+    expect(state()).toEqual({ shown: 2, switching: false });
   });
 });
