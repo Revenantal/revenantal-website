@@ -60,6 +60,7 @@
   );
 }
 
+/* Gentle: swings of a few percent, no sudden jumps (the owner is sensitive to flashing). */
 @keyframes room-flicker {
   0%,
   100% {
@@ -67,18 +68,18 @@
   }
 
   23% {
-    filter: brightness(0.93);
+    filter: brightness(0.965);
   }
 
-  24% {
-    filter: brightness(1.05);
+  27% {
+    filter: brightness(1.025);
   }
 
   61% {
-    filter: brightness(0.97);
+    filter: brightness(0.985);
   }
 
   78% {
-    filter: brightness(1.03);
+    filter: brightness(1.015);
   }
 }
