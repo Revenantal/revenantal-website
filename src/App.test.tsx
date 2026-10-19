@@ -103,7 +103,9 @@ describe("TV and List modes", () => {
     void act(() => {
       vi.advanceTimersByTime(250);
     });
-    expect(screen.getByRole("button", { name: /Channel dial/ })).toBeTruthy();
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: /Channel dial/ }),
+    );
     expect(values.get("rv-tv")).toBe("on");
   });
 

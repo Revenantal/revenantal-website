@@ -97,7 +97,8 @@ export function Screen({
 }: ScreenProps) {
   if (!power) return offKey > 0 ? <PowerOff key={offKey} /> : null;
   const frame = manifest?.safe && !switching ? SAFE : FULL;
-  const running = visible;
+  // Reduced motion freezes the snow on one frame.
+  const running = visible && !props.reducedMotion;
   const tuning = {
     filter: pictureFilter(bloom, detune),
     transform:

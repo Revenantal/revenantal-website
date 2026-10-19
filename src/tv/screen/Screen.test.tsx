@@ -99,6 +99,29 @@ describe("screen host", () => {
     expect(container.textContent).toBe("");
   });
 
+  it("animates the NO SIGNAL snow, but freezes it for reduced motion", () => {
+    const canvas = {
+      createImageData: (width: number, height: number) => ({
+        data: new Uint8ClampedArray(width * height * 4),
+      }),
+      putImageData: vi.fn(),
+    };
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
+      canvas as unknown as CanvasRenderingContext2D,
+    );
+    const interval = vi.spyOn(window, "setInterval");
+
+    const { unmount } = render(<Screen {...props()} />);
+    expect(interval).toHaveBeenCalled();
+    unmount();
+
+    interval.mockClear();
+    const calm = props();
+    render(<Screen {...calm} props={{ ...calm.props, reducedMotion: true }} />);
+    expect(canvas.putImageData).toHaveBeenCalled();
+    expect(interval).not.toHaveBeenCalled();
+  });
+
   it("loads the channel lazily and passes every prop with a scoped host", async () => {
     const load = vi.fn(() => Promise.resolve({ ChannelComponent: Echo }));
     const manifest = fixture(load);

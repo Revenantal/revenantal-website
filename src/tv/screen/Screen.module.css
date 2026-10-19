@@ -206,3 +206,9 @@
     transform: none;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .picture[data-anim="on"] {
+    animation: none;
+  }
+}

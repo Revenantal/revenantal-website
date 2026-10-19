@@ -106,6 +106,8 @@ export function TvView({
   const [osd, setOsd] = useState<OsdState>(null);
   const [announcement, setAnnouncement] = useState("");
   const timerRef = useRef<number | undefined>(undefined);
+  // Turning on from List mode puts focus on the dial.
+  const [dialFocus, setDialFocus] = useState(startup === "warm" ? 1 : 0);
   useEffect(
     () => () => {
       window.clearTimeout(timerRef.current);
@@ -308,6 +310,7 @@ export function TvView({
                   slots={SLOT_COUNT}
                   label={`${channelLabel(channel)}, ${channelName(channel)}`}
                   onTune={tune}
+                  focusRequest={dialFocus}
                   onDrag={(drag) => {
                     if (!power) return;
                     if (drag && drag.position !== shown) audio.play("dial");
@@ -320,6 +323,8 @@ export function TvView({
                   onDismiss={() => {
                     audio.play("toggle");
                     dismissHint();
+                    // The note falls away; keep focus on the control it points at.
+                    setDialFocus((count) => count + 1);
                   }}
                 />
                 <VolumeKnob volume={settings.volume} onChange={changeVolume} />

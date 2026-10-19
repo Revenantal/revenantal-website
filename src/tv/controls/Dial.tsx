@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useId, useRef, useState } from "preact/hooks";
 import type { TargetedPointerEvent, TargetedWheelEvent } from "preact";
 import { DIAL } from "../geometry";
 import {
@@ -19,6 +19,11 @@ export type DialProps = {
   onTune: (position: number) => void;
   /** Live drag preview: the nearest position and offset from its detent, or null when released. */
   onDrag?: (preview: { position: number; offset: number } | null) => void;
+  /**
+   * Each new non-zero value moves focus to the dial, including on mount: the TV uses it when
+   * the hint note falls and after turning on from List mode.
+   */
+  focusRequest?: number;
 };
 
 const WHEEL_MS = 140;
@@ -34,9 +39,22 @@ const HIT = 110;
  * @param props.label - What the dial is tuned to, for the accessible name.
  * @param props.onTune - Requests a new position through the store.
  * @param props.onDrag - Receives live drag previews for the screen.
+ * @param props.focusRequest - Changes to request focus; zero never focuses.
  * @returns The knob sprite and its hit zone.
  */
-export function Dial({ position, slots, label, onTune, onDrag }: DialProps) {
+export function Dial({
+  position,
+  slots,
+  label,
+  onTune,
+  onDrag,
+  focusRequest = 0,
+}: DialProps) {
+  const helpId = useId();
+  const zoneRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (focusRequest) zoneRef.current?.focus();
+  }, [focusRequest]);
   const [turn, setTurn] = useState(position * stepAngle(slots));
   const [dragAngle, setDragAngle] = useState<number | null>(null);
   const shownRef = useRef(position);
@@ -132,8 +150,10 @@ export function Dial({ position, slots, label, onTune, onDrag }: DialProps) {
       />
       <button
         type="button"
+        ref={zoneRef}
         className={styles.zone}
-        aria-label={`Channel dial, tuned to ${label}. Click for next, scroll or use the arrow keys to turn.`}
+        aria-label={`Channel dial, now ${label}`}
+        aria-describedby={helpId}
         style={{
           left: `${String(DIAL.x - HIT / 2)}px`,
           top: `${String(DIAL.y - HIT / 2)}px`,
@@ -151,6 +171,10 @@ export function Dial({ position, slots, label, onTune, onDrag }: DialProps) {
           endDrag(true);
         }}
       />
+      <span id={helpId} className={styles.help}>
+        Click for the next channel, or use the arrow keys, scroll or drag to
+        turn.
+      </span>
     </>
   );
 }
