@@ -4,6 +4,7 @@ import { createStore } from "@data/store";
 import type { StoreOptions } from "@data/store";
 import "@fontsource/michroma/latin-400.css";
 import "@fontsource/archivo-narrow/latin-400.css";
+import "@fontsource/archivo-narrow/latin-600.css";
 import "@fontsource/archivo-narrow/latin-700.css";
 import "@styles/tokens.css";
 import "@styles/reset.css";

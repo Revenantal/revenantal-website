@@ -175,6 +175,14 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - ffmpeg was installed on the owner's machine with winget for sound encoding.
 - The shipped sounds and TV artwork are credited in this change; the TV artwork credit names ChatGPT and Claude.
 
+### Per-channel test suites (2026-10-18)
+
+- Each channel keeps its own test suite in its folder, runnable alone with `pnpm test:channel <id>` (only `src/channels/<id>/`). The shared contract tests from task 3.1 must be callable per channel so each suite runs them for itself. CI and pre-merge still run the full suite.
+
+### TV preview flag (2026-10-18)
+
+- While phase 2 is in progress, the TV renders only with `?tv` in the URL (and 900 px or wider), so `main` keeps serving List mode until the power LED (2.3) and TV/List transitions (2.7) exist. Remove the flag in 2.7.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

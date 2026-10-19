@@ -1,0 +1,13 @@
+.screen {
+  position: absolute;
+  overflow: hidden;
+}
+
+.photo {
+  position: absolute;
+  display: block;
+  max-width: none;
+  filter: brightness(var(--dim)) saturate(0.85);
+  pointer-events: none;
+  user-select: none;
+}

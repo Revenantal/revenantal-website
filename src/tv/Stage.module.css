@@ -1,0 +1,17 @@
+.room {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-room);
+}
+
+.stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+
+  /* Room darkness: photo layers render at this brightness, lit by the spill. */
+  --dim: 0.42;
+  --dim-badge: 0.57;
+}

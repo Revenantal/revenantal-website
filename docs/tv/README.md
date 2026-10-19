@@ -41,6 +41,8 @@ Prototype: `docs/reference/prototypes/door-tv.dc.html` (the canonical interactiv
 - The dial has no numeral ring or numeral buttons at any size. Derive detents and rotation from the [configured slots](dial-configuration.md); retain one keyboard-accessible knob and the channel OSD.
 - Channels are authored at **760×570** and scaled into the glass.
 - Every stage coordinate lives in `tv/geometry.ts`, one named constant each.
+- `Stage` measures only its own element with a `ResizeObserver`; no window listener. Photo layers render at room darkness (`--dim` 0.42, badge 0.57) and the room glow spill lights them.
+- Until task 2.7 wires power and TV/List transitions, the TV renders only with `?tv` in the URL (and at 900 px or wider); otherwise List mode shows.
 
 ## Branding
 

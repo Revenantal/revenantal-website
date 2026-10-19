@@ -19,15 +19,15 @@ Python + Pillow/NumPy, run by hand with `pnpm assets:sprites` (`tools/assets/tv_
 
 Stage coordinates, kept in `tv/geometry.ts`.
 
-| Part                                            | Position                                      |
-| ----------------------------------------------- | --------------------------------------------- |
-| Screen box                                      | left 96, top 88, 1092×816                     |
-| Dial centre / knob radius                       | (1391, 211) / 56 sprite                       |
-| Volume knob centre / cap radius / ridge annulus | (1390.5, 369) / 27 / 28–35                    |
-| Button stack area                               | x centre 1386, y 424–614 (190 px)             |
-| Settings door                                   | 1284,618 → 1488,691; hinge on the bottom edge |
-| Power LED                                       | centre (1455, 908)                            |
-| Badge                                           | 290×42 at (496, 964)                          |
+| Part                                          | Position                                      |
+| --------------------------------------------- | --------------------------------------------- |
+| Screen box                                    | left 96, top 88, 1092×816                     |
+| Dial centre / knob radius                     | (1391, 211) / 56 sprite                       |
+| Volume knob centre / ring sprite / cap sprite | (1392, 370) / 74 px / 54 px                   |
+| Button stack area                             | x centre 1386, y 424–614 (190 px)             |
+| Settings door                                 | 1284,618 → 1488,691; hinge on the bottom edge |
+| Power LED                                     | centre (1455, 908)                            |
+| Badge                                         | 290×42 at (496, 964)                          |
 
 ## Sound Pipeline
 
