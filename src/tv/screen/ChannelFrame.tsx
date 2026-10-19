@@ -159,7 +159,7 @@ export function ChannelFrame({
     );
   const { Component } = load;
   return (
-    <div className={styles.picture} data-anim="on">
+    <div className={styles.picture} data-anim="on" data-channel={manifest.id}>
       <Component
         {...props}
         {...sound}

@@ -39,6 +39,14 @@
     "edits": "Latin subset, weight 400"
   },
   {
+    "title": "Archivo Black",
+    "url": "https://github.com/Omnibus-Type/Archivo",
+    "author": "The Archivo Project Authors (Omnibus-Type)",
+    "license": "OFL 1.1",
+    "usedFor": "TV Guide headers and clock",
+    "edits": "Latin subset, weight 400"
+  },
+  {
     "title": "CRT TV Switches On",
     "url": "https://freesound.org/people/Fission9/sounds/693860/",
     "author": "Fission9",

@@ -4,7 +4,7 @@
 
 The home channel and the first thing new visitors see, so it sets the quality bar. A 90s cable guide channel built from glossy broadcast graphics, a mix of Prevue Channel and the Weather Channel.
 
-- **Kind:** directory · **Folder:** `tv-guide` · **Build:** tasks 3.4–3.5 (launch) · **Status:** design done (v3)
+- **Kind:** directory · **Folder:** `tv-guide` · **Build:** tasks 3.4–3.5 (launch) · **Status:** grid, clock, ticker and Coming up built (3.4); forecast panel next (3.5)
 
 ## Concept
 
@@ -21,34 +21,36 @@ It should look like broadcast graphics, not a cartoon: bevelled glossy panels, g
 | Listing times  | `now` rounded to the half hour in the viewer's time zone                                                  |
 | Ticker         | `live.github` latest pushes, `live.steam` now playing, server counts, project status changes              |
 | Forecast       | From `/api/forecast` (see `docs/architecture/forecast-and-radar.md`)                                      |
-| Coming up      | Build-time stills of other channels from `public/assets/promos/`                                          |
+| Coming up      | Stills of other built channels in `public/assets/promos/`, captured by `pnpm promos`                      |
 
 The forecast is the one place a channel fetches data. That fetch lives in a small helper inside this channel folder. If it fails, the forecast segment is skipped and the promo window shows only "Coming up". It never falls back to a fixed city.
 
 ## Interaction
 
-- The grid auto-scrolls. Hover or focus pauses it.
+- The grid auto-scrolls. Hover or focus pauses it, and a focused row is moved into view. Reduced motion shows a still, manually scrollable list.
 - ↑/↓ inside the channel are not captured (the dial keeps them). Tab moves through rows; Enter opens the project in a new tab.
-- Click a row to open it. Clicking a server or Steam row tunes nothing; it's information only.
+- Click a row to open it. Server, Steam and GitHub rows are information only. Rows for other channels ("on the dial") tune to them.
 - "Coming up" can be clicked to tune to that channel. Call `host.tune(channelId)` from props; the host resolves its assigned position and updates the normal hash. Do not import the store or hard-code a position in this control.
+- The station box shows the next promo ("Also on"), or an "On the dial" list while only one other channel is built.
+- Projects that are up carry a LIVE badge. The ticker reports the current state only: what's playing on Steam, the latest pushes, running servers and their players, and projects that are down or slow.
 
 ## Look
 
 - Navy and blue-violet gradient panels with glossy highlights; yellow and white type; red LIVE badges.
 - Each row gets a small coloured icon by project type.
 - Fonts: Archivo Narrow (listings), Archivo Black (headers, temperatures).
-- Display profile: scan 1, flicker, glow 0.8. `safe: true`.
+- Display profile: scan 1, flicker, glow 0.8. `safe: false` (owner request): the background and ticker bar bleed to the glass edges, while the panels, time header and listings are drawn at mockup size and scaled to 90% inside a padded box (38 px sides, 24 px top), and the ticker text sits inside the same padding.
 
 ## Sound
 
-Smooth-jazz loop, a row tick and a promo stinger. See `soundscapes.md` → TV Guide.
+Silent at launch. A smooth-jazz loop, row tick and promo stinger will be proposed for owner approval (see `soundscapes.md` → TV Guide).
 
 ## Build Notes
 
 - Grid scroll uses `transform` on one element, driven by `requestAnimationFrame`, and pauses when `active` is false.
 - Same-origin RainViewer radar over bundled Natural Earth land/coastlines loads only during the active forecast segment. Keep readable Open-Meteo, RainViewer, DB-IP and Natural Earth links in the panel footer. Follow the request, privacy, caching and fallback rules in `docs/architecture/forecast-and-radar.md`.
 - °C by default, °F for US visitors (from the endpoint).
-- "Coming up" stills are captured from each built channel at build time with Playwright. Unbuilt channels are skipped.
+- `pnpm promos` captures each built channel (except the Guide) through the dev server and the local live snapshot, and writes the stills and `promos.json`. Run it after a channel is added or changes its look; refresh the live snapshot first so the stills show real states.
 - Keep the forecast fetch, radar and promo rotation in separate modules so the grid can ship first (3.4) and the forecast after (3.5).
 
 ## Acceptance
