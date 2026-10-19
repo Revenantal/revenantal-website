@@ -14,11 +14,6 @@ export type Lineup = {
 /** Registry validation options. */
 export type LineupOptions = {
   /**
-   * Accept a registry with no channel yet. Only the phase 2 placeholder registry uses this;
-   * once a channel is approved and registered, the default rejects an all-empty registry.
-   */
-  allowNoChannels?: boolean;
-  /**
    * Approved positions for channel IDs not yet registered, so internal buttons can tune to
    * them before the channel exists. A registered manifest always wins.
    */
@@ -73,8 +68,7 @@ export function createLineup(
     if (!byId.has(id)) byId.set(id, position);
   }
   if (slots === 0) throw new Error("The registry has no slots.");
-  if (byPosition.size === 0 && !options.allowNoChannels)
-    throw new Error("The registry has no channels.");
+  if (byPosition.size === 0) throw new Error("The registry has no channels.");
   return {
     slots,
     at: (position) => byPosition.get(position) ?? null,

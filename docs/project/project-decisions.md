@@ -192,7 +192,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 ### Controls build notes (2026-10-18)
 
-- The registry (`src/channels/index.ts`, task 2.4) is `{ 11: null }` until the first channel is approved: 11 slots, all NO SIGNAL. `createLineup` still rejects an all-empty registry by default; the registry passes `allowNoChannels` for phase 2 only, to be removed when the first channel registers. Reserved IDs (`tv-guide` 1, `status` 10, `credits` 11) let SERVERS and Credits tune before their manifests exist; a registered manifest always wins and a conflicting one fails validation.
+- The registry (`src/channels/index.ts`, task 2.4) is `{ 11: null }` until the first channel is approved: 11 slots, all NO SIGNAL. `createLineup` rejects an all-empty registry; the phase 2 `allowNoChannels` option was removed when Status registered at 10 (task 3.2). Reserved IDs (`tv-guide` 1, `status` 10, `credits` 11) let SERVERS and Credits tune before their manifests exist; a registered manifest always wins and a conflicting one fails validation.
 - Since task 2.6 the host passes real scoped `play`/`setLoop` (`src/audio/channel-scope.ts`) and the effective `volume`. Capture and save callbacks stay inert until 4.3.
 - Channel sound assets must be same-origin files under `/assets/`; any other `src` is ignored. `setLoop(id, false)` keeps the loop off (including `on-active` loops) until `setLoop(id, true)`.
 - TV-wide keys (↑/→, ↓/←, +/−) use a document listener in `tv/controls/tv-keys.ts`, the input layer that owns window listeners, instead of a focusable wrapper. Text fields, sliders and modified keys keep their own keys.
@@ -221,6 +221,20 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Directory and game channels must render every project as a new-tab link in the DOM with 30 projects. Revisit if a channel's approved design pages its listings.
 - The registry validates each manifest's kind, colours, display profile and audio at startup (`manifest-check.ts`), so a bad manifest fails before it reaches the dial.
 - Capture, PRESS START, saves, captions and media checks join the contract with tasks 4.3 and 4.5, where those host features are built.
+
+### CH 10 Status: approved (2026-10-19)
+
+The owner approved building Status (task 3.2) on 2026-10-19 with the scope in `docs/channels/10-status.md`, with these changes:
+
+- **Keyboard:** no key capture at launch. Every server is a real link (projects) or button (game servers) in Tab order, and the rack pans to the focused unit. Arrow keys keep turning the dial. Arrow-key selection may follow with capture in task 4.3.
+- **Freshness:** channels receive a `freshness` prop (fresh / stale / unavailable and observation time for each live source), computed once by the host's existing filter. Channels do not recompute it.
+- **Fonts:** Press Start 2P for the LED signs (new, loaded only with the channel, credited); VT323 for every display and readout. JetBrains Mono is not used.
+- **Sound:** no refresh tick, since the page fetches data once. A quiet server-room hum loop is proposed separately for owner approval; until then Status adds no sound of its own.
+- **Wording:** the footer shows the local time and snapshot age, never a poll countdown. A stale game server shows its sample age ("sample 2 days old"), never "last seen". The game-server display uses the spec's four lines.
+- **Art:** the existing cleaned rack sprites are used as they are; the owner judges them on the real TV.
+- **Fill the screen** (owner request during the build, 2026-10-19): Status is full bleed (`safe: false`) and the rack is zoomed 1.4×, so the servers span the glass and the cabinet sides crop off. The spec's `safe: true` is replaced.
+- Long server names and games shorten with an ellipsis so the state word always shows. Project LIVE/NEW tags from the mockup are not shown: no data field supplies them.
+- TV containers that clip channels use `overflow: clip`, not `hidden`. A hidden box can still be scrolled when focus lands on something outside it, which shifted the whole picture when tabbing to an off-screen server.
 
 ### Dependency review (2026-10-19)
 
@@ -267,7 +281,6 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Independent audit (2026-10-18): F01–F03 have approved specification fixes recorded above; implement and verify them in the corresponding build tasks. F06 is resolved by the revised plan and F09 is fixed and verified in reference tooling. F04/F05 are also resolved in the shared host-interface specification. F07/F08/F10 now have specification resolutions and F12 is cleaned up; F11 remains deferred to The Late Show review. See [the audit report](audit-2026-10-18.md). All runtime acceptance checks remain pending.
 
 - A hidden channel: wanted or not. Not needed for v1.
-- Exact Status game-server display fields: confirm when building channel 10.
 - Volume knob graphic: the photo's printed rim marks plus the moving tick read as "double dots". Revisit later, for example by repainting the rim without marks in `tv_sprites.py` or using a different indicator.
 - GitHub directory is implemented locally for task 1.10; hosting/scheduling and content review remain before launch.
-- Status of the patch panel / switch / UPS photo sprites: generated and cleaned; final art pass when channel 10 is built.
+- Status rack sprites: used as cleaned for the build (2026-10-19); the owner judges them on the real TV.

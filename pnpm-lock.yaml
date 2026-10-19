@@ -11,6 +11,9 @@ importers:
       '@fontsource/permanent-marker':
         specifier: 5.3.0
         version: 5.3.0
+      '@fontsource/press-start-2p':
+        specifier: 5.3.0
+        version: 5.3.0
       '@fontsource/vt323':
         specifier: 5.3.0
         version: 5.3.0
@@ -451,6 +454,9 @@ packages:
 
   '@fontsource/permanent-marker@5.3.0':
     resolution: {integrity: sha512-ZO/NtYW4SCc/iY8N3dmjWyDITcXJ/vhWZFgnwRcvzwCKKnScMrM/a2/6VHlsjCVuIgmPzNrCFbedEYhv+/jJBg==}
+
+  '@fontsource/press-start-2p@5.3.0':
+    resolution: {integrity: sha512-gxWFxdeDglPhEYSwEeooomcaFK8kSQYLQwVxfnOJeYRj2sPEHXjpVtFgEaYfqzOjuAJGrIcJOipu2KY5YkbyuQ==}
 
   '@fontsource/vt323@5.3.0':
     resolution: {integrity: sha512-3w33Rg/0+R1587HQfz4t7Q7e0GGeCqr3wmzIwqdGInUnrGEwMA5eX39GP4Z9wpTQnwfhVOhYuxuRwRUeIcicbw==}
@@ -3416,6 +3422,8 @@ snapshots:
   '@fontsource/michroma@5.3.0': {}
 
   '@fontsource/permanent-marker@5.3.0': {}
+
+  '@fontsource/press-start-2p@5.3.0': {}
 
   '@fontsource/vt323@5.3.0': {}
 

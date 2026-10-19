@@ -2,7 +2,9 @@
   position: absolute;
   top: 0;
   left: 0;
-  overflow: hidden;
+
+  /* clip, not hidden: a hidden box can still be scrolled by focus, which shifts channels. */
+  overflow: clip;
   transform-origin: 0 0;
 }
 
@@ -30,7 +32,7 @@
   position: relative;
   width: 760px;
   height: 570px;
-  overflow: hidden;
+  overflow: clip;
 }
 
 /* A new channel snaps in from a quick blur: no dark frame and no brightness spike. */

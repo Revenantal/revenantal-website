@@ -68,6 +68,13 @@ export type TvViewProps = {
 };
 
 const OSD_MS = 1700;
+const NOTHING_YET = { state: "unavailable", observedAt: null } as const;
+const UNAVAILABLE = {
+  steam: NOTHING_YET,
+  github: NOTHING_YET,
+  status: NOTHING_YET,
+  servers: NOTHING_YET,
+};
 const INERT_SAVE = {
   load: () => null,
   store: () => false,
@@ -373,6 +380,7 @@ export function TvView({
                 projects: view?.projects ?? [],
                 servers: view?.servers ?? [],
                 live: view?.live ?? null,
+                freshness: view?.freshness ?? UNAVAILABLE,
                 links: site?.links ?? { steam: "", github: "", discord: "" },
                 credits: site?.credits ?? [],
                 now,

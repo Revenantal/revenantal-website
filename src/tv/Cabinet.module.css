@@ -1,6 +1,6 @@
 .screen {
   position: absolute;
-  overflow: hidden;
+  overflow: clip;
 }
 
 .photo {
