@@ -188,6 +188,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - The TV sits in a dark room photo (owner-supplied, generated with ChatGPT). Layout is a hybrid: the room fills the window around a smaller TV on normal and large screens, and the TV grows back to full height on small windows (stage scale never below 0.65 or above full fit). This supersedes the earlier "keep full height" answer.
 - The room image includes recognisable third-party characters and products (Halo, Star Wars and Alien figures, a Nintendo console and controller). The owner accepted this risk and chose to keep the image as is. Replace the image if a rights holder objects or before any commercial use.
 - Credited as "Room artwork" in the shared credits, naming ChatGPT.
+- The owner asked for a slightly bigger TV and a much darker scene: the TV shows 10% larger than the photo's framing (`ROOM_ZOOM`, the room zooms with it), the room photo renders at 45% brightness under a heavy vignette, and the cabinet at 42% (badge 55%).
 
 ## Clarifications
 

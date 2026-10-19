@@ -36,7 +36,7 @@ Prototype: `docs/reference/prototypes/door-tv.dc.html` (the canonical interactiv
 
 ## Stage and Scaling
 
-- The TV is authored at a fixed **1536×1024** stage and scaled as one unit. `roomLayout()` in `tv/geometry.ts` places it: the room photo covers the window with the real TV laid over the photo's painted TV, and the TV never drops below stage scale 0.65 or past full fit, so small windows get a full-height TV and the stage is never cut off.
+- The TV is authored at a fixed **1536×1024** stage and scaled as one unit. `roomLayout()` in `tv/geometry.ts` places it: the room photo covers the window with the real TV laid over the photo's painted TV, shown 10% larger than the photo's framing (`ROOM_ZOOM`), and the TV never drops below stage scale 0.65 or past full fit, so small windows get a full-height TV and the stage is never cut off.
 - Minimum supported viewport: **1280×650** (about 0.63×). Controls keep a ≥ 44 px effective hit area at that scale (enlarge hit zones, not visuals).
 - The dial has no numeral ring or numeral buttons at any size. Derive detents and rotation from the [configured slots](dial-configuration.md); retain one keyboard-accessible knob and the channel OSD.
 - Channels are authored at **760×570** and scaled into the glass.

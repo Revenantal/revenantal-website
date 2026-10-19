@@ -11,7 +11,7 @@
   width: var(--room-width);
   max-width: none;
   height: var(--room-height);
-  filter: brightness(0.85);
+  filter: brightness(0.45) saturate(0.9);
   user-select: none;
 
   /* Ultrawide windows can be wider than the photo; fade its sides into the dark room. */
@@ -50,7 +50,7 @@
 .vignette {
   background: radial-gradient(
     ellipse at 50% 50%,
-    transparent 60%,
-    rgb(0 0 0 / 50%) 100%
+    transparent 35%,
+    rgb(0 0 0 / 80%) 100%
   );
 }

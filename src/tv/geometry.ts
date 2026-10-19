@@ -54,6 +54,9 @@ export const ROOM = {
 /** The TV never shrinks below this stage scale to show more room. */
 export const MIN_ROOM_SCALE = 0.65;
 
+/** How much larger than the room photo's own framing the TV is shown; the room zooms with it. */
+export const ROOM_ZOOM = 1.1;
+
 /** Where the stage and the room photo sit in the window, in CSS pixels. */
 export type RoomLayout = {
   scale: number;
@@ -76,7 +79,7 @@ export function roomLayout(width: number, height: number): RoomLayout {
   const cover = Math.max(width / ROOM.width, height / ROOM.height);
   const scale = Math.min(
     fit,
-    Math.max(cover * ROOM.pixelsPerStage, MIN_ROOM_SCALE),
+    Math.max(cover * ROOM.pixelsPerStage * ROOM_ZOOM, MIN_ROOM_SCALE),
   );
   const roomScale = scale / ROOM.pixelsPerStage;
   const roomWidth = ROOM.width * roomScale;
