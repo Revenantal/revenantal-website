@@ -12,6 +12,6 @@
   transform-origin: 0 0;
 
   /* Room darkness: photo layers render at this brightness, lit by the spill. */
-  --dim: 0.42;
-  --dim-badge: 0.55;
+  --dim: 0.32;
+  --dim-badge: 0.45;
 }
