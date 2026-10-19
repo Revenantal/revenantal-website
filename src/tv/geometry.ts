@@ -38,6 +38,77 @@ export const POWER_LED = { x: 1455, y: 908 } as const;
 export const BADGE: Box = { left: 496, top: 964, width: 290, height: 42 };
 
 /**
+ * The room photo behind the TV. Its painted TV is covered by the real stage:
+ * stage point (x, y) sits at room pixel anchor + (point − cabinet centre) × pixelsPerStage.
+ */
+export const ROOM = {
+  width: 1536,
+  height: 1024,
+  pixelsPerStage: 0.651,
+  anchorX: 772,
+  anchorY: 426,
+  cabinetX: 767.5,
+  cabinetY: 508.5,
+} as const;
+
+/** The TV never shrinks below this stage scale to show more room. */
+export const MIN_ROOM_SCALE = 0.65;
+
+/** Where the stage and the room photo sit in the window, in CSS pixels. */
+export type RoomLayout = {
+  scale: number;
+  stageLeft: number;
+  stageTop: number;
+  room: Box;
+};
+
+/**
+ * Places the TV in the room. The room photo covers the window with the real TV over its
+ * painted one; on small windows the TV grows back toward full height so it stays usable.
+ * The stage is always fully visible.
+ *
+ * @param width - Window width in CSS pixels.
+ * @param height - Window height in CSS pixels.
+ * @returns Stage scale and offsets, and the room photo's box.
+ */
+export function roomLayout(width: number, height: number): RoomLayout {
+  const fit = stageScale(width, height);
+  const cover = Math.max(width / ROOM.width, height / ROOM.height);
+  const scale = Math.min(
+    fit,
+    Math.max(cover * ROOM.pixelsPerStage, MIN_ROOM_SCALE),
+  );
+  const roomScale = scale / ROOM.pixelsPerStage;
+  const roomWidth = ROOM.width * roomScale;
+  const roomHeight = ROOM.height * roomScale;
+  let roomLeft = (width - roomWidth) / 2;
+  let roomTop = (height - roomHeight) / 2;
+  const originX = ROOM.anchorX - ROOM.cabinetX * ROOM.pixelsPerStage;
+  const originY = ROOM.anchorY - ROOM.cabinetY * ROOM.pixelsPerStage;
+  let stageLeft = roomLeft + originX * roomScale;
+  let stageTop = roomTop + originY * roomScale;
+  const clamp = (value: number, max: number) =>
+    Math.min(Math.max(value, 0), Math.max(max, 0));
+  const dx = clamp(stageLeft, width - STAGE.width * scale) - stageLeft;
+  const dy = clamp(stageTop, height - STAGE.height * scale) - stageTop;
+  stageLeft += dx;
+  stageTop += dy;
+  roomLeft += dx;
+  roomTop += dy;
+  return {
+    scale,
+    stageLeft,
+    stageTop,
+    room: {
+      left: roomLeft,
+      top: roomTop,
+      width: roomWidth,
+      height: roomHeight,
+    },
+  };
+}
+
+/**
  * Scale that fits the stage inside a viewport, centred with letterboxing.
  *
  * @param width - Available width in CSS pixels.

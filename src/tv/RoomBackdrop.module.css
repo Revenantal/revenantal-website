@@ -2,34 +2,41 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-
-  --stage-w: calc(1536px * var(--stage-scale));
-  --stage-h: calc(1024px * var(--stage-scale));
 }
 
-.wall,
+.photo {
+  position: absolute;
+  top: var(--room-top);
+  left: var(--room-left);
+  width: var(--room-width);
+  max-width: none;
+  height: var(--room-height);
+  filter: brightness(0.85);
+  user-select: none;
+
+  /* Ultrawide windows can be wider than the photo; fade its sides into the dark room. */
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+}
+
 .spill,
 .vignette {
   position: absolute;
   inset: 0;
 }
 
-.wall {
-  background: radial-gradient(
-    ellipse calc(var(--stage-w) * 0.75) calc(var(--stage-h) * 0.85) at 50% 50%,
-    #3a2f27 0,
-    #261e19 62%,
-    #120f0d 82%,
-    var(--color-room) 100%
-  );
-}
-
-/* Screen light thrown past the cabinet onto the wall behind it. */
+/* Screen light thrown past the cabinet into the room. */
 .spill {
   background: radial-gradient(
-    ellipse calc(var(--stage-w) * 0.78) calc(var(--stage-h) * 0.7) at
-      calc(50% + var(--screen-x) * var(--stage-scale))
-      calc(50% + var(--screen-y) * var(--stage-scale)),
+    ellipse calc(1536px * var(--stage-scale) * 0.78)
+      calc(1024px * var(--stage-scale) * 0.7) at
+      calc(var(--stage-left) + var(--screen-x) * var(--stage-scale))
+      calc(var(--stage-top) + var(--screen-y) * var(--stage-scale)),
     var(--glow) 0,
     transparent 75%
   );
@@ -43,7 +50,7 @@
 .vignette {
   background: radial-gradient(
     ellipse at 50% 50%,
-    transparent 55%,
-    rgb(0 0 0 / 55%) 100%
+    transparent 60%,
+    rgb(0 0 0 / 50%) 100%
   );
 }

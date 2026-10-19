@@ -5,7 +5,9 @@ import {
   DOOR,
   SCREEN,
   STAGE,
+  MIN_ROOM_SCALE,
   boxStyle,
+  roomLayout,
   stageScale,
 } from "./geometry";
 import { NO_SIGNAL, panelGlow, roomGlowOpacity } from "./room-glow";
@@ -33,6 +35,46 @@ describe("stage geometry", () => {
       width: "204px",
       height: "73px",
     });
+  });
+});
+
+describe("room layout", () => {
+  const inside = (width: number, height: number) => {
+    const layout = roomLayout(width, height);
+    expect(layout.stageLeft).toBeGreaterThanOrEqual(-0.001);
+    expect(layout.stageTop).toBeGreaterThanOrEqual(-0.001);
+    expect(layout.stageLeft + STAGE.width * layout.scale).toBeLessThanOrEqual(
+      width + 0.001,
+    );
+    expect(layout.stageTop + STAGE.height * layout.scale).toBeLessThanOrEqual(
+      height + 0.001,
+    );
+    return layout;
+  };
+
+  it("lets the room fill a 16:9 window around a smaller TV", () => {
+    const layout = inside(1920, 1080);
+    expect(layout.scale).toBeLessThan(stageScale(1920, 1080));
+    expect(layout.room.left).toBeLessThanOrEqual(0);
+    expect(layout.room.top).toBeLessThanOrEqual(0);
+    expect(layout.room.left + layout.room.width).toBeGreaterThanOrEqual(1920);
+    expect(layout.room.top + layout.room.height).toBeGreaterThanOrEqual(1080);
+  });
+
+  it("grows the TV back to full height on small windows", () => {
+    const layout = inside(1280, 650);
+    expect(layout.scale).toBeCloseTo(stageScale(1280, 650));
+    expect(layout.scale).toBeLessThanOrEqual(MIN_ROOM_SCALE);
+  });
+
+  it("never lets the TV overflow, even on ultrawide windows", () => {
+    for (const [width, height] of [
+      [3440, 1440],
+      [1440, 900],
+      [2560, 1600],
+      [1000, 1400],
+    ] as const)
+      inside(width, height);
   });
 });
 
