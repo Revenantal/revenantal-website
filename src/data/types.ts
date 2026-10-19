@@ -28,7 +28,7 @@ export type PanelButton = {
   action?: "copy" | "tune"; // copy: copies `copyValue` · tune: jumps the dial to `channel`
   copyValue?: string;
   copiedLabel?: string;
-  channel?: string; // channel id for `tune`; tune buttons are hidden in List mode
+  channel?: string; // channel id for `tune`; List mode links a "status" tune button to its servers section and hides the rest
 };
 
 /** One shared source attribution. */

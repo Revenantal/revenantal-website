@@ -115,8 +115,10 @@ export function ListView({ site, view, now }: ListViewProps) {
           )}
         </section>
 
-        <section className={styles.section} aria-labelledby="servers-title">
-          <h2 id="servers-title">Game servers</h2>
+        <section className={styles.section} aria-labelledby="servers">
+          <h2 id="servers" tabIndex={-1}>
+            Game servers
+          </h2>
           <SourceAge source={view.freshness.servers} now={now} />
           {view.servers.length === 0 ? (
             <p className={styles.empty}>No server observations available.</p>
@@ -152,9 +154,20 @@ export function ListView({ site, view, now }: ListViewProps) {
           <h2 id="profiles-title">Elsewhere</h2>
           <div className={styles.profiles}>
             {site.buttons
-              .filter((button) => button.action !== "tune")
+              .filter(
+                (button) =>
+                  button.action !== "tune" || button.channel === "status",
+              )
               .map((button) =>
-                button.href ? (
+                button.action === "tune" ? (
+                  <a
+                    className={styles.button}
+                    href="#servers"
+                    key={button.label}
+                  >
+                    {button.label}
+                  </a>
+                ) : button.href ? (
                   <a
                     className={styles.button}
                     href={button.href}

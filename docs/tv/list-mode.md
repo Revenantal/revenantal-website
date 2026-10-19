@@ -19,7 +19,7 @@ Single column, max 640 px, 20 px gutters.
 2. **Right now:** Steam card, latest push card.
 3. **Projects:** status text, name, desc · host, type.
 4. **Game servers:** name, game, state, players; address only where published.
-5. **Elsewhere:** the panel buttons as flat buttons (tune buttons hidden).
+5. **Elsewhere:** the panel buttons as flat buttons. The SERVERS tune button links to the Game servers section; other tune buttons are hidden.
 6. **Recent pushes:** 5.
 7. **Credits:** collapsible, with the snapshot write time.
 
