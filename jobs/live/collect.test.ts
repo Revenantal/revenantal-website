@@ -172,6 +172,31 @@ describe("provider projection", () => {
     expect(mapped.projects?.[2]?.desc).toBe("Code and experiments on GitHub.");
     expect(mapped.projects?.[3]?.desc.endsWith("…")).toBe(true);
   });
+  it("leaves out excluded repositories before applying the limit", () => {
+    const repo = {
+      id: 30,
+      name: "Keep-One",
+      html_url: "https://example.invalid/repo",
+      pushed_at: time,
+      language: null,
+      fork: false,
+      private: false,
+    };
+    const mapped = mapGithub(
+      [
+        { ...repo, id: 31, name: "Hidden-Repo" },
+        repo,
+        { ...repo, id: 32, name: "keep-two" },
+      ],
+      2,
+      ["hidden-repo"],
+    );
+    expect(mapped.projects?.map((project) => project.name)).toEqual([
+      "Keep-One",
+      "keep-two",
+    ]);
+    expect(JSON.stringify(mapped)).not.toContain("Hidden-Repo");
+  });
   it("links a repository website when set, otherwise the repository", () => {
     const repo = {
       id: 20,

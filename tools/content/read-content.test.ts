@@ -1,7 +1,7 @@
 import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { resolve, join } from "node:path";
 import { beforeEach, describe, expect, it } from "vitest";
-import { readContent } from "./read-content";
+import { publicSite, readContent } from "./read-content";
 
 let root: string;
 beforeEach(async () => {
@@ -31,6 +31,17 @@ describe("shared content compilation", () => {
     expect(site.credits).toEqual(
       JSON.parse(await readFile(resolve("content/credits.json"), "utf8")),
     );
+  });
+
+  it("keeps the GitHub exclude list out of public site.json", async () => {
+    await writeFile(
+      join(root, "content/directory.json"),
+      JSON.stringify({ source: "github", limit: 5, exclude: ["secret-repo"] }),
+    );
+    const site = await readContent(root);
+    expect(site.directory?.exclude).toEqual(["secret-repo"]);
+    expect(JSON.stringify(publicSite(site))).not.toContain("secret-repo");
+    expect(publicSite(site).directory).toEqual({ source: "github", limit: 5 });
   });
 
   it("excludes hidden projects from the public payload", async () => {

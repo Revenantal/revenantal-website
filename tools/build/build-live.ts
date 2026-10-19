@@ -1,4 +1,6 @@
+import { writeFile } from "node:fs/promises";
 import { build } from "vite";
+import { readContent } from "../content/read-content.ts";
 await build({
   configFile: false,
   publicDir: false,
@@ -18,3 +20,8 @@ await build({
   },
   ssr: { noExternal: true },
 });
+// The job's copy keeps private content, such as the GitHub exclude list, that public site.json omits.
+await writeFile(
+  ".cache/live/site.json",
+  JSON.stringify(await readContent(process.cwd())),
+);

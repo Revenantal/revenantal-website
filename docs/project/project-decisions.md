@@ -163,6 +163,11 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - The owner approved publishing each repository's own GitHub description and website, reversing the earlier "generic language descriptions, no homepage URLs" rule. Descriptions are whitespace-cleaned and capped at 200 characters, falling back to the language text. A valid HTTP(S) website becomes the project link and host (type `site`); otherwise the card links to the repository. Recent pushes still link to repositories. The personal-site/résumé filter still applies, and the owner reviews public repository text.
 - In List mode, the Status tune button (SERVERS) becomes a link to the Game servers section. Other tune buttons stay hidden there.
 
+### Content review (2026-10-18)
+
+- Projects stay automatic from GitHub. content/directory.json `exclude` lists repository names to leave out, matched case-insensitively before the limit. The list stays private: the live-job image carries its own full content copy, and public site.json omits it.
+- This site's repository stays in the list. The Discord username may be public. Server names stay as the panel reports them, with no overrides for now.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

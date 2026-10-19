@@ -2,8 +2,6 @@
 !jobs/
 !jobs/live/
 !jobs/live/Dockerfile
-!dist/
-!dist/site.json
 !.cache/
 !.cache/live/
 !.cache/live/**

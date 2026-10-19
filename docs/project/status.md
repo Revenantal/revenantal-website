@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Close Gate 1. Phase 1 is merged to `main` (PR #1, 04c8ae3) and CI passes. Hosting is deferred to the launch check (3.7) by owner instruction. The only remaining Gate 1 item is owner review of the real project content (1.10). Do not start the TV shell until Gate 1 is settled.
+**Current focus:** Phase 2, the TV shell, starting with 2.1 asset tools. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
 
 **Last updated:** 2026-10-18
 
@@ -28,8 +28,8 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 1.7 Direct Pelican provider — real panel discovery, resources and rates verified locally; Factorio counts accepted as absent; Minecraft counts untested on a live server
 - [x] 1.8 Server merge and overrides
 - [x] 1.9 List mode
-- [ ] 1.10 Real project list, links and credits — merged; awaiting owner content review
-- [ ] **Gate 1**
+- [x] 1.10 Real project list, links and credits
+- [x] **Gate 1**
 
 ## Phase 2 — TV Shell
 
@@ -121,6 +121,8 @@ Later the same day the owner deferred hosting until the project is complete. Ren
 Credits now list only shipped external assets: the two OFL fonts. Sound and TV-image credits return when those assets ship. The AI-generated image credit wording awaits an owner decision.
 
 Owner content review answers: GitHub projects now use each repository's description and website (with cleaning and fallbacks); the SERVERS button links to the Game servers section in List mode; image credits may name the tools used (AGENTS.md amended). 1.10 still needs the remaining answers: automatic vs curated list, whether this site's repo is listed, public Discord name and server renames/hides.
+
+Owner completed the 1.10 review: the project list stays automatic from GitHub with an `exclude` list in content/directory.json (names matched case-insensitively, kept out of public site.json; the live job gets its own full content copy). This site's repository stays listed, the Discord name may be public and server names stay as the panel reports them. Ticked 1.10 and Gate 1: tooling, CI and hooks work; List mode shows projects, servers and live data from the shared store with freshness handling and axe-clean checks; runtime snapshots update without a site rebuild (Caddy checks).
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 

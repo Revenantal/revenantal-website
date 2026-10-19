@@ -6,7 +6,7 @@ Types live in `src/data/types.ts`. Each `content/` file has a zod schema, so a t
 
 ## Content Compilation
 
-content/directory.json selects github or curated navigation and a limit of 1–30 (default ten). Curated entries live in projects.json; GitHub entries arrive in live.github.projects through the scheduled job. The store selects one source for all views. Retained repository links stay available with stale metadata, while old current-state telemetry is removed.
+content/directory.json selects github or curated navigation and a limit of 1–30 (default ten). Its optional `exclude` list names GitHub repositories to leave out (case-insensitive). The live job reads a full content copy that includes it; public site.json omits it. Curated entries live in projects.json; GitHub entries arrive in live.github.projects through the scheduled job. The store selects one source for all views. Retained repository links stay available with stale metadata, while old current-state telemetry is removed.
 
 links.json owns profile values. buttons.json refers to link/copy keys that the build resolves once; tune actions stay symbolic channel IDs. Optional server overrides default to an empty array and missing playlists to an empty map. Nonempty playlists must target registered broadcast channels. Hidden curated projects are removed from public site.json. credits.json also generates CREDITS.md; builds reject mismatched credits.
 

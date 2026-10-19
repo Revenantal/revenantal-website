@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { liveSchema } from "../../src/data/schemas.ts";
 import { resolve } from "node:path";
 import type { Plugin } from "vite";
-import { readContent } from "./read-content.ts";
+import { publicSite, readContent } from "./read-content.ts";
 import type { Site } from "../../src/data/types.ts";
 
 /**
@@ -26,7 +26,7 @@ export function contentPlugin(): Plugin {
       this.emitFile({
         type: "asset",
         fileName: "site.json",
-        source: JSON.stringify(site),
+        source: JSON.stringify(publicSite(site)),
       });
     },
     configureServer(server) {
@@ -47,7 +47,7 @@ export function contentPlugin(): Plugin {
                 resolve(root, ".cache/live-preview/live.json"),
                 "utf8",
               ).then((text) => liveSchema.parse(JSON.parse(text) as unknown))
-            : readContent(resolve(root));
+            : readContent(resolve(root)).then(publicSite);
         void content
           .then((content) => {
             response.setHeader("Content-Type", "application/json");

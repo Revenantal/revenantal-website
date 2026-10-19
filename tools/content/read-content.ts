@@ -98,3 +98,15 @@ export async function readContent(
     projects: site.projects.filter((project) => !project.hidden),
   };
 }
+
+/**
+ * Removes content that only the live job needs, so the browser never sees the GitHub exclude list.
+ *
+ * @param site - Complete validated content.
+ * @returns The public site.json payload.
+ */
+export function publicSite(site: Site): Site {
+  if (!site.directory) return site;
+  const { source, limit } = site.directory;
+  return { ...site, directory: { source, limit } };
+}

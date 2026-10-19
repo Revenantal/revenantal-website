@@ -67,7 +67,7 @@ try {
         NODE_PATH: "",
         PELICAN_URL: "https://example.invalid",
         PELICAN_KEY: "fixture-key",
-        SITE_PATH: resolve("dist/site.json"),
+        SITE_PATH: resolve(".cache/live/site.json"),
         LIVE_PATH: output,
         PELICAN_STATE_PATH: join(root, "pelican-state.json"),
         GAME_QUERY_HOST: "",
@@ -90,7 +90,7 @@ try {
     /fixture-private-command|sftp_details|variables|invocation/,
   );
   const site = siteSchema.parse(
-    JSON.parse(await readFile("dist/site.json", "utf8")) as unknown,
+    JSON.parse(await readFile(".cache/live/site.json", "utf8")) as unknown,
   );
   const now = new Date();
   const live = snapshot;

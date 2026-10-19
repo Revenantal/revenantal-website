@@ -136,6 +136,10 @@ export const siteSchema = z
       .strictObject({
         source: z.enum(["curated", "github"]),
         limit: z.number().int().min(1).max(30),
+        exclude: z
+          .array(z.string().regex(/^[A-Za-z0-9._-]{1,100}$/))
+          .max(100)
+          .optional(),
       })
       .optional(),
     projects: z.array(projectSchema),

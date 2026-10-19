@@ -1,4 +1,5 @@
 {
   "source": "github",
-  "limit": 10
+  "limit": 10,
+  "exclude": []
 }

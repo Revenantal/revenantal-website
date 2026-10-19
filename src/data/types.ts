@@ -66,7 +66,11 @@ export type BroadcastPlaylist = {
 /** Validated static content shared by every view. */
 export type Site = {
   projects: Project[];
-  directory?: { source: "curated" | "github"; limit: number };
+  directory?: {
+    source: "curated" | "github";
+    limit: number;
+    exclude?: string[]; // GitHub repository names; private to the live job, stripped from public site.json
+  };
   buttons: PanelButton[]; // the stack re-spaces itself; 4 fit at 72% size
   servers: ServerOverride[];
   links: { steam: string; github: string; discord: string };

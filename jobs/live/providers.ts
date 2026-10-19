@@ -129,16 +129,20 @@ function cleanHomepage(value: string | null | undefined): URL | undefined {
  *
  * @param value - Untrusted GitHub repository list.
  * @param limit - Maximum number of recent public projects to publish.
+ * @param exclude - Repository names to leave out, matched case-insensitively.
  * @returns A sanitized repository summary and project navigation.
  */
 export function mapGithub(
   value: unknown,
   limit = 10,
+  exclude: string[] = [],
 ): NonNullable<Live["github"]> {
+  const banned = new Set(exclude.map((name) => name.toLowerCase()));
   const repos = reposSchema
     .parse(value)
     .filter(
       (repo) =>
+        !banned.has(repo.name.toLowerCase()) &&
         !repo.private &&
         !repo.fork &&
         !repo.archived &&
@@ -211,7 +215,9 @@ export function createReaders(
         "User-Agent": "revenantal-status",
       },
       fetcher,
-    ).then((value) => mapGithub(value, site.directory?.limit ?? 10));
+    ).then((value) =>
+      mapGithub(value, site.directory?.limit ?? 10, site.directory?.exclude),
+    );
     return githubRequest;
   };
   return {
