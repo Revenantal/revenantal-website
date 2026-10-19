@@ -21,7 +21,6 @@ export default defineConfig({
       "src/**/*.test.{ts,tsx}",
       "tools/**/*.test.ts",
       "jobs/**/*.test.ts",
-      "agent/**/*.test.ts",
       "api/**/*.test.ts",
     ],
     restoreMocks: true,

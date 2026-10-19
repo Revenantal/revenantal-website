@@ -106,6 +106,12 @@ A sanitized real query against the owner-supplied Factorio allocation via games.
 
 **Left off:** Local code migration and documentation are complete. Hosting remains disconnected. Next configure the existing job's PELICAN_URL, restricted PELICAN_KEY and GAME_QUERY_HOST in its runtime environment, then verify scheduled-host resource collection and actual player counts. Docker-enabled CI, PR/merge/branch setup and remaining production acceptance keep Gate 1 open. Do not start the TV shell until that gate is settled. No individual channel is approved or built.
 
+## Phase 1 PR and CI (2026-10-18)
+
+Opened PR #1 (feat/1.1-foundation → master). The first CI run failed only at the container check: the site container exited at start, so no port was published. Likely cause: the upstream Caddy binary's file capability cannot exec under cap-drop ALL with no-new-privileges. The site Dockerfile now copies the binary to drop it; the check keeps containers and prints their logs if a start fails. Not yet confirmed by a passing run.
+
+Added deploy/.env.example (SITE_TAG) and completed deploy/.env.live.example with every live-job variable, including optional paths. A test fails when the job reads a variable missing from the example. Runtime credentials are still not configured on a host.
+
 ## Channel Build Approvals
 
 All individual channel builds are awaiting plan review and explicit owner confirmation, including TV Guide, Status and Credits. Existing design statuses below describe design progress, not permission to implement. Record each confirmed channel scope and date in `project-decisions.md` and note its approval here.

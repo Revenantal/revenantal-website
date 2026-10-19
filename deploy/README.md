@@ -20,7 +20,7 @@ Site and one-shot live-job images are prepared, but none have been published. Pe
 
 ## Scheduled Feed Setup (later)
 
-The live-job image contains the exact validated site.json from its build. Use the same verified SHA as the site. Provision /srv/revenantal/live owned by UID/GID 10001 for snapshots and private numeric rate baselines. Create deploy/.env containing SITE_TAG and copy .env.live.example to ignored .env.live for runtime credentials. GitHub works anonymously; Steam needs its runtime key/ID. Never commit these environment files.
+The live-job image contains the exact validated site.json from its build. Use the same verified SHA as the site. Provision /srv/revenantal/live owned by UID/GID 10001 for snapshots and private numeric rate baselines. Copy .env.example to ignored deploy/.env and set SITE_TAG, then copy .env.live.example to ignored deploy/.env.live for runtime credentials. The examples list every setting; add any new variable to them in the same change (a test fails otherwise). GitHub works anonymously; Steam needs its runtime key/ID. Never commit these environment files.
 
 live-job.compose.example.yml runs the image once with a read-only root and its dedicated /data mount. From /opt/revenantal, run:
 

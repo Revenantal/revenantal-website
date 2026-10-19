@@ -41,7 +41,6 @@ try {
     const id = docker([
       "run",
       "--detach",
-      "--rm",
       "--read-only",
       "--tmpfs",
       "/tmp",
@@ -56,7 +55,14 @@ try {
       `${prefix}:${marker}`,
     ]);
     containers.push(id);
-    const binding = docker(["port", id, "8080/tcp"]);
+    let binding: string;
+    try {
+      binding = docker(["port", id, "8080/tcp"]);
+    } catch (error) {
+      const logs = spawnSync("docker", ["logs", id], { encoding: "utf8" });
+      console.error(logs.stdout, logs.stderr);
+      throw error;
+    }
     const port = /127\.0\.0\.1:(\d+)/.exec(binding)?.[1];
     assert(port, "Container must expose only a loopback test port.");
     const base = `http://127.0.0.1:${port}`;
@@ -72,7 +78,7 @@ try {
       });
       assert.notEqual(attempt.status, 0, `Container must not write ${target}`);
     }
-    docker(["stop", id]);
+    docker(["rm", "--force", id]);
     containers.pop();
   }
   console.log(
@@ -80,7 +86,7 @@ try {
   );
 } finally {
   for (const id of containers)
-    spawnSync("docker", ["stop", id], { stdio: "ignore" });
+    spawnSync("docker", ["rm", "--force", id], { stdio: "ignore" });
   for (const image of images)
     spawnSync("docker", ["image", "rm", image], { stdio: "ignore" });
 }
