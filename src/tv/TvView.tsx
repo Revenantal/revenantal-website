@@ -13,7 +13,8 @@ import { SettingsDoor } from "./controls/SettingsDoor";
 import { usePageVisible } from "./controls/page-visible";
 import { usePerfMonitor } from "./controls/perf-monitor";
 import { useAudioUnlock } from "./controls/audio-unlock";
-import { createAudioEngine } from "@audio/engine";
+import { tvAudio } from "./tv-audio";
+import { useChannelHash } from "./controls/channel-hash";
 import { BloomFilter } from "./effects/BloomFilter";
 import { NO_SIGNAL_PROFILE, resolveEffects } from "./effects/resolve";
 import { ScreenEffects } from "./effects/ScreenEffects";
@@ -51,6 +52,8 @@ export type TvViewProps = {
     | "perf"
   >;
   view: DataView | null;
+  /** How the picture comes on when the TV mounts: a quick boot, or the full warm-up. */
+  startup?: "load" | "warm";
   actions: Pick<
     AppStore,
     | "setChannel"
@@ -80,10 +83,16 @@ const HINT_FALL_MS = 1400;
  * @param props - Shared snapshot and store actions.
  * @param props.snapshot - Channel, power, door, viewer settings, content and clock.
  * @param props.view - Freshness-filtered projects, servers and live data.
+ * @param props.startup - Quick boot on page load, or warm-up when turned on from List mode.
  * @param props.actions - Store actions the controls call.
  * @returns The TV in its room.
  */
-export function TvView({ snapshot, view, actions }: TvViewProps) {
+export function TvView({
+  snapshot,
+  view,
+  actions,
+  startup = "load",
+}: TvViewProps) {
   const { channel, power, settings, door, site, hintDismissed, now } = snapshot;
   const visible = usePageVisible();
   const reducedMotion = useMediaQuery(TV_REDUCED_MOTION);
@@ -142,11 +151,11 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
   };
 
   // One audio engine for the TV's lifetime; sound files download now, play after a gesture.
-  const [audio] = useState(createAudioEngine);
+  const audio = tvAudio();
   useEffect(() => {
     audio.preload();
   }, [audio]);
-  const [audioUnlocked, setAudioUnlocked] = useState(false);
+  const [audioUnlocked, setAudioUnlocked] = useState(audio.unlocked);
   const [unlockAudio] = useState(() => () => {
     void audio.unlock().then(() => {
       setAudioUnlocked(audio.unlocked);
@@ -186,7 +195,7 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
   };
 
   const [boot, setBoot] = useState<Boot>({
-    kind: reducedMotion ? "none" : "load",
+    kind: reducedMotion ? "none" : startup,
     key: 0,
   });
   const [offKey, setOffKey] = useState(0);
@@ -219,6 +228,13 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
   });
 
   usePerfMonitor(power && visible, snapshot.perf, actions.setPerf);
+  useChannelHash(channel, SLOT_COUNT, tune);
+  // Turned on from List mode: the same sounds as pressing the power LED.
+  useEffect(() => {
+    if (startup !== "warm") return;
+    audio.play("power_btn");
+    audio.play("crt_on");
+  }, [audio, startup]);
   useEffect(() => {
     audio.setHidden(!visible);
   }, [audio, visible]);
@@ -260,6 +276,15 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
   }, [audio, power, settings.snd, settings.volume, noSignal, detune]);
   return (
     <main className={styles.tv}>
+      <button
+        type="button"
+        className={styles.skip}
+        onClick={() => {
+          changePower(false);
+        }}
+      >
+        Skip to the simple list
+      </button>
       <h1 className={styles["sr-only"]}>revenantal</h1>
       <BloomFilter />
       <div className={styles.set}>

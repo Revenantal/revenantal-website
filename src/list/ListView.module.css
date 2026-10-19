@@ -9,6 +9,34 @@
   border-block: var(--border-width) solid var(--color-accent);
 }
 
+.turn-on {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  min-height: var(--target-size);
+  margin-top: var(--space-item);
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: var(--color-panel);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.turn-on:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+.led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff2a36;
+  box-shadow: 0 0 8px #ff2a36;
+}
+
 .model,
 .meta {
   color: var(--color-muted);
@@ -26,6 +54,10 @@
   line-height: var(--line-body);
   letter-spacing: var(--tracking-brand);
   overflow-wrap: anywhere;
+}
+
+.wordmark:focus {
+  outline: none;
 }
 
 .intro {

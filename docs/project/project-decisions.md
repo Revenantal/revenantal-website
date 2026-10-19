@@ -181,7 +181,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 ### TV preview flag (2026-10-18)
 
-- While phase 2 is in progress, the TV renders only with `?tv` in the URL (and 900 px or wider), so `main` keeps serving List mode until the power LED (2.3) and TV/List transitions (2.7) exist. Remove the flag in 2.7.
+- While phase 2 was in progress, the TV rendered only with `?tv` in the URL. Task 2.7 removed the flag: desktop windows (900 px or wider) get the TV by default; a viewer who left it off, or who prefers reduced motion, starts in List mode with a Turn on the TV button.
 
 ### Room scene (2026-10-18)
 
@@ -224,6 +224,12 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - `resolveEffects` implements the precedence table (viewer OFF > channel OFF > channel strength > default); reduced motion and the performance fallback can only remove effects. NO SIGNAL uses the prototype's profile (scan 1, flicker on, glow 0.5), so its GLOW lamp lights.
 - The flicker overlay is 3–5% white instead of the prototype's 7–11%, because the owner is sensitive to flashing. FLK still turns it off.
 - The OSD and NO SIGNAL card are softened (owner request): slightly see-through, softer glow and a faint blur, so they read as part of the broadcast.
+
+### Persistence and transitions (2026-10-19)
+
+- Load order for the channel is `#chN`, then `rv-ch` (zero-based), then channel 1; invalid or out-of-range values fall through and are never wrapped. `rv-tv` stores on/off. Both are written through the guarded storage path.
+- The TV's audio engine is shared for the page (`tv/tv-audio.ts`) so sound stays unlocked across TV/List switches; List mode's Turn on the TV click also unlocks it.
+- The skip link "Skip to the simple list" is the TV's first Tab stop and turns the TV off into List mode, which focuses its heading on arrival.
 
 ## Clarifications
 

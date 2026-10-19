@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { filterFreshData } from "./freshness";
 import { loadLive, loadSite } from "./loaders";
+import { CHANNEL_KEY, POWER_KEY, remember } from "./persistence";
 import type { Live, Site } from "./types";
 
 const settingsSchema = z.object({
@@ -36,6 +37,10 @@ export type StoreOptions = {
   fetcher?: typeof fetch;
   now?: Date;
   positionCount?: number;
+  /** Starting channel, from the URL or the last visit (see persistence.ts). */
+  initialChannel?: number;
+  /** Whether the TV starts on; off starts in List mode. */
+  initialPower?: boolean;
 };
 
 /**
@@ -62,8 +67,8 @@ export function createStore(options: StoreOptions = {}) {
     now: options.now ?? new Date(),
     loading: true,
     error: false,
-    power: true,
-    channel: 1,
+    power: options.initialPower ?? true,
+    channel: options.initialChannel ?? 1,
     door: false,
     hintDismissed: false,
     perf: 0,
@@ -116,6 +121,7 @@ export function createStore(options: StoreOptions = {}) {
     },
     setPower: (power: boolean) => {
       update({ power, door: power ? snapshot.door : false });
+      remember(options.storage, POWER_KEY, power ? "on" : "off");
     },
     setChannel: (position: number) => {
       const count = options.positionCount ?? 1;
@@ -127,6 +133,7 @@ export function createStore(options: StoreOptions = {}) {
       )
         return false;
       update({ channel: position });
+      remember(options.storage, CHANNEL_KEY, String(position - 1));
       return true;
     },
     setVolume: (volume: number) => {
