@@ -60,22 +60,19 @@ describe("channel lineup", () => {
     ).toThrow(/position 1: display.scan/);
   });
 
-  it("rejects empty and all-null registries unless the phase 2 option allows them", () => {
+  it("rejects empty and all-null registries", () => {
     expect(() => createLineup({})).toThrow(/no slots/);
     expect(() => createLineup({ 11: null })).toThrow(/no channels/);
-    expect(createLineup({ 11: null }, { allowNoChannels: true }).slots).toBe(
-      11,
-    );
   });
 
   it("resolves reserved IDs until their channel registers, without overriding it", () => {
     const reserved = { status: 10, credits: 11 };
-    const empty = createLineup(
-      { 11: null },
-      { allowNoChannels: true, reserved },
+    const early = createLineup(
+      { 1: manifest("tv-guide"), 11: null },
+      { reserved },
     );
-    expect(empty.positionOf("status")).toBe(10);
-    expect(empty.at(10)).toBeNull();
+    expect(early.positionOf("status")).toBe(10);
+    expect(early.at(10)).toBeNull();
 
     const built = createLineup(
       { 10: manifest("status"), 11: null },

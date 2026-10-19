@@ -120,13 +120,14 @@ export function mapServer(
   }
   const stats = parsed.data.attributes;
   const resource = stats.resources;
+  // Wings reports "missing" when the node has no container for the server: not running.
+  const reported =
+    stats.current_state === "missing" ? "offline" : stats.current_state;
   server.state =
     maintenance || stats.is_suspended
       ? "maintenance"
-      : ["running", "starting", "stopping", "offline"].includes(
-            stats.current_state,
-          )
-        ? (stats.current_state as LiveServer["state"])
+      : ["running", "starting", "stopping", "offline"].includes(reported)
+        ? (reported as LiveServer["state"])
         : "unknown";
   if (server.state !== "running") return { server };
   // Wings reports uptime in milliseconds and cumulative network bytes, not bytes per second.

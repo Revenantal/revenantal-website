@@ -1,12 +1,13 @@
 import { createLineup } from "./_shared/lineup";
 import type { ChannelRegistry } from "./_shared/types";
+import { manifest as status } from "./status/manifest";
 
 /**
  * The sole channel registry: explicit dial positions mapped to manifests. Missing keys and
- * null slots show NO SIGNAL; the highest key sets the dial's slot count. No channel is
- * approved yet, so the launch positions are empty: TV Guide 1, Status 10, Credits 11.
+ * null slots show NO SIGNAL; the highest key sets the dial's slot count. Launch positions:
+ * TV Guide 1 (not built yet), Status 10, Credits 11 (not built yet).
  */
-export const registry: ChannelRegistry = { 11: null };
+export const registry: ChannelRegistry = { 10: status, 11: null };
 
 /** Approved launch positions; internal buttons can tune to them before the channel exists. */
 export const LAUNCH_POSITIONS = {
@@ -16,8 +17,4 @@ export const LAUNCH_POSITIONS = {
 } as const;
 
 /** The validated lineup the TV reads. */
-export const lineup = createLineup(registry, {
-  // Phase 2 only: allow an empty lineup until the first channel is approved and registered.
-  allowNoChannels: true,
-  reserved: LAUNCH_POSITIONS,
-});
+export const lineup = createLineup(registry, { reserved: LAUNCH_POSITIONS });

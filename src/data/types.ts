@@ -134,6 +134,15 @@ export type SourceFreshness = {
   failed: boolean; // latest attempt failed; retained values are stale
 };
 
+/** How current one live source is, as shown to viewers. */
+export type SourceState = {
+  state: "fresh" | "stale" | "unavailable";
+  observedAt: string | null; // ISO time of the retained observation
+};
+
+/** The state of every live source after freshness filtering. */
+export type LiveFreshness = Record<LiveSource, SourceState>;
+
 /** The raw public snapshot before freshness filtering. */
 export type Live = {
   fetchedAt: string; // ISO time this aggregate was written

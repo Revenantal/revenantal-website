@@ -21,10 +21,11 @@ describe("shipped asset credits", () => {
       ).toBe(true);
   });
 
-  it("credits the TV and room artwork when they ship", () => {
+  it("credits the TV, room and rack artwork when they ship", () => {
     for (const [file, title] of [
       ["public/assets/tv/frame.webp", "TV artwork"],
       ["public/assets/tv/room.webp", "Room artwork"],
+      ["public/assets/status/server-1u.webp", "Status rack artwork"],
     ] as const)
       if (existsSync(file))
         expect(

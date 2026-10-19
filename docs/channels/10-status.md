@@ -4,7 +4,7 @@
 
 One tall photo-real 19-inch server rack. Every project is a server, every game server is a bigger server, and every light and display is drawn live from data. The SERVERS panel button tunes here.
 
-- **Kind:** directory · **Folder:** `status` · **Build:** task 3.2 (launch) · **Status:** rack design and sprites done
+- **Kind:** directory · **Folder:** `status` · **Build:** task 3.2 (launch) · **Status:** built (approved 2026-10-19)
 
 ## Concept
 
@@ -39,7 +39,7 @@ The 2U server chassis, mirrored. On the left, in the recessed bay, an LED dot-ma
 
 ### Footer
 
-A small line: local time, snapshot age ("snapshot 8 min old"), and key hints ("↑↓ select · Enter open / copy"). Label project and game-server sections with their own observation ages and STALE / unavailable state. Do not show a next-poll countdown: this page does not poll.
+A small line: local time, snapshot age ("snapshot 8 min old"), and key hints ("Tab select · Enter open / copy"). Each section display shows its own source caption under the unit count ("checked 3 min ago", "STALE · 5 h old" or "NO DATA"), from the host's `freshness` prop. Do not show a next-poll countdown: this page does not poll.
 
 ## Data Shown
 
@@ -54,20 +54,20 @@ Missing or stale data shows as unknown (dim LEDs, "—"), never as down. Follow 
 
 ## Interaction
 
-- ↑/↓ inside the channel move the selection, so this channel captures arrows only after the viewer clicks into it or presses Enter (same PRESS START-style rule, without an overlay; the dial keeps arrows until then).
-- Enter on a project opens it in a new tab. Enter on a game server copies its address (if published).
+- Every project is a link and every game server a button, in Tab order. Selection follows focus. The arrow keys keep turning the dial (no key capture at launch; arrow selection may come with task 4.3).
+- Enter on a project opens it in a new tab. Enter on a game server copies its address (if published), announced in a polite live region; a failed copy announces the address instead.
 - Click any server to select it; click again to open/copy.
-- The camera eases to keep the selected unit in view.
+- The camera eases to centre the selected unit. The mouse wheel pans the rack.
 
 ## Look
 
 - Dark server-room background, cool steel rack, warm LEDs.
-- Fonts: Press Start 2P (LED signs), VT323 (displays), JetBrains Mono (readouts).
-- Display profile: no scan, no flicker, glow 0.4, `transition: 'cut'`. `safe: true`.
+- Fonts: Press Start 2P (LED signs, loaded only with this channel) and VT323 (displays and readouts).
+- Display profile: no scan, no flicker, glow 0.4, `transition: 'cut'`. `safe: false` (owner request): the rack is drawn at mockup size and zoomed 1.4× (`ZOOM` in `hardware.ts`) so the servers fill the glass and the cabinet sides crop off; the footer stays 6% in from the edges.
 
 ## Sound
 
-Quiet server-room hum and a soft tick on refresh. See `soundscapes.md` → Status.
+None yet. A quiet server-room hum loop awaits owner approval of a CC0 recording. There is no refresh tick: the page fetches data once.
 
 ## Art Pipeline
 

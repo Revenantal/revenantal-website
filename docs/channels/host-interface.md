@@ -17,6 +17,7 @@ import type {
   Channel,
   DialPosition,
   Live,
+  LiveFreshness,
   Project,
   Site,
 } from "../../data/types";
@@ -49,6 +50,7 @@ export type ChannelProps = {
   projects: Project[];
   servers: Live["servers"];
   live: Live | null;
+  freshness: LiveFreshness; // per-source fresh/stale/unavailable, from the host's filter
   links: Site["links"];
   credits: Site["credits"];
   broadcast: BroadcastPlaylist | null; // only this channel’s playlist
@@ -87,7 +89,7 @@ A manifest loader adapts its named export as `load: async () => ({ ChannelCompon
 
 ## Data and Lifecycle
 
-The host passes visible, ordered projects and the freshness-filtered live view described in [Live Data](../architecture/live-data.md). Shared links and credits come from `site.json`. `broadcast` is `site.broadcast[manifest.id] ?? null` for a broadcast manifest and null for every other kind. Channels must not mutate the supplied data.
+The host passes visible, ordered projects and the freshness-filtered live view described in [Live Data](../architecture/live-data.md), plus `freshness`: each source's state (fresh, stale or unavailable) and observation time, so channels label ages without recomputing them. Shared links and credits come from `site.json`. `broadcast` is `site.broadcast[manifest.id] ?? null` for a broadcast manifest and null for every other kind. Channels must not mutate the supplied data.
 
 `active` combines tune state, power, transition state and tab visibility. All channel loops, timers and shared media pause when false. The TV input/lifecycle layer owns visibility listeners; channels do not add global listeners. `reducedMotion` is supplied even when a viewer manually enables TV mode, so Credits and other channels can choose their static version.
 

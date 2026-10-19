@@ -23,7 +23,7 @@ One-shots and loops are declared in each manifest’s `audio` metadata. Channels
 | Coin Drop        | Upbeat lounge / arcade loop                                                         | Coin clinks on pegs at varied pitch, bumper boing rising with the multiplier, payout jingle, register on purchase | Kenney Casino Audio and Music Jingles (CC0)                                          |
 | The Late Show    | The film's own score only if it is public domain; otherwise public-domain classical | Quiet projector clatter, reel-change click                                                                        | Musopen public-domain recordings; Freesound CC0 projector                            |
 | Paid Programming | Cheesy 80s jingle bumper between clips                                              | New narration per clip, cash-register ding, applause                                                              | Original or AI narration; Freesound CC0 applause                                     |
-| Status           | None                                                                                | Quiet server-room hum, soft tick on refresh                                                                       | Freesound CC0                                                                        |
+| Status           | None                                                                                | Quiet server-room hum (pending approval)                                                                          | Freesound CC0                                                                        |
 
 Credits has no additional music or effects; only the existing TV ambient bed and control sounds apply.
 

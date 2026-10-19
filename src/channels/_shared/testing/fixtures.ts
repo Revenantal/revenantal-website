@@ -1,5 +1,12 @@
 import { vi } from "vitest";
-import type { Live, LiveServer, Project, Site } from "../../../data/types";
+import type {
+  Live,
+  LiveFreshness,
+  LiveServer,
+  Project,
+  Site,
+  SourceState,
+} from "../../../data/types";
 import type { ChannelProps } from "../types";
 
 /**
@@ -148,6 +155,23 @@ const credits: Site["credits"] = [
   },
 ];
 
+const every = (state: SourceState): LiveFreshness => ({
+  steam: state,
+  github: state,
+  status: state,
+  servers: state,
+});
+
+/** Every source fresh, as FRESH_LIVE reports. */
+export const FRESH_STATE = every({ state: "fresh", observedAt: FIXTURE_ISO });
+/** Every source stale, as STALE_LIVE reports. */
+export const STALE_STATE = every({ state: "stale", observedAt: OLD_ISO });
+/** No live data at all. */
+export const UNAVAILABLE_STATE = every({
+  state: "unavailable",
+  observedAt: null,
+});
+
 /**
  * Full channel props with spies for every callback: one fresh project and live data, active,
  * full motion and volume. Every value can be overridden.
@@ -163,6 +187,12 @@ export function channelProps(
     projects: fixtureProjects(1),
     servers: live?.servers ?? [],
     live,
+    freshness:
+      live === null
+        ? UNAVAILABLE_STATE
+        : live === STALE_LIVE
+          ? STALE_STATE
+          : FRESH_STATE,
     links,
     credits,
     broadcast: null,

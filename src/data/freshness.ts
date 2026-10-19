@@ -5,13 +5,10 @@ import type {
   Project,
   Site,
   SourceFreshness,
+  SourceState,
 } from "./types";
 
-/** Freshness displayed alongside each independently observed source. */
-export type SourceState = {
-  state: "fresh" | "stale" | "unavailable";
-  observedAt: string | null;
-};
+export type { SourceState };
 
 /** One sanitized view is shared by the directory and all future channels. */
 export type DataView = {

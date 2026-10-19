@@ -102,9 +102,9 @@ export async function checkProject(
       (response) => {
         response.resume();
         const ms = Math.round(performance.now() - started);
-        const good =
-          (response.statusCode ?? 500) >= 200 &&
-          (response.statusCode ?? 500) < 400;
+        const code = response.statusCode ?? 500;
+        // 429 is the host answering (bot protection such as Vercel's), so the site is reachable.
+        const good = (code >= 200 && code < 400) || code === 429;
         resolve({ state: good ? (ms < 1500 ? "up" : "slow") : "down", ms });
       },
     );

@@ -1,0 +1,633 @@
+/* CH 10 Status, ported from the approved rack mockups (docs/reference/prototypes/build_rack.py). */
+
+.root {
+  position: relative;
+  width: 760px;
+  height: 570px;
+
+  /* clip, not hidden: a hidden box can still be scrolled by focus, which shifts channels. */
+  overflow: clip;
+  background: radial-gradient(
+    ellipse at 40% 0%,
+    #2c3b4e 0%,
+    #0e141c 55%,
+    #05070a 100%
+  );
+  font-family: var(--font-body), sans-serif;
+  user-select: none;
+}
+
+.zoom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: clip;
+  transform-origin: 0 0;
+}
+
+.rack {
+  position: absolute;
+  top: 0;
+  width: 620px;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.cap {
+  display: block;
+  width: 100%;
+  height: 208px;
+}
+
+.rails {
+  position: absolute;
+  top: 208px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-repeat: repeat-y;
+  background-position: 0 0;
+  background-size: 620px 183.12px;
+}
+
+.units {
+  position: absolute;
+  top: 208px;
+  left: 60px;
+  width: 500px;
+}
+
+.unit {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 70%));
+}
+
+.sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sprite[data-mirrored="true"] {
+  transform: scaleX(-1);
+}
+
+/* Servers are real links and buttons; selection follows focus. */
+.server {
+  position: absolute;
+  left: 0;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 70%));
+  transition:
+    transform 0.18s ease-out,
+    filter 0.18s ease-out;
+}
+
+/* The drawn unit; screen readers get the spoken summary instead. */
+.visual {
+  position: absolute;
+  inset: 0;
+}
+
+.server[data-selected="true"] {
+  z-index: 2;
+  outline: 2px solid #57a8ff;
+  outline-offset: 1px;
+  filter: drop-shadow(8px 5px 7px rgb(0 0 0 / 85%));
+  transform: translateX(-8px);
+}
+
+.server:focus-visible {
+  outline: 3px solid #57a8ff;
+  outline-offset: 1px;
+}
+
+.server[data-dim="true"] {
+  filter: brightness(0.72);
+}
+
+.at {
+  position: absolute;
+  display: flex;
+  line-height: 0;
+  transform: translate(-50%, -50%);
+}
+
+.led {
+  display: inline-block;
+  border-radius: 50%;
+  background: #1a221c;
+}
+
+.led[data-lit="true"] {
+  background: radial-gradient(circle at 35% 35%, #fff 0 15%, var(--c) 50%);
+  box-shadow:
+    0 0 var(--s) var(--c),
+    0 0 calc(var(--s) * 2) color-mix(in srgb, var(--c) 40%, transparent);
+}
+
+.led[data-anim="blink"] {
+  animation: blink var(--d) steps(2) infinite;
+  animation-delay: var(--o);
+}
+
+.led[data-anim="flick1"] {
+  animation: flick1 var(--d) steps(1) infinite;
+  animation-delay: var(--o);
+}
+
+.led[data-anim="flick2"] {
+  animation: flick2 var(--d) steps(1) infinite;
+  animation-delay: var(--o);
+}
+
+.led[data-anim="flick3"] {
+  animation: flick3 var(--d) steps(1) infinite;
+  animation-delay: var(--o);
+}
+
+/* Front displays: VFD over the grille. */
+.vfd {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-sizing: border-box;
+  padding: 3px 7px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: linear-gradient(#04100f, #020807);
+  box-shadow:
+    inset 0 0 0 1px #000,
+    inset 0 2px 6px rgb(0 0 0 / 90%),
+    0 0 0 1px rgb(255 255 255 / 6%);
+  color: #6ff0ff;
+  font-family: "VT323", monospace;
+  text-shadow: 0 0 5px rgb(111 240 255 / 55%);
+  white-space: nowrap;
+}
+
+.vfd::after {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgb(0 0 0 / 25%) 0 1px,
+      transparent 1px 2px
+    ),
+    linear-gradient(115deg, rgb(255 255 255 / 6%), transparent 40%);
+  content: "";
+  pointer-events: none;
+}
+
+.server[data-selected="true"] .vfd {
+  box-shadow:
+    inset 0 0 0 1px #57a8ff,
+    inset 0 2px 6px rgb(0 0 0 / 90%),
+    0 0 10px rgb(87 168 255 / 35%);
+}
+
+.vfd[data-off="true"] {
+  color: #2e5a5e;
+  text-shadow: none;
+}
+
+.line1 {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.name {
+  flex-shrink: 0;
+  max-width: 60%;
+  overflow: hidden;
+  color: #e6fdff;
+  letter-spacing: 0.04em;
+  text-overflow: ellipsis;
+}
+
+/* Long names and games shorten with an ellipsis; the state always shows. */
+.game {
+  min-width: 0;
+  overflow: hidden;
+  color: #3fa6b4;
+  text-overflow: ellipsis;
+  text-shadow: none;
+}
+
+.vfd[data-off="true"] .name {
+  color: inherit;
+}
+
+.state {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.line2 {
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.dim {
+  color: #3fa6b4;
+  text-shadow: none;
+}
+
+.bright {
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+.marquee {
+  display: inline-block;
+}
+
+.server[data-selected="true"] .marquee[data-long="true"] {
+  animation: marquee 7s ease-in-out infinite alternate;
+}
+
+.lcd {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  padding: 0 4px;
+  overflow: hidden;
+  background: #061a0c;
+  color: #78ff96;
+  font-family: "VT323", monospace;
+  font-size: 15px;
+  line-height: 1;
+  text-shadow: 0 0 4px rgb(120 255 150 / 70%);
+  white-space: nowrap;
+}
+
+.lcd[data-tone="slow"] {
+  background: #1e1606;
+  color: #ffc45a;
+  text-shadow: 0 0 4px rgb(255 196 90 / 70%);
+}
+
+.lcd[data-tone="down"] {
+  background: #1e0606;
+  color: #ff6e6e;
+  text-shadow: 0 0 4px rgb(255 110 110 / 70%);
+}
+
+.lcd[data-tone="unknown"] {
+  background: #0b0f0c;
+  color: #4d6a55;
+  text-shadow: none;
+}
+
+.lcd[data-tone="units"] {
+  justify-content: center;
+  background: #06121a;
+  color: #9fe0ff;
+  font-size: 14px;
+  text-shadow: 0 0 4px rgb(159 224 255 / 70%);
+}
+
+.caption {
+  position: absolute;
+  color: #8a93a0;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+/* The 2U section sign: an amber or blue LED dot matrix. */
+.sign {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 2px;
+  background-color: #060505;
+  background-image: radial-gradient(
+    circle,
+    rgb(255 255 255 / 7.5%) 0 0.75px,
+    transparent 0.95px
+  );
+  background-size: 2px 2px;
+  box-shadow:
+    inset 0 0 0 1px #000,
+    inset 0 2px 5px rgb(0 0 0 / 95%),
+    0 1px 0 rgb(255 255 255 / 10%);
+}
+
+.sign::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(170deg, rgb(255 255 255 / 9%), transparent 45%);
+  content: "";
+  pointer-events: none;
+}
+
+.sign-glow {
+  position: absolute;
+  inset: 0 10px;
+  filter: drop-shadow(0 0 2px var(--c)) drop-shadow(0 0 5px var(--c));
+}
+
+.sign-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  justify-content: center;
+  color: var(--c);
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  line-height: 1;
+  mask-image: radial-gradient(circle, #000 0 0.8px, transparent 0.95px);
+  mask-size: 2px 2px;
+}
+
+/* Network gear: patch panel jacks, switch ports and cables. */
+.strip {
+  position: absolute;
+  color: #2a2a3a;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.row {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.key {
+  display: flex;
+  justify-content: center;
+  width: 13px;
+  height: 12px;
+  border: 1px solid #4a4d55;
+  background: #050506;
+  box-shadow: inset 0 1px 2px #000;
+}
+
+.plug {
+  display: block;
+  width: 7px;
+  height: 7px;
+  margin-top: 1px;
+  background: #0b0c0e;
+}
+
+.ports {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.port-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.port {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.port-leds {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 0;
+}
+
+.rj {
+  display: block;
+  width: 13px;
+  height: 10px;
+  border: 1px solid #5a5e66;
+  border-radius: 1px;
+  background: #030304;
+  box-shadow: inset 0 2px 2px #000;
+}
+
+.cables {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.trays {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tray {
+  position: relative;
+  height: 100%;
+}
+
+.tray img {
+  display: block;
+  height: 100%;
+}
+
+/* UPS. */
+.ring {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1.5px #39ff6e,
+    0 0 6px #39ff6e;
+}
+
+.meter {
+  position: absolute;
+  display: flex;
+  gap: 3px;
+}
+
+.bar {
+  width: 8px;
+  height: 12px;
+  background: #14301c;
+}
+
+.bar[data-on="true"] {
+  background: #39ff6e;
+  box-shadow: 0 0 4px #39ff6e;
+}
+
+.small {
+  position: absolute;
+  color: #9aa0aa;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+/* View edges and footer. */
+.fade-top,
+.fade-bottom {
+  position: absolute;
+  right: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.fade-top {
+  top: 0;
+  height: 40px;
+  background: linear-gradient(rgb(5 7 10 / 85%), transparent);
+}
+
+.fade-bottom {
+  bottom: 0;
+  height: 50px;
+  background: linear-gradient(transparent, rgb(5 7 10 / 90%));
+}
+
+/* Full bleed: important text stays 6% in from the glass edges. */
+.footer {
+  position: absolute;
+  right: 46px;
+  bottom: 34px;
+  margin: 0;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: rgb(5 7 10 / 88%);
+  color: #8a93a0;
+  font-size: 10px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Paused while inactive; still with reduced motion. */
+.root[data-active="false"] .led,
+.root[data-active="false"] .marquee {
+  animation-play-state: paused;
+}
+
+.root[data-motion="reduced"] .rack,
+.root[data-motion="reduced"] .server {
+  transition: none;
+}
+
+.root[data-motion="reduced"] .led,
+.root[data-motion="reduced"] .marquee {
+  animation: none;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes flick1 {
+  0%,
+  14%,
+  39%,
+  52%,
+  78%,
+  95% {
+    opacity: 1;
+  }
+
+  8%,
+  33%,
+  47%,
+  71%,
+  90% {
+    opacity: 0.12;
+  }
+}
+
+@keyframes flick2 {
+  6%,
+  27%,
+  44%,
+  66%,
+  88% {
+    opacity: 1;
+  }
+
+  0%,
+  22%,
+  41%,
+  60%,
+  83% {
+    opacity: 0.12;
+  }
+}
+
+@keyframes flick3 {
+  0%,
+  17%,
+  24%,
+  57%,
+  68% {
+    opacity: 1;
+  }
+
+  12%,
+  20%,
+  50%,
+  62%,
+  85% {
+    opacity: 0.12;
+  }
+}
+
+@keyframes marquee {
+  0%,
+  15% {
+    transform: translateX(0);
+  }
+
+  85%,
+  100% {
+    transform: translateX(-38%);
+  }
+}

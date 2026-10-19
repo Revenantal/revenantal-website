@@ -4,6 +4,7 @@ import type {
   Channel,
   DialPosition,
   Live,
+  LiveFreshness,
   Project,
   Site,
 } from "../../data/types";
@@ -36,6 +37,7 @@ export type ChannelProps = {
   projects: Project[];
   servers: Live["servers"];
   live: Live | null;
+  freshness: LiveFreshness; // per-source fresh/stale/unavailable, from the host's filter
   links: Site["links"];
   credits: Site["credits"];
   broadcast: BroadcastPlaylist | null; // only this channel’s playlist

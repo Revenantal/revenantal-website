@@ -66,6 +66,12 @@ function props(overrides: Partial<ScreenProps> = {}): ScreenProps {
       projects: [],
       servers: [],
       live: null,
+      freshness: {
+        steam: { state: "unavailable", observedAt: null },
+        github: { state: "unavailable", observedAt: null },
+        status: { state: "unavailable", observedAt: null },
+        servers: { state: "unavailable", observedAt: null },
+      },
       links: { steam: "", github: "", discord: "" },
       credits: [],
       now: new Date("2026-10-19T12:00:00Z"),
