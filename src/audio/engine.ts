@@ -1,3 +1,7 @@
+import type { ChannelAudio } from "@data/types";
+import { createChannelScope } from "./channel-scope";
+import type { ChannelScope } from "./channel-scope";
+
 /** The TV's own recorded sounds, by event. */
 export type TvSound =
   | "btn_down"
@@ -73,6 +77,11 @@ export function createAudioEngine(options: AudioEngineOptions = {}) {
     detune: 0,
   };
   let hidden = false;
+  let ducked = false;
+  const scopes = new Set<ChannelScope>();
+  const refreshScopes = () => {
+    for (const scope of scopes) scope.refresh();
+  };
 
   const audible = () => state.power && state.snd && state.volume > 0 && !hidden;
 
@@ -179,6 +188,7 @@ export function createAudioEngine(options: AudioEngineOptions = {}) {
       );
     }
     if (context.state === "suspended" && !hidden) await context.resume();
+    refreshScopes();
   }
 
   /**
@@ -216,6 +226,41 @@ export function createAudioEngine(options: AudioEngineOptions = {}) {
     setAmbient(next: AmbientState) {
       state = next;
       updateAmbient();
+      refreshScopes();
+    },
+    /**
+     * Ducks channel music to 30% while the OSD shows.
+     *
+     * @param next - Whether the OSD is showing.
+     */
+    setDucked(next: boolean) {
+      if (ducked === next) return;
+      ducked = next;
+      refreshScopes();
+    },
+    /**
+     * Creates a sound scope for one mounted channel. Dispose it when the channel unmounts.
+     *
+     * @param audio - The channel manifest's sound and loop declarations.
+     * @returns The scope.
+     */
+    createScope(audio: ChannelAudio | undefined) {
+      const scope = createChannelScope(audio, {
+        context: () => context,
+        output: () => master,
+        audible,
+        level: () => state.volume / 10,
+        ducked: () => ducked,
+        fetcher,
+      });
+      scopes.add(scope);
+      return {
+        ...scope,
+        dispose: () => {
+          scope.dispose();
+          scopes.delete(scope);
+        },
+      };
     },
     /**
      * Stops all output immediately while the tab is hidden, and resumes when shown.
@@ -228,6 +273,7 @@ export function createAudioEngine(options: AudioEngineOptions = {}) {
       if (hidden) void context.suspend();
       else void context.resume();
       updateAmbient();
+      refreshScopes();
     },
     /**
      * Whether the first gesture has unlocked audio.

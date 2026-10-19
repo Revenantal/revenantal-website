@@ -208,4 +208,50 @@ describe("screen host", () => {
       "url(#crt-bloom) blur(1.50px) contrast(0.82)",
     );
   });
+
+  it("gives each channel its own sound scope, zero volume while inactive, and disposes it on tune-away", async () => {
+    const scope = {
+      play: vi.fn(),
+      setLoop: vi.fn(),
+      setActive: vi.fn(),
+      dispose: vi.fn(),
+    };
+    const createAudioScope = vi.fn(() => scope);
+    const manifest = fixture(
+      () => Promise.resolve({ ChannelComponent: Echo }),
+      {
+        audio: {
+          sounds: { coin: { src: "/assets/channels/fixture/coin.m4a" } },
+        },
+      },
+    );
+    const base = props();
+    const withVolume = (visible: boolean) =>
+      props({
+        manifest,
+        visible,
+        createAudioScope,
+        props: { ...base.props, volume: 0.7 },
+      });
+    const { rerender } = render(<Screen {...withVolume(true)} />);
+    await screen.findByText(/channel says hi/);
+    expect(createAudioScope).toHaveBeenCalledWith(manifest.audio);
+    expect(received?.volume).toBe(0.7);
+    await vi.waitFor(() => {
+      expect(scope.setActive).toHaveBeenLastCalledWith(true);
+    });
+    received?.play("coin", { gain: 0.5 });
+    expect(scope.play).toHaveBeenCalledWith("coin", { gain: 0.5 });
+
+    rerender(<Screen {...withVolume(false)} />);
+    expect(received?.volume).toBe(0);
+    await vi.waitFor(() => {
+      expect(scope.setActive).toHaveBeenLastCalledWith(false);
+    });
+
+    rerender(<Screen {...props({ shown: 2, createAudioScope })} />);
+    await vi.waitFor(() => {
+      expect(scope.dispose).toHaveBeenCalled();
+    });
+  });
 });
