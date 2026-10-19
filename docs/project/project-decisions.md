@@ -199,6 +199,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Four stacked buttons fit only 190 stage px, so at the 1280×650 minimum each button's hit area is about 30 screen px tall (hit zones already extend past the visuals). That meets WCAG 2.2 AA target size (24 px) but not the project's 44 px goal; it reaches about 42 px at 1920×1080. The door switches are smaller still. Revisit if the button count or layout changes.
 - Switch and button accessible names start with their visible label (for example "SCAN: Scanlines, ON") so they pass WCAG label-in-name.
 - Power off currently darkens the tube and stops tuning; the collapse animation and the switch to List mode arrive with the screen (2.4) and transitions (2.7). The owner chose to make the Credits button work before the Credits channel exists: it closes the door, tunes to position 11 (NO SIGNAL until the channel is built) and returns focus to the door button. This overrides the "unavailable until registered" line in `controls.md`.
+- The hint note uses Permanent Marker (`@fontsource/permanent-marker`, Apache 2.0, credited). Its dismissal is saved under `rv-hint` now rather than waiting for the persistence task (2.7), since "never shown again" needs it.
 - The on-screen display uses VT323 (`@fontsource/vt323`, credited) and sits in the 760×570 channel space scaled into the glass. Channel and volume changes are announced through one polite live region.
 
 ## Clarifications

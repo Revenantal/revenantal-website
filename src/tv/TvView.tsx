@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import type { AppStore, StoreSnapshot } from "@data/store";
 import { Cabinet } from "./Cabinet";
 import { Dial } from "./controls/Dial";
+import { HintNote } from "./controls/HintNote";
+import type { HintPhase } from "./controls/HintNote";
 import { wrapPosition } from "./controls/dial-math";
 import { PanelButtons } from "./controls/PanelButtons";
 import { PowerLed } from "./controls/PowerLed";
@@ -20,15 +22,22 @@ import styles from "./TvView.module.css";
 export type TvViewProps = {
   snapshot: Pick<
     StoreSnapshot,
-    "channel" | "power" | "settings" | "door" | "site"
+    "channel" | "power" | "settings" | "door" | "site" | "hintDismissed"
   >;
   actions: Pick<
     AppStore,
-    "setChannel" | "setVolume" | "setPower" | "setDoor" | "toggleSetting"
+    | "setChannel"
+    | "setVolume"
+    | "setPower"
+    | "setDoor"
+    | "toggleSetting"
+    | "dismissHint"
   >;
 };
 
 const OSD_MS = 1700;
+const HINT_DELAY_MS = 1600;
+const HINT_FALL_MS = 1400;
 
 /**
  * The TV mode shell: room, cabinet and every control. Channels, effects and audio arrive in
@@ -40,7 +49,7 @@ const OSD_MS = 1700;
  * @returns The TV in its room.
  */
 export function TvView({ snapshot, actions }: TvViewProps) {
-  const { channel, power, settings, door, site } = snapshot;
+  const { channel, power, settings, door, site, hintDismissed } = snapshot;
   const [osd, setOsd] = useState<OsdState>(null);
   const [announcement, setAnnouncement] = useState("");
   const timerRef = useRef<number | undefined>(undefined);
@@ -50,6 +59,34 @@ export function TvView({ snapshot, actions }: TvViewProps) {
     },
     [],
   );
+
+  // First visit: the note appears after a moment, falls when dismissed, and never returns.
+  const [hint, setHint] = useState<HintPhase>(
+    hintDismissed ? "gone" : "waiting",
+  );
+  useEffect(() => {
+    if (hint !== "waiting" || !power) return;
+    const timer = window.setTimeout(() => {
+      setHint("shown");
+    }, HINT_DELAY_MS);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [hint, power]);
+  useEffect(() => {
+    if (hint !== "falling") return;
+    const timer = window.setTimeout(() => {
+      setHint("gone");
+    }, HINT_FALL_MS);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [hint]);
+  const dismissHint = () => {
+    if (hint !== "waiting" && hint !== "shown") return;
+    actions.dismissHint();
+    setHint(hint === "shown" ? "falling" : "gone");
+  };
 
   const flash = (next: OsdState, message: string) => {
     window.clearTimeout(timerRef.current);
@@ -62,6 +99,7 @@ export function TvView({ snapshot, actions }: TvViewProps) {
 
   const tune = (position: number) => {
     if (!actions.setChannel(position)) return;
+    dismissHint();
     const label = channelLabel(position);
     const name = channelName(position);
     flash({ kind: "channel", label, name }, `${label}, ${name}`);
@@ -98,6 +136,15 @@ export function TvView({ snapshot, actions }: TvViewProps) {
   });
 
   const picture = power ? NO_SIGNAL : POWERED_OFF;
+  const shownOsd: OsdState =
+    hint === "shown"
+      ? {
+          kind: "channel",
+          label: channelLabel(channel),
+          name: channelName(channel),
+          blink: true,
+        }
+      : osd;
   const glowOpacity = roomGlowOpacity(picture, settings.glow && power);
   return (
     <main className={styles.tv}>
@@ -117,6 +164,7 @@ export function TvView({ snapshot, actions }: TvViewProps) {
                   label={`${channelLabel(channel)}, ${channelName(channel)}`}
                   onTune={tune}
                 />
+                <HintNote phase={hint} onDismiss={dismissHint} />
                 <VolumeKnob volume={settings.volume} onChange={changeVolume} />
                 <PanelButtons
                   buttons={site?.buttons ?? []}
@@ -144,7 +192,7 @@ export function TvView({ snapshot, actions }: TvViewProps) {
               </>
             }
           >
-            {power ? <Osd osd={osd} /> : null}
+            {power ? <Osd osd={shownOsd} /> : null}
           </Cabinet>
         </Stage>
       </div>

@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 2, the TV shell: 2.3 controls in three PRs (dial and volume, then buttons/door/power, then the hint note). Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
+**Current focus:** Phase 2, the TV shell: 2.3 controls finishing with the hint note, then 2.4 the screen and channel host. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
 
 **Last updated:** 2026-10-18
 
@@ -35,7 +35,7 @@ What is built and where things are. Tick an item when its task has reached `main
 
 - [x] 2.1 Asset tools (sprites, sounds, fonts)
 - [x] 2.2 Stage and cabinet
-- [ ] 2.3 Controls and compact dial — dial, volume and OSD merged (#12); buttons, door and power on `feat/2.3-panel-door-power`; hint note next
+- [ ] 2.3 Controls and compact dial — dial, volume, OSD (#12), buttons, door and power (#13) merged; hint note on `feat/2.3-hint-note`
 - [ ] 2.4 Screen and channel host
 - [ ] 2.5 Display effects
 - [ ] 2.6 Audio engine
@@ -133,6 +133,8 @@ Task 2.2 on `feat/2.2-stage-cabinet`: `tv/geometry.ts`, `Stage` (fit and letterb
 Task 2.3, part 1 on `feat/2.3-dial-volume`: unnumbered dial (click next, throttled scroll, drag with live snapping and cancel, arrow keys, overshoot turn), volume knob as a slider (click halves, scroll, 14 px drag steps, keys; notch turns ±135°), TV-wide keys, channel/volume OSD in VT323 and a polite live region. Dial maths covers 1, 8, 10, 11, 13 and 17 slots, wraparound, ties and drag snapping. Browser check at 1920×1080: 98 px dial target, click/wheel/keys/drag and volume work, OSD matches the prototype, axe clean, no console errors. 125 tests; initial JS 41.5 kB.
 
 Task 2.3, part 2 on `feat/2.3-panel-door-power`: panel buttons from content (links in a new tab, copy with COPIED! and announced failure, SERVERS tunes to position 10; four buttons at 72%), the flip-down settings door with five switches, amber override lamps and a Credits button (disabled until registered), and the power LED (off darkens the tube, cuts the room light and stops tuning). Browser check at 1920×1080: clipboard copy works, SERVERS tunes to CH 10, Tab order is dial, volume, buttons, door, switches, power, axe clean with the door open, no console errors. 132 tests; initial JS 43.1 kB.
+
+Task 2.3, part 3 on `feat/2.3-hint-note`: first-visit "turn the dial →" note (Permanent Marker) appears after 1.6 s with a blinking CH number; clicking it or any channel change peels the tape and drops it over 1.4 s; `rv-hint` keeps it dismissed. Also merged #11 (pnpm/action-setup 6.1.0) with a clean squash message, and the Credits button now tunes to position 11 by owner decision. Browser check: note appears, falls, stays gone after reload, axe clean, no errors. 135 tests; initial JS 43.6 kB.
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 

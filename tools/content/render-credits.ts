@@ -18,7 +18,9 @@ export function renderCredits(credits: Credit[]): string {
           ? "[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)"
           : credit.license === "OFL 1.1"
             ? "[OFL 1.1](https://openfontlicense.org/)"
-            : escape(credit.license);
+            : credit.license === "Apache 2.0"
+              ? "[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)"
+              : escape(credit.license);
     return `| [${escape(credit.title)}](<${credit.url.replaceAll("<", "%3C").replaceAll(">", "%3E")}>) | ${escape(credit.author)} | ${licence} | ${escape(credit.usedFor)} | ${escape(credit.edits ?? "—")} |`;
   });
   return [
