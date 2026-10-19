@@ -15,6 +15,13 @@ export const NO_SIGNAL: Picture = {
   level: 0.5,
 };
 
+/** A switched-off tube: dark grey-green glass that lights nothing. */
+export const POWERED_OFF: Picture = {
+  background: "#141a16",
+  glow: "rgba(0, 0, 0, 0)",
+  level: false,
+};
+
 function luminance(hex: string): number {
   const value = Number.parseInt(hex.slice(1), 16);
   const [r, g, b] = [(value >> 16) & 255, (value >> 8) & 255, value & 255].map(

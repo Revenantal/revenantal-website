@@ -3,36 +3,44 @@ import type { AppStore, StoreSnapshot } from "@data/store";
 import { Cabinet } from "./Cabinet";
 import { Dial } from "./controls/Dial";
 import { wrapPosition } from "./controls/dial-math";
+import { PanelButtons } from "./controls/PanelButtons";
+import { PowerLed } from "./controls/PowerLed";
+import { SettingsDoor } from "./controls/SettingsDoor";
 import { useTvKeys } from "./controls/tv-keys";
 import { VolumeKnob } from "./controls/VolumeKnob";
-import { SLOT_COUNT, channelLabel, channelName } from "./lineup";
+import { SLOT_COUNT, channelLabel, channelName, positionOf } from "./lineup";
 import { Osd } from "./Osd";
 import type { OsdState } from "./Osd";
-import { NO_SIGNAL, roomGlowOpacity } from "./room-glow";
+import { NO_SIGNAL, POWERED_OFF, roomGlowOpacity } from "./room-glow";
 import { RoomBackdrop } from "./RoomBackdrop";
 import { Stage } from "./Stage";
 import styles from "./TvView.module.css";
 
 /** The TV reads the shared snapshot and changes it only through store actions. */
 export type TvViewProps = {
-  snapshot: Pick<StoreSnapshot, "channel" | "power" | "settings">;
-  actions: Pick<AppStore, "setChannel" | "setVolume">;
+  snapshot: Pick<
+    StoreSnapshot,
+    "channel" | "power" | "settings" | "door" | "site"
+  >;
+  actions: Pick<
+    AppStore,
+    "setChannel" | "setVolume" | "setPower" | "setDoor" | "toggleSetting"
+  >;
 };
 
 const OSD_MS = 1700;
 
 /**
- * The TV mode shell: room, cabinet, dial, volume and on-screen display. The panel buttons,
- * door, power, channels, effects and audio arrive in later phase 2 tasks; until then the
- * glass shows the empty NO SIGNAL tube.
+ * The TV mode shell: room, cabinet and every control. Channels, effects and audio arrive in
+ * later phase 2 tasks; until then the glass shows the empty NO SIGNAL tube.
  *
  * @param props - Shared snapshot and store actions.
- * @param props.snapshot - Channel, power and viewer settings.
+ * @param props.snapshot - Channel, power, door, viewer settings and content.
  * @param props.actions - Store actions the controls call.
  * @returns The TV in its room.
  */
 export function TvView({ snapshot, actions }: TvViewProps) {
-  const { channel, power, settings } = snapshot;
+  const { channel, power, settings, door, site } = snapshot;
   const [osd, setOsd] = useState<OsdState>(null);
   const [announcement, setAnnouncement] = useState("");
   const timerRef = useRef<number | undefined>(undefined);
@@ -59,12 +67,24 @@ export function TvView({ snapshot, actions }: TvViewProps) {
     flash({ kind: "channel", label, name }, `${label}, ${name}`);
   };
 
+  const tuneTo = (id: string) => {
+    const position = positionOf(id);
+    if (position !== undefined) tune(position);
+  };
+
   const changeVolume = (volume: number) => {
     actions.setVolume(volume);
     flash(
       { kind: "volume", volume },
       volume === 0 ? "Muted" : `Volume ${String(volume)}`,
     );
+  };
+
+  const changePower = (on: boolean) => {
+    actions.setPower(on);
+    window.clearTimeout(timerRef.current);
+    setOsd(null);
+    setAnnouncement(on ? "TV on" : "TV off");
   };
 
   useTvKeys({
@@ -77,22 +97,18 @@ export function TvView({ snapshot, actions }: TvViewProps) {
     },
   });
 
-  const glow = settings.glow && power;
+  const picture = power ? NO_SIGNAL : POWERED_OFF;
+  const glowOpacity = roomGlowOpacity(picture, settings.glow && power);
   return (
     <main className={styles.tv}>
       <h1 className={styles["sr-only"]}>revenantal</h1>
       <div className={styles.set}>
         <Stage
-          backdrop={
-            <RoomBackdrop
-              color={NO_SIGNAL.glow}
-              opacity={roomGlowOpacity(NO_SIGNAL, glow)}
-            />
-          }
+          backdrop={<RoomBackdrop color={picture.glow} opacity={glowOpacity} />}
         >
           <Cabinet
-            picture={NO_SIGNAL}
-            glow={glow}
+            picture={picture}
+            glow={settings.glow && power}
             controls={
               <>
                 <Dial
@@ -102,10 +118,33 @@ export function TvView({ snapshot, actions }: TvViewProps) {
                   onTune={tune}
                 />
                 <VolumeKnob volume={settings.volume} onChange={changeVolume} />
+                <PanelButtons
+                  buttons={site?.buttons ?? []}
+                  onTune={tuneTo}
+                  onAnnounce={setAnnouncement}
+                />
+                <SettingsDoor
+                  open={door}
+                  settings={settings}
+                  limited={{
+                    glow:
+                      settings.glow &&
+                      power &&
+                      picture.level !== false &&
+                      picture.level < 1,
+                  }}
+                  onDoor={actions.setDoor}
+                  onToggle={actions.toggleSetting}
+                  onCredits={() => {
+                    actions.setDoor(false);
+                    tuneTo("credits");
+                  }}
+                />
+                <PowerLed power={power} onPower={changePower} />
               </>
             }
           >
-            <Osd osd={osd} />
+            {power ? <Osd osd={osd} /> : null}
           </Cabinet>
         </Stage>
       </div>

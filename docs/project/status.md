@@ -35,7 +35,7 @@ What is built and where things are. Tick an item when its task has reached `main
 
 - [x] 2.1 Asset tools (sprites, sounds, fonts)
 - [x] 2.2 Stage and cabinet
-- [ ] 2.3 Controls and compact dial — dial, volume and OSD on `feat/2.3-dial-volume`; buttons, door, power and hint note next
+- [ ] 2.3 Controls and compact dial — dial, volume and OSD merged (#12); buttons, door and power on `feat/2.3-panel-door-power`; hint note next
 - [ ] 2.4 Screen and channel host
 - [ ] 2.5 Display effects
 - [ ] 2.6 Audio engine
@@ -131,6 +131,8 @@ Merged PR #8 (task 2.1) and reviewed Dependabot: merged #2–#6 (checkout 7, set
 Task 2.2 on `feat/2.2-stage-cabinet`: `tv/geometry.ts`, `Stage` (fit and letterbox by `min(vw/1536, vh/1024)` via ResizeObserver), `Cabinet` (NO SIGNAL glass, dimmed frame, static door/knob/volume sprites), `Badge` and `RoomGlow` (spill opacity = glow × channel level × picture brightness). Previewed with `?tv`. Browser checks at 1536×1024, 1280×650 and 1920×900 show correct letterboxing, aligned sprites, no overflow and no console errors; 800 px falls back to List mode; axe reports no violations on the TV or List. 109 tests pass; initial JS 38.7 kB. Native Caddy check not rerun locally (no CADDY_BIN); CI container checks cover routing. Also added the per-channel test rule and `pnpm test:channel <id>`. Follow-up in the same PR: the owner-supplied room photo now surrounds the TV with a hybrid layout (`roomLayout()`): room fills 16:9 and larger windows around a smaller TV, full-height TV on small windows, sides fade on ultrawide. Checked at 1920×1080, 1440×900, 1280×650 and 3440×1440 with no overflow or console errors; axe clean; 113 tests pass; initial JS 39.3 kB. The image's third-party characters are an owner-accepted risk (project-decisions.md).
 
 Task 2.3, part 1 on `feat/2.3-dial-volume`: unnumbered dial (click next, throttled scroll, drag with live snapping and cancel, arrow keys, overshoot turn), volume knob as a slider (click halves, scroll, 14 px drag steps, keys; notch turns ±135°), TV-wide keys, channel/volume OSD in VT323 and a polite live region. Dial maths covers 1, 8, 10, 11, 13 and 17 slots, wraparound, ties and drag snapping. Browser check at 1920×1080: 98 px dial target, click/wheel/keys/drag and volume work, OSD matches the prototype, axe clean, no console errors. 125 tests; initial JS 41.5 kB.
+
+Task 2.3, part 2 on `feat/2.3-panel-door-power`: panel buttons from content (links in a new tab, copy with COPIED! and announced failure, SERVERS tunes to position 10; four buttons at 72%), the flip-down settings door with five switches, amber override lamps and a Credits button (disabled until registered), and the power LED (off darkens the tube, cuts the room light and stops tuning). Browser check at 1920×1080: clipboard copy works, SERVERS tunes to CH 10, Tab order is dial, volume, buttons, door, switches, power, axe clean with the door open, no console errors. 132 tests; initial JS 43.1 kB.
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 

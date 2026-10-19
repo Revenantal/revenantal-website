@@ -1,0 +1,25 @@
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(10 0 0 / 85%) 45%, transparent 75%);
+  pointer-events: none;
+  transition: background 0.2s;
+}
+
+.glow[data-on="true"] {
+  background: radial-gradient(circle, rgb(255 60 60 / 55%), transparent 70%);
+}
+
+.zone {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.zone:focus-visible {
+  outline: var(--focus-width) solid var(--color-tv-focus);
+  outline-offset: var(--focus-offset);
+}

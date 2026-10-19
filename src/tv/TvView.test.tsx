@@ -47,10 +47,10 @@ describe("TV view", () => {
     expect(sources).toEqual([
       "/assets/tv/room.webp",
       "/assets/tv/frame.webp",
-      "/assets/tv/door.webp",
       "/assets/tv/knob.webp",
       "/assets/tv/vol.webp",
       "/assets/tv/cap.webp",
+      "/assets/tv/door.webp",
     ]);
     for (const image of container.querySelectorAll("img")) {
       expect(image.getAttribute("alt")).toBe("");
@@ -169,5 +169,54 @@ describe("TV view", () => {
     const frame = container.querySelector("img[src$='frame.webp']");
     expect(frame).not.toBeNull();
     expect(fireEvent.dragStart(frame as Element)).toBe(false);
+  });
+
+  it("powers off and on from the LED, darkening the tube and blocking tuning", () => {
+    const { store } = renderTv();
+    const power = screen.getByRole("button", { name: "Power" });
+    expect(power.getAttribute("aria-pressed")).toBe("true");
+
+    fireEvent.click(power);
+    expect(store.getSnapshot().power).toBe(false);
+    expect(power.getAttribute("aria-pressed")).toBe("false");
+    expect(screen.getByText("TV off")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: /Channel dial/ }));
+    expect(store.getSnapshot().channel).toBe(1);
+
+    fireEvent.click(power);
+    expect(store.getSnapshot().power).toBe(true);
+  });
+
+  it("opens the door to reveal the switches, and closes it again", () => {
+    const { store } = renderTv();
+    const door = screen.getByRole("button", { name: "Settings door" });
+    expect(door.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByRole("button", { name: /Scanlines/ })).toBeNull();
+
+    fireEvent.click(door);
+    expect(store.getSnapshot().door).toBe(true);
+    const scan = screen.getByRole("button", { name: "SCAN: Scanlines, ON" });
+    fireEvent.click(scan);
+    expect(store.getSnapshot().settings.scan).toBe(false);
+    expect(
+      screen.getByRole("button", { name: "SCAN: Scanlines, OFF" }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("button", { name: /^GLOW: Room glow, ON, limited/ }),
+    ).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Settings door" }));
+    expect(store.getSnapshot().door).toBe(false);
+  });
+
+  it("closes the door and tunes to Credits from the CRD button", () => {
+    const { store } = renderTv();
+    fireEvent.click(screen.getByRole("button", { name: "Settings door" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "CRD: Credits" }));
+    expect(store.getSnapshot().door).toBe(false);
+    expect(store.getSnapshot().channel).toBe(11);
+    expect(document.activeElement?.getAttribute("aria-label")).toBe(
+      "Settings door",
+    );
   });
 });
