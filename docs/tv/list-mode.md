@@ -25,7 +25,7 @@ Single column, max 640 px, 20 px gutters.
 
 Broadcast channels don't appear in List mode.
 
-List mode ships first, in phase 1. Until the TV shell is implemented in phase 2, it is the site at every width and the Turn on the TV control is hidden. Phase 2 adds the mode-selection rules and transitions described here.
+List mode shipped first, in phase 1. Task 2.7 added the mode-selection rules and transitions described here; the Turn on the TV button shows in List mode wherever the window can show the TV.
 
 ## Transitions
 

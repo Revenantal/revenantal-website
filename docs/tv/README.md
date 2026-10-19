@@ -43,7 +43,7 @@ Prototype: `docs/reference/prototypes/door-tv.dc.html` (the canonical interactiv
 - Every stage coordinate lives in `tv/geometry.ts`, one named constant each.
 - Around the TV is a dark room (`RoomBackdrop`): the room photo (`public/assets/tv/room.webp`), the screen light spilling onto it, and a vignette. On windows wider than the photo its sides fade into the room colour. The TV itself is never cropped or stretched.
 - `Stage` measures only its own element with a `ResizeObserver`; no window listener. Photo layers render at room darkness (`--dim` 0.42, badge 0.57) and the room glow spill lights them.
-- Until task 2.7 wires power and TV/List transitions, the TV renders only with `?tv` in the URL (and at 900 px or wider); otherwise List mode shows.
+- Mode selection and the TV/List transitions live in `src/App.tsx`; see `list-mode.md`. The channel and power state persist as described in `persistence-and-urls.md`.
 
 ## Branding
 

@@ -1,11 +1,20 @@
 import type { DataView } from "@data/freshness";
 import type { Site } from "@data/types";
+import { useEffect, useRef } from "preact/hooks";
 import { CopyButton } from "./CopyButton";
 import { SourceAge } from "./SourceAge";
 import styles from "./ListView.module.css";
 
 /** The directory receives only shared content and freshness-filtered observations. */
-export type ListViewProps = { site: Site; view: DataView; now: Date };
+export type ListViewProps = {
+  site: Site;
+  view: DataView;
+  now: Date;
+  /** Turns the TV on; the button shows only where the TV can render. */
+  onTurnOn?: () => void;
+  /** Move focus to the heading on arrival, for example after turning the TV off. */
+  focusOnMount?: boolean;
+};
 
 /**
  * Renders the complete directory at every viewport before the TV shell exists.
@@ -14,9 +23,21 @@ export type ListViewProps = { site: Site; view: DataView; now: Date };
  * @param props.site - Validated static content.
  * @param props.view - Shared freshness-filtered data.
  * @param props.now - The shared viewer clock.
+ * @param props.onTurnOn - Turns the TV on, when the window can show it.
+ * @param props.focusOnMount - Whether to focus the heading on arrival.
  * @returns Projects, public servers, profiles and shared credits in semantic order.
  */
-export function ListView({ site, view, now }: ListViewProps) {
+export function ListView({
+  site,
+  view,
+  now,
+  onTurnOn,
+  focusOnMount = false,
+}: ListViewProps) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (focusOnMount) headingRef.current?.focus();
+  }, [focusOnMount]);
   const steam = view.live?.steam;
   const latest = view.live?.github?.repos[0];
   const snapshotTime = view.live?.fetchedAt;
@@ -30,10 +51,22 @@ export function ListView({ site, view, now }: ListViewProps) {
       <main className={styles.directory}>
         <header className={styles.header}>
           <p className={styles.model}>SOLID STATE · MODEL RV-404</p>
-          <h1 className={styles.wordmark}>REVENANTAL</h1>
+          <h1 className={styles.wordmark} ref={headingRef} tabIndex={-1}>
+            REVENANTAL
+          </h1>
           <p className={styles.intro}>
             Projects, tools and a few things to play.
           </p>
+          {onTurnOn ? (
+            <button
+              type="button"
+              className={styles["turn-on"]}
+              onClick={onTurnOn}
+            >
+              <span className={styles.led} aria-hidden="true" />
+              Turn on the TV
+            </button>
+          ) : null}
         </header>
 
         <section className={styles.section} aria-labelledby="right-now-title">

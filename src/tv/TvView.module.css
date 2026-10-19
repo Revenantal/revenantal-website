@@ -7,6 +7,27 @@
   outline-offset: calc(var(--focus-width) * -1);
 }
 
+/* First Tab stop: turns the TV off into List mode. Visible only on focus. */
+.skip {
+  position: fixed;
+  top: 12px;
+  left: -9999px;
+  z-index: 50;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 6px;
+  background: #ece6e6;
+  color: #0b0b0c;
+  font: inherit;
+  cursor: pointer;
+}
+
+.skip:focus-visible {
+  left: 12px;
+  outline: var(--focus-width) solid var(--color-tv-focus);
+  outline-offset: var(--focus-offset);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

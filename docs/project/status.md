@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 2, the TV shell: 2.6 part 2 (scoped channel audio) in review, then 2.7 persistence, URLs and TV/List transitions. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
+**Current focus:** Phase 2, the TV shell: 2.7 persistence, URLs and TV/List transitions in review (it makes the TV the desktop default on `main`), then 2.8 the TV accessibility pass and Gate 2. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
 
 **Last updated:** 2026-10-18
 
@@ -38,8 +38,8 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 2.3 Controls and compact dial
 - [x] 2.4 Screen and channel host
 - [x] 2.5 Display effects
-- [ ] 2.6 Audio engine — TV sounds and ambient merged (#19); scoped channel audio on `feat/2.6-channel-audio`
-- [ ] 2.7 Persistence, URLs and TV/List transitions
+- [x] 2.6 Audio engine
+- [ ] 2.7 Persistence, URLs and TV/List transitions — on `feat/2.7-persistence-urls`, awaiting owner review before merge
 - [ ] 2.8 TV accessibility pass
 - [ ] **Gate 2**
 
@@ -145,6 +145,8 @@ Task 2.5 on `feat/2.5-display-effects`: effect precedence resolver with exhausti
 Task 2.6, part 1 on `feat/2.6-audio-engine`: `src/audio/engine.ts` plays the ten TV recordings at volume/10 × 0.9 × the event factor (synthesized fallbacks if a file is missing), runs the hum, whine and hiss bed, unlocks on the first gesture and suspends while the tab is hidden. Dial, static, volume, buttons (press and release), switches, CRD, note, door and power (with the CRT warm-up sound) are wired. Browser check: no context before a gesture, all 10 files decode after the first click, sounds start, no autoplay warnings. 250 tests; initial JS 48.9 kB.
 
 Task 2.6, part 2 on `feat/2.6-channel-audio`: per-channel sound scopes (manifest-declared `/assets/` one-shots and loops only; unknown IDs ignored; nothing queued before unlock; one voice per loop; `on-active` and `manual` starts; music fades in over 0.6 s and ducks to 30% under the OSD; asset × local × viewer gain applied once; stops while inactive, muted or hidden and resumes; nothing survives dispose), wired through the channel frame with the effective `volume` prop (0 while locked, off, muted or inactive). 257 tests; initial JS 49.9 kB. Instrumented browser check unchanged: silent before a gesture, all 10 TV sounds decode and play.
+
+Task 2.7 on `feat/2.7-persistence-urls`: `#chN` (written with replaceState, re-tunes on hashchange), `rv-ch` and `rv-tv` with the spec's load order and no wrapping; the `?tv` preview flag removed, so desktop gets the TV by default and List mode is the start for viewers who left it off or prefer reduced motion; TV → List (collapse, TV fades and scales to 0.97 from 0.5 s, List in at 0.9 s, heading focused) and List → TV (List out in 0.25 s, then the full warm-up with its sounds); the skip link as the TV's first Tab stop; a page-wide shared audio engine. Browser walkthrough: desktop default TV, power-off to List, reload remembers off, Turn on the TV, `#ch10`, skip link first, 800 px List only, axe clean in both modes, no errors. 267 tests; initial JS 50.7 kB.
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 

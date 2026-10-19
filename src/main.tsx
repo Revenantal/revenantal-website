@@ -2,6 +2,7 @@ import { render } from "preact";
 import { App } from "./App";
 import { createStore } from "@data/store";
 import type { StoreOptions } from "@data/store";
+import { initialChannel, initialPower } from "@data/persistence";
 import { SLOT_COUNT } from "@tv/lineup";
 import "@fontsource/michroma/latin-400.css";
 import "@fontsource/archivo-narrow/latin-400.css";
@@ -24,6 +25,14 @@ try {
 } catch {
   /* Privacy settings may block storage access. */
 }
-const store = createStore({ storage, positionCount: SLOT_COUNT });
+const reducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
+const store = createStore({
+  storage,
+  positionCount: SLOT_COUNT,
+  initialChannel: initialChannel(window.location.hash, storage, SLOT_COUNT),
+  initialPower: initialPower(storage, reducedMotion),
+});
 render(<App store={store} />, root);
 void store.load();
