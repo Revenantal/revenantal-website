@@ -65,6 +65,9 @@ describe("beta38 public resource mapping", () => {
       expect(mapped.counter).toBeUndefined();
     }
     expect(mapServer(metadata, null, now).server.state).toBe("unknown");
+    const missing = structuredClone(stats);
+    missing.attributes.current_state = "missing";
+    expect(mapServer(metadata, missing, now).server.state).toBe("offline");
     expect(
       mapServer({ ...metadata, is_node_under_maintenance: true }, stats, now)
         .server.state,

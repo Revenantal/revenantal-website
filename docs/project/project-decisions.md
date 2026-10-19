@@ -234,6 +234,9 @@ The owner approved building Status (task 3.2) on 2026-10-19 with the scope in `d
 - **Art:** the existing cleaned rack sprites are used as they are; the owner judges them on the real TV.
 - **Fill the screen** (owner request during the build, 2026-10-19): Status is full bleed (`safe: false`) and the rack is zoomed 1.4×, so the servers span the glass and the cabinet sides crop off. The spec's `safe: true` is replaced.
 - Long server names and games shorten with an ellipsis so the state word always shows. Project LIVE/NEW tags from the mockup are not shown: no data field supplies them.
+- Live job fixes from the first real-data look (2026-10-19): Pelican's `missing` state (the node has no container for the server) maps to offline, not unknown. A project answering 429 (bot protection, as Vercel does for the job's HEAD request) counts as reachable, not down.
+- The game-server sign and UPS show a player total only when every running server reports a count; Factorio reports none, so a running Factorio server shows "-- PLAYERS".
+- Section sign text is 12 px (the mockup's 16 px filled the sign) at the owner's request.
 - TV containers that clip channels use `overflow: clip`, not `hidden`. A hidden box can still be scrolled when focus lands on something outside it, which shifted the whole picture when tabbing to an off-screen server.
 
 ### Dependency review (2026-10-19)

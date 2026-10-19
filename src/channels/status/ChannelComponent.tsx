@@ -49,9 +49,11 @@ export function ChannelComponent(props: ChannelProps) {
     (project) => project.status === "up" || project.status === "slow",
   ).length;
   const running = servers.filter((server) => server.state === "running");
-  const players = serversFresh
-    ? running.reduce((total, server) => total + (server.players ?? 0), 0)
-    : null;
+  // A total only when it is known: fresh data, and every running server reports a count.
+  const players =
+    serversFresh && running.every((server) => server.players !== undefined)
+      ? running.reduce((total, server) => total + (server.players ?? 0), 0)
+      : null;
   const loads = running.flatMap((server) =>
     server.cpuPct === undefined ? [] : [server.cpuPct],
   );

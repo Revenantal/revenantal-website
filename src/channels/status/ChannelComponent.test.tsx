@@ -129,6 +129,36 @@ describe("Status channel", () => {
     expect(container.textContent).toContain("no snapshot");
   });
 
+  it("shows no player total while a running server reports no count", () => {
+    const props = up();
+    render(
+      <ChannelComponent
+        {...props}
+        servers={[
+          { id: "f", name: "Factory", game: "factorio", state: "running" },
+          { id: "p", name: "Pix", game: "minecraft", state: "offline" },
+        ]}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", {
+        name: /GAME SERVERS: -- PLAYERS, checked/,
+      }),
+    ).toBeTruthy();
+    cleanup();
+    render(
+      <ChannelComponent
+        {...props}
+        servers={[
+          { id: "p", name: "Pix", game: "minecraft", state: "offline" },
+        ]}
+      />,
+    );
+    expect(
+      screen.getByRole("heading", { name: /GAME SERVERS: 0 PLAYERS, checked/ }),
+    ).toBeTruthy();
+  });
+
   it("shows the local time and snapshot age, never a poll countdown", () => {
     const { container } = render(<ChannelComponent {...up()} />);
     expect(container.textContent).toMatch(/snapshot under a minute old/);
