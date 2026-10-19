@@ -1,0 +1,49 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  --stage-w: calc(1536px * var(--stage-scale));
+  --stage-h: calc(1024px * var(--stage-scale));
+}
+
+.wall,
+.spill,
+.vignette {
+  position: absolute;
+  inset: 0;
+}
+
+.wall {
+  background: radial-gradient(
+    ellipse calc(var(--stage-w) * 0.75) calc(var(--stage-h) * 0.85) at 50% 50%,
+    #3a2f27 0,
+    #261e19 62%,
+    #120f0d 82%,
+    var(--color-room) 100%
+  );
+}
+
+/* Screen light thrown past the cabinet onto the wall behind it. */
+.spill {
+  background: radial-gradient(
+    ellipse calc(var(--stage-w) * 0.78) calc(var(--stage-h) * 0.7) at
+      calc(50% + var(--screen-x) * var(--stage-scale))
+      calc(50% + var(--screen-y) * var(--stage-scale)),
+    var(--glow) 0,
+    transparent 75%
+  );
+  opacity: calc(var(--spill) * 1.6);
+  mix-blend-mode: screen;
+  transition:
+    background 0.4s,
+    opacity 0.5s;
+}
+
+.vignette {
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 55%,
+    rgb(0 0 0 / 55%) 100%
+  );
+}

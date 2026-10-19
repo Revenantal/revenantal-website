@@ -11,6 +11,9 @@
   left: 50%;
   transform-origin: center;
 
+  /* Contact shadow so the cabinet sits in the room rather than on it. */
+  box-shadow: 0 0 70px 24px rgb(0 0 0 / 75%);
+
   /* Room darkness: photo layers render at this brightness, lit by the spill. */
   --dim: 0.42;
   --dim-badge: 0.57;

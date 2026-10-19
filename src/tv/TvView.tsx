@@ -1,5 +1,6 @@
 import { Cabinet } from "./Cabinet";
-import { NO_SIGNAL } from "./room-glow";
+import { NO_SIGNAL, roomGlowOpacity } from "./room-glow";
+import { RoomBackdrop } from "./RoomBackdrop";
 import { Stage } from "./Stage";
 import styles from "./TvView.module.css";
 
@@ -10,11 +11,19 @@ import styles from "./TvView.module.css";
  * @returns The letterboxed TV.
  */
 export function TvView() {
+  const glow = true; // Viewer GLOW switch arrives with the settings door (2.3/2.5).
   return (
     <main className={styles.tv}>
       <h1 className={styles["sr-only"]}>revenantal</h1>
-      <Stage>
-        <Cabinet picture={NO_SIGNAL} glow />
+      <Stage
+        backdrop={
+          <RoomBackdrop
+            color={NO_SIGNAL.glow}
+            opacity={roomGlowOpacity(NO_SIGNAL, glow)}
+          />
+        }
+      >
+        <Cabinet picture={NO_SIGNAL} glow={glow} />
       </Stage>
     </main>
   );
