@@ -34,7 +34,7 @@ This replaces the settings-door credits panel. Until the Credits channel is buil
 ## Channel Change
 
 1. Knob turns, detent click plays, OSD shows `CH 03` + channel name in green for 1.7 s.
-2. If the target's transition is `static` and the viewer's FX switch is on: 460 ms of animated snow, roll bar and static burst sound, then the new channel powers on (scale-from-line, 380 ms).
+2. If the target's transition is `static` and the viewer's FX switch is on: 460 ms of soft, blurred snow, a faint roll bar and the static burst sound, then the new channel snaps in from a quick blur (0.22 s). No scale-from-line or brightness flash between channels (owner decision, 2026-10-19).
 3. If `cut`, or FX is off: the channel swaps immediately.
 4. Positions with no channel show animated snow and a NO SIGNAL card, with a soft hiss.
 

@@ -6,6 +6,26 @@
   transform-origin: 0 0;
 }
 
+/* Power-on: a quick boot on page load, or the full warm-up with a degauss wobble at 3 s. */
+.tube[data-boot="load"] {
+  animation: tv-boot 0.9s ease-out;
+}
+
+.tube[data-boot="warm"] {
+  animation: tv-warm 3.3s ease-out;
+}
+
+.degauss[data-boot="warm"] {
+  animation: tv-degauss 0.6s ease-out 3s;
+}
+
+.detune {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
 .picture {
   position: relative;
   width: 760px;
@@ -13,13 +33,16 @@
   overflow: hidden;
 }
 
-/* A new picture powers on from a bright horizontal line. */
+/* A new channel snaps in from a quick blur: no dark frame and no brightness spike. */
 .picture[data-anim="on"] {
-  animation: tv-on 0.38s ease-out;
+  animation: tv-tune 0.22s ease-out;
 }
 
+/* Toned down from the prototype (#777, full-strength snow) at the owner's request:
+   a soft, blurred crackle at about the brightness of the picture. */
 .picture[data-anim="static"] {
-  background: #777;
+  background: #3a3a3a;
+  filter: blur(1.5px);
 }
 
 .snow {
@@ -33,7 +56,7 @@
   right: 0;
   left: 0;
   height: 22%;
-  background: rgb(255 255 255 / 18%);
+  background: rgb(255 255 255 / 5%);
   animation: tv-roll 0.5s linear infinite;
 }
 
@@ -79,20 +102,13 @@
   outline-offset: var(--focus-offset);
 }
 
-@keyframes tv-on {
+@keyframes tv-tune {
   0% {
-    filter: brightness(4);
-    transform: scale(1, 0.012);
-  }
-
-  55% {
-    filter: brightness(1.6);
-    transform: scale(1, 1.04);
+    filter: blur(6px);
   }
 
   100% {
     filter: none;
-    transform: none;
   }
 }
 
@@ -103,5 +119,90 @@
 
   100% {
     top: 110%;
+  }
+}
+
+@keyframes tv-boot {
+  0% {
+    filter: brightness(6);
+    transform: scale(1, 0.004);
+  }
+
+  40% {
+    filter: brightness(6);
+    transform: scale(1, 0.004);
+  }
+
+  70% {
+    filter: brightness(1.8);
+    transform: scale(1, 1.03);
+  }
+
+  100% {
+    filter: none;
+    transform: none;
+  }
+}
+
+@keyframes tv-warm {
+  0% {
+    filter: brightness(6);
+    transform: scale(1, 0.004);
+  }
+
+  8% {
+    filter: brightness(6);
+    transform: scale(1, 0.004);
+  }
+
+  16% {
+    filter: brightness(1.4) blur(1px);
+    transform: scale(1, 1.02);
+  }
+
+  24% {
+    filter: brightness(0.22) blur(2.5px) saturate(0.4);
+    transform: none;
+  }
+
+  70% {
+    filter: brightness(0.8) blur(0.8px) saturate(0.85);
+  }
+
+  100% {
+    filter: none;
+    transform: none;
+  }
+}
+
+@keyframes tv-degauss {
+  0% {
+    filter: none;
+    transform: none;
+  }
+
+  12% {
+    filter: hue-rotate(70deg) saturate(2.4);
+    transform: skewX(2.5deg) scale(1.015);
+  }
+
+  30% {
+    filter: hue-rotate(-50deg) saturate(2);
+    transform: skewX(-2deg) scale(0.99);
+  }
+
+  50% {
+    filter: hue-rotate(30deg) saturate(1.5);
+    transform: skewX(1.2deg);
+  }
+
+  72% {
+    filter: hue-rotate(-12deg);
+    transform: skewX(-0.5deg);
+  }
+
+  100% {
+    filter: none;
+    transform: none;
   }
 }

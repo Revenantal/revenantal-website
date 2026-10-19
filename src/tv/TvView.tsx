@@ -26,6 +26,7 @@ import type { OsdState } from "./Osd";
 import { NO_SIGNAL, POWERED_OFF, roomGlowOpacity } from "./room-glow";
 import { RoomBackdrop } from "./RoomBackdrop";
 import { Screen } from "./screen/Screen";
+import type { Boot } from "./screen/Screen";
 import { Stage } from "./Stage";
 import { useTuning } from "./use-tuning";
 import styles from "./TvView.module.css";
@@ -72,9 +73,10 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
   const { channel, power, settings, door, site, hintDismissed, now } = snapshot;
   const visible = usePageVisible();
   const reducedMotion = useMediaQuery(TV_REDUCED_MOTION);
-  const { shown, switching } = useTuning(
+  // Reduced motion keeps the TV calm: no static bursts, boot or warm-up animations.
+  const { shown, switching, preview } = useTuning(
     channel,
-    settings.fx,
+    settings.fx && !reducedMotion,
     power,
     manifestAt,
   );
@@ -147,8 +149,22 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
     );
   };
 
+  const [boot, setBoot] = useState<Boot>({
+    kind: reducedMotion ? "none" : "load",
+    key: 0,
+  });
+  const [offKey, setOffKey] = useState(0);
+  const [detune, setDetune] = useState(0);
+
   const changePower = (on: boolean) => {
     actions.setPower(on);
+    setDetune(0);
+    if (on)
+      setBoot((current) => ({
+        kind: reducedMotion ? "none" : "warm",
+        key: current.key + 1,
+      }));
+    else setOffKey((count) => count + 1);
     window.clearTimeout(timerRef.current);
     setOsd(null);
     setAnnouncement(on ? "TV on" : "TV off");
@@ -201,8 +217,16 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
                   slots={SLOT_COUNT}
                   label={`${channelLabel(channel)}, ${channelName(channel)}`}
                   onTune={tune}
+                  onDrag={(drag) => {
+                    if (!power) return;
+                    preview(drag?.position ?? null);
+                    setDetune(drag ? Math.min(1, drag.offset * 2) : 0);
+                  }}
                 />
-                <HintNote phase={hint} onDismiss={dismissHint} />
+                <HintNote
+                  phase={power ? hint : "gone"}
+                  onDismiss={dismissHint}
+                />
                 <VolumeKnob volume={settings.volume} onChange={changeVolume} />
                 <PanelButtons
                   buttons={site?.buttons ?? []}
@@ -261,6 +285,9 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
                 save: INERT_SAVE,
               }}
               onTune={tuneTo}
+              boot={boot}
+              offKey={reducedMotion ? 0 : offKey}
+              detune={detune}
               onPowerOff={() => {
                 changePower(false);
               }}

@@ -177,4 +177,27 @@ describe("screen host", () => {
       "FIXTURE is unavailable.",
     );
   });
+
+  it("plays the boot or warm-up, collapses on power off, and distorts while detuned", () => {
+    const { container, rerender } = render(
+      <Screen {...props({ boot: { kind: "load", key: 0 } })} />,
+    );
+    expect(container.querySelector("[data-boot='load']")).not.toBeNull();
+
+    rerender(<Screen {...props({ boot: { kind: "warm", key: 1 } })} />);
+    expect(container.querySelectorAll("[data-boot='warm']")).toHaveLength(2);
+
+    rerender(<Screen {...props({ detune: 0.5 })} />);
+    expect(container.querySelectorAll("canvas")).toHaveLength(2);
+    const picture = container.querySelector<HTMLElement>(
+      "[data-boot] [data-boot] > div",
+    );
+    expect(picture?.style.filter).toContain("blur(1.50px)");
+
+    rerender(<Screen {...props({ power: false, offKey: 0 })} />);
+    expect(container.textContent).toBe("");
+    rerender(<Screen {...props({ power: false, offKey: 1 })} />);
+    expect(container.firstElementChild).not.toBeNull();
+    expect(screen.queryByText("NO SIGNAL")).toBeNull();
+  });
 });
