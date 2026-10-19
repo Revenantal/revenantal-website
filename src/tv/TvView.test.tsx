@@ -25,7 +25,7 @@ afterEach(() => {
 
 function ConnectedTv({ store }: { store: ReturnType<typeof createStore> }) {
   const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot);
-  return <TvView snapshot={snapshot} actions={store} />;
+  return <TvView snapshot={snapshot} view={store.getView()} actions={store} />;
 }
 
 function renderTv() {

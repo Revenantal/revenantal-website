@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import type { AppStore, StoreSnapshot } from "@data/store";
+import type { DataView } from "@data/freshness";
+import type { Picture } from "./room-glow";
 import { Cabinet } from "./Cabinet";
 import { Dial } from "./controls/Dial";
 import { HintNote } from "./controls/HintNote";
@@ -8,22 +10,33 @@ import { wrapPosition } from "./controls/dial-math";
 import { PanelButtons } from "./controls/PanelButtons";
 import { PowerLed } from "./controls/PowerLed";
 import { SettingsDoor } from "./controls/SettingsDoor";
+import { usePageVisible } from "./controls/page-visible";
+import { TV_REDUCED_MOTION, useMediaQuery } from "./controls/media-query";
 import { useTvKeys } from "./controls/tv-keys";
 import { VolumeKnob } from "./controls/VolumeKnob";
-import { SLOT_COUNT, channelLabel, channelName, positionOf } from "./lineup";
+import {
+  SLOT_COUNT,
+  channelLabel,
+  channelName,
+  manifestAt,
+  positionOf,
+} from "./lineup";
 import { Osd } from "./Osd";
 import type { OsdState } from "./Osd";
 import { NO_SIGNAL, POWERED_OFF, roomGlowOpacity } from "./room-glow";
 import { RoomBackdrop } from "./RoomBackdrop";
+import { Screen } from "./screen/Screen";
 import { Stage } from "./Stage";
+import { useTuning } from "./use-tuning";
 import styles from "./TvView.module.css";
 
 /** The TV reads the shared snapshot and changes it only through store actions. */
 export type TvViewProps = {
   snapshot: Pick<
     StoreSnapshot,
-    "channel" | "power" | "settings" | "door" | "site" | "hintDismissed"
+    "channel" | "power" | "settings" | "door" | "site" | "hintDismissed" | "now"
   >;
+  view: DataView | null;
   actions: Pick<
     AppStore,
     | "setChannel"
@@ -32,10 +45,16 @@ export type TvViewProps = {
     | "setDoor"
     | "toggleSetting"
     | "dismissHint"
+    | "setCaptions"
   >;
 };
 
 const OSD_MS = 1700;
+const INERT_SAVE = {
+  load: () => null,
+  store: () => false,
+  reset: () => false,
+};
 const HINT_DELAY_MS = 1600;
 const HINT_FALL_MS = 1400;
 
@@ -44,12 +63,21 @@ const HINT_FALL_MS = 1400;
  * later phase 2 tasks; until then the glass shows the empty NO SIGNAL tube.
  *
  * @param props - Shared snapshot and store actions.
- * @param props.snapshot - Channel, power, door, viewer settings and content.
+ * @param props.snapshot - Channel, power, door, viewer settings, content and clock.
+ * @param props.view - Freshness-filtered projects, servers and live data.
  * @param props.actions - Store actions the controls call.
  * @returns The TV in its room.
  */
-export function TvView({ snapshot, actions }: TvViewProps) {
-  const { channel, power, settings, door, site, hintDismissed } = snapshot;
+export function TvView({ snapshot, view, actions }: TvViewProps) {
+  const { channel, power, settings, door, site, hintDismissed, now } = snapshot;
+  const visible = usePageVisible();
+  const reducedMotion = useMediaQuery(TV_REDUCED_MOTION);
+  const { shown, switching } = useTuning(
+    channel,
+    settings.fx,
+    power,
+    manifestAt,
+  );
   const [osd, setOsd] = useState<OsdState>(null);
   const [announcement, setAnnouncement] = useState("");
   const timerRef = useRef<number | undefined>(undefined);
@@ -98,16 +126,17 @@ export function TvView({ snapshot, actions }: TvViewProps) {
   };
 
   const tune = (position: number) => {
-    if (!actions.setChannel(position)) return;
+    if (!actions.setChannel(position)) return false;
     dismissHint();
     const label = channelLabel(position);
     const name = channelName(position);
     flash({ kind: "channel", label, name }, `${label}, ${name}`);
+    return true;
   };
 
   const tuneTo = (id: string) => {
     const position = positionOf(id);
-    if (position !== undefined) tune(position);
+    return position !== undefined && tune(position);
   };
 
   const changeVolume = (volume: number) => {
@@ -135,7 +164,16 @@ export function TvView({ snapshot, actions }: TvViewProps) {
     },
   });
 
-  const picture = power ? NO_SIGNAL : POWERED_OFF;
+  const manifest = manifestAt(shown);
+  const picture: Picture = !power
+    ? POWERED_OFF
+    : manifest
+      ? {
+          background: manifest.bg,
+          glow: manifest.glow,
+          level: manifest.display?.glow ?? 1,
+        }
+      : NO_SIGNAL;
   const shownOsd: OsdState =
     hint === "shown"
       ? {
@@ -192,6 +230,41 @@ export function TvView({ snapshot, actions }: TvViewProps) {
               </>
             }
           >
+            <Screen
+              power={power}
+              shown={shown}
+              switching={switching}
+              visible={visible}
+              manifest={manifest}
+              broadcast={
+                manifest?.kind === "broadcast"
+                  ? (site?.broadcast[manifest.id] ?? null)
+                  : null
+              }
+              props={{
+                projects: view?.projects ?? [],
+                servers: view?.servers ?? [],
+                live: view?.live ?? null,
+                links: site?.links ?? { steam: "", github: "", discord: "" },
+                credits: site?.credits ?? [],
+                now,
+                reducedMotion,
+                // Audio arrives in 2.6, capture and saves in 4.3; until then these are inert.
+                volume: 0,
+                play: () => undefined,
+                setLoop: () => undefined,
+                captions: settings.captions,
+                setCaptions: actions.setCaptions,
+                captured: false,
+                requestCapture: () => undefined,
+                releaseCapture: () => undefined,
+                save: INERT_SAVE,
+              }}
+              onTune={tuneTo}
+              onPowerOff={() => {
+                changePower(false);
+              }}
+            />
             {power ? <Osd osd={shownOsd} /> : null}
           </Cabinet>
         </Stage>

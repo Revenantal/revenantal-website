@@ -1,18 +1,18 @@
+import { lineup } from "@channels/index";
+import type { ChannelManifest } from "@channels/_shared/types";
+
+/** The dial's slot count, from the highest registered position. */
+export const SLOT_COUNT = lineup.slots;
+
 /**
- * Temporary phase 2 lineup: eleven slots (the highest launch position, Credits at 11),
- * all NO SIGNAL. Task 2.4 replaces this with the channel registry in src/channels/index.ts.
+ * The manifest tuned at a dial position.
+ *
+ * @param position - Dial position 1..SLOT_COUNT.
+ * @returns The manifest, or null for NO SIGNAL.
  */
-export const SLOT_COUNT = 11;
-
-// No channel is built yet, so every slot is empty.
-const NAMES = new Map<number, string>();
-
-// Approved launch positions, used by internal buttons that tune by channel ID.
-const POSITIONS = new Map<string, number>([
-  ["tv-guide", 1],
-  ["status", 10],
-  ["credits", 11],
-]);
+export function manifestAt(position: number): ChannelManifest | null {
+  return lineup.at(position);
+}
 
 /**
  * Display name for a dial position.
@@ -21,7 +21,7 @@ const POSITIONS = new Map<string, number>([
  * @returns The channel name, or NO SIGNAL for an empty slot.
  */
 export function channelName(position: number): string {
-  return NAMES.get(position) ?? "NO SIGNAL";
+  return lineup.at(position)?.name ?? "NO SIGNAL";
 }
 
 /**
@@ -41,5 +41,5 @@ export function channelLabel(position: number): string {
  * @returns The assigned position, or undefined if the ID has none.
  */
 export function positionOf(id: string): number | undefined {
-  return POSITIONS.get(id);
+  return lineup.positionOf(id);
 }
