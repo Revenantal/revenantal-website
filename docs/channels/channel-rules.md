@@ -85,4 +85,6 @@ For the launch lineup, the registry is `{ 1: tvGuide, 10: status, 11: credits }`
 
 ## Tests
 
+Each channel has its own test suite inside its folder, and it must run on its own: `pnpm test:channel <id>` runs only `src/channels/<id>/`, so building one channel never needs the full suite. That suite covers the channel's own logic and runs the shared contract checks against that channel alone, using the shared fixtures. The full `pnpm test` still runs everything in CI and before merging.
+
 Every channel passes the shared contract tests (task 3.1): renders from fixtures, renders with `live = null`, renders with stale sources, renders with 0, 1 and 30 projects, declares a valid profile, and pauses when `active` is false. Registry tests cover the launch positions (1, 10 and 11), gaps, omitted channels, stable hashes, the SERVERS button and the settings-door Credits button.

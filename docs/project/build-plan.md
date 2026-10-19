@@ -60,15 +60,15 @@ Follow [Before Building a Channel](../channels/channel-rules.md#before-building-
 
 ## Phase 3 — Launch
 
-| Task | Work                                                                                                                                                | Docs                                    |
-| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| 3.1  | Channel contract verification: full host-interface fixtures; actions, captions, saves and stale-scope tests every channel must pass                 | `channels/channel-rules.md`             |
-| 3.2  | Channel 10 — Status (rack, displays, selection, camera pan, copy address)                                                                           | `channels/10-status.md`                 |
-| 3.3  | Forecast/radar service: trusted proxy, private responses, bounded caches, no identifying logs, timeouts and same-origin radar; own Docker image     | `architecture/forecast-and-radar.md`    |
-| 3.4  | Channel 1 — TV Guide: listings, ticker, clock, coming up                                                                                            | `channels/01-tv-guide.md`               |
-| 3.5  | TV Guide forecast/radar panel with visible attribution, bundled Natural Earth base map and privacy/failure checks                                   | `channels/01-tv-guide.md`               |
-| 3.6  | Channel 11 — Credits: movie-style roll, settings-door tune button, shared credits props, reduced-motion list; credits in List mode and `CREDITS.md` | `channels/11-credits.md`, `tv/audio.md` |
-| 3.7  | Launch check: hosting setup (deploy, scheduler, branch protection), budgets, cross-browser, axe, privacy review                                     | `architecture/hosting-and-ci.md`        |
+| Task | Work                                                                                                                                                                                                  | Docs                                    |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| 3.1  | Channel contract verification: full host-interface fixtures; actions, captions, saves and stale-scope tests every channel must pass, callable per channel so `pnpm test:channel <id>` runs them alone | `channels/channel-rules.md`             |
+| 3.2  | Channel 10 — Status (rack, displays, selection, camera pan, copy address)                                                                                                                             | `channels/10-status.md`                 |
+| 3.3  | Forecast/radar service: trusted proxy, private responses, bounded caches, no identifying logs, timeouts and same-origin radar; own Docker image                                                       | `architecture/forecast-and-radar.md`    |
+| 3.4  | Channel 1 — TV Guide: listings, ticker, clock, coming up                                                                                                                                              | `channels/01-tv-guide.md`               |
+| 3.5  | TV Guide forecast/radar panel with visible attribution, bundled Natural Earth base map and privacy/failure checks                                                                                     | `channels/01-tv-guide.md`               |
+| 3.6  | Channel 11 — Credits: movie-style roll, settings-door tune button, shared credits props, reduced-motion list; credits in List mode and `CREDITS.md`                                                   | `channels/11-credits.md`, `tv/audio.md` |
+| 3.7  | Launch check: hosting setup (deploy, scheduler, branch protection), budgets, cross-browser, axe, privacy review                                                                                       | `architecture/hosting-and-ci.md`        |
 
 **Gate 3 — launch:** live on revenantal.com with TV Guide (1), Status (10) and Credits (11); every other position shows NO SIGNAL.
 
