@@ -112,6 +112,8 @@ Opened PR #1 (feat/1.1-foundation → master). The first CI run failed only at t
 
 Added deploy/.env.example (SITE_TAG) and completed deploy/.env.live.example with every live-job variable, including optional paths. A test fails when the job reads a variable missing from the example. Runtime credentials are still not configured on a host.
 
+Local runtime check with owner credentials in ignored deploy/.env.live: GitHub, project status and Steam succeed. Pelican returns 401 Unauthenticated, identical to a made-up key, so the panel does not recognise the supplied key; server data and player counts remain unverified.
+
 ## Channel Build Approvals
 
 All individual channel builds are awaiting plan review and explicit owner confirmation, including TV Guide, Status and Credits. Existing design statuses below describe design progress, not permission to implement. Record each confirmed channel scope and date in `project-decisions.md` and note its approval here.
