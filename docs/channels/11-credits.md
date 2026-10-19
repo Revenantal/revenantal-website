@@ -4,7 +4,7 @@
 
 A traditional movie-style credits roll, reached through the settings-door Credits button or the dial. It replaces the credits overlay inside the settings door.
 
-- **Kind:** credits · **Folder:** `credits` · **Build:** task 3.6 (required at launch) · **Status:** built on `feat/3.6-credits` (approved 2026-10-19)
+- **Kind:** credits · **Folder:** `credits` · **Build:** task 3.6 (required at launch) · **Status:** built in task 3.6 (approved 2026-10-19)
 
 ## Concept
 
