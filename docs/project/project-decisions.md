@@ -113,6 +113,15 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - A minimal static holding screen proves the application mount/build; shared content and List mode follow after CI/deployment setup. No project data is invented.
 - CI is authored for PRs and pushes to main/master, with immutable action pins and no deployment side effects. Service images, deployment workflow and remote branch settings remain task 1.3 work.
 
+### Scheduled GitHub directory and hosting preparation (2026-10-18)
+
+- The owner confirmed the scheduled GitHub API feed for the latest public repositories under revenantal. Keep browser requests on the static same-origin snapshots; refresh the feed in the ten-minute live job.
+- content/directory.json selects github or curated navigation and a limit; default ten. GitHub projects use stable numeric repository IDs, public repository links and generic language descriptions. Do not publish homepage URLs, raw descriptions, owner profiles or account metadata. Exclude forks, archived/private repositories and obvious personal-site/resume listings. This filter is conservative; public repository names still need normal content review.
+- Retain last known repository navigation after a failed/expired feed, with its stale label. Suppress stale activity/current-state telemetry. A successful empty feed removes old navigation. The curated project file may remain empty.
+- GitHub authentication is optional for this public endpoint. A runtime token can raise shared anonymous rate limits; it never enters browser files or build inputs.
+- The owner requested deployment files only and will connect hosting later. Prepare site/live-job images and an opt-in publication workflow; do not configure secrets, deploy, or change the remote default branch. The existing remote default is master; production automation targets main and stays disabled pending deliberate setup.
+- Phase 1 content, store, job and List implementation proceeds locally. The Pelican agent still requires confirmation of one real redacted response from the installed version. No individual channel build is authorized.
+
 ## Clarifications
 
 - **README tone (2026-10-18, revised).** The root README is a vintage TV user manual, written as the finished visitor experience. Use operating instructions rather than channel listings or development status. Actual implementation progress remains in `status.md`; the manual does not mark any build task complete.
@@ -131,5 +140,5 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 - A hidden channel: wanted or not. Not needed for v1.
 - Exact Status game-server display fields: confirm when building channel 10.
-- Real project list: written in phase 1, task 1.10.
+- GitHub directory is implemented locally for task 1.10; hosting/scheduling and content review remain before launch.
 - Status of the patch panel / switch / UPS photo sprites: generated and cleaned; final art pass when channel 10 is built.

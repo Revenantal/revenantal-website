@@ -6,7 +6,14 @@ import jsdoc from "eslint-plugin-jsdoc";
 import hooks from "eslint-plugin-react-hooks";
 import prettier from "eslint-config-prettier";
 
-const typedFiles = ["src/**/*.{ts,tsx}", "tools/**/*.ts", "vite.config.ts"];
+const typedFiles = [
+  "src/**/*.{ts,tsx}",
+  "tools/**/*.ts",
+  "jobs/**/*.ts",
+  "agent/**/*.ts",
+  "api/**/*.ts",
+  "vite.config.ts",
+];
 const architecturalFiles = [
   "src/**/*.{ts,tsx}",
   "jobs/**/*.ts",
@@ -40,7 +47,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/**/*.{ts,tsx}", "tools/**/*.ts"],
+    files: [
+      "src/**/*.{ts,tsx}",
+      "tools/**/*.ts",
+      "jobs/**/*.ts",
+      "agent/**/*.ts",
+      "api/**/*.ts",
+    ],
     plugins: { jsdoc },
     settings: { jsdoc: { mode: "typescript" } },
     rules: {
@@ -116,6 +129,14 @@ export default tseslint.config(
             allow("list", "data"),
             allow("audio", "data"),
             allow("channel", "shared"),
+            {
+              from: element(["jobs", "agent", "api"]),
+              allow: {
+                to: {
+                  element: { type: "data", fileInternalPath: "schemas.ts" },
+                },
+              },
+            },
             {
               from: element(["channel", "shared", "jobs", "agent", "api"]),
               dependency: { kind: "type" },

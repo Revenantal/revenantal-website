@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "preview": "vite preview --host 127.0.0.1",
-    "build": "vite build && size-limit",
+    "build": "pnpm credits:check && vite build && size-limit && pnpm build:live",
     "lint": "eslint . --max-warnings 0 && stylelint \"src/**/*.css\"",
     "lint:fix": "eslint . --fix && stylelint \"src/**/*.css\" --fix",
     "format": "prettier . --write",
@@ -20,7 +20,14 @@
     "test:watch": "vitest",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "prepare": "husky",
-    "check:attribution": "node tools/checks/check-attribution.ts"
+    "check:attribution": "node tools/checks/check-attribution.ts",
+    "test:caddy": "node tools/checks/check-caddy.ts",
+    "test:container": "node tools/checks/check-container.ts",
+    "credits:write": "node tools/content/credits.ts --write",
+    "credits:check": "node tools/content/credits.ts",
+    "build:live": "node tools/build/build-live.ts",
+    "live:run": "node jobs/live/main.ts",
+    "live:preview": "node tools/build/run-local-live.ts"
   },
   "size-limit": [
     {
@@ -31,13 +38,17 @@
     }
   ],
   "dependencies": {
-    "preact": "11.0.1"
+    "preact": "11.0.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@babel/core": "7.29.7",
     "@commitlint/cli": "21.2.3",
     "@commitlint/config-conventional": "21.2.3",
     "@eslint/js": "9.39.5",
+    "@fontsource/archivo-narrow": "5.3.0",
+    "@fontsource/michroma": "5.3.0",
     "@preact/preset-vite": "2.10.6",
     "@size-limit/file": "14.2.0",
     "@testing-library/preact": "3.2.4",

@@ -1,0 +1,25 @@
+[
+  {
+    "label": "STEAM",
+    "face": "cream",
+    "link": "steam"
+  },
+  {
+    "label": "GITHUB",
+    "face": "grey",
+    "link": "github"
+  },
+  {
+    "label": "DISCORD",
+    "face": "dark",
+    "action": "copy",
+    "copyKey": "discord",
+    "copiedLabel": "COPIED!"
+  },
+  {
+    "label": "SERVERS",
+    "face": "cream",
+    "action": "tune",
+    "channel": "status"
+  }
+]

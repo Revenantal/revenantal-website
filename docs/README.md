@@ -2,7 +2,7 @@
 
 This folder is the source of truth for revenantal.com: requirements, decisions, design, technical specs, the build plan and progress.
 
-**Status:** The application scaffold and development tooling are implemented locally on `feat/1.1-foundation`; deployment and shared data work follow. Track reviewed build progress in `project/status.md`.
+**Status:** The foundation is committed on `feat/1.1-foundation`; deployment files, shared data and GitHub-backed List mode are implemented locally. Hosting is deferred and the Pelican agent is pending. Track reviewed build progress in `project/status.md`.
 
 ## Reading Order
 

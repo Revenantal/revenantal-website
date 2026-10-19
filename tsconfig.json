@@ -27,5 +27,12 @@
       "@styles/*": ["./src/styles/*"]
     }
   },
-  "include": ["src", "tools/**/*.ts", "vite.config.ts"]
+  "include": [
+    "src",
+    "tools/**/*.ts",
+    "vite.config.ts",
+    "jobs/**/*.ts",
+    "agent/**/*.ts",
+    "api/**/*.ts"
+  ]
 }

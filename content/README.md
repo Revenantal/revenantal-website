@@ -1,3 +1,12 @@
-# content
+# Content
 
-Hand-edited content JSON belongs here. Task 1.4 adds schemas and content files; task 1.10 supplies real project entries. Runtime observations are never edited here.
+Hand-edited JSON is validated by src/data/schemas.ts and compiled into site.json by tools/content/. Runtime observations belong in live.json.
+
+- directory.json selects github or curated project navigation and a limit of 1–30. GitHub is the approved default, with ten recent public projects.
+- projects.json contains optional curated projects; it is intentionally empty while GitHub supplies navigation.
+- links.json defines public profiles once. buttons.json references those keys for links/copy actions; tune buttons are hidden in List mode.
+- servers.json contains optional visibility, naming and address policies. It never invents discovered servers.
+- credits.json is the shared attribution source. Run pnpm credits:write after editing it.
+- Optional broadcast.json holds playlists, validated against registered broadcast channel IDs. None are registered yet.
+
+Never add runtime status, secrets, personal information or player names here.

@@ -101,7 +101,7 @@ Each channel is its own release, behind its own gate (contract tests plus a look
 ## v1 Acceptance Criteria
 
 - Every interaction in `tv/controls.md` works by mouse, touch and keyboard.
-- Adding a project to `content/projects.json` shows it in every directory and game channel and in List mode with no code change.
+- Adding a project to `content/projects.json` in curated mode, or refreshing the approved scheduled GitHub feed in github mode, supplies every directory/game channel and List mode through the shared store with no view changes.
 - Registering a channel manifest at an explicit position fills only that position. Launch uses 1, 10 and 11; adding/removing channels preserves gaps, hashes, saved positions and the SERVERS button target. Display profile rules hold and override lamps light correctly.
 - Channel host actions, credits/playlists, persistent captions and manifest audio follow `channels/host-interface.md`. Tune-away, hidden tabs and power-off stop media and invalidate stale callbacks.
 - With `live.json` missing or malformed the site boots and every channel renders.

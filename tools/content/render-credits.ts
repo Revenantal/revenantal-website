@@ -1,0 +1,32 @@
+import type { Credit } from "../../src/data/types.ts";
+
+const escape = (value: string) =>
+  value.replaceAll("\n", " ").replace(/[\\`*_[\]<>|]/g, "\\$&");
+
+/**
+ * Produces the repository credits from the same entries sent to site views.
+ *
+ * @param credits - Validated shared credit entries.
+ * @returns Markdown ready for the repository formatter.
+ */
+export function renderCredits(credits: Credit[]): string {
+  const rows = credits.map((credit) => {
+    const licence =
+      credit.license === "CC BY 4.0"
+        ? "[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)"
+        : credit.license === "CC0 1.0"
+          ? "[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)"
+          : escape(credit.license);
+    return `| [${escape(credit.title)}](<${credit.url.replaceAll("<", "%3C").replaceAll(">", "%3E")}>) | ${escape(credit.author)} | ${licence} | ${escape(credit.usedFor)} | ${escape(credit.edits ?? "—")} |`;
+  });
+  return [
+    "# Credits",
+    "",
+    "Source: `content/credits.json`. Run `pnpm credits:write` after changing an entry.",
+    "",
+    "| Asset | Author | Licence | Used for | Edits |",
+    "| --- | --- | --- | --- | --- |",
+    ...rows,
+    "",
+  ].join("\n");
+}

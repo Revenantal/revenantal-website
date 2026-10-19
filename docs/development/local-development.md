@@ -1,13 +1,16 @@
 # Local Development
 
-Use Node.js 24 and pnpm 11.9.0 (pinned in package.json). Install pnpm through its official installer or Corepack when available.
+Use Node.js 24 and pnpm 11.9.0, pinned in package.json.
 
 ```sh
 pnpm install --frozen-lockfile
+pnpm live:preview
 pnpm dev
 ```
 
-Open the localhost URL printed by Vite. The initial build shows a static holding screen; the data pipeline and List mode follow in phase 1. There are no live-service credentials or channel implementations in this scaffold.
+Open the URL printed by Vite. List mode is currently the site at every width. The preview command runs the real scheduled job once and writes ignored .cache/live-preview files. It fetches public GitHub repositories; Steam and server sources remain unavailable unless configured. The browser reads local snapshots and never calls GitHub. Run the command again, then reload, to obtain newer data. Without a local snapshot the directory still opens with unavailable live sections.
+
+Static content is validated from content/*.json during development and build. Set content/directory.json to curated to use content/projects.json instead of the scheduled GitHub project list. Shared credits also generate CREDITS.md with pnpm credits:write; the build checks that it matches.
 
 ## Checks
 
@@ -15,14 +18,12 @@ Open the localhost URL printed by Vite. The initial build shows a static holding
 pnpm check
 ```
 
-This runs formatting, ESLint/Stylelint, strict TypeScript, Vitest and the production build with a 90 kB initial JavaScript gzip limit. Individual commands are available in package.json. `pnpm preview` serves the production output locally.
+Runs formatting, ESLint/Stylelint, strict TypeScript, Vitest and production builds, including the 90 kB initial JavaScript gzip limit and the independent live-job bundle. pnpm preview serves the built site. Tests use fixtures, not live credentials.
 
-ESLint enforces module boundaries, named application exports, accessibility rules, hooks rules and documentation on public declarations. Policy tests exercise forbidden imports and attribution checks. TypeScript/Vite aliases are @data, @tv, @channels, @list, @audio and @styles, each followed by a module path.
+pnpm test:container requires Docker and verifies image replacement/rollback, runtime mounts, permissions, cache headers and missing-file behavior. CI runs it on Linux. On a machine with an official Caddy binary, set CADDY_BIN and run pnpm test:caddy for the routing checks without Docker; this does not verify container permissions.
 
-`pnpm install` installs Husky hooks. Pre-commit formats/lints staged application/tooling files and type-checks. Commit-msg checks Conventional Commits and the authorship policy. Never bypass these hooks. Only explicitly approved dependency build scripts run; pnpm-workspace.yaml records them.
+Husky installs on pnpm install. Pre-commit lints/formats staged files and type-checks; commit-msg checks Conventional Commits and attribution. Never bypass hooks. Application aliases are @data, @tv, @channels, @list, @audio and @styles. Reference tools retain their independent package under docs/reference/prototypes.
 
-## CI and Hosting
+## Hosting
 
-Checks run on pull requests and pushes to main/master; action versions are pinned to commit SHAs. Dependabot updates dependencies and action pins weekly. The independent reference-tool package remains under docs/reference/prototypes and keeps its existing lockfile.
-
-Deployment workflows, service images and remote branch protection are still task 1.3 work. The scaffold does not deploy itself. No channel may be built without its separate confirmed plan.
+Deployment files are prepared in deploy/. Hosting is disconnected and publishing is disabled until explicitly configured. No individual channel implementation is approved; the TV shell follows the phase 1 gate.

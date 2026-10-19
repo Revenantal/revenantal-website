@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Review the local foundation (1.1–1.2), then complete task 1.3 deployment/CI setup before content/data work.
+**Current focus:** Finish phase 1 verification and review. Foundation is committed; deployment files, shared data and GitHub-backed List mode are implemented locally. Hosting is deferred by owner instruction; Pelican collection requires a real installed-version response.
 
 **Last updated:** 2026-10-18
 
@@ -21,14 +21,14 @@ What is built and where things are. Tick an item when its task has reached `main
 
 - [ ] 1.1 Scaffold repo — implemented locally; awaiting PR/merge
 - [ ] 1.2 Tooling and pre-commit hooks — implemented locally; awaiting PR/merge
-- [ ] 1.3 CI, deploy, branch protection — CI checks/Dependabot authored; deployment and remote settings pending
-- [ ] 1.4 Content schemas and files
-- [ ] 1.5 Store and shared UI actions
-- [ ] 1.6 Live job
-- [ ] 1.7 Pelican agent
-- [ ] 1.8 Server merge and overrides
-- [ ] 1.9 List mode
-- [ ] 1.10 Real project list, links and credits
+- [ ] 1.3 CI, deploy, branch protection — files prepared and native routing verified; Docker/remote settings and hosting pending
+- [ ] 1.4 Content schemas and files — implemented locally
+- [ ] 1.5 Store and shared UI actions — implemented and tested locally
+- [ ] 1.6 Live job — implemented; real public GitHub feed verified locally; host scheduler not installed
+- [ ] 1.7 Pelican agent — awaiting a real redacted installed-version response
+- [ ] 1.8 Server merge and overrides — implemented and fixture-tested locally
+- [ ] 1.9 List mode — implemented; desktop/mobile browser and axe checks pass locally
+- [ ] 1.10 Real project list, links and credits — scheduled GitHub navigation, public links and shared credits implemented locally
 - [ ] **Gate 1**
 
 ## Phase 2 — TV Shell
@@ -79,6 +79,14 @@ Started on `feat/1.1-foundation` from baseline `7b03e00`. Added Preact/Vite, str
 Local lint, type-check and 18 policy tests pass. The initial production JavaScript is about 5.2 kB gzipped against the 90 kB budget. Browser checks at 1280×650 and 390×844 with reduced motion show HTTP 200, the expected main/heading, no horizontal overflow, no console errors and no external requests. The installed commit-msg hook accepts a valid message and rejects a co-author trailer. The full `pnpm check` command and the installed pre-commit hook passed; staged whitespace checks are clean.
 
 No task is checked off because the feature has not reached `main`; no remote CI result, deployment or phase gate is claimed.
+
+## Data and List Build (2026-10-18)
+
+Foundation commit: 501216a on feat/1.1-foundation. Added validated content compilation, shared store/loaders, independent freshness, a one-shot live job, safe project checks, server policy merging and the complete List view. GitHub supplies ten recent public repository links through the approved scheduled feed; the browser makes one same-origin request per snapshot and no provider calls.
+
+Prepared non-root site/live-job Dockerfiles, opt-in CI publication, separate runtime mounts, a one-shot Compose job and a ten-minute host timer. Native Caddy routing checks passed for two site versions and rollback, atomic snapshot replacement, cache headers, unavailable weather and missing-file 404. Docker is unavailable locally; container permission checks remain for Docker-enabled CI. Hosting is disconnected and no publication, scheduler installation or remote protection changes have occurred.
+
+Local browser checks passed at 1280×650 and 390×844, including reduced motion, real GitHub data, 0/1/30 projects, missing/malformed live data, no horizontal overflow and no axe violations. Further browser checks passed for clock expiry without polling, retained stale navigation with unknown status, keyboard skip navigation, clipboard success/denial, blocked storage and the actual built site served under Caddy/CSP. The complete pnpm check passed: formatting, lint, strict types, 74 tests and both production builds. Initial JavaScript is about 37.3 kB gzipped against 90 kB. Steam and game servers remain unavailable without runtime configuration; no observations are invented. The Pelican agent and remote acceptance keep Gate 1 open. No TV shell or individual channel is built.
 
 ## Channel Build Approvals
 

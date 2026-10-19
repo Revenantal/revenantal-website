@@ -17,9 +17,9 @@ Single column, max 640 px, 20 px gutters.
 
 1. Wordmark "REVENANTAL" (Michroma, 0.24em tracking) + "SOLID STATE · MODEL RV-404".
 2. **Right now:** Steam card, latest push card.
-3. **Projects:** status dot, name, desc · host, type.
+3. **Projects:** status text, name, desc · host, type.
 4. **Game servers:** name, game, state, players; address only where published.
-5. **Find me:** the panel buttons as flat buttons (tune buttons hidden).
+5. **Elsewhere:** the panel buttons as flat buttons (tune buttons hidden).
 6. **Recent pushes:** 5.
 7. **Credits:** collapsible, with the snapshot write time.
 
@@ -36,6 +36,10 @@ List mode ships first, in phase 1. Until the TV shell is implemented in phase 2,
 ## Rules
 
 - Body text contrast ≥ 4.5:1.
-- Works with `live = null`: live sections hide or show "—".
+- Works with `live = null`: navigation and profiles remain; live sections show explicit unavailable/empty labels.
 - Apply the shared freshness rules in `docs/architecture/live-data.md`. Label each live section with its own observation age and stale/unavailable state; omit stale current-state indicators and counters. Ages update locally on the shared clock and tab resume, without polling.
 - Passes axe with no serious issues.
+
+## Local Implementation (2026-10-18)
+
+List mode currently renders at every width. Fonts are self-hosted, buttons have 44 px targets, status uses readable words and the project section has a skip link. Clipboard denial leaves selectable text and announced feedback. Shared credits are collapsible. GitHub navigation may remain stale while its activity disappears; project availability has a separate source-age label. Browser checks cover 0/1/30 projects and missing/malformed snapshots on desktop/mobile, with no axe violations. TV transitions remain phase 2 work.
