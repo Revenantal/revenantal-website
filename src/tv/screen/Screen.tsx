@@ -2,6 +2,7 @@ import type { ChannelManifest, ChannelProps } from "@channels/_shared/types";
 import { BLOOM_FILTER } from "../effects/BloomFilter";
 import { CHANNEL, SCREEN } from "../geometry";
 import { ChannelFrame } from "./ChannelFrame";
+import type { ChannelFrameProps } from "./ChannelFrame";
 import { NoSignal } from "./NoSignal";
 import { PowerOff } from "./PowerOff";
 import { Snow } from "./Snow";
@@ -30,6 +31,8 @@ export type ScreenProps = {
   detune?: number;
   /** Phosphor bloom on the picture. */
   bloom?: boolean;
+  /** Creates each mounted channel's sound scope. */
+  createAudioScope?: ChannelFrameProps["createAudioScope"];
 };
 
 // Title-safe channels are inset and slightly smaller; full-bleed ones fill the glass.
@@ -73,6 +76,7 @@ export function pictureFilter(bloom: boolean, detune: number) {
  * @param props.offKey - Power-off collapse counter.
  * @param props.detune - Drag distance from the nearest detent.
  * @param props.bloom - Whether the phosphor bloom filter applies.
+ * @param props.createAudioScope - Creates each channel's sound scope.
  * @returns The screen contents.
  */
 export function Screen({
@@ -89,6 +93,7 @@ export function Screen({
   offKey = 0,
   detune = 0,
   bloom = false,
+  createAudioScope,
 }: ScreenProps) {
   if (!power) return offKey > 0 ? <PowerOff key={offKey} /> : null;
   const frame = manifest?.safe && !switching ? SAFE : FULL;
@@ -123,6 +128,7 @@ export function Screen({
                 props={{ ...props, broadcast, active: visible && detune === 0 }}
                 onTune={onTune}
                 onPowerOff={onPowerOff}
+                createAudioScope={createAudioScope}
               />
             ) : (
               <NoSignal key={shown} running={running} />

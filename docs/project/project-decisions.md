@@ -193,7 +193,8 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 ### Controls build notes (2026-10-18)
 
 - The registry (`src/channels/index.ts`, task 2.4) is `{ 11: null }` until the first channel is approved: 11 slots, all NO SIGNAL. `createLineup` still rejects an all-empty registry by default; the registry passes `allowNoChannels` for phase 2 only, to be removed when the first channel registers. Reserved IDs (`tv-guide` 1, `status` 10, `credits` 11) let SERVERS and Credits tune before their manifests exist; a registered manifest always wins and a conflicting one fails validation.
-- Until the audio engine (2.6) and input capture/saves (4.3), the host passes inert `play`, `setLoop`, capture and save callbacks and an effective `volume` of 0, so the full contract is already in place for channels.
+- Since task 2.6 the host passes real scoped `play`/`setLoop` (`src/audio/channel-scope.ts`) and the effective `volume`. Capture and save callbacks stay inert until 4.3.
+- Channel sound assets must be same-origin files under `/assets/`; any other `src` is ignored. `setLoop(id, false)` keeps the loop off (including `on-active` loops) until `setLoop(id, true)`.
 - TV-wide keys (↑/→, ↓/←, +/−) use a document listener in `tv/controls/tv-keys.ts`, the input layer that owns window listeners, instead of a focusable wrapper. Text fields, sliders and modified keys keep their own keys.
 - Owner feedback on the first controls preview: the volume knob photo no longer rotates (it wobbled off-centre); only a light index tick turns ±135°, per `controls.md`. The knob turns by dragging round it (27° per step, relative to where it was grabbed), like the channel dial, replacing the prototype's up/down drag. TV images can no longer be dragged by the browser.
 - Panel button and switch labels use Archivo Narrow (the spec's TV UI font) rather than the prototype's Bungee and JetBrains Mono, avoiding two extra fonts.

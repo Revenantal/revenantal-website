@@ -11,7 +11,16 @@ import type {
   ChannelManifest,
   ChannelProps,
 } from "@channels/_shared/types";
+import type { ChannelAudio } from "@data/types";
 import styles from "./Screen.module.css";
+
+/** The part of an audio scope a channel frame drives. */
+export type AudioScope = {
+  play: ChannelProps["play"];
+  setLoop: ChannelProps["setLoop"];
+  setActive: (active: boolean) => void;
+  dispose: () => void;
+};
 
 /** One mounted channel scope. Remount (key by position) to start a new scope. */
 export type ChannelFrameProps = {
@@ -19,6 +28,8 @@ export type ChannelFrameProps = {
   props: Omit<ChannelProps, "host">;
   onTune: (id: string) => boolean;
   onPowerOff: () => void;
+  /** Creates this channel's sound scope; omitted in tests without audio. */
+  createAudioScope?: (audio: ChannelAudio | undefined) => AudioScope;
 };
 
 type Load =
@@ -37,6 +48,7 @@ type Load =
  * @param props.props - Every channel prop except the host.
  * @param props.onTune - Tunes the TV to a channel ID; returns whether it was accepted.
  * @param props.onPowerOff - Turns the TV off through the normal power action.
+ * @param props.createAudioScope - Creates the scoped play/setLoop for this channel.
  * @returns The channel, a loading state or an error state.
  */
 export function ChannelFrame({
@@ -44,6 +56,7 @@ export function ChannelFrame({
   props,
   onTune,
   onPowerOff,
+  createAudioScope,
 }: ChannelFrameProps) {
   const [load, setLoad] = useState<Load>({ status: "loading" });
   const [attempt, setAttempt] = useState(0);
@@ -79,6 +92,35 @@ export function ChannelFrame({
       current = false;
     };
   }, [manifest, attempt]);
+
+  // One sound scope per mounted channel: active only while the channel is, gone on unmount.
+  const scopeRef = useRef<AudioScope | null>(null);
+  useEffect(() => {
+    const scope = createAudioScope?.(manifest.audio) ?? null;
+    scopeRef.current = scope;
+    return () => {
+      scope?.dispose();
+      scopeRef.current = null;
+    };
+  }, [createAudioScope, manifest]);
+  useEffect(() => {
+    scopeRef.current?.setActive(props.active && load.status === "ready");
+  }, [props.active, load.status]);
+  const sound = useMemo(
+    () => ({
+      play: (id: string, options?: Parameters<ChannelProps["play"]>[1]) => {
+        scopeRef.current?.play(id, options);
+      },
+      setLoop: (
+        id: string,
+        playing: boolean,
+        options?: Parameters<ChannelProps["setLoop"]>[2],
+      ) => {
+        scopeRef.current?.setLoop(id, playing, options);
+      },
+    }),
+    [],
+  );
 
   const host = useMemo<ChannelHost>(
     () => ({
@@ -118,7 +160,12 @@ export function ChannelFrame({
   const { Component } = load;
   return (
     <div className={styles.picture} data-anim="on">
-      <Component {...props} host={host} />
+      <Component
+        {...props}
+        {...sound}
+        volume={props.active ? props.volume : 0}
+        host={host}
+      />
     </div>
   );
 }

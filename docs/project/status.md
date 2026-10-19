@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 2, the TV shell: 2.6 audio engine, part 1 (TV sounds and ambient) in review, then part 2 (scoped channel audio). Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
+**Current focus:** Phase 2, the TV shell: 2.6 part 2 (scoped channel audio) in review, then 2.7 persistence, URLs and TV/List transitions. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
 
 **Last updated:** 2026-10-18
 
@@ -38,7 +38,7 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 2.3 Controls and compact dial
 - [x] 2.4 Screen and channel host
 - [x] 2.5 Display effects
-- [ ] 2.6 Audio engine — TV sounds, ambient bed and unlock on `feat/2.6-audio-engine`; scoped channel `play`/`setLoop` next
+- [ ] 2.6 Audio engine — TV sounds and ambient merged (#19); scoped channel audio on `feat/2.6-channel-audio`
 - [ ] 2.7 Persistence, URLs and TV/List transitions
 - [ ] 2.8 TV accessibility pass
 - [ ] **Gate 2**
@@ -143,6 +143,8 @@ Task 2.4, part 2 on `feat/2.4-power-tuning`: 0.9 s boot on page load; 3.3 s warm
 Task 2.5 on `feat/2.5-display-effects`: effect precedence resolver with exhaustive tests (viewer × channel × perf × reduced motion), scanlines that fade between strengths, a gentle flicker that also makes the room light breathe, phosphor bloom, vignette (heavier for title-safe channels) and glass dust, 1.35× room light during static, settings-door switches and amber lamps driven by the resolver, and the silent performance fallback (1.2 s settle, 1.5 s sample, under 42 fps drops bloom, then flicker). OSD softened by owner request. Browser check: switches toggle the layers, axe clean, no errors. 245 tests; initial JS 47.1 kB.
 
 Task 2.6, part 1 on `feat/2.6-audio-engine`: `src/audio/engine.ts` plays the ten TV recordings at volume/10 × 0.9 × the event factor (synthesized fallbacks if a file is missing), runs the hum, whine and hiss bed, unlocks on the first gesture and suspends while the tab is hidden. Dial, static, volume, buttons (press and release), switches, CRD, note, door and power (with the CRT warm-up sound) are wired. Browser check: no context before a gesture, all 10 files decode after the first click, sounds start, no autoplay warnings. 250 tests; initial JS 48.9 kB.
+
+Task 2.6, part 2 on `feat/2.6-channel-audio`: per-channel sound scopes (manifest-declared `/assets/` one-shots and loops only; unknown IDs ignored; nothing queued before unlock; one voice per loop; `on-active` and `manual` starts; music fades in over 0.6 s and ducks to 30% under the OSD; asset × local × viewer gain applied once; stops while inactive, muted or hidden and resumes; nothing survives dispose), wired through the channel frame with the effective `volume` prop (0 while locked, off, muted or inactive). 257 tests; initial JS 49.9 kB. Instrumented browser check unchanged: silent before a gesture, all 10 TV sounds decode and play.
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 

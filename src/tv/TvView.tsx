@@ -146,9 +146,16 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
   useEffect(() => {
     audio.preload();
   }, [audio]);
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
   const [unlockAudio] = useState(() => () => {
-    void audio.unlock();
+    void audio.unlock().then(() => {
+      setAudioUnlocked(audio.unlocked);
+    });
   });
+  const [createAudioScope] = useState(
+    () => (manifestAudio: Parameters<typeof audio.createScope>[0]) =>
+      audio.createScope(manifestAudio),
+  );
   useAudioUnlock(unlockAudio);
 
   const tune = (position: number) => {
@@ -215,6 +222,9 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
   useEffect(() => {
     audio.setHidden(!visible);
   }, [audio, visible]);
+  useEffect(() => {
+    audio.setDucked(power && osd !== null);
+  }, [audio, power, osd]);
   const manifest = manifestAt(shown);
   const effects = resolveEffects({
     viewer: settings,
@@ -337,10 +347,15 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
                 credits: site?.credits ?? [],
                 now,
                 reducedMotion,
-                // Audio arrives in 2.6, capture and saves in 4.3; until then these are inert.
-                volume: 0,
+                // Effective volume before the channel's active state; the frame zeroes it when inactive.
+                volume:
+                  audioUnlocked && power && settings.snd
+                    ? settings.volume / 10
+                    : 0,
+                // The frame replaces these with the channel's own sound scope.
                 play: () => undefined,
                 setLoop: () => undefined,
+                // Capture and saves arrive in 4.3; until then these are inert.
                 captions: settings.captions,
                 setCaptions: actions.setCaptions,
                 captured: false,
@@ -353,6 +368,7 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
               offKey={reducedMotion ? 0 : offKey}
               detune={detune}
               bloom={effects.bloom}
+              createAudioScope={createAudioScope}
               onPowerOff={() => {
                 changePower(false);
               }}
