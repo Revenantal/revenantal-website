@@ -80,6 +80,12 @@ Don't use `--no-verify`.
 - Name the build-plan task in Context.
 - Update `docs/project/status.md` and any affected spec doc in the same PR.
 
+### Dependabot PRs
+
+- Check that each new action pin matches its release tag, read the release notes for major versions, and confirm CI passes. `@types/node` stays on the Node 24 runtime's major version.
+- Squash-merge with your own message so GitHub does not add a `Co-authored-by: dependabot[bot]` trailer, which the attribution check rejects: `gh pr merge <n> --squash --subject "<PR title> (#<n>)" --body "Bumps <dependency> from <old> to <new>."`.
+- If a merge leaves another Dependabot PR conflicting, comment `@dependabot rebase` on it.
+
 ## Required Checks (CI)
 
 `ci.yml` runs on every PR and push to `main`:

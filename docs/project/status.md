@@ -33,7 +33,7 @@ What is built and where things are. Tick an item when its task has reached `main
 
 ## Phase 2 — TV Shell
 
-- [ ] 2.1 Asset tools (sprites, sounds, fonts) — implemented on `feat/2.1-asset-tools`; awaiting PR
+- [x] 2.1 Asset tools (sprites, sounds, fonts)
 - [ ] 2.2 Stage and cabinet
 - [ ] 2.3 Controls and compact dial
 - [ ] 2.4 Screen and channel host
@@ -125,6 +125,8 @@ Owner content review answers: GitHub projects now use each repository's descript
 Owner completed the 1.10 review: the project list stays automatic from GitHub with an `exclude` list in content/directory.json (names matched case-insensitively, kept out of public site.json; the live job gets its own full content copy). This site's repository stays listed, the Discord name may be public and server names stay as the panel reports them. Ticked 1.10 and Gate 1: tooling, CI and hooks work; List mode shows projects, servers and live data from the shared store with freshness handling and axe-clean checks; runtime snapshots update without a site rebuild (Caddy checks).
 
 Task 2.1 on `feat/2.1-asset-tools`: `tools/assets/tv_sprites.py` cuts the frame and nine control sprites from the source photo (frame 107 KB, sprites 1–5 KB) and matches the approved reference sprites to within 2–5 levels on average. `tools/assets/tv_sounds.py` produces the ten TV sounds as mono 44.1 kHz AAC 96 kbps (about 80 KB total), peaks −0.8 to −2.3 dBFS after encoding. Fonts stay on `@fontsource`. Sound and TV artwork credits are restored, with a test tying sound sources and TV art to credits.
+
+Merged PR #8 (task 2.1) and reviewed Dependabot: merged #2–#6 (checkout 7, setup-node 7, pnpm/action-setup, setup-buildx 4, login-action 4; pins verified against tags), closed #7 (@types/node 26 does not match the Node 24 runtime) and ignored its future majors. GitHub's default squash added `Co-authored-by: dependabot[bot]` to those five commits, so the CI attribution check failed the #5 push; history was not rewritten. Later Dependabot merges use a custom squash message (git-workflow.md).
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 
