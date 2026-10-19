@@ -25,7 +25,8 @@ export function App({ store }: AppProps) {
   const wide = useMediaQuery(TV_MIN_WIDTH);
   useEffect(() => startPageClock(store.tick), [store]);
   const view = store.getView();
-  if (tvPreview && wide) return <TvView snapshot={snapshot} actions={store} />;
+  if (tvPreview && wide)
+    return <TvView snapshot={snapshot} view={view} actions={store} />;
   if (snapshot.site && view)
     return <ListView site={snapshot.site} view={view} now={snapshot.now} />;
   return (

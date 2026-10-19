@@ -3,6 +3,9 @@ import { useSyncExternalStore } from "preact/compat";
 /** Viewports narrower than this always use List mode; the TV is not rendered. */
 export const TV_MIN_WIDTH = "(min-width: 900px)";
 
+/** Viewers who ask for less motion; channels choose their static versions. */
+export const TV_REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+
 /**
  * Subscribes to a CSS media query. Lives in the TV input layer, which owns window listeners.
  *

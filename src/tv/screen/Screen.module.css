@@ -1,0 +1,97 @@
+.space {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transform-origin: 0 0;
+}
+
+.picture {
+  position: relative;
+  width: 760px;
+  height: 570px;
+  overflow: hidden;
+}
+
+/* A new picture powers on from a bright horizontal line. */
+.picture[data-anim="on"] {
+  animation: tv-on 0.38s ease-out;
+}
+
+.picture[data-anim="static"] {
+  background: #777;
+}
+
+.roll {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 22%;
+  background: rgb(255 255 255 / 18%);
+  animation: tv-roll 0.5s linear infinite;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 6px 22px;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-osd);
+  font-size: 40px;
+  transform: translate(-50%, -50%);
+}
+
+.message {
+  display: grid;
+  gap: 12px;
+  place-content: center;
+  height: 100%;
+  color: #fff;
+  font-family: var(--font-osd);
+  font-size: 28px;
+  text-align: center;
+}
+
+.message button {
+  justify-self: center;
+  padding: 6px 18px;
+  border: 2px solid #fff;
+  background: #000;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.message button:focus-visible {
+  outline: var(--focus-width) solid var(--color-tv-focus);
+  outline-offset: var(--focus-offset);
+}
+
+@keyframes tv-on {
+  0% {
+    filter: brightness(4);
+    transform: scale(1, 0.012);
+  }
+
+  55% {
+    filter: brightness(1.6);
+    transform: scale(1, 1.04);
+  }
+
+  100% {
+    filter: none;
+    transform: none;
+  }
+}
+
+@keyframes tv-roll {
+  0% {
+    top: -30%;
+  }
+
+  100% {
+    top: 110%;
+  }
+}
