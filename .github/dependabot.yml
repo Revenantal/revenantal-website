@@ -16,3 +16,11 @@ updates:
     directory: /
     schedule:
       interval: weekly
+  - package-ecosystem: docker
+    directories: [/, /jobs/live]
+    schedule:
+      interval: weekly
+    ignore:
+      # The live job stays on the Node 24 runtime until it moves deliberately.
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]

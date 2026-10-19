@@ -203,6 +203,15 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - The owner changed the hint note to appear on every page load (2026-10-19), not only on a first visit. Dismissal lasts until the next load; the `rv-hint` storage key is dropped.
 - The on-screen display uses VT323 (`@fontsource/vt323`, credited) and sits in the 760×570 channel space scaled into the glass. Channel and volume changes are announced through one polite live region.
 
+### Dependency review (2026-10-19)
+
+- Every dependency is on its latest version except these, held back deliberately. Revisit when the blocker clears; Dependabot raises the updates.
+  - TypeScript 6.0 (not 7): `typescript-eslint` supports TypeScript below 6.1 only.
+  - ESLint and `@eslint/js` 9 (not 10): `eslint-plugin-jsx-a11y` supports ESLint up to 9 only.
+  - `@babel/core` 7 (not 8): `@preact/preset-vite` requires Babel 7.
+  - Node 24 and `@types/node` 24 (not 26): Node 26 is not LTS yet. Move the runtime, CI, Docker image and types together once it is.
+- The live-job image moved to Node 24.22.0, and Dependabot now watches both Dockerfiles (Node majors ignored, like `@types/node`). Caddy 2.11.7 and the reference tools were already current.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.
