@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 2, the TV shell: 2.8 the TV accessibility pass and Gate 2. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
+**Current focus:** Phase 3, launch: 3.1 the channel contract tests, then the plan review for the first channel. Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
 
 **Last updated:** 2026-10-19
 
@@ -40,8 +40,8 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 2.5 Display effects
 - [x] 2.6 Audio engine
 - [x] 2.7 Persistence, URLs and TV/List transitions
-- [ ] 2.8 TV accessibility pass — on `feat/2.8-tv-accessibility`, in review
-- [ ] **Gate 2**
+- [x] 2.8 TV accessibility pass
+- [x] **Gate 2**
 
 ## Phase 3 — Launch
 
@@ -227,3 +227,7 @@ Follow-up completed locally on 2026-10-18: F01–F03 are resolved in the specifi
 Pelican Panel beta38 list/resources responses were supplied and mapped. The restricted account works with zero selected subuser permissions; the owner reports manual assignments complete. The owner confirmed public panel access and one shared games.revenantal.com hostname. The local agent/SSH approach is superseded. Scheduled-host authentication, container execution and actual player-count queries still require verification. Upgrade-to-v1 compatibility is unverified.
 
 See `project-decisions.md` → Open Items.
+
+Task 2.8 (merged in #22): keyboard-only run at 1280×650 and 1920×1080 with the spec's Tab order and visible focus on every stop; the dial's name follows the spec; focus moves to the dial when the hint note falls or the TV turns on; door switches fill the compartment (the 20 px pitch at 1280×650 is an owner-accepted limit); reduced motion also drops the tune snap and freezes the snow. 268 tests.
+
+Gate 2 (2026-10-19): the TV reads the shared store and data; no dial numerals render; detents, gaps, wraparound and a 14-slot dial are covered by unit and component tests; every position shows NO SIGNAL; power-off, under 900 px and reduced motion return to List mode (axe clean). Every control was run by mouse, keyboard and touch (emulated touchscreen: taps on every control, dial and volume drags, no page scroll while dragging). The touch run found that after a touch drag the dial and volume knob ignored the next tap, because a touch drag ends without the click the skip-one-click flag expected; fixed and tested. A real phone or tablet check is still worth doing. 271 tests. No individual channel is built or approved.
