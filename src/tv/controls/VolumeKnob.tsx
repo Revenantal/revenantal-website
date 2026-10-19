@@ -85,6 +85,8 @@ export function VolumeKnob({ volume, onChange }: VolumeKnobProps) {
   };
 
   const onPointerDown = (event: TargetedPointerEvent<HTMLDivElement>) => {
+    // A touch drag ends without a click, so the skip-one-click flag resets on each new press.
+    draggedRef.current = false;
     dragRef.current = { angle: angleOf(event), acc: 0, volume, moved: false };
     event.currentTarget.setPointerCapture(event.pointerId);
   };

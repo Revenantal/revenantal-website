@@ -165,6 +165,12 @@ describe("TV view", () => {
     fireEvent.pointerMove(slider, { clientX: 10, clientY: 50, pointerId: 1 });
     expect(store.getSnapshot().settings.volume).toBe(10);
     fireEvent.pointerUp(slider, { pointerId: 1 });
+
+    // A touch drag ends without a click; the next tap still counts.
+    fireEvent.pointerDown(slider, { clientX: 20, clientY: 50, pointerId: 2 });
+    fireEvent.pointerUp(slider, { pointerId: 2 });
+    fireEvent.click(slider, { clientX: 20, clientY: 50 });
+    expect(store.getSnapshot().settings.volume).toBe(9);
   });
 
   it("cancels drags that start anywhere on the TV", () => {

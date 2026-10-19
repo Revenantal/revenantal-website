@@ -81,6 +81,8 @@ export function Dial({
   };
 
   const onPointerDown = (event: TargetedPointerEvent<HTMLButtonElement>) => {
+    // A touch drag ends without a click, so the skip-one-click flag resets on each new press.
+    draggedRef.current = false;
     dragRef.current = { start: angleOf(event), moved: false };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
