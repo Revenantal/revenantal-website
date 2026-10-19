@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 3, launch: 3.4 the TV Guide (approved 2026-10-19); the forecast service (3.3) is in review. Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. Status and the TV Guide are approved; Status is built.
+**Current focus:** Phase 3, launch: 3.4 the TV Guide (approved 2026-10-19) in review, then the forecast panel (3.5). Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. Status and the TV Guide are approved; Status is built.
 
 **Last updated:** 2026-10-19
 
@@ -47,7 +47,7 @@ What is built and where things are. Tick an item when its task has reached `main
 
 - [x] 3.1 Channel contract and tests
 - [x] 3.2 Channel 10 — Status
-- [ ] 3.3 Forecast endpoint
+- [x] 3.3 Forecast endpoint
 - [ ] 3.4 Channel 1 — TV Guide — approved by the owner 2026-10-19; on `feat/3.4-tv-guide`, in review
 - [ ] 3.5 TV Guide forecast and radar
 - [ ] 3.6 Channel 11 — Credits and shared attributions
@@ -235,5 +235,7 @@ Gate 2 (2026-10-19): the TV reads the shared store and data; no dial numerals re
 Task 3.1 (merged in #24): `describeChannelContract(manifest)` in `src/channels/_shared/testing/` is the shared contract each channel's own `contract.test.tsx` runs, so `pnpm test:channel <id>` includes it. It checks manifests and lazy loading, rendering across every fixture case with frozen props, project links, forbidden side effects (global listeners, network, storage, own audio), pausing while inactive and cleanup after unmount. A sample channel passes; broken variants fail the matching check. The registry now validates each manifest's kind, colours, display profile and audio. Host actions are tested through the real TV and store, and the real registry is guarded at the launch positions. 294 tests; initial JS 51.4 kB. No channel is built or approved.
 
 Task 3.2 (merged in #25): the Status rack at position 10, built from data (patch panel and switch, projects, game servers, power and UPS), with live LEDs, VFD displays, section signs with per-source captions, and the snapshot age in the footer. Projects are new-tab links and game servers copy-address buttons in Tab order; the rack pans to centre the focused unit, and the wheel pans it. Stale and missing data show as unknown, never down, with no player totals. Full bleed, zoomed 1.4× by owner request. Channels now receive a `freshness` prop. Press Start 2P and the rack art are credited. The phase 2 empty-lineup option is gone. Browser check at 1920×1080 on real data: SERVERS tunes here, focus centres each server, arrows still turn the dial, axe clean, no errors. 312 tests; initial JS 52.3 kB; Status chunk 6.4 kB of 30 kB.
+
+Task 3.3 (merged in #26): the private weather service in `api/forecast/` (trusted-peer address, DB-IP city lookup, Open-Meteo forecast, RainViewer frames and tiles, per-client and global limits, LRU caches, coalescing, deadlines, size caps, fixed hosts, no logging), its bundled build and image, Caddy routing that stays closed until `FORECAST_UPSTREAM` is set, the compose example and deploy workflow steps, and a CI container check. Verified locally end to end with the real database, providers and Caddy 2.11.7, including spoofing, untrusted-edge and DNT cases. 342 tests. Weather stays off until the 3.7 hosting checks.
 
 Task 3.4 on `feat/3.4-tv-guide`: the TV Guide at position 1. The large Local Forecast window (soft static and "Forecast not available" until 3.5 or while unavailable), the station box with the viewer's own clock and date and the channels on the dial, the half-hour time header, auto-drifting listings (projects with LIVE badges, game servers, Steam, latest GitHub push, other channels) that pause on hover, focus and when inactive, and a current-state LIVE ticker read once to screen readers. Full bleed with padded content and no Coming up, by owner request. Archivo Black credited. Browser check on real data: axe clean, no errors. 336 tests; Guide chunk about 5 kB of 30 kB. The forecast panel follows in 3.5.

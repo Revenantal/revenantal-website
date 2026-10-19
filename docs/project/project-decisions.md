@@ -254,6 +254,14 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - **Sound:** silent at launch; jazz loop, row tick and promo stinger to be proposed for approval later.
 - **Radar map:** bundled simplified Natural Earth land and coastlines, as specified.
 
+### Forecast service (2026-10-19)
+
+- Task 3.3 builds the weather service to the spec in `docs/architecture/forecast-and-radar.md` (see its Implementation section). It stays off: Caddy answers weather routes as unavailable until `FORECAST_UPSTREAM` is set after the 3.7 checks.
+- The city database is DB-IP Lite City (MMDB, CC BY 4.0), read with `mmdb-lib` (MIT, no dependencies). It is downloaded monthly at deploy (`pnpm fetch:dbip`) and never committed.
+- RainViewer tiles are fixed server-side at 256 px, colour scheme 2, smoothed with snow shown. The service exposes frame IDs (their timestamps), never upstream paths.
+- A 429 or other non-200 answer from the service means "skip the forecast segment"; the TV Guide never shows a fixed city or stale weather.
+- DB-IP, Open-Meteo, RainViewer and Natural Earth join the shared credits when the panel ships (3.5).
+
 ### Dependency review (2026-10-19)
 
 - Every dependency is on its latest version except these, held back deliberately. Revisit when the blocker clears; Dependabot raises the updates.

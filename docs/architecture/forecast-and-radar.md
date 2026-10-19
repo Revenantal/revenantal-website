@@ -57,6 +57,18 @@ Test two visitors in different cities through real ingress; responses cannot be 
 
 Exercise cache eviction/expiry, coalescing, limits, aborts, timeouts, oversized/invalid upstream data, denied redirects/hosts, invalid tiles/frames and missing coverage. Browser requests must remain same-origin. Check credits visually and by keyboard at authored panel size. Gate 3 requires these checks; failure leaves weather disabled while the guide works.
 
+## Implementation (task 3.3)
+
+The service is built and stays off until the 3.7 checks pass. Code is in `api/forecast/`: `client-address.ts` (trusted peer and public-address checks), `locate.ts` (DB-IP lookup), `forecast.ts` (Open-Meteo), `radar.ts` (RainViewer), `upstream.ts` (the only outbound client), `limits.ts`, `lru.ts` and `handler.ts`. Response types `Forecast` and `RadarFrames` are in `src/data/types.ts` for the TV Guide.
+
+- **Settings:** the service reads `PORT` (8090), `TRUSTED_PEERS` (the site Caddy's exact address or range; unset trusts nobody) and `DBIP_PATH`. The site's Caddy reads `TRUSTED_EDGE` (the edge proxy; unset trusts nobody) and `FORECAST_UPSTREAM` (unset sends weather routes to a closed port, so they answer `{"error":"weather_unavailable"}` 503). See `deploy/compose.example.yml`.
+- **Responses:** 200 with the forecast, frames or a PNG tile; 204 for DNT or Save-Data (before any lookup); 403 `cross_origin` without same-origin fetch metadata; 429 `rate_limited`; 503 `unavailable` (no trusted public address or no city) or `upstream`; 404 for invalid tiles or frames. The TV Guide treats anything but 200 as "skip the segment".
+- **City database:** `pnpm fetch:dbip` downloads this month's DB-IP Lite city MMDB (or last month's) into `.cache/forecast/`; the deploy workflow runs it before building `revenantal-forecast`. Without it the service starts and answers every forecast as unavailable.
+- **Logs:** a startup line and hourly aggregate counts by route and bounded code. No addresses, places or request details.
+- **Verified locally (2026-10-19):** the bundled service with the real database and providers (8.8.8.8 → Mountain View in °F and mph; a UK address → London in °C and km/h; three radar frames; a real PNG tile); then edge → Caddy 2.11.7 → service with a trusted and an untrusted edge, a forged `X-Real-IP`, a missing address and DNT. Logs held no addresses. CI builds the image without the database and checks that it starts read-only as user 10001 and fails closed.
+- **Pending (3.7):** two real visitors through the real ingress, platform log inspection, and the exact edge and Caddy peers.
+- DB-IP's requested attribution text is "IP Geolocation by DB-IP"; the panel footer (3.5) uses that wording.
+
 ## Local Time
 
 Clocks use the viewer’s time zone and locale through Intl, independent of location lookup. 12- or 24-hour format follows the locale.

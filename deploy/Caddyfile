@@ -5,6 +5,12 @@
 	log default {
 		level WARN
 	}
+	# Only the edge proxy may name the visitor's address. Unset, nothing is trusted, the
+	# visitor address stays the edge's private one, and the weather service refuses it.
+	servers {
+		trusted_proxies static {$TRUSTED_EDGE:192.0.2.1/32}
+		trusted_proxies_strict
+	}
 }
 
 :{$PORT:8080} {
@@ -31,11 +37,31 @@
 		file_server
 	}
 
+	# Weather goes to the private forecast service, which is off until FORECAST_UPSTREAM is set
+	# (task 3.7). No access logs are written for any route. Visitor address headers are
+	# replaced with the one validated address; nothing else about the visitor is forwarded.
 	@weather path /api/forecast /api/radar /api/radar/*
 	handle @weather {
-		header Cache-Control "private, no-store"
-		header Content-Type application/json
-		respond `{"error":"weather_unavailable"}` 503
+		# Deferred, so it replaces the service's copy instead of adding a second header.
+		header >Cache-Control "private, no-store"
+		reverse_proxy {$FORECAST_UPSTREAM:127.0.0.1:9} {
+			header_up -Forwarded
+			header_up -X-Forwarded-For
+			header_up -X-Forwarded-Host
+			header_up -X-Forwarded-Proto
+			header_up -Cookie
+			header_up X-Real-IP {client_ip}
+			header_down -Server
+		}
+	}
+
+	handle_errors {
+		@weatherDown path /api/forecast /api/radar /api/radar/*
+		handle @weatherDown {
+			header Cache-Control "private, no-store"
+			header Content-Type application/json
+			respond `{"error":"weather_unavailable"}` 503
+		}
 	}
 
 	handle /api/* {

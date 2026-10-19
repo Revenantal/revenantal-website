@@ -194,3 +194,32 @@ export type LiveServer = {
   nextRestart?: string; // Pelican schedules (extra permission)
   lastBackup?: string; // Pelican backups (extra permission)
 };
+
+/** GET /api/forecast: the visitor's approximate city and its forecast. Nothing else. */
+export type Forecast = {
+  city: string;
+  country: string; // ISO 3166-1 alpha-2
+  units: "C" | "F"; // °F for US visitors, °C elsewhere
+  windUnit: "km/h" | "mph";
+  latitude: number; // city centre, rounded to two decimals
+  longitude: number;
+  observedAt: string; // ISO time of the current conditions
+  current: {
+    temperature: number;
+    weatherCode: number; // WMO code
+    windSpeed: number;
+    isDay: boolean;
+  };
+  daily: {
+    date: string; // YYYY-MM-DD in the city's time zone
+    high: number;
+    low: number;
+    weatherCode: number;
+    precipitationChance: number | null; // percent
+  }[];
+};
+
+/** GET /api/radar/frames: recent past radar frames, newest last. */
+export type RadarFrames = {
+  frames: { id: string; time: string }[]; // tiles: /api/radar/tiles/<id>/<z>/<x>/<y>.png
+};

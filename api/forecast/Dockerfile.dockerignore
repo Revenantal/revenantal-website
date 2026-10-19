@@ -1,0 +1,8 @@
+**
+!api/
+!api/forecast/
+!api/forecast/Dockerfile
+!.cache/
+!.cache/forecast/
+!.cache/forecast/main.mjs
+!.cache/forecast/dbip-city-lite.mmdb
