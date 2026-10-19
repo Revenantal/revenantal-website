@@ -42,10 +42,14 @@
   top: 50%;
   left: 50%;
   padding: 6px 22px;
-  background: #000;
-  color: #fff;
+
+  /* Part of the broadcast, not pasted on top: snow shows through and the edges soften. */
+  background: rgb(0 0 0 / 62%);
+  color: rgb(235 235 235 / 80%);
   font-family: var(--font-osd);
   font-size: 40px;
+  text-shadow: 0 0 6px rgb(255 255 255 / 45%);
+  filter: blur(0.6px);
   transform: translate(-50%, -50%);
 }
 
