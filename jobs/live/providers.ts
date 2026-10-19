@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { webUrlSchema } from "../../src/data/schemas.ts";
 import { readPelican } from "./pelican/provider.ts";
 import type { Live, Site } from "../../src/data/types.ts";
 import type { SourceReaders } from "./collect.ts";
@@ -15,6 +16,7 @@ const reposSchema = z.array(
   z.object({
     id: count,
     description: z.string().nullable().optional(),
+    homepage: z.string().nullable().optional(),
     archived: z.boolean().optional(),
     name: z.string(),
     html_url: z.url(),
@@ -93,6 +95,36 @@ export function mapSteam(values: unknown[]): NonNullable<Live["steam"]> {
 }
 
 /**
+ * Collapses whitespace and control characters and caps a repository description.
+ *
+ * @param value - Untrusted GitHub description.
+ * @returns Display text of at most 200 characters, or undefined when empty.
+ */
+function cleanDescription(
+  value: string | null | undefined,
+): string | undefined {
+  const clean = (value ?? "").replace(/[\p{Cc}\s]+/gu, " ").trim();
+  if (!clean) return undefined;
+  return clean.length > 200 ? clean.slice(0, 199).trimEnd() + "…" : clean;
+}
+
+/**
+ * Accepts a repository's HTTP(S) website, adding https:// to a bare domain.
+ *
+ * @param value - Untrusted GitHub homepage field.
+ * @returns The validated URL, or undefined when empty or unsafe.
+ */
+function cleanHomepage(value: string | null | undefined): URL | undefined {
+  const trimmed = (value ?? "").trim();
+  if (!trimmed) return undefined;
+  const candidate = /^[a-z][a-z0-9+.-]*:/i.test(trimmed)
+    ? trimmed
+    : `https://${trimmed}`;
+  const parsed = webUrlSchema.safeParse(candidate);
+  return parsed.success ? new URL(parsed.data) : undefined;
+}
+
+/**
  * Keeps only public, non-fork GitHub repositories and the display fields needed by views.
  *
  * @param value - Untrusted GitHub repository list.
@@ -129,17 +161,22 @@ export function mapGithub(
           ]
         : [],
     ),
-    projects: repos.map((repo, order) => ({
-      id: `github-${String(repo.id)}`,
-      name: repo.name,
-      type: "sandbox",
-      url: repo.html_url,
-      host: "github.com",
-      desc: repo.language
-        ? `${repo.language} project on GitHub.`
-        : "Code and experiments on GitHub.",
-      order,
-    })),
+    projects: repos.map((repo, order) => {
+      const homepage = cleanHomepage(repo.homepage);
+      return {
+        id: `github-${String(repo.id)}`,
+        name: repo.name,
+        type: homepage ? "site" : "sandbox",
+        url: homepage?.href ?? repo.html_url,
+        host: homepage?.hostname ?? "github.com",
+        desc:
+          cleanDescription(repo.description) ??
+          (repo.language
+            ? `${repo.language} project on GitHub.`
+            : "Code and experiments on GitHub."),
+        order,
+      };
+    }),
   };
 }
 

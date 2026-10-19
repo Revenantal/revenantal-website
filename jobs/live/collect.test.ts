@@ -129,7 +129,7 @@ describe("provider projection", () => {
       "Authorization",
     );
   });
-  it("omits archived/personal listings and raw descriptions, with stable IDs", () => {
+  it("omits archived and personal listings, with stable IDs", () => {
     const repo = {
       id: 42,
       name: "fixture",
@@ -147,6 +147,58 @@ describe("provider projection", () => {
     expect(mapped.projects).toHaveLength(1);
     expect(mapped.projects?.[0]?.id).toBe("github-42");
     expect(JSON.stringify(mapped)).not.toContain("Personal website");
+  });
+  it("uses cleaned repository descriptions, falling back to the language", () => {
+    const repo = {
+      id: 7,
+      name: "fixture",
+      html_url: "https://example.invalid/repo",
+      pushed_at: time,
+      language: "TypeScript",
+      fork: false,
+      private: false,
+    };
+    const mapped = mapGithub([
+      { ...repo, description: "  Maps\n\tthings \u0007 nicely " },
+      { ...repo, id: 8, description: "   " },
+      { ...repo, id: 9, description: null, language: null },
+      { ...repo, id: 10, description: "x".repeat(300) },
+    ]);
+    expect(mapped.projects?.map((project) => project.desc.length)).toEqual([
+      18, 29, 31, 200,
+    ]);
+    expect(mapped.projects?.[0]?.desc).toBe("Maps things nicely");
+    expect(mapped.projects?.[1]?.desc).toBe("TypeScript project on GitHub.");
+    expect(mapped.projects?.[2]?.desc).toBe("Code and experiments on GitHub.");
+    expect(mapped.projects?.[3]?.desc.endsWith("…")).toBe(true);
+  });
+  it("links a repository website when set, otherwise the repository", () => {
+    const repo = {
+      id: 20,
+      name: "fixture",
+      html_url: "https://example.invalid/repo",
+      pushed_at: time,
+      language: "TypeScript",
+      fork: false,
+      private: false,
+    };
+    const mapped = mapGithub([
+      { ...repo, homepage: "https://site.example.invalid/app" },
+      { ...repo, id: 21, homepage: "bare.example.invalid" },
+      { ...repo, id: 22, homepage: "javascript:alert(1)" },
+      { ...repo, id: 23, homepage: "https://user:pass@x.example.invalid" },
+      { ...repo, id: 24, homepage: "" },
+    ]);
+    expect(
+      mapped.projects?.map(({ url, host, type }) => [url, host, type]),
+    ).toEqual([
+      ["https://site.example.invalid/app", "site.example.invalid", "site"],
+      ["https://bare.example.invalid/", "bare.example.invalid", "site"],
+      ["https://example.invalid/repo", "github.com", "sandbox"],
+      ["https://example.invalid/repo", "github.com", "sandbox"],
+      ["https://example.invalid/repo", "github.com", "sandbox"],
+    ]);
+    expect(mapped.repos[0]?.url).toBe("https://example.invalid/repo");
   });
   it("drops private GitHub repositories, forks and unnecessary account fields", () => {
     const repo = {
