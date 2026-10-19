@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/archivo-black':
+        specifier: 5.3.0
+        version: 5.3.0
       '@fontsource/permanent-marker':
         specifier: 5.3.0
         version: 5.3.0
@@ -448,6 +451,9 @@ packages:
     peerDependenciesMeta:
       '@noble/hashes':
         optional: true
+
+  '@fontsource/archivo-black@5.3.0':
+    resolution: {integrity: sha512-7EsTIQ+Blf96ktpzTUpI7msi+u9/AJxM/GZxOSkEubVd1jSTrFSTNxMgfpX/8rQsjZ+19a+qvRbtcTEp5J/72g==}
 
   '@fontsource/archivo-narrow@5.3.0':
     resolution: {integrity: sha512-fK2Y7PdIP23+t5Dp7gh9n94zxTCdHD6M955aJ8QzR6RvW+5WgmryKySEvaCUAeSLXzA113hyW0BwEHHxHADX7Q==}
@@ -3423,6 +3429,8 @@ snapshots:
       levn: 0.4.1
 
   '@exodus/bytes@1.16.0': {}
+
+  '@fontsource/archivo-black@5.3.0': {}
 
   '@fontsource/archivo-narrow@5.3.0': {}
 

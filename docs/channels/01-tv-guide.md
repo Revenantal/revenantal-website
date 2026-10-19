@@ -4,11 +4,11 @@
 
 The home channel and the first thing new visitors see, so it sets the quality bar. A 90s cable guide channel built from glossy broadcast graphics, a mix of Prevue Channel and the Weather Channel.
 
-- **Kind:** directory · **Folder:** `tv-guide` · **Build:** tasks 3.4–3.5 (launch) · **Status:** design done (v3)
+- **Kind:** directory · **Folder:** `tv-guide` · **Build:** tasks 3.4–3.5 (launch) · **Status:** grid, clock, ticker and station box built (3.4); forecast panel next (3.5)
 
 ## Concept
 
-The screen is split like a real guide channel. The top half has a promo window that alternates between "Coming up" (a still of another channel) and a Local Forecast for the visitor's own city over a Doppler radar map. The top right shows the visitor's own clock and date. The bottom half is a scrolling listings grid, one row per project, and a live news ticker runs along the bottom.
+The screen is split like a real guide channel. The top half has a large Local Forecast window for the visitor's own city over a Doppler radar map. The top right shows the visitor's own clock and date and the other channels on the dial. The bottom half is a scrolling listings grid, one row per project, and a live news ticker runs along the bottom.
 
 It should look like broadcast graphics, not a cartoon: bevelled glossy panels, gradients, drop shadows, thin rules.
 
@@ -21,40 +21,42 @@ It should look like broadcast graphics, not a cartoon: bevelled glossy panels, g
 | Listing times  | `now` rounded to the half hour in the viewer's time zone                                                  |
 | Ticker         | `live.github` latest pushes, `live.steam` now playing, server counts, project status changes              |
 | Forecast       | From `/api/forecast` (see `docs/architecture/forecast-and-radar.md`)                                      |
-| Coming up      | Build-time stills of other channels from `public/assets/promos/`                                          |
+| On the dial    | `dial.json` in this folder, kept in step with the registry by a check                                     |
 
-The forecast is the one place a channel fetches data. That fetch lives in a small helper inside this channel folder. If it fails, the forecast segment is skipped and the promo window shows only "Coming up". It never falls back to a fixed city.
+The forecast is the one place a channel fetches data. That fetch lives in a small helper inside this channel folder. While it is unavailable (not built yet, DNT or Save-Data, no city, or a failure), the window shows soft static and "Forecast not available". It never falls back to a fixed city.
 
 ## Interaction
 
-- The grid auto-scrolls. Hover or focus pauses it.
+- The grid auto-scrolls. Hover or focus pauses it, and a focused row is moved into view. Reduced motion shows a still, manually scrollable list.
 - ↑/↓ inside the channel are not captured (the dial keeps them). Tab moves through rows; Enter opens the project in a new tab.
-- Click a row to open it. Clicking a server or Steam row tunes nothing; it's information only.
-- "Coming up" can be clicked to tune to that channel. Call `host.tune(channelId)` from props; the host resolves its assigned position and updates the normal hash. Do not import the store or hard-code a position in this control.
+- Click a row to open it. Server, Steam and GitHub rows are information only. Rows for other channels ("on the dial") tune to them.
+- Rows for other channels tune with `host.tune(channelId)`; the host resolves the position and updates the normal hash. Do not import the store or hard-code a position.
+- The station box lists the channels on the dial.
+- Projects that are up carry a LIVE badge. The ticker reports the current state only: what's playing on Steam, the latest pushes, running servers and their players, and projects that are down or slow.
 
 ## Look
 
 - Navy and blue-violet gradient panels with glossy highlights; yellow and white type; red LIVE badges.
 - Each row gets a small coloured icon by project type.
 - Fonts: Archivo Narrow (listings), Archivo Black (headers, temperatures).
-- Display profile: scan 1, flicker, glow 0.8. `safe: true`.
+- Display profile: scan 1, flicker, glow 0.8. `safe: false` (owner request): the background and ticker bar bleed to the glass edges, while the panels, time header and listings are drawn at mockup size and scaled to 90% inside a padded box (38 px sides, 24 px top), and the ticker text sits inside the same padding.
 
 ## Sound
 
-Smooth-jazz loop, a row tick and a promo stinger. See `soundscapes.md` → TV Guide.
+Silent at launch. A smooth-jazz loop, row tick and promo stinger will be proposed for owner approval (see `soundscapes.md` → TV Guide).
 
 ## Build Notes
 
 - Grid scroll uses `transform` on one element, driven by `requestAnimationFrame`, and pauses when `active` is false.
 - Same-origin RainViewer radar over bundled Natural Earth land/coastlines loads only during the active forecast segment. Keep readable Open-Meteo, RainViewer, DB-IP and Natural Earth links in the panel footer. Follow the request, privacy, caching and fallback rules in `docs/architecture/forecast-and-radar.md`.
 - °C by default, °F for US visitors (from the endpoint).
-- "Coming up" stills are captured from each built channel at build time with Playwright. Unbuilt channels are skipped.
+- Add each newly built channel to `dial.json` (ID, label, title, one-line blurb); `tools/checks/tv-guide-dial.test.ts` fails until it matches the registry.
 - Keep the forecast fetch, radar and promo rotation in separate modules so the grid can ship first (3.4) and the forecast after (3.5).
 
 ## Acceptance
 
 - Renders with 0, 1 and 30 projects, and with `live = null`.
-- Forecast missing → promo shows only "Coming up", no errors, no fixed city.
+- Forecast missing → the window shows soft static and "Forecast not available", no errors, no fixed city.
 - Clock shows the viewer's own time and format.
 - Every project and visible weather attribution reachable by keyboard.
 - Weather uses only same-origin requests; DNT/Save-Data skips lookup/radar, missing coverage is labelled, and cancellation/limits follow the weather specification.

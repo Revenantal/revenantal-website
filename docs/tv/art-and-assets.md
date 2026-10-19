@@ -56,4 +56,4 @@ Self-hosted through pinned `@fontsource` packages: import the Latin-subset CSS f
 
 ## Channel Art
 
-Per-channel art pipelines (rack sprites, Revscape fallback still, Guide "Coming up" stills) are in each channel's doc.
+Per-channel art pipelines (rack sprites, Revscape fallback still) are in each channel's doc.
