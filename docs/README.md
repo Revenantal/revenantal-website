@@ -2,7 +2,7 @@
 
 This folder is the source of truth for revenantal.com: requirements, decisions, design, technical specs, the build plan and progress.
 
-**Status:** The foundation is committed on `feat/1.1-foundation`; deployment files, shared data and GitHub-backed List mode are implemented locally. Hosting is deferred; Pelican collection is integrated into the ten-minute live job and awaits runtime verification. Track reviewed build progress in `project/status.md`.
+**Status:** Phase 1 is merged to `master` (PR #1). Hosting, the scheduler and branch protection are deferred; Gate 1 is open. Track reviewed build progress in `project/status.md`.
 
 ## Reading Order
 

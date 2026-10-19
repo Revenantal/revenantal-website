@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Finish phase 1 verification and review. Foundation is committed; deployment files, shared data and GitHub-backed List mode are implemented locally. Hosting is deferred by owner instruction; Pelican now runs directly inside the ten-minute live job, using one runtime game hostname. Finish runtime credentials, scheduled-host/player-count verification and remote/container acceptance before Gate 1.
+**Current focus:** Close Gate 1. Phase 1 merged to `master` in PR #1 (04c8ae3); CI, including container checks, passes. Remaining: hosting and the ten-minute scheduler (deferred by owner instruction), branch protection, owner review of the real project content, and the main-branch migration. Do not start the TV shell until Gate 1 is settled.
 
 **Last updated:** 2026-10-18
 
@@ -19,16 +19,16 @@ What is built and where things are. Tick an item when its task has reached `main
 
 ## Phase 1 — Foundation, Data and List Mode
 
-- [ ] 1.1 Scaffold repo — implemented locally; awaiting PR/merge
-- [ ] 1.2 Tooling and pre-commit hooks — implemented locally; awaiting PR/merge
-- [ ] 1.3 CI, deploy, branch protection — files prepared and native routing verified; Docker/remote settings and hosting pending
-- [ ] 1.4 Content schemas and files — implemented locally
-- [ ] 1.5 Store and shared UI actions — implemented and tested locally
-- [ ] 1.6 Live job — implemented; real public GitHub feed verified locally; host scheduler not installed
-- [ ] 1.7 Direct Pelican provider — implemented in the live job; real host authentication/query verification pending
-- [ ] 1.8 Server merge and overrides — implemented and fixture-tested locally
-- [ ] 1.9 List mode — implemented; desktop/mobile browser and axe checks pass locally
-- [ ] 1.10 Real project list, links and credits — scheduled GitHub navigation, public links and shared credits implemented locally
+- [x] 1.1 Scaffold repo
+- [x] 1.2 Tooling and pre-commit hooks
+- [ ] 1.3 CI, deploy, branch protection — CI passes on PRs and `master` (container checks included); deploy publication, Coolify and branch protection pending hosting
+- [x] 1.4 Content schemas and files
+- [x] 1.5 Store and shared UI actions
+- [ ] 1.6 Live job — merged; all sources verified locally with real credentials; host scheduler not installed
+- [x] 1.7 Direct Pelican provider — real panel discovery, resources and rates verified locally; Factorio counts accepted as absent; Minecraft counts untested on a live server
+- [x] 1.8 Server merge and overrides
+- [x] 1.9 List mode
+- [ ] 1.10 Real project list, links and credits — merged; awaiting owner content review
 - [ ] **Gate 1**
 
 ## Phase 2 — TV Shell
@@ -113,6 +113,8 @@ Opened PR #1 (feat/1.1-foundation → master). The first CI run failed only at t
 Added deploy/.env.example (SITE_TAG) and completed deploy/.env.live.example with every live-job variable, including optional paths. A test fails when the job reads a variable missing from the example. Runtime credentials are configured locally; the scheduled host is not set up.
 
 Local runtime check with owner credentials in ignored deploy/.env.live: GitHub, project status, Steam and Pelican all succeed. Discovery found four assigned servers; the running one reports uptime, CPU and memory, and a second run produced network rates from the persisted baseline. Two servers report the panel state "missing", published as unknown. The Factorio player count is absent: the public listing service returns "no game for given host_address" for games.revenantal.com and its IP on port 34197, so the server is not publicly listed. The owner accepts Factorio without counts. Minecraft player counts are untested because no Minecraft server was running. Runs were local, not on the scheduled host.
+
+PR #1 squash-merged to `master` as 04c8ae3 after CI passed on its final commit. Ticked 1.1, 1.2, 1.4, 1.5, 1.7, 1.8 and 1.9. 1.3 and 1.6 wait on hosting and the scheduler; 1.10 waits on owner review of the real project content. The repo still uses `master`; the move to `main` stays a deliberate hosting-setup step.
 
 ## Channel Build Approvals
 
