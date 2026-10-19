@@ -2,6 +2,11 @@
   min-height: 100svh;
 }
 
+.set:focus-visible {
+  outline: var(--focus-width) solid var(--color-tv-focus);
+  outline-offset: calc(var(--focus-width) * -1);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

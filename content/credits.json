@@ -15,6 +15,14 @@
     "edits": "Latin subset, weights 400 and 700"
   },
   {
+    "title": "VT323",
+    "url": "https://github.com/phoikoi/VT323",
+    "author": "The VT323 Project Authors",
+    "license": "OFL 1.1",
+    "usedFor": "TV on-screen display font",
+    "edits": "Latin subset, weight 400"
+  },
+  {
     "title": "CRT TV Switches On",
     "url": "https://freesound.org/people/Fission9/sounds/693860/",
     "author": "Fission9",

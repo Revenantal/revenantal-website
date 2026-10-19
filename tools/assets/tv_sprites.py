@@ -175,14 +175,6 @@ def housing_sprite(photo: Image.Image) -> Image.Image:
     return img
 
 
-def volume_sprite(photo: Image.Image) -> Image.Image:
-    """Cut the volume ring and paint its light index notch at 12 o'clock."""
-    img = round_crop(photo, VOLUME, VOLUME_RADIUS)
-    c = img.width / 2
-    ImageDraw.Draw(img).rectangle((c - 1.5, c - 33, c + 1.5, c - 29), fill=(232, 226, 214, 255))
-    return img
-
-
 def round_crop(photo: Image.Image, centre: tuple[float, float], radius: float) -> Image.Image:
     """Cut a circular sprite centred on a photo point."""
     size = int(round(radius * 2 + 1))
@@ -210,7 +202,8 @@ def main() -> None:
 
     # Sprites come from the untouched photo.
     save(cut_knob(photo), args.out / "knob.webp")
-    save(volume_sprite(photo), args.out / "vol.webp")
+    # The ring never rotates; the app draws the moving volume indicator tick.
+    save(round_crop(photo, VOLUME, VOLUME_RADIUS), args.out / "vol.webp")
     save(round_crop(photo, VOLUME, CAP_RADIUS), args.out / "cap.webp")
     save(housing_sprite(photo), args.out / "housing.webp")
     for name, (x, y, w, h) in FACES.items():

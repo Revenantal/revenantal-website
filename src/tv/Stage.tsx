@@ -34,7 +34,14 @@ export function Stage({ children, backdrop }: StageProps) {
       }
     : {};
   return (
-    <div className={styles.room} ref={ref} style={vars}>
+    <div
+      className={styles.room}
+      ref={ref}
+      style={vars}
+      onDragStart={(event) => {
+        event.preventDefault();
+      }}
+    >
       {layout ? backdrop : null}
       <div
         className={styles.stage}

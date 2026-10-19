@@ -1,0 +1,38 @@
+.photo {
+  position: absolute;
+  max-width: none;
+  filter: brightness(var(--dim)) saturate(0.85);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The knob photo never turns; only this index tick does, ±135° around the centre. */
+.indicator {
+  position: absolute;
+  pointer-events: none;
+  transition: transform 0.2s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.tick {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 3px;
+  height: 5px;
+  border-radius: 1px;
+  background: #e8e2d6;
+  filter: brightness(calc(var(--dim) + 0.3));
+  transform: translateX(-50%);
+}
+
+.zone {
+  position: absolute;
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.zone:focus-visible {
+  outline: var(--focus-width) solid var(--color-tv-focus);
+  outline-offset: var(--focus-offset);
+}

@@ -3,6 +3,9 @@
 
   --color-background: #100b0d;
   --color-room: #050505;
+  --color-osd: #5fff7a;
+  --color-tv-focus: #ff2a36;
+  --font-osd: "VT323", ui-monospace, monospace;
   --color-text: #f1ebe7;
   --color-muted: #bfb2b6;
   --color-accent: #aa253e;

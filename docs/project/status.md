@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 2, the TV shell: 2.2 stage and cabinet on `feat/2.2-stage-cabinet`, then 2.3 controls. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
+**Current focus:** Phase 2, the TV shell: 2.3 controls in three PRs (dial and volume, then buttons/door/power, then the hint note). Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
 
 **Last updated:** 2026-10-18
 
@@ -34,8 +34,8 @@ What is built and where things are. Tick an item when its task has reached `main
 ## Phase 2 — TV Shell
 
 - [x] 2.1 Asset tools (sprites, sounds, fonts)
-- [ ] 2.2 Stage and cabinet — implemented on `feat/2.2-stage-cabinet`; awaiting PR
-- [ ] 2.3 Controls and compact dial
+- [x] 2.2 Stage and cabinet
+- [ ] 2.3 Controls and compact dial — dial, volume and OSD on `feat/2.3-dial-volume`; buttons, door, power and hint note next
 - [ ] 2.4 Screen and channel host
 - [ ] 2.5 Display effects
 - [ ] 2.6 Audio engine
@@ -129,6 +129,8 @@ Task 2.1 on `feat/2.1-asset-tools`: `tools/assets/tv_sprites.py` cuts the frame 
 Merged PR #8 (task 2.1) and reviewed Dependabot: merged #2–#6 (checkout 7, setup-node 7, pnpm/action-setup, setup-buildx 4, login-action 4; pins verified against tags), closed #7 (@types/node 26 does not match the Node 24 runtime) and ignored its future majors. GitHub's default squash added `Co-authored-by: dependabot[bot]` to those five commits, so the CI attribution check failed the #5 push; history was not rewritten. Later Dependabot merges use a custom squash message (git-workflow.md).
 
 Task 2.2 on `feat/2.2-stage-cabinet`: `tv/geometry.ts`, `Stage` (fit and letterbox by `min(vw/1536, vh/1024)` via ResizeObserver), `Cabinet` (NO SIGNAL glass, dimmed frame, static door/knob/volume sprites), `Badge` and `RoomGlow` (spill opacity = glow × channel level × picture brightness). Previewed with `?tv`. Browser checks at 1536×1024, 1280×650 and 1920×900 show correct letterboxing, aligned sprites, no overflow and no console errors; 800 px falls back to List mode; axe reports no violations on the TV or List. 109 tests pass; initial JS 38.7 kB. Native Caddy check not rerun locally (no CADDY_BIN); CI container checks cover routing. Also added the per-channel test rule and `pnpm test:channel <id>`. Follow-up in the same PR: the owner-supplied room photo now surrounds the TV with a hybrid layout (`roomLayout()`): room fills 16:9 and larger windows around a smaller TV, full-height TV on small windows, sides fade on ultrawide. Checked at 1920×1080, 1440×900, 1280×650 and 3440×1440 with no overflow or console errors; axe clean; 113 tests pass; initial JS 39.3 kB. The image's third-party characters are an owner-accepted risk (project-decisions.md).
+
+Task 2.3, part 1 on `feat/2.3-dial-volume`: unnumbered dial (click next, throttled scroll, drag with live snapping and cancel, arrow keys, overshoot turn), volume knob as a slider (click halves, scroll, 14 px drag steps, keys; notch turns ±135°), TV-wide keys, channel/volume OSD in VT323 and a polite live region. Dial maths covers 1, 8, 10, 11, 13 and 17 slots, wraparound, ties and drag snapping. Browser check at 1920×1080: 98 px dial target, click/wheel/keys/drag and volume work, OSD matches the prototype, axe clean, no console errors. 125 tests; initial JS 41.5 kB.
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 
