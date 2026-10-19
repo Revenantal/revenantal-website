@@ -21,8 +21,15 @@ describe("shipped asset credits", () => {
       ).toBe(true);
   });
 
-  it("credits the TV artwork when its sprites ship", () => {
-    if (!existsSync("public/assets/tv/frame.webp")) return;
-    expect(credits.some((credit) => credit.title === "TV artwork")).toBe(true);
+  it("credits the TV and room artwork when they ship", () => {
+    for (const [file, title] of [
+      ["public/assets/tv/frame.webp", "TV artwork"],
+      ["public/assets/tv/room.webp", "Room artwork"],
+    ] as const)
+      if (existsSync(file))
+        expect(
+          credits.some((credit) => credit.title === title),
+          `${title} has no credit`,
+        ).toBe(true);
   });
 });

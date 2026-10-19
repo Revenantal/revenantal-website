@@ -4,12 +4,17 @@ import { useSyncExternalStore } from "preact/compat";
 import type { AppStore } from "@data/store";
 import { ListView } from "@list/ListView";
 import { startPageClock } from "@tv/controls/page-clock";
+import { TV_MIN_WIDTH, useMediaQuery } from "@tv/controls/media-query";
+import { TvView } from "@tv/TvView";
+
+// The TV is previewed with ?tv until power and TV/List transitions land (task 2.7).
+const tvPreview = new URLSearchParams(window.location.search).has("tv");
 
 /** Application composition receives its one shared store from the entry point. */
 export type AppProps = { store: AppStore };
 
 /**
- * Connects the shared store to the responsive directory and its loading states.
+ * Connects the shared store to the TV preview or the responsive directory and its loading states.
  *
  * @param props - The single application store.
  * @param props.store - The shared application store.
@@ -17,8 +22,10 @@ export type AppProps = { store: AppStore };
  */
 export function App({ store }: AppProps) {
   const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot);
+  const wide = useMediaQuery(TV_MIN_WIDTH);
   useEffect(() => startPageClock(store.tick), [store]);
   const view = store.getView();
+  if (tvPreview && wide) return <TvView />;
   if (snapshot.site && view)
     return <ListView site={snapshot.site} view={view} now={snapshot.now} />;
   return (

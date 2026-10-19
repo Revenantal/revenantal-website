@@ -36,11 +36,14 @@ Prototype: `docs/reference/prototypes/door-tv.dc.html` (the canonical interactiv
 
 ## Stage and Scaling
 
-- The TV is authored at a fixed **1536×1024** stage and scaled as one unit by `min(vw/1536, vh/1024)`, centred.
+- The TV is authored at a fixed **1536×1024** stage and scaled as one unit. `roomLayout()` in `tv/geometry.ts` places it: the room photo covers the window with the real TV laid over the photo's painted TV, shown 10% larger than the photo's framing (`ROOM_ZOOM`), and the TV never drops below stage scale 0.65 or past full fit, so small windows get a full-height TV and the stage is never cut off.
 - Minimum supported viewport: **1280×650** (about 0.63×). Controls keep a ≥ 44 px effective hit area at that scale (enlarge hit zones, not visuals).
 - The dial has no numeral ring or numeral buttons at any size. Derive detents and rotation from the [configured slots](dial-configuration.md); retain one keyboard-accessible knob and the channel OSD.
 - Channels are authored at **760×570** and scaled into the glass.
 - Every stage coordinate lives in `tv/geometry.ts`, one named constant each.
+- Around the TV is a dark room (`RoomBackdrop`): the room photo (`public/assets/tv/room.webp`), the screen light spilling onto it, and a vignette. On windows wider than the photo its sides fade into the room colour. The TV itself is never cropped or stretched.
+- `Stage` measures only its own element with a `ResizeObserver`; no window listener. Photo layers render at room darkness (`--dim` 0.42, badge 0.57) and the room glow spill lights them.
+- Until task 2.7 wires power and TV/List transitions, the TV renders only with `?tv` in the URL (and at 900 px or wider); otherwise List mode shows.
 
 ## Branding
 

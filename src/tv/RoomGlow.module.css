@@ -1,0 +1,16 @@
+.spill {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 52% 60% at 42% 48%, var(--glow) 0, transparent 78%),
+    radial-gradient(
+      ellipse 22% 55% at 88% 45%,
+      var(--glow-panel) 0,
+      transparent 80%
+    );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transition:
+    background 0.4s,
+    opacity 0.5s;
+}

@@ -175,6 +175,21 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - ffmpeg was installed on the owner's machine with winget for sound encoding.
 - The shipped sounds and TV artwork are credited in this change; the TV artwork credit names ChatGPT and Claude.
 
+### Per-channel test suites (2026-10-18)
+
+- Each channel keeps its own test suite in its folder, runnable alone with `pnpm test:channel <id>` (only `src/channels/<id>/`). The shared contract tests from task 3.1 must be callable per channel so each suite runs them for itself. CI and pre-merge still run the full suite.
+
+### TV preview flag (2026-10-18)
+
+- While phase 2 is in progress, the TV renders only with `?tv` in the URL (and 900 px or wider), so `main` keeps serving List mode until the power LED (2.3) and TV/List transitions (2.7) exist. Remove the flag in 2.7.
+
+### Room scene (2026-10-18)
+
+- The TV sits in a dark room photo (owner-supplied, generated with ChatGPT). Layout is a hybrid: the room fills the window around a smaller TV on normal and large screens, and the TV grows back to full height on small windows (stage scale never below 0.65 or above full fit). This supersedes the earlier "keep full height" answer.
+- The room image includes recognisable third-party characters and products (Halo, Star Wars and Alien figures, a Nintendo console and controller). The owner accepted this risk and chose to keep the image as is. Replace the image if a rights holder objects or before any commercial use.
+- Credited as "Room artwork" in the shared credits, naming ChatGPT.
+- The owner asked for a slightly bigger TV and a much darker scene: the TV shows 10% larger than the photo's framing (`ROOM_ZOOM`, the room zooms with it), the room photo renders at 45% brightness under a heavy vignette, and the cabinet at 32% (badge 45%) after a further owner request to darken the TV.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

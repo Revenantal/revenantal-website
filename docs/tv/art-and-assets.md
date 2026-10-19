@@ -15,19 +15,23 @@ Python + Pillow/NumPy, run by hand with `pnpm assets:sprites` (`tools/assets/tv_
 5. **Cut sprites:** button housing (1315,425 → 1457,488, rounded alpha, face opening filled as a dark recess), three faces (cream 1330,435 114×43; grey 1331,497 113×44; dark 1331,560 113×43; 2 px rounded corners), volume ring (r 36.5 around (1392, 370), light index notch at 12 o'clock) and cap (r 26.5), settings door (1284,618 → 1488,691). The frame keeps the door's rim and hinges with a dark cavity behind it.
 6. Export WebP (quality 86–92). Sizes: frame ~100 KB, sprites 1–5 KB each.
 
+## Room Photo
+
+`docs/reference/assets/tv/room.png` (1536×1024) is a dark den around a painted copy of the TV. The sprite script exports it as `public/assets/tv/room.webp`. The painted cabinet spans about (300, 102)–(1244, 750); `ROOM` in `tv/geometry.ts` maps the real cabinet centre (767.5, 508.5) onto (772, 426) at 0.651 room pixels per stage pixel (matched by height), so the real TV fully covers the painted one. The frame's photo margin outside the cabinet is transparent so the room shows up to the cabinet edge. A replacement room image must keep a straight-on TV at a similar size and position, or the `ROOM` values need re-measuring.
+
 ## Anchor Points
 
 Stage coordinates, kept in `tv/geometry.ts`.
 
-| Part                                            | Position                                      |
-| ----------------------------------------------- | --------------------------------------------- |
-| Screen box                                      | left 96, top 88, 1092×816                     |
-| Dial centre / knob radius                       | (1391, 211) / 56 sprite                       |
-| Volume knob centre / cap radius / ridge annulus | (1390.5, 369) / 27 / 28–35                    |
-| Button stack area                               | x centre 1386, y 424–614 (190 px)             |
-| Settings door                                   | 1284,618 → 1488,691; hinge on the bottom edge |
-| Power LED                                       | centre (1455, 908)                            |
-| Badge                                           | 290×42 at (496, 964)                          |
+| Part                                          | Position                                      |
+| --------------------------------------------- | --------------------------------------------- |
+| Screen box                                    | left 96, top 88, 1092×816                     |
+| Dial centre / knob radius                     | (1391, 211) / 56 sprite                       |
+| Volume knob centre / ring sprite / cap sprite | (1392, 370) / 74 px / 54 px                   |
+| Button stack area                             | x centre 1386, y 424–614 (190 px)             |
+| Settings door                                 | 1284,618 → 1488,691; hinge on the bottom edge |
+| Power LED                                     | centre (1455, 908)                            |
+| Badge                                         | 290×42 at (496, 964)                          |
 
 ## Sound Pipeline
 

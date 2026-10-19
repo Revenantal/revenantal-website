@@ -15,9 +15,11 @@ from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[2]
 PHOTO = ROOT / "docs/reference/assets/tv/tv-photo-door.png"
+ROOM = ROOT / "docs/reference/assets/tv/room.png"
 OUT = ROOT / "public/assets/tv"
 
 SCREEN_BOX = (100, 92, 1182, 900)  # x0, y0, x1, y1 searched for green
+CABINET = (10, 11, 1526, 1007)  # outer cabinet edge; the photo margin outside it becomes transparent
 DIAL = (1391, 211)
 DIAL_RADIUS = 81
 KNOB_ANGLE = -33.3  # pointer direction in the photo, degrees clockwise from up
@@ -198,6 +200,7 @@ def save(img: Image.Image, path: Path, quality: int = 88) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--photo", type=Path, default=PHOTO)
+    parser.add_argument("--room", type=Path, default=ROOM)
     parser.add_argument("--out", type=Path, default=OUT)
     args = parser.parse_args()
     photo = Image.open(args.photo).convert("RGB")
@@ -221,10 +224,21 @@ def main() -> None:
     clear_buttons(rgb)
     door_cavity(rgb)
     frame = Image.fromarray(rgb.clip(0, 255).astype(np.uint8), "RGB").convert("RGBA")
+    cabinet = Image.new("L", photo.size, 0)
+    x0, y0, x1, y1 = CABINET
+    w, h = x1 - x0, y1 - y0
+    cabinet.paste(rounded_mask((w, h), 16), (x0, y0))
+    alpha *= np.asarray(cabinet).astype(float) / 255
     frame.putalpha(Image.fromarray((alpha * 255).round().astype(np.uint8), "L"))
     face = dial_face()
     frame.alpha_composite(face, (DIAL[0] - face.width // 2, DIAL[1] - face.height // 2))
     save(frame, args.out / "frame.webp", quality=86)
+
+    # The room plate behind the TV; its painted TV is covered by the real one.
+    room = Image.open(args.room).convert("RGB")
+    if room.size != (1536, 1024):
+        raise SystemExit(f"Expected a 1536x1024 room, got {room.size}.")
+    save(room, args.out / "room.webp", quality=80)
 
 
 if __name__ == "__main__":

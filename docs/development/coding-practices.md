@@ -125,7 +125,7 @@ export function resolveEffect(
 ## Testing
 
 - Vitest with Testing Library for components.
-- Every channel has a smoke test: renders with the shared fixtures, with `live: null`, and with an empty project list.
+- Every channel has its own test suite in its folder, runnable alone with `pnpm test:channel <id>`. It includes a smoke test (renders with the shared fixtures, with `live: null`, and with an empty project list) and the shared contract checks for that channel. Use it while building a channel; CI runs the full suite.
 - Unit-test the logic that's easy to get wrong: effect precedence, dial maths, broadcast schedule, store actions, live-data merging, the Pelican response mapping.
 - The live job and agent are tested against saved real responses in `__fixtures__/`, never live APIs.
 
