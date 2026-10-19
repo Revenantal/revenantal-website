@@ -190,6 +190,12 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Credited as "Room artwork" in the shared credits, naming ChatGPT.
 - The owner asked for a slightly bigger TV and a much darker scene: the TV shows 10% larger than the photo's framing (`ROOM_ZOOM`, the room zooms with it), the room photo renders at 45% brightness under a heavy vignette, and the cabinet at 32% (badge 45%) after a further owner request to darken the TV.
 
+### Controls build notes (2026-10-18)
+
+- Until the channel registry lands in 2.4, `src/tv/lineup.ts` provides a temporary 11-slot lineup (Credits' launch position is the highest), all NO SIGNAL. The registry's "reject all-null" rule needs a phase 2 exception or placeholder entries; decide in 2.4.
+- TV-wide keys (↑/→, ↓/←, +/−) use a document listener in `tv/controls/tv-keys.ts`, the input layer that owns window listeners, instead of a focusable wrapper. Text fields, sliders and modified keys keep their own keys.
+- The on-screen display uses VT323 (`@fontsource/vt323`, credited) and sits in the 760×570 channel space scaled into the glass. Channel and volume changes are announced through one polite live region.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.
