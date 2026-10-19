@@ -33,14 +33,16 @@
   overflow: hidden;
 }
 
-/* A new picture powers on from a bright horizontal line. */
+/* A new channel snaps in from a quick blur: no dark frame and no brightness spike. */
 .picture[data-anim="on"] {
-  animation: tv-on 0.38s ease-out;
+  animation: tv-tune 0.22s ease-out;
 }
 
-/* Toned down from the prototype (#777, full-strength snow) at the owner's request. */
+/* Toned down from the prototype (#777, full-strength snow) at the owner's request:
+   a soft, blurred crackle at about the brightness of the picture. */
 .picture[data-anim="static"] {
-  background: #4a4a4a;
+  background: #3a3a3a;
+  filter: blur(1.5px);
 }
 
 .snow {
@@ -54,7 +56,7 @@
   right: 0;
   left: 0;
   height: 22%;
-  background: rgb(255 255 255 / 9%);
+  background: rgb(255 255 255 / 5%);
   animation: tv-roll 0.5s linear infinite;
 }
 
@@ -100,20 +102,13 @@
   outline-offset: var(--focus-offset);
 }
 
-@keyframes tv-on {
+@keyframes tv-tune {
   0% {
-    filter: brightness(1.8);
-    transform: scale(1, 0.012);
-  }
-
-  55% {
-    filter: brightness(1.15);
-    transform: scale(1, 1.02);
+    filter: blur(6px);
   }
 
   100% {
     filter: none;
-    transform: none;
   }
 }
 

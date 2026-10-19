@@ -215,7 +215,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 ### Picture transitions (2026-10-19)
 
-- The owner found the channel-change flash too aggressive. The static burst is darker than the prototype (#4a4a4a base, snow at 60%, roll bar at 9%), and a new picture's scale-from-line power-on peaks at 1.8× brightness instead of 4×. The 460 ms and 380 ms timings are unchanged. Page-load boot, warm-up, degauss and power-off keep the prototype values.
+- The owner found the channel-change flash too aggressive, twice. Measured, the scale-from-line "power-on" of each new picture dropped the screen to about 45% brightness and then overshot to 130%. Channel changes no longer use it: the static burst is a soft, blurred crackle (#3a3a3a base, snow at 50%, roll bar at 5%, 1.5 px blur) and the new picture snaps in from a 6 px blur over 0.22 s, with no dark frame or brightness spike. The 460 ms static timing is unchanged. Page-load boot, warm-up, degauss and power-off keep the prototype animations, which the owner likes.
 - Reduced-motion viewers in TV mode get no static bursts, boot, warm-up or power-off collapse.
 
 ## Clarifications

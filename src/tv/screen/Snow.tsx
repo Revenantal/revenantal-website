@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useLayoutEffect, useRef } from "preact/hooks";
 import { CHANNEL } from "../geometry";
 import styles from "./Screen.module.css";
 
@@ -47,7 +47,8 @@ function noiseFrames(context: CanvasRenderingContext2D): ImageData[] {
  */
 export function Snow({ interval, running, opacity = 1 }: SnowProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
+  // Draw the first frame before paint so a new snow layer never shows one blank frame.
+  useLayoutEffect(() => {
     const context = canvasRef.current?.getContext("2d");
     if (!context) return;
     const all = noiseFrames(context);
