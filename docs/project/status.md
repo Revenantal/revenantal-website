@@ -45,7 +45,7 @@ What is built and where things are. Tick an item when its task has reached `main
 
 ## Phase 3 — Launch
 
-- [ ] 3.1 Channel contract and tests
+- [ ] 3.1 Channel contract and tests — on `feat/3.1-channel-contract`, in review
 - [ ] 3.2 Channel 10 — Status
 - [ ] 3.3 Forecast endpoint
 - [ ] 3.4 Channel 1 — TV Guide
@@ -231,3 +231,5 @@ See `project-decisions.md` → Open Items.
 Task 2.8 (merged in #22): keyboard-only run at 1280×650 and 1920×1080 with the spec's Tab order and visible focus on every stop; the dial's name follows the spec; focus moves to the dial when the hint note falls or the TV turns on; door switches fill the compartment (the 20 px pitch at 1280×650 is an owner-accepted limit); reduced motion also drops the tune snap and freezes the snow. 268 tests.
 
 Gate 2 (2026-10-19): the TV reads the shared store and data; no dial numerals render; detents, gaps, wraparound and a 14-slot dial are covered by unit and component tests; every position shows NO SIGNAL; power-off, under 900 px and reduced motion return to List mode (axe clean). Every control was run by mouse, keyboard and touch (emulated touchscreen: taps on every control, dial and volume drags, no page scroll while dragging). The touch run found that after a touch drag the dial and volume knob ignored the next tap, because a touch drag ends without the click the skip-one-click flag expected; fixed and tested. A real phone or tablet check is still worth doing. 271 tests. No individual channel is built or approved.
+
+Task 3.1 on `feat/3.1-channel-contract`: `describeChannelContract(manifest)` in `src/channels/_shared/testing/` is the shared contract each channel's own `contract.test.tsx` runs, so `pnpm test:channel <id>` includes it. It checks manifests and lazy loading, rendering across every fixture case with frozen props, project links, forbidden side effects (global listeners, network, storage, own audio), pausing while inactive and cleanup after unmount. A sample channel passes; broken variants fail the matching check. The registry now validates each manifest's kind, colours, display profile and audio. Host actions are tested through the real TV and store, and the real registry is guarded at the launch positions. 294 tests; initial JS 51.4 kB. No channel is built or approved.

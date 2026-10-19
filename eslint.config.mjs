@@ -177,5 +177,27 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // The channel contract fixtures import Vitest; only tests may use them.
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/**/*.test.{ts,tsx}", "src/channels/_shared/testing/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            { name: "react", message: "Use preact or preact/hooks." },
+            { name: "react-dom", message: "Use preact." },
+          ],
+          patterns: [
+            {
+              group: ["**/_shared/testing", "**/_shared/testing/**"],
+              message: "Test-only fixtures: import them from test files.",
+            },
+          ],
+        },
+      ],
+    },
+  },
   prettier,
 );

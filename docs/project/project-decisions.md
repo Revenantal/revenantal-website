@@ -213,6 +213,15 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Reduced motion in TV mode also drops the 0.22 s tune snap and freezes the NO SIGNAL snow on one frame.
 - Door switches now fill their share of the compartment (20×37 screen px at 1280×650, 29×53 at 1920×1080). At the minimum viewport their centres are 20 px apart, under WCAG 2.2 AA target size (24 px); they pass from about 1150×770 up. Six controls cannot reach 24 px in the door's width at that scale. The owner accepted this as a known limit (2026-10-19): every switch works by keyboard and List mode is one step away. Revisit if the door layout changes (moving Credits out of the row would give five switches about 24 px each).
 
+### Channel contract (2026-10-19)
+
+- Each channel adds `src/channels/<id>/contract.test.tsx`, which calls `describeChannelContract(manifest)` from `src/channels/_shared/testing/`. Fixtures there are test-only (they import Vitest); lint rejects them in application code.
+- The contract checks what jsdom can prove. The 760×570 root, axe and the look on the real TV stay with each channel's browser check.
+- "Pauses when inactive" is checked as: no timers or animation frames left scheduled, and no `play`, `setLoop(id, true)`, `tune`, `powerOff`, `requestCapture` or `save.store` calls while inactive or after unmount.
+- Directory and game channels must render every project as a new-tab link in the DOM with 30 projects. Revisit if a channel's approved design pages its listings.
+- The registry validates each manifest's kind, colours, display profile and audio at startup (`manifest-check.ts`), so a bad manifest fails before it reaches the dial.
+- Capture, PRESS START, saves, captions and media checks join the contract with tasks 4.3 and 4.5, where those host features are built.
+
 ### Dependency review (2026-10-19)
 
 - Every dependency is on its latest version except these, held back deliberately. Revisit when the blocker clears; Dependabot raises the updates.

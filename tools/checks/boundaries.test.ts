@@ -33,6 +33,28 @@ describe("architecture enforcement", () => {
     expect(result?.errorCount).toBe(0);
   });
 
+  it("keeps the channel contract fixtures out of application code", async () => {
+    const source =
+      'import { channelProps } from "../_shared/testing/fixtures";';
+    const [app] = await eslint.lintText(source, {
+      filePath: resolve("src/channels/fixture/ChannelComponent.tsx"),
+    });
+    const [test] = await eslint.lintText(source, {
+      filePath: resolve("src/channels/fixture/fixture.test.tsx"),
+    });
+
+    expect(
+      app?.messages.some(
+        (message) => message.ruleId === "no-restricted-imports",
+      ),
+    ).toBe(true);
+    expect(
+      test?.messages.some(
+        (message) => message.ruleId === "no-restricted-imports",
+      ),
+    ).toBe(false);
+  });
+
   it("rejects default exports in application code", async () => {
     const [result] = await eslint.lintText("export default 1;", {
       filePath: resolve("src/fixture.ts"),

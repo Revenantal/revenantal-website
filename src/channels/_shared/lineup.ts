@@ -1,3 +1,4 @@
+import { manifestProblems } from "./manifest-check";
 import type { ChannelManifest, ChannelRegistry } from "./types";
 
 /** A validated registry: the dial's slot count plus sparse lookups. */
@@ -24,11 +25,10 @@ export type LineupOptions = {
   reserved?: Readonly<Record<string, number>>;
 };
 
-const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
 /**
  * Validates the position-keyed registry and builds sparse lookups. Keys must be canonical
- * positive safe integers and channel IDs unique; gaps and null slots are NO SIGNAL.
+ * positive safe integers, channel IDs unique and every manifest valid (kind, colours, display
+ * profile and audio); gaps and null slots are NO SIGNAL.
  *
  * @param registry - Positions mapped to manifests or null.
  * @param options - Validation options.
@@ -52,12 +52,13 @@ export function createLineup(
       throw new Error(`Invalid registry position "${key}".`);
     slots = Math.max(slots, position);
     if (!manifest) continue;
-    if (!ID.test(manifest.id))
-      throw new Error(`Invalid channel ID "${manifest.id}".`);
+    const problems = manifestProblems(manifest);
+    if (problems.length > 0)
+      throw new Error(
+        `Invalid channel manifest at position ${key}: ${problems.join("; ")}.`,
+      );
     if (byId.has(manifest.id))
       throw new Error(`Duplicate channel ID "${manifest.id}".`);
-    if (typeof manifest.load !== "function")
-      throw new Error(`Channel "${manifest.id}" has no loader.`);
     byPosition.set(position, manifest);
     byId.set(manifest.id, position);
   }
