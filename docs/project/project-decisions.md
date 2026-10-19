@@ -239,6 +239,14 @@ The owner approved building Status (task 3.2) on 2026-10-19 with the scope in `d
 - Section sign text is 12 px (the mockup's 16 px filled the sign) at the owner's request.
 - TV containers that clip channels use `overflow: clip`, not `hidden`. A hidden box can still be scrolled when focus lands on something outside it, which shifted the whole picture when tabbing to an off-screen server.
 
+### Forecast service (2026-10-19)
+
+- Task 3.3 builds the weather service to the spec in `docs/architecture/forecast-and-radar.md` (see its Implementation section). It stays off: Caddy answers weather routes as unavailable until `FORECAST_UPSTREAM` is set after the 3.7 checks.
+- The city database is DB-IP Lite City (MMDB, CC BY 4.0), read with `mmdb-lib` (MIT, no dependencies). It is downloaded monthly at deploy (`pnpm fetch:dbip`) and never committed.
+- RainViewer tiles are fixed server-side at 256 px, colour scheme 2, smoothed with snow shown. The service exposes frame IDs (their timestamps), never upstream paths.
+- A 429 or other non-200 answer from the service means "skip the forecast segment"; the TV Guide never shows a fixed city or stale weather.
+- DB-IP, Open-Meteo, RainViewer and Natural Earth join the shared credits when the panel ships (3.5).
+
 ### Dependency review (2026-10-19)
 
 - Every dependency is on its latest version except these, held back deliberately. Revisit when the blocker clears; Dependabot raises the updates.
