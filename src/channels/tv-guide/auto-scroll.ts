@@ -11,7 +11,9 @@ export const SCROLL_SPEED = 16;
  * @param offset - Pixels scrolled.
  */
 export function placeTrack(track: HTMLElement, offset: number) {
-  track.style.transform = offset ? `translateY(${(-offset).toFixed(1)}px)` : "";
+  track.style.transform = offset
+    ? `translate3d(0, ${String(-offset)}px, 0)`
+    : "";
 }
 
 /**

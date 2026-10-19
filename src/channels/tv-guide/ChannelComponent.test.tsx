@@ -145,7 +145,7 @@ describe("TV Guide", () => {
       vi.advanceTimersByTime(1000);
     });
     const moved = track.style.transform;
-    expect(moved).toMatch(/translateY\(-\d/);
+    expect(moved).toMatch(/translate3d\(0(px)?, -\d/);
 
     const copy = container.querySelector("[data-copy]");
     expect(copy?.getAttribute("aria-hidden")).toBe("true");

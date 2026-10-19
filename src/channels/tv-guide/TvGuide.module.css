@@ -518,9 +518,10 @@
   overflow: auto;
 }
 
-/* No will-change: a cached layer would be drawn at authoring size and enlarged (blurry). */
+/* Its own GPU layer, so the drift glides at sub-pixel steps instead of hopping a whole pixel
+   at a time. Sharp because the Guide has no bloom filter (a filter would enlarge the layer). */
 .track {
-  transform: translateY(0);
+  will-change: transform;
 }
 
 .list {
