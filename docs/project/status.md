@@ -118,6 +118,8 @@ PR #1 squash-merged to `master` as 04c8ae3 after CI passed on its final commit. 
 
 Later the same day the owner deferred hosting until the project is complete. Renamed `master` to `main` on GitHub (open Dependabot PRs retargeted automatically), deleted `feat/1.1-foundation`, and limited CI push triggers to `main`. Ticked 1.3 and 1.6 for their in-repo work; host setup moved to 3.7.
 
+Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
+
 ## Channel Build Approvals
 
 All individual channel builds are awaiting plan review and explicit owner confirmation, including TV Guide, Status and Credits. Existing design statuses below describe design progress, not permission to implement. Record each confirmed channel scope and date in `project-decisions.md` and note its approval here.

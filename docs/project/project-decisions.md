@@ -149,6 +149,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 - The owner deferred hosting until the project is complete. Coolify, image publication, the scheduled live job on a host and branch protection move to the launch check (task 3.7). Tasks 1.3 and 1.6 close on their in-repo work; Gate 1 does not wait for hosting.
 - The repository default branch was renamed from `master` to `main`, and the merged `feat/1.1-foundation` branch was deleted. CI push triggers target `main` only.
+- The GitHub repository was renamed from `Revenantal/revenantal` to `Revenantal/revenantal-website`, because a repository named after the account is shown as its profile README. Image names under `ghcr.io/revenantal/` are unchanged.
 
 ## Clarifications
 
