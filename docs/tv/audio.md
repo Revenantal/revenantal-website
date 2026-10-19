@@ -22,6 +22,8 @@ Links and licences: `docs/reference/sound-credits.md`. Originals: `docs/referenc
 - Files: mono, trimmed, peak-normalised to −1 dBFS, AAC 96 kbps `.m4a` (about 220 KB total). Decode all on load; play from buffers.
 - If a buffer is missing, fall back to the synthesized version of that sound (from the prototype).
 
+Built in task 2.6 (`src/audio/engine.ts`): the TV fetches the ten files when it mounts, creates and decodes nothing until the first pointer-down or key press (`tv/controls/audio-unlock.ts`), and suspends all output while the tab is hidden.
+
 ## Ambient Bed (synthesized, no files)
 
 - **Mains hum:** 60/120/180/240 Hz at 0.006 × v, fades in over ~0.6 s.
