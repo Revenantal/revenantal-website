@@ -8,7 +8,7 @@ import type { Forecast, RadarFrames } from "../../data/types";
 export const WEATHER_PATHS = [
   "/api/forecast",
   "/api/radar/",
-  "/assets/tv-guide/land-110m.json",
+  "/assets/tv-guide/base-map.json",
 ];
 
 const MEMORY_MS = 30 * 60_000;

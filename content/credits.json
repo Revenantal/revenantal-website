@@ -159,11 +159,11 @@
     "edits": "Monthly database, read on our server only"
   },
   {
-    "title": "Natural Earth 1:110m land",
+    "title": "Natural Earth map data",
     "url": "https://www.naturalearthdata.com/",
     "author": "Natural Earth",
     "license": "Public domain",
     "usedFor": "TV Guide radar base map",
-    "edits": "Release v5.1.2 land polygons, rounded to 0.01°"
+    "edits": "Release v5.1.2: 1:110m land, lakes and country borders, 1:50m state and province lines; simplified and rounded to 0.01°"
   }
 ]

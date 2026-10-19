@@ -252,6 +252,18 @@ describe("TV view", () => {
     vi.useRealTimers();
   });
 
+  it("flashes the channel briefly on load instead of holding it while the note shows", () => {
+    vi.useFakeTimers();
+    renderTv();
+    expect(screen.getByText("CH 01")).toBeTruthy();
+    void act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+    expect(screen.getByRole("note")).toBeTruthy();
+    expect(screen.queryByText("CH 01")).toBeNull();
+    vi.useRealTimers();
+  });
+
   it("dismisses the note on the first channel change, and shows it again on the next page load", () => {
     vi.useFakeTimers();
     const { store } = renderTv();

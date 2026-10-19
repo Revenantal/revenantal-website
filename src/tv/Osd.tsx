@@ -3,7 +3,7 @@ import styles from "./Osd.module.css";
 
 /** Which on-screen display is showing, if any. */
 export type OsdState =
-  | { kind: "channel"; label: string; name: string; blink?: boolean }
+  | { kind: "channel"; label: string; name: string }
   | { kind: "volume"; volume: number }
   | null;
 
@@ -29,9 +29,7 @@ export function Osd({ osd }: { osd: OsdState }) {
     >
       {osd.kind === "channel" ? (
         <div className={styles.channel}>
-          <div className={styles.number} data-blink={Boolean(osd.blink)}>
-            {osd.label}
-          </div>
+          <div className={styles.number}>{osd.label}</div>
           <div className={styles.name}>{osd.name}</div>
         </div>
       ) : (

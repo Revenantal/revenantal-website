@@ -39,7 +39,7 @@ The forecast is the one place a channel fetches data. That fetch lives in a smal
 - Navy and blue-violet gradient panels with glossy highlights; yellow and white type; red LIVE badges.
 - Each row gets a small coloured icon by project type.
 - Fonts: Archivo Narrow (listings), Archivo Black (headers, temperatures).
-- Display profile: scan 1, flicker, glow 0.8. `safe: false` (owner request): the background and ticker bar bleed to the glass edges, while the panels, time header and listings are drawn at mockup size and scaled to 90% inside a padded box (38 px sides, 24 px top), and the ticker text sits inside the same padding.
+- Display profile: scan 1, flicker, glow 0.8, no bloom (its filter renders the picture at authoring size and enlarges it, which blurred the text). `safe: false` (owner request): the background and ticker bar bleed to the glass edges, while the panels, time header and listings are drawn at mockup size and scaled to 90% inside a padded box (38 px sides, 24 px top), and the ticker text sits inside the same padding.
 
 ## Sound
 
@@ -49,7 +49,7 @@ Silent at launch. A smooth-jazz loop, row tick and promo stinger will be propose
 
 - Grid scroll uses `transform` on one element, driven by `requestAnimationFrame`, and pauses when `active` is false.
 - The forecast window (`ForecastWindow.tsx`, `RadarMap.tsx`, `weather.ts`) fetches `/api/forecast` while the channel is active, at most once per 30 minutes per visit (memory only, never storage), and aborts on tune-away. Do Not Track or Save-Data skip it with no request.
-- It shows the current temperature and conditions, "Feels · Humidity · Wind", three days (Today and the next two), and same-origin RainViewer radar (three recent frames at zoom 6, at most two tile requests in flight, looping only while active; the newest frame only with reduced motion) over the bundled Natural Earth land map (`public/assets/tv-guide/land-110m.json`, fetched only when the forecast shows). A city marker sits on the map. Missing coverage or failed tiles show "Radar unavailable".
+- It shows the current temperature and conditions, "Feels · Humidity · Wind", three days (Today and the next two), and same-origin RainViewer radar (three recent frames at zoom 5, at most two tile requests in flight, looping only while active; the newest frame only with reduced motion) over the bundled Natural Earth base map (`public/assets/tv-guide/base-map.json`: land, lakes, country borders, and state and province lines; fetched only when the forecast shows). A city marker sits on the map. Missing coverage or failed tiles show "Radar unavailable".
 - A stationary footer credits "Weather data by Open-Meteo.com · Radar by RainViewer · IP Geolocation by DB-IP · Map: Natural Earth" with links, plus a Privacy button that shows the panel's privacy note and provider privacy links. Screen readers get one spoken summary of the forecast.
 - The contract allows only these requests (`WEATHER_PATHS` in `weather.ts`). Follow the request, privacy, caching and fallback rules in `docs/architecture/forecast-and-radar.md`.
 - °C by default, °F for US visitors (from the endpoint).

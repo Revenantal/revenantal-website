@@ -117,7 +117,7 @@
   position: absolute;
   inset: 0;
   overflow: clip;
-  background: #0a1a3a;
+  background: #081633;
 }
 
 .land {
@@ -127,11 +127,31 @@
   height: 100%;
 }
 
-.land path {
-  fill: #1d3460;
-  stroke: #6f8fd0;
+/* Water dark navy, land a lighter blue-grey, coasts bright, borders dashed. */
+.map-land {
+  fill: #2b4776;
+  stroke: #a9c4f5;
+  stroke-width: 1;
+}
+
+.map-lakes {
+  fill: #081633;
+  stroke: #a9c4f5;
   stroke-width: 0.8;
-  stroke-opacity: 0.8;
+}
+
+.map-states {
+  fill: none;
+  stroke: #7d97c8;
+  stroke-dasharray: 3 3;
+  stroke-width: 0.7;
+}
+
+.map-borders {
+  fill: none;
+  stroke: #d6e2ff;
+  stroke-dasharray: 5 3;
+  stroke-width: 1.1;
 }
 
 .tile {
@@ -498,8 +518,9 @@
   overflow: auto;
 }
 
+/* No will-change: a cached layer would be drawn at authoring size and enlarged (blurry). */
 .track {
-  will-change: transform;
+  transform: translateY(0);
 }
 
 .list {

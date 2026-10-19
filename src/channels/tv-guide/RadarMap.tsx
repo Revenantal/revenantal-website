@@ -2,61 +2,81 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import { TILE, fetchFrames, project, tileLayout } from "./weather";
 import styles from "./TvGuide.module.css";
 
-const ZOOM = 6;
+const ZOOM = 5;
 const FRAME_MS = 700;
 const IN_FLIGHT = 2;
 
-type Land = number[][];
-let landMemory: Land | null = null;
+/** The bundled Natural Earth layers: flat [lon, lat, …] lists in hundredths of a degree. */
+export type BaseMap = {
+  land: number[][];
+  lakes: number[][];
+  borders: number[][];
+  states: number[][];
+};
+let mapMemory: BaseMap | null = null;
+
+const isShapes = (value: unknown): value is number[][] =>
+  Array.isArray(value) && value.every((shape) => Array.isArray(shape));
 
 /**
- * Loads the bundled Natural Earth land rings once per visit.
+ * Loads the bundled base map once per visit.
  *
  * @param signal - Aborts on tune-away.
- * @returns The rings ([lon, lat, …] × 100), or null.
+ * @returns The layers, or null.
  */
-async function loadLand(signal: AbortSignal): Promise<Land | null> {
-  if (landMemory) return landMemory;
+async function loadBaseMap(signal: AbortSignal): Promise<BaseMap | null> {
+  if (mapMemory) return mapMemory;
   try {
-    const response = await fetch("/assets/tv-guide/land-110m.json", { signal });
+    const response = await fetch("/assets/tv-guide/base-map.json", { signal });
     if (!response.ok) return null;
-    const body = (await response.json()) as { rings?: unknown };
-    if (!Array.isArray(body.rings)) return null;
-    landMemory = body.rings as Land;
-    return landMemory;
+    const body = (await response.json()) as Partial<
+      Record<keyof BaseMap, unknown>
+    >;
+    const { land, lakes, borders, states } = body;
+    if (
+      !isShapes(land) ||
+      !isShapes(lakes) ||
+      !isShapes(borders) ||
+      !isShapes(states)
+    )
+      return null;
+    mapMemory = { land, lakes, borders, states };
+    return mapMemory;
   } catch {
     return null;
   }
 }
 
 /**
- * Builds an SVG path for the land rings inside the view.
+ * Builds SVG path data for shapes inside the view: closed rings or open lines.
  *
- * @param land - The rings.
+ * @param shapes - Flat [lon, lat, …] lists × 100.
+ * @param closed - Close each shape (rings) or leave it open (lines).
  * @param originX - View origin in world pixels.
  * @param originY - View origin in world pixels.
  * @param width - View width.
  * @param height - View height.
  * @returns The path data.
  */
-export function landPath(
-  land: Land,
+export function shapePath(
+  shapes: number[][],
+  closed: boolean,
   originX: number,
   originY: number,
   width: number,
   height: number,
 ): string {
   const parts: string[] = [];
-  for (const ring of land) {
+  for (const shape of shapes) {
     const points: string[] = [];
     let minX = Infinity;
     let maxX = -Infinity;
     let minY = Infinity;
     let maxY = -Infinity;
-    for (let index = 0; index + 1 < ring.length; index += 2) {
+    for (let index = 0; index + 1 < shape.length; index += 2) {
       const [x, y] = project(
-        (ring[index] ?? 0) / 100,
-        (ring[index + 1] ?? 0) / 100,
+        (shape[index] ?? 0) / 100,
+        (shape[index + 1] ?? 0) / 100,
         ZOOM,
       );
       const left = x - originX;
@@ -68,7 +88,7 @@ export function landPath(
       points.push(`${left.toFixed(1)} ${top.toFixed(1)}`);
     }
     if (maxX < 0 || minX > width || maxY < 0 || minY > height) continue;
-    parts.push(`M${points.join("L")}Z`);
+    parts.push(`M${points.join("L")}${closed ? "Z" : ""}`);
   }
   return parts.join("");
 }
@@ -92,7 +112,7 @@ async function pool(tasks: (() => Promise<void>)[], limit: number) {
 }
 
 /**
- * The radar view: dark land and coastlines from the bundled Natural Earth map, recent radar
+ * The radar view: land, lakes, coastlines and borders from the bundled Natural Earth map, recent radar
  * frames over it (same-origin, at most two requests at a time, cancelled on tune-away) and a
  * marker on the city. Missing coverage or failed tiles say "Radar unavailable"; they are
  * never shown as clear skies.
@@ -143,7 +163,7 @@ export function RadarMap({
       }),
     [latitude, longitude, width, height, cityX, cityY],
   );
-  const [land, setLand] = useState<Land | null>(landMemory);
+  const [baseMap, setBaseMap] = useState<BaseMap | null>(mapMemory);
   const [frames, setFrames] = useState<
     { id: string; urls: (string | null)[] }[]
   >([]);
@@ -154,15 +174,15 @@ export function RadarMap({
 
   // The bundled map, once per visit.
   useEffect(() => {
-    if (!active || land) return;
+    if (!active || baseMap) return;
     const controller = new AbortController();
-    void loadLand(controller.signal).then((loaded) => {
-      if (!controller.signal.aborted) setLand(loaded);
+    void loadBaseMap(controller.signal).then((loaded) => {
+      if (!controller.signal.aborted) setBaseMap(loaded);
     });
     return () => {
       controller.abort();
     };
-  }, [active, land]);
+  }, [active, baseMap]);
 
   // Radar frames: fetched while active, released on tune-away.
   useEffect(() => {
@@ -231,16 +251,31 @@ export function RadarMap({
     onFrameTime(frame ? new Date(Number(frame.id) * 1000) : null);
   }, [frame, onFrameTime]);
 
-  const path = land
-    ? landPath(land, layout.originX, layout.originY, width, height)
-    : "";
+  const draw = (shapes: number[][], closed: boolean) =>
+    shapePath(shapes, closed, layout.originX, layout.originY, width, height);
   return (
     <div className={styles.radar} aria-hidden="true">
       <svg
         className={styles.land}
         viewBox={`0 0 ${String(width)} ${String(height)}`}
       >
-        <path d={path} />
+        {baseMap ? (
+          <>
+            <path className={styles["map-land"]} d={draw(baseMap.land, true)} />
+            <path
+              className={styles["map-lakes"]}
+              d={draw(baseMap.lakes, true)}
+            />
+            <path
+              className={styles["map-states"]}
+              d={draw(baseMap.states, false)}
+            />
+            <path
+              className={styles["map-borders"]}
+              d={draw(baseMap.borders, false)}
+            />
+          </>
+        ) : null}
       </svg>
       {frame
         ? layout.tiles.map((tile, index) => (

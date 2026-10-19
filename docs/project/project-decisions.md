@@ -261,7 +261,9 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - RainViewer tiles are fixed server-side at 256 px, colour scheme 2, smoothed with snow shown. The service exposes frame IDs (their timestamps), never upstream paths.
 - A 429 or other non-200 answer from the service means "skip the forecast segment"; the TV Guide never shows a fixed city or stale weather.
 - DB-IP, Open-Meteo, RainViewer and Natural Earth are credited in the panel footer and the shared credits (task 3.5). The owner asked for the weather attribution explicitly.
-- The radar base map is a static same-origin file fetched only when the forecast shows, keeping 25 kB of map data out of the Guide's 30 kB JavaScript budget.
+- The radar base map is a static same-origin file fetched only when the forecast shows, keeping its 55 kB of map data out of the Guide's 30 kB JavaScript budget. After owner feedback that the radar showed no geography, it gained lakes, country borders and state/province lines, and the radar zoomed out one level (zoom 5).
+- **Bloom blurs text.** The phosphor bloom is an SVG filter, so the browser renders the channel at its 760×570 authoring size and enlarges it (~1.4×); with its red/blue split, text looked doubled and soft even with every viewer switch off (owner report, 2026-10-19). The TV Guide's profile turns bloom off. Text-heavy channels should do the same. Channels also avoid `will-change` on large text layers for the same reason.
+- The channel overlay (OSD) flashes for 1.7 s on page load and power on, like a channel change; it no longer stays up while the hint note shows (owner request, 2026-10-19).
 - `pnpm dev` can show real weather: the dev plugin runs the service and names the public address set in the git-ignored `.env.local` (`FORECAST_DEV_IP`).
 
 ### Dependency review (2026-10-19)
