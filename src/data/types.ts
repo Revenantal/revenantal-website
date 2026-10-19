@@ -90,7 +90,7 @@ export type DisplayProfile = {
   scan?: number | false; // 0..1, default 1
   flicker?: boolean; // default true
   glow?: number | false; // 0..1, default 1
-  bloom?: boolean; // default true
+  bloom?: boolean; // default false: opt in only for channels without small text
   transition?: "static" | "cut"; // how the TV changes INTO this channel
 };
 

@@ -39,7 +39,7 @@ The forecast is the one place a channel fetches data. That fetch lives in a smal
 - Navy and blue-violet gradient panels with glossy highlights; yellow and white type; red LIVE badges.
 - Each row gets a small coloured icon by project type.
 - Fonts: Archivo Narrow (listings), Archivo Black (headers, temperatures).
-- Display profile: scan 1, flicker, glow 0.8, no bloom (its filter renders the picture at authoring size and enlarges it, which blurred the text). `safe: false` (owner request): the background and ticker bar bleed to the glass edges, while the panels, time header and listings are drawn at mockup size and scaled to 90% inside a padded box (38 px sides, 24 px top), and the ticker text sits inside the same padding.
+- Display profile: scan 1, flicker, glow 0.8, no bloom (the default; its filter blurs text). `safe: false` (owner request): the background and ticker bar bleed to the glass edges, while the panels, time header and listings are drawn at mockup size and scaled to 90% inside a padded box (38 px sides, 24 px top), and the ticker text sits inside the same padding.
 
 ## Sound
 

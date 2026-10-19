@@ -78,7 +78,8 @@ export function resolveEffects({
     scan,
     flicker,
     glow,
-    bloom: profile.bloom !== false && perf < 1,
+    // Opt-in: the bloom filter enlarges the rendered picture, which blurs text.
+    bloom: profile.bloom === true && perf < 1,
     static: viewer.fx && !cut && !reducedMotion,
     limited: {
       scan: viewer.scan && scan < 1,
