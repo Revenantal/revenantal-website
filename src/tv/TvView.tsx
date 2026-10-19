@@ -12,6 +12,8 @@ import { PowerLed } from "./controls/PowerLed";
 import { SettingsDoor } from "./controls/SettingsDoor";
 import { usePageVisible } from "./controls/page-visible";
 import { usePerfMonitor } from "./controls/perf-monitor";
+import { useAudioUnlock } from "./controls/audio-unlock";
+import { createAudioEngine } from "@audio/engine";
 import { BloomFilter } from "./effects/BloomFilter";
 import { NO_SIGNAL_PROFILE, resolveEffects } from "./effects/resolve";
 import { ScreenEffects } from "./effects/ScreenEffects";
@@ -139,8 +141,22 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
     }, OSD_MS);
   };
 
+  // One audio engine for the TV's lifetime; sound files download now, play after a gesture.
+  const [audio] = useState(createAudioEngine);
+  useEffect(() => {
+    audio.preload();
+  }, [audio]);
+  const [unlockAudio] = useState(() => () => {
+    void audio.unlock();
+  });
+  useAudioUnlock(unlockAudio);
+
   const tune = (position: number) => {
     if (!actions.setChannel(position)) return false;
+    audio.play("dial");
+    const transition = manifestAt(position)?.display?.transition ?? "static";
+    if (settings.fx && !reducedMotion && transition === "static")
+      audio.play("static");
     dismissHint();
     const label = channelLabel(position);
     const name = channelName(position);
@@ -155,6 +171,7 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
 
   const changeVolume = (volume: number) => {
     actions.setVolume(volume);
+    audio.play("vol");
     flash(
       { kind: "volume", volume },
       volume === 0 ? "Muted" : `Volume ${String(volume)}`,
@@ -170,6 +187,8 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
 
   const changePower = (on: boolean) => {
     actions.setPower(on);
+    audio.play("power_btn");
+    if (on) audio.play("crt_on");
     setDetune(0);
     if (on)
       setBoot((current) => ({
@@ -193,6 +212,9 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
   });
 
   usePerfMonitor(power && visible, snapshot.perf, actions.setPerf);
+  useEffect(() => {
+    audio.setHidden(!visible);
+  }, [audio, visible]);
   const manifest = manifestAt(shown);
   const effects = resolveEffects({
     viewer: settings,
@@ -216,6 +238,16 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
         }
       : osd;
   const glowOpacity = roomGlowOpacity(picture, power, switching);
+  const noSignal = power && !manifest && !switching;
+  useEffect(() => {
+    audio.setAmbient({
+      power,
+      snd: settings.snd,
+      volume: settings.volume,
+      noSignal,
+      detune,
+    });
+  }, [audio, power, settings.snd, settings.volume, noSignal, detune]);
   return (
     <main className={styles.tv}>
       <h1 className={styles["sr-only"]}>revenantal</h1>
@@ -243,27 +275,41 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
                   onTune={tune}
                   onDrag={(drag) => {
                     if (!power) return;
+                    if (drag && drag.position !== shown) audio.play("dial");
                     preview(drag?.position ?? null);
                     setDetune(drag ? Math.min(1, drag.offset * 2) : 0);
                   }}
                 />
                 <HintNote
                   phase={power ? hint : "gone"}
-                  onDismiss={dismissHint}
+                  onDismiss={() => {
+                    audio.play("toggle");
+                    dismissHint();
+                  }}
                 />
                 <VolumeKnob volume={settings.volume} onChange={changeVolume} />
                 <PanelButtons
                   buttons={site?.buttons ?? []}
                   onTune={tuneTo}
                   onAnnounce={setAnnouncement}
+                  onPress={(phase) => {
+                    audio.play(phase === "down" ? "btn_down" : "btn_up");
+                  }}
                 />
                 <SettingsDoor
                   open={door}
                   settings={settings}
                   limited={effects.limited}
-                  onDoor={actions.setDoor}
-                  onToggle={actions.toggleSetting}
+                  onDoor={(open) => {
+                    audio.play(open ? "door_open" : "door_close");
+                    actions.setDoor(open);
+                  }}
+                  onToggle={(name) => {
+                    audio.play("toggle");
+                    actions.toggleSetting(name);
+                  }}
                   onCredits={() => {
+                    audio.play("toggle");
                     actions.setDoor(false);
                     tuneTo("credits");
                   }}

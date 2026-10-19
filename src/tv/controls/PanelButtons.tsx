@@ -8,6 +8,8 @@ export type PanelButtonsProps = {
   buttons: PanelButton[];
   onTune: (channel: string) => void;
   onAnnounce: (message: string) => void;
+  /** Press and release, for the button's sounds. */
+  onPress?: (phase: "down" | "up") => void;
 };
 
 const HOUSING = { width: 142, height: 63 };
@@ -37,12 +39,14 @@ export function stackLayout(count: number) {
  * @param props.buttons - Panel buttons from site.json.
  * @param props.onTune - Tunes to a channel ID.
  * @param props.onAnnounce - Announces copy results in the TV's live region.
+ * @param props.onPress - Reports press and release for sound.
  * @returns The button stack.
  */
 export function PanelButtons({
   buttons,
   onTune,
   onAnnounce,
+  onPress,
 }: PanelButtonsProps) {
   const [copied, setCopied] = useState<string | null>(null);
   const timerRef = useRef<number | undefined>(undefined);
@@ -99,6 +103,14 @@ export function PanelButtons({
             </span>
           </span>
         );
+        const pressHandlers = {
+          onPointerDown: () => {
+            onPress?.("down");
+          },
+          onPointerUp: () => {
+            onPress?.("up");
+          },
+        };
         const faceBox = {
           left: `${String(FACE.left * 100)}%`,
           top: `${String(FACE.top * 100)}%`,
@@ -121,6 +133,7 @@ export function PanelButtons({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${button.label} (opens in a new tab)`}
+                {...pressHandlers}
               >
                 {face}
               </a>
@@ -129,6 +142,7 @@ export function PanelButtons({
                 type="button"
                 className={styles.press}
                 style={faceBox}
+                {...pressHandlers}
                 aria-label={
                   button.action === "copy"
                     ? `${label}: copy username`
