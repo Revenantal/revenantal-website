@@ -19,7 +19,7 @@ Everything the site needs that is not code. Tick items as they are sourced, clea
 - [x] Prototype radar map and "Coming up" still — `docs/reference/assets/guide/`
 - [ ] Bundle simplified Natural Earth 1:110m land/coastlines; pin source/version and record public-domain terms, processing and compressed budget. Reserve visible forecast/radar credit links.
 - [ ] Radar tiles and base map wired to the live source (task 3.5)
-- [ ] "Coming up" stills captured from each channel at build time
+- [x] ~~"Coming up" stills~~: dropped by the owner (2026-10-19); the Guide shows the forecast instead
 
 ## Revscape
 

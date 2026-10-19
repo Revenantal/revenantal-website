@@ -1,5 +1,5 @@
 import type { Live, LiveServer, Project, SourceState } from "../../data/types";
-import type { Promo } from "./promos";
+import type { DialChannel } from "./dial";
 import { timeAgo } from "./time";
 
 /** Which icon a row's channel cell shows. */
@@ -21,7 +21,7 @@ export type Row = {
   callsign: string;
   sub: string;
   blocks: Block[];
-  /** Projects open in a new tab; promos tune the TV; others are information only. */
+  /** Projects open in a new tab; other channels tune the TV; the rest is information only. */
   action:
     | { kind: "link"; url: string }
     | { kind: "tune"; channelId: string }
@@ -150,7 +150,7 @@ export function serverRow(server: LiveServer, index: number): Row {
  * @param input.servers - Game servers.
  * @param input.live - The freshness-filtered live data.
  * @param input.steam - Freshness of the Steam source.
- * @param input.promos - Other built channels.
+ * @param input.dial - The other channels on the dial.
  * @param input.now - The display clock.
  * @returns The rows, in order.
  */
@@ -159,14 +159,14 @@ export function buildRows({
   servers,
   live,
   steam,
-  promos,
+  dial,
   now,
 }: {
   projects: Project[];
   servers: LiveServer[];
   live: Live | null;
   steam: SourceState;
-  promos: Promo[];
+  dial: DialChannel[];
   now: Date;
 }): Row[] {
   const rows = [...projects.map(projectRow), ...servers.map(serverRow)];
@@ -201,15 +201,15 @@ export function buildRows({
       action: { kind: "none" },
       label: `GitHub: ${push.name}, pushed ${ago}`,
     });
-  for (const promo of promos)
+  for (const channel of dial)
     rows.push({
-      key: `promo-${promo.id}`,
+      key: `dial-${channel.id}`,
       icon: "dial",
-      callsign: promo.label,
+      callsign: channel.label,
       sub: "on the dial",
-      blocks: [{ title: promo.title, detail: promo.blurb, span: 3 }],
-      action: { kind: "tune", channelId: promo.id },
-      label: `${promo.label}, ${promo.title}: ${promo.blurb}. Tune to this channel`,
+      blocks: [{ title: channel.title, detail: channel.blurb, span: 3 }],
+      action: { kind: "tune", channelId: channel.id },
+      label: `${channel.label}, ${channel.title}: ${channel.blurb}. Tune to this channel`,
     });
   return rows;
 }

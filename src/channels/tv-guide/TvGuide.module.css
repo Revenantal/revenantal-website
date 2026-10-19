@@ -72,8 +72,8 @@
   font-weight: 400;
 }
 
-/* Promo window: Coming up now, the local forecast in task 3.5. */
-.promo {
+/* The large window: the local forecast (task 3.5), soft static until then. */
+.forecast {
   top: 8px;
   left: 8px;
   width: 460px;
@@ -81,33 +81,13 @@
   padding: 0;
 }
 
-.promo-button {
+.static {
   position: absolute;
   inset: 0;
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.still {
-  position: absolute;
-  inset: 0;
-  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-.promo-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(transparent 55%, rgb(5 12 50 / 85%));
+  opacity: 0.35;
+  filter: blur(1.5px);
 }
 
 .badge {
@@ -120,38 +100,16 @@
   letter-spacing: 0.08em;
 }
 
-.promo-title {
-  position: absolute;
-  right: 14px;
-  bottom: 10px;
-  left: 14px;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.promo-name {
-  font-size: 30px;
-  line-height: 1;
-}
-
-.promo-blurb {
-  max-width: 55%;
-  color: #dfe8ff;
-  font-size: 13px;
-  text-align: right;
-}
-
-.empty {
+.unavailable {
   position: absolute;
   inset: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  margin: 0;
   color: #dfe8ff;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 /* Station: logo, the viewer's clock, the next promo. */
@@ -235,40 +193,7 @@
   text-align: center;
 }
 
-.mini {
-  position: relative;
-  display: block;
-  width: calc(100% - 24px);
-  height: 96px;
-  margin: 8px 12px 0;
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid rgb(170 200 255 / 60%);
-  border-radius: 5px;
-  background: #070f3a;
-  box-shadow: 0 3px 6px rgb(0 0 0 / 50%);
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-}
-
-.mini-badge {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 2px 7px;
-  border-radius: 0 0 5px;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-}
-
-.mini-name {
-  position: absolute;
-  bottom: 4px;
-  left: 8px;
-  font-size: 16px;
-}
-
+/* The other channels on the dial. */
 .dial {
   position: relative;
   height: 96px;
@@ -278,6 +203,16 @@
   border-radius: 5px;
   background: linear-gradient(rgb(20 40 130 / 90%), rgb(8 18 70 / 95%));
   box-shadow: 0 3px 6px rgb(0 0 0 / 50%);
+}
+
+.dial-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2px 7px;
+  border-radius: 0 0 5px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
 }
 
 .dial-list {
@@ -495,8 +430,6 @@ button.cell {
 }
 
 /* Focus: a gold ring inside each control. */
-.promo-button:focus-visible,
-.mini:focus-visible,
 .cell:focus-visible {
   outline: 3px solid #ffd400;
   outline-offset: -3px;

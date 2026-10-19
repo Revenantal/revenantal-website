@@ -29,15 +29,18 @@ describe("TV Guide", () => {
     ).toHaveLength(3);
   });
 
-  it("tunes to other channels from Coming up and the listings through the host", () => {
+  it("tunes to other channels from the listings through the host", () => {
     const props = channelProps();
     render(<ChannelComponent {...props} />);
-    fireEvent.click(
-      screen.getByRole("button", { name: /^Coming up on CH 10: STATUS/ }),
-    );
     fireEvent.click(screen.getByRole("button", { name: /^CH 10, STATUS:/ }));
-    expect(props.host.tune).toHaveBeenCalledTimes(2);
     expect(props.host.tune).toHaveBeenCalledWith("status");
+  });
+
+  it("shows soft static in the forecast window until weather is available, never a fixed city", () => {
+    render(<ChannelComponent {...channelProps()} />);
+    const window = screen.getByRole("region", { name: "Local forecast" });
+    expect(window.textContent).toContain("Forecast not available");
+    expect(window.querySelector("canvas")).not.toBeNull();
   });
 
   it("drifts the listings only while active and not hovered, and keeps a second copy out of reach", () => {

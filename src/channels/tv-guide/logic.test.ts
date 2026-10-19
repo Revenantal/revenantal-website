@@ -12,12 +12,11 @@ import { buildRows, callsign, projectRow, serverRow } from "./listings";
 import { tickerItems } from "./ticker";
 import { clockParts, listingSlots, longDate, timeAgo } from "./time";
 
-const promo = {
+const dialChannel = {
   id: "status",
   label: "CH 10",
   title: "STATUS",
   blurb: "The server rack.",
-  image: "/assets/promos/status.jpg",
 };
 
 describe("listings", () => {
@@ -77,7 +76,7 @@ describe("listings", () => {
       servers: FRESH_LIVE.servers ?? [],
       live: FRESH_LIVE,
       steam: FRESH_STATE.steam,
-      promos: [promo],
+      dial: [dialChannel],
       now: FIXTURE_NOW,
     });
     expect(rows.map((row) => row.icon)).toEqual([
@@ -95,7 +94,7 @@ describe("listings", () => {
       servers: [],
       live: STALE_LIVE,
       steam: STALE_STATE.steam,
-      promos: [],
+      dial: [],
       now: FIXTURE_NOW,
     });
     expect(stale).toEqual([]);

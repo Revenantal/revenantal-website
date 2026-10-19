@@ -18,7 +18,7 @@ Expose neither the weather port nor the internal Caddy listener directly. Never 
 
 Every forecast/radar response, including errors, has Cache-Control: private, no-store. Edge, Caddy, service workers and CDN rules bypass these routes. Do not persist forecasts, city or coordinates in browser storage. Browser weather state lives only in memory during the visit.
 
-The separate upstream forecast cache uses rounded city-centre coordinates plus units, TTL 30 minutes, LRU maximum 1,000 entries/32 MiB; evict at either limit. Never key by IP. Coalesce city requests. Use a five-second deadline, 256 KiB forecast response limit, no redirects and no per-request retries. Bound upstream concurrency to eight and upstream traffic to 30 requests/minute globally across forecast/radar. Expired data or exhausted limits falls back to Coming up, not stale data shown as current.
+The separate upstream forecast cache uses rounded city-centre coordinates plus units, TTL 30 minutes, LRU maximum 1,000 entries/32 MiB; evict at either limit. Never key by IP. Coalesce city requests. Use a five-second deadline, 256 KiB forecast response limit, no redirects and no per-request retries. Bound upstream concurrency to eight and upstream traffic to 30 requests/minute globally across forecast/radar. Expired data or exhausted limits shows the panel's unavailable state, never stale data shown as current.
 
 Limit forecast requests to ten/minute and radar requests to 120/minute per transient client bucket. Buckets use an HMAC of the normalized IP with a random in-memory service secret, expire after ten minutes and are capped at 10,000; reject excess new buckets. No raw IP retention after request processing. Restart clears buckets. Rate limits also apply to cache hits.
 

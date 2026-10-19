@@ -243,9 +243,10 @@ The owner approved building Status (task 3.2) on 2026-10-19 with the scope in `d
 
 The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with the scope in `docs/channels/01-tv-guide.md` and the v3 mockup, with these choices:
 
-- **Two PRs:** listings grid, clock, ticker and Coming up first (3.4), then the forecast and radar panel (3.5).
+- **Two PRs:** listings grid, clock, ticker and station box first (3.4), then the forecast and radar panel (3.5).
 - **Full bleed with padding** (owner request during the build, 2026-10-19, replacing the title-safe choice): the background and ticker bar reach the glass edges; the panels and listings are scaled to 90% inside a padded box so the glass never cuts them off.
-- **Coming up stills:** `pnpm promos` captures each built channel (except the Guide itself) into committed images in `public/assets/promos/`, run when a channel changes, instead of a capture in every build. Playwright is a dev dependency for this and the browser checks.
+- **No Coming up** (owner, 2026-10-19, replacing the promo stills plan): the large window is the local forecast only, with no opt-in. While weather is unavailable it shows soft static and "Forecast not available". The station box lists the other channels from `dial.json`, which a check keeps in step with the registry. The `pnpm promos` capture and the Playwright dependency were removed.
+- **No opt-in for weather** (owner, 2026-10-19): the city comes from a coarse, unstored network-address lookup with no browser permission; the panel's privacy note, DNT and Save-Data handling cover it.
 - **Forecast details:** the forecast service adds feels-like temperature, humidity and wind direction for the "Feels · Humidity · Wind" line (3.5).
 - **Badges:** a LIVE badge on projects that are currently up; no NEW badge (no data supplies it).
 - **Ticker:** current state only (latest GitHub pushes, what's playing on Steam, server player counts, projects that are down or slow). No "status changes", since the page holds one snapshot.
