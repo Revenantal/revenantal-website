@@ -1,7 +1,7 @@
 import type { ComponentChildren } from "preact";
 import { Badge } from "./Badge";
 import { RoomGlow } from "./RoomGlow";
-import { DOOR, SCREEN, STAGE, boxStyle } from "./geometry";
+import { SCREEN, STAGE, boxStyle } from "./geometry";
 import type { Picture } from "./room-glow";
 import { roomGlowOpacity } from "./room-glow";
 import styles from "./Cabinet.module.css";
@@ -17,7 +17,7 @@ export type CabinetProps = {
 const ASSETS = "/assets/tv";
 
 /**
- * Photo layers of the TV: glass, frame, door, controls, room glow and badge.
+ * Photo layers of the TV: glass, frame, controls, room glow and badge.
  *
  * @param props - Current picture, glow switch, screen contents and controls.
  * @param props.picture - What the screen shows, for its colour and the room light.
@@ -43,13 +43,6 @@ export function Cabinet({ picture, glow, children, controls }: CabinetProps) {
         width={STAGE.width}
         height={STAGE.height}
         style={boxStyle({ left: 0, top: 0, ...STAGE })}
-      />
-      <img
-        className={styles.photo}
-        src={`${ASSETS}/door.webp`}
-        alt=""
-        draggable={false}
-        style={boxStyle(DOOR)}
       />
       {controls}
       <RoomGlow color={picture.glow} opacity={roomGlowOpacity(picture, glow)} />

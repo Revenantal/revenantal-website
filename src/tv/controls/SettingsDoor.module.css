@@ -1,0 +1,131 @@
+.compartment {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.switch {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  padding: 2px;
+  border: 0;
+  background: none;
+  color: #cfc6b4;
+  cursor: pointer;
+}
+
+.switch:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.switch:focus-visible {
+  outline: 2px solid var(--color-tv-focus);
+  outline-offset: 1px;
+}
+
+.track {
+  position: relative;
+  width: 14px;
+  height: 28px;
+  border-radius: 3px;
+  background: #050403;
+  box-shadow: inset 0 0 0 1px #2a2622;
+}
+
+.lever {
+  position: absolute;
+  top: 13px;
+  left: 2px;
+  width: 10px;
+  height: 13px;
+  border-radius: 2px;
+  background: linear-gradient(#f2efe6, #9a958a);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 60%);
+  transition: top 0.12s;
+}
+
+.lever[data-on="true"] {
+  top: 2px;
+}
+
+.short {
+  font-family: var(--font-body);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+
+.lamp {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #2a2622;
+}
+
+.lamp[data-lit="true"] {
+  background: #ffb02e;
+  box-shadow: 0 0 4px #ffb02e;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin: 5px 0;
+  border-radius: 2px;
+  background: linear-gradient(#efe7d4, #b9b09c);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 60%);
+  color: #3a2e22;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Drawn as decoration so the button's name matches its visible "CRD" label. */
+.info::before {
+  content: "i";
+}
+
+.hinge {
+  position: absolute;
+  perspective: 520px;
+  pointer-events: none;
+}
+
+.door {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: brightness(var(--dim)) saturate(0.85);
+  transform: rotateX(0deg);
+  transform-origin: 50% 100%;
+  transition:
+    transform 0.45s cubic-bezier(0.5, 1.6, 0.6, 1),
+    filter 0.45s;
+}
+
+.door[data-open="true"] {
+  filter: brightness(calc(var(--dim) * 1.6)) saturate(0.85);
+  transform: rotateX(-82deg);
+}
+
+.zone {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.zone:focus-visible {
+  outline: var(--focus-width) solid var(--color-tv-focus);
+  outline-offset: var(--focus-offset);
+}

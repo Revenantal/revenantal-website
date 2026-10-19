@@ -7,6 +7,16 @@ export const SLOT_COUNT = 11;
 // No channel is built yet, so every slot is empty.
 const NAMES = new Map<number, string>();
 
+// Approved launch positions, used by internal buttons that tune by channel ID.
+const POSITIONS = new Map<string, number>([
+  ["tv-guide", 1],
+  ["status", 10],
+  ["credits", 11],
+]);
+
+// Channels whose manifests are registered; empty until each channel is approved and built.
+const REGISTERED = new Set<string>();
+
 /**
  * Display name for a dial position.
  *
@@ -25,4 +35,24 @@ export function channelName(position: number): string {
  */
 export function channelLabel(position: number): string {
   return `CH ${String(position).padStart(2, "0")}`;
+}
+
+/**
+ * Resolves a stable channel ID to its dial position.
+ *
+ * @param id - Channel ID such as "status".
+ * @returns The assigned position, or undefined if the ID has none.
+ */
+export function positionOf(id: string): number | undefined {
+  return POSITIONS.get(id);
+}
+
+/**
+ * Whether a channel's manifest is registered (built and approved).
+ *
+ * @param id - Channel ID.
+ * @returns True once the channel exists.
+ */
+export function isRegistered(id: string): boolean {
+  return REGISTERED.has(id);
 }
