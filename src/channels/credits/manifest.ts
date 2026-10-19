@@ -11,7 +11,7 @@ export const manifest: ChannelManifest = {
   // "Epic Finale (loop)" by X3nus (CC BY 4.0), credited in content/credits.json.
   audio: {
     loops: {
-      music: { src: "/assets/music/credits.m4a", kind: "music", gain: 0.4 },
+      music: { src: "/assets/music/credits.m4a", kind: "music", gain: 0.58 },
     },
   },
   load: async () => ({

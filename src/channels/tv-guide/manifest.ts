@@ -17,7 +17,7 @@ export const manifest: ChannelManifest = {
   // "Weather Forecast Type Beat" by YellowTree (CC BY 4.0), credited in content/credits.json.
   audio: {
     loops: {
-      music: { src: "/assets/music/tv-guide.m4a", kind: "music", gain: 0.4 },
+      music: { src: "/assets/music/tv-guide.m4a", kind: "music", gain: 0.58 },
     },
   },
   load: async () => ({
