@@ -13,5 +13,77 @@
     "license": "OFL 1.1",
     "usedFor": "body font",
     "edits": "Latin subset, weights 400 and 700"
+  },
+  {
+    "title": "CRT TV Switches On",
+    "url": "https://freesound.org/people/Fission9/sounds/693860/",
+    "author": "Fission9",
+    "license": "CC0 1.0",
+    "usedFor": "power-on",
+    "edits": "cut to 0.12–3.95 s, faded, normalised, AAC"
+  },
+  {
+    "title": "Channel Switch.wav",
+    "url": "https://freesound.org/people/LimitSnap_Creations/sounds/279004/",
+    "author": "LimitSnap_Creations",
+    "license": "CC0 1.0",
+    "usedFor": "channel change static",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "vcr_switch.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/364202/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "push buttons (press / release)",
+    "edits": "split into press and release, faded, normalised, AAC"
+  },
+  {
+    "title": "electrical_switch_02.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/139062/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "channel dial detent",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "click_01.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/266018/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "volume tick",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "rocker_switch.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/119415/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "settings toggles",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "push_button_switch_04.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/134712/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "power button",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "Tapedeck open and closing",
+    "url": "https://freesound.org/people/stecman/sounds/376059/",
+    "author": "stecman",
+    "license": "CC0 1.0",
+    "usedFor": "settings door open / close",
+    "edits": "first two takes cut out, faded, normalised, AAC"
+  },
+  {
+    "title": "TV artwork",
+    "url": "https://revenantal.com/",
+    "author": "revenantal",
+    "license": "Owner-supplied",
+    "usedFor": "TV cabinet and controls",
+    "edits": "Generated with ChatGPT and edited with Claude: screen keyed out, dial repainted without numerals, controls cut into sprites"
   }
 ]

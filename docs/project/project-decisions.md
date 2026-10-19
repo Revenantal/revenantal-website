@@ -168,6 +168,13 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Projects stay automatic from GitHub. content/directory.json `exclude` lists repository names to leave out, matched case-insensitively before the limit. The list stays private: the live-job image carries its own full content copy, and public site.json omits it.
 - This site's repository stays in the list. The Discord username may be public. Server names stay as the panel reports them, with no overrides for now.
 
+### Asset tools (2026-10-18)
+
+- The TV sprites and sounds ship from repeatable scripts (`tools/assets/tv_sprites.py`, `tv_sounds.py`) rather than the hand-made reference files. Their output matches the approved sprites closely. Outputs are committed under `public/assets/`.
+- Fonts stay on pinned `@fontsource` packages (Latin subset, `swap`, bundled and hashed) instead of a separate subsetting tool and `public/assets/fonts/`.
+- ffmpeg was installed on the owner's machine with winget for sound encoding.
+- The shipped sounds and TV artwork are credited in this change; the TV artwork credit names ChatGPT and Claude.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

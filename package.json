@@ -26,6 +26,8 @@
     "credits:write": "node tools/content/credits.ts --write",
     "credits:check": "node tools/content/credits.ts",
     "build:live": "node tools/build/build-live.ts",
+    "assets:sprites": "python tools/assets/tv_sprites.py",
+    "assets:sounds": "python tools/assets/tv_sounds.py",
     "live:run": "node jobs/live/main.ts",
     "live:preview": "node tools/build/run-local-live.ts",
     "test:pelican": "node tools/checks/check-pelican.ts"
