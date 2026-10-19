@@ -9,7 +9,7 @@ GitHub Actions builds, lints and tests everything. Coolify only runs what Action
 | `pre-commit` hook                       | ESLint, Stylelint and Prettier on staged files (auto-fix), `tsc --noEmit`                                                                                                                  |
 | `commit-msg` hook                       | commitlint (Conventional Commits), AI attribution check                                                                                                                                    |
 | `ci.yml` (every PR and push)            | `pnpm install --frozen-lockfile` → Prettier check → ESLint → Stylelint → `tsc --noEmit` → Vitest → `vite build` → size-limit → attribution check over commits and the PR body when present |
-| `deploy.yml` (push to `main`, after CI) | Build site/live-job images (forecast image follows its implementation) → push to GHCR tagged with commit SHA and `latest` → call the Coolify deploy webhook                                |
+| `deploy.yml` (push to `main`, after CI) | Build site, live-job and forecast images (the forecast image after `pnpm fetch:dbip`) → push to GHCR tagged with commit SHA and `latest` → call the Coolify deploy webhook                 |
 
 ## Hosting on Coolify
 

@@ -77,6 +77,17 @@ jobs:
           push: true
           tags: ghcr.io/revenantal/revenantal-live:${{ env.TESTED_SHA }}
           labels: org.opencontainers.image.revision=${{ env.TESTED_SHA }}
+      - name: Fetch the DB-IP Lite city database for the weather service
+        if: steps.candidate.outputs.current == 'true'
+        run: pnpm fetch:dbip
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        if: steps.candidate.outputs.current == 'true'
+        with:
+          context: .
+          file: api/forecast/Dockerfile
+          push: true
+          tags: ghcr.io/revenantal/revenantal-forecast:${{ env.TESTED_SHA }}
+          labels: org.opencontainers.image.revision=${{ env.TESTED_SHA }}
       - name: Promote the current tested image
         if: steps.candidate.outputs.current == 'true'
         id: promotion
@@ -87,6 +98,7 @@ jobs:
           if [ "$current" = "$TESTED_SHA" ]; then
             docker buildx imagetools create --tag "$IMAGE:latest" "$IMAGE:$TESTED_SHA"
             docker buildx imagetools create --tag "ghcr.io/revenantal/revenantal-live:latest" "ghcr.io/revenantal/revenantal-live:$TESTED_SHA"
+            docker buildx imagetools create --tag "ghcr.io/revenantal/revenantal-forecast:latest" "ghcr.io/revenantal/revenantal-forecast:$TESTED_SHA"
             echo 'promoted=true' >> "$GITHUB_OUTPUT"
           fi
       - name: Request the configured Coolify deployment
