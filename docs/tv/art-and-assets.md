@@ -6,13 +6,13 @@ Credit each image in `content/credits.json` when it ships: author `revenantal`, 
 
 ## Image Pipeline (`tools/assets/`)
 
-Python + Pillow/NumPy, run by hand.
+Python + Pillow/NumPy, run by hand with `pnpm assets:sprites` (`tools/assets/tv_sprites.py`). Output goes to `public/assets/tv/`; the script's results match the approved reference sprites to within a few levels per channel.
 
 1. **Key the screen:** alpha = 1 − clamp((G − max(R,B) − 30) / 70); despill green on the edges. Screen box: x 100–1182, y 92–900.
 2. **Repaint the dial face:** black disc to r 81 with a subtle radial gradient, inner groove at r 48, 60 tick marks. No numerals are baked or drawn; tick marks are decorative and do not define channel capacity.
-3. **Cut the dial knob:** disc r 46 plus the pointer-bar sectors out to r 55 (±12° around −33.3° and 146.7°); red index dot on the pointer end.
+3. **Cut the dial knob:** disc r 46 plus the pointer-bar sectors out to r 55 (±12° around −33.3° and 146.7°); red index dot on the pointer end. The sprite keeps the photo's −33.3° pointer angle (clockwise from 12 o'clock), so the dial rotates it relative to that.
 4. **Clear the button area** (x 1311–1461, y 421–615): per-row tone interpolated between the clean panel edges, plus tiled high-pass brushing from those edges.
-5. **Cut sprites:** button housing (1315,425 → 1457,488, rounded alpha), three faces (cream, grey, dark), settings door (1284,618 → 1488,691).
+5. **Cut sprites:** button housing (1315,425 → 1457,488, rounded alpha, face opening filled as a dark recess), three faces (cream 1330,435 114×43; grey 1331,497 113×44; dark 1331,560 113×43; 2 px rounded corners), volume ring (r 36.5 around (1392, 370), light index notch at 12 o'clock) and cap (r 26.5), settings door (1284,618 → 1488,691). The frame keeps the door's rim and hinges with a dark cavity behind it.
 6. Export WebP (quality 86–92). Sizes: frame ~100 KB, sprites 1–5 KB each.
 
 ## Anchor Points
@@ -31,11 +31,11 @@ Stage coordinates, kept in `tv/geometry.ts`.
 
 ## Sound Pipeline
 
-ffmpeg + Python: mono 44.1 kHz → cut → trim silence at 1% of peak → 2–3 ms fade-in, 10–60 ms fade-out → normalise to −1 dBFS → AAC 96 kbps. Keep originals and the source link next to each file.
+ffmpeg + Python, run with `pnpm assets:sounds` (`tools/assets/tv_sounds.py`): mono → cut → trim silence at 1% of peak → 2.5 ms fade-in, 10–60 ms fade-out → normalise to −1 dBFS → resample to 44.1 kHz → AAC 96 kbps `.m4a` in `public/assets/sounds/` (about 80 KB for all ten). Cut points live in the script: button press 0–0.215 s and release from 0.215 s; door open and close are the first two takes. Originals and source links stay in `docs/reference/`.
 
 ## Fonts
 
-Self-hosted WOFF2 in `public/assets/fonts/`, Latin subset, `font-display: swap`. No Google Fonts requests. Each channel preloads only its own.
+Self-hosted through pinned `@fontsource` packages: import the Latin-subset CSS for each weight used (for example `@fontsource/michroma/latin-400.css`). Vite bundles the WOFF2 files with hashed names, so they cache long-term; the CSS uses `font-display: swap`. No Google Fonts requests and no separate subsetting tool. The TV shell and List mode import theirs from the entry; each channel imports its own fonts inside its lazy chunk. Add each new font to the credits when it ships.
 
 | Font                                | Used by                                       |
 | ----------------------------------- | --------------------------------------------- |

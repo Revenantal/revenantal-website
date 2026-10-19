@@ -33,7 +33,7 @@ What is built and where things are. Tick an item when its task has reached `main
 
 ## Phase 2 — TV Shell
 
-- [ ] 2.1 Asset tools (sprites, sounds, fonts)
+- [ ] 2.1 Asset tools (sprites, sounds, fonts) — implemented on `feat/2.1-asset-tools`; awaiting PR
 - [ ] 2.2 Stage and cabinet
 - [ ] 2.3 Controls and compact dial
 - [ ] 2.4 Screen and channel host
@@ -123,6 +123,8 @@ Credits now list only shipped external assets: the two OFL fonts. Sound and TV-i
 Owner content review answers: GitHub projects now use each repository's description and website (with cleaning and fallbacks); the SERVERS button links to the Game servers section in List mode; image credits may name the tools used (AGENTS.md amended). 1.10 still needs the remaining answers: automatic vs curated list, whether this site's repo is listed, public Discord name and server renames/hides.
 
 Owner completed the 1.10 review: the project list stays automatic from GitHub with an `exclude` list in content/directory.json (names matched case-insensitively, kept out of public site.json; the live job gets its own full content copy). This site's repository stays listed, the Discord name may be public and server names stay as the panel reports them. Ticked 1.10 and Gate 1: tooling, CI and hooks work; List mode shows projects, servers and live data from the shared store with freshness handling and axe-clean checks; runtime snapshots update without a site rebuild (Caddy checks).
+
+Task 2.1 on `feat/2.1-asset-tools`: `tools/assets/tv_sprites.py` cuts the frame and nine control sprites from the source photo (frame 107 KB, sprites 1–5 KB) and matches the approved reference sprites to within 2–5 levels on average. `tools/assets/tv_sounds.py` produces the ten TV sounds as mono 44.1 kHz AAC 96 kbps (about 80 KB total), peaks −0.8 to −2.3 dBFS after encoding. Fonts stay on `@fontsource`. Sound and TV artwork credits are restored, with a test tying sound sources and TV art to credits.
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 
