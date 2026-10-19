@@ -3,7 +3,7 @@ import styles from "./HintNote.module.css";
 /** The note is shown, falling away, or gone. */
 export type HintPhase = "waiting" | "shown" | "falling" | "gone";
 
-/** Shown once on a first visit; the TV owns its timing. */
+/** Shown on each page load until dismissed; the TV owns its timing. */
 export type HintNoteProps = { phase: HintPhase; onDismiss: () => void };
 
 const POSITION = { left: 1150, top: 150 };

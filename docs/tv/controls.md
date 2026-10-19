@@ -15,7 +15,7 @@ Every control maps to one store action, so mouse, touch, keyboard and URL all be
 | Settings door                         | Click                                                                   | Door swings down on its hinges; reveals 5 toggle switches + credits button; click its bottom edge to close                              |
 | Credits button (inside settings door) | Click / Enter                                                           | Close the door and tune to Credits (channel ID `credits`, position 11); restart the roll from the top                                   |
 | Power LED                             | Click                                                                   | Off: picture collapses, afterglow dot fades over 3.2 s, TV fades out, List mode fades in                                                |
-| Hint note                             | Click, or any channel change                                            | Tape peels, note falls off screen (1.4 s); never shown again                                                                            |
+| Hint note                             | Click, or any channel change                                            | Tape peels, note falls off screen (1.4 s); returns on the next page load                                                                |
 
 The dial is unnumbered at every viewport size. Its position count and step angle come from the configured channel slots, including blanks; see [dial configuration](dial-configuration.md). No UHF dial.
 

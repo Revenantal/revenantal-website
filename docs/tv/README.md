@@ -15,7 +15,7 @@ Prototype: `docs/reference/prototypes/door-tv.dc.html` (the canonical interactiv
 
 1. The page fills the window with the TV, scaled to fit and letterboxed on near-black. The cabinet sits in a dark room lit by the screen.
 2. On load the screen does a quick power-on to the last-watched channel, or channel 1 (TV Guide) on a first visit.
-3. First visit only: after about 1.6 s a taped paper note reading "turn the dial →" appears beside the dial and the CH number blinks. Turning the dial or clicking the note makes it peel and fall away. It never returns.
+3. On every page load, after about 1.6 s a taped paper note reading "turn the dial →" appears beside the dial and the CH number blinks. Turning the dial or clicking the note makes it peel and fall away until the next page load.
 4. Visitors change channel with the dial (click, drag, scroll, arrow keys).
 5. Panel buttons link to Steam and GitHub, copy the Discord username, and SERVERS tunes to the Status channel.
 6. The settings door flips open to show switches for scanlines, flicker, static, sound and room glow, plus a Credits button that tunes to the movie-style credits roll on channel 11.

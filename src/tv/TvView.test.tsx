@@ -220,19 +220,9 @@ describe("TV view", () => {
     );
   });
 
-  it("shows the first-visit note after a moment and drops it when clicked, for good", () => {
+  it("shows the note after a moment and drops it when clicked", () => {
     vi.useFakeTimers();
-    const storage = new Map<string, string>();
-    const store = createStore({
-      positionCount: SLOT_COUNT,
-      storage: {
-        getItem: (key) => storage.get(key) ?? null,
-        setItem: (key, value) => {
-          storage.set(key, value);
-        },
-      },
-    });
-    render(<ConnectedTv store={store} />);
+    renderTv();
     expect(screen.queryByRole("note")).toBeNull();
 
     void act(() => {
@@ -242,7 +232,6 @@ describe("TV view", () => {
     expect(screen.getByText("CH 01")).toBeTruthy();
 
     fireEvent.click(note);
-    expect(storage.get("rv-hint")).toBe("1");
     void act(() => {
       vi.advanceTimersByTime(1400);
     });
@@ -250,7 +239,7 @@ describe("TV view", () => {
     vi.useRealTimers();
   });
 
-  it("dismisses the note on the first channel change and skips it once dismissed", () => {
+  it("dismisses the note on the first channel change, and shows it again on the next page load", () => {
     vi.useFakeTimers();
     const { store } = renderTv();
     void act(() => {
@@ -262,15 +251,11 @@ describe("TV view", () => {
     expect(store.getSnapshot().hintDismissed).toBe(true);
     cleanup();
 
-    const dismissed = createStore({
-      positionCount: SLOT_COUNT,
-      storage: { getItem: () => "1", setItem: () => undefined },
-    });
-    render(<ConnectedTv store={dismissed} />);
+    renderTv();
     void act(() => {
-      vi.advanceTimersByTime(5000);
+      vi.advanceTimersByTime(1600);
     });
-    expect(screen.queryByRole("note")).toBeNull();
+    expect(screen.getByRole("note")).toBeTruthy();
     vi.useRealTimers();
   });
 });

@@ -56,13 +56,6 @@ export function createStore(options: StoreOptions = {}) {
     /* Blocked/malformed storage leaves valid in-memory defaults. */
   }
 
-  let hintDismissed = false;
-  try {
-    hintDismissed = options.storage?.getItem("rv-hint") === "1";
-  } catch {
-    /* Blocked storage shows the first-visit note again; harmless. */
-  }
-
   let snapshot: StoreSnapshot = {
     site: null,
     raw: null,
@@ -72,7 +65,7 @@ export function createStore(options: StoreOptions = {}) {
     power: true,
     channel: 1,
     door: false,
-    hintDismissed,
+    hintDismissed: false,
     perf: 0,
     settings,
   };
@@ -150,13 +143,8 @@ export function createStore(options: StoreOptions = {}) {
       update({ door: snapshot.power && door });
     },
     dismissHint: () => {
-      if (snapshot.hintDismissed) return;
-      update({ hintDismissed: true });
-      try {
-        options.storage?.setItem("rv-hint", "1");
-      } catch {
-        /* The note stays dismissed for this visit when storage is blocked. */
-      }
+      // Dismissal lasts for this page load only; the note returns on the next load.
+      if (!snapshot.hintDismissed) update({ hintDismissed: true });
     },
     setPerf: (perf: number) => {
       if (Number.isInteger(perf) && perf >= 0 && perf <= 2) update({ perf });

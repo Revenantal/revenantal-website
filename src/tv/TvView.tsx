@@ -60,7 +60,7 @@ export function TvView({ snapshot, actions }: TvViewProps) {
     [],
   );
 
-  // First visit: the note appears after a moment, falls when dismissed, and never returns.
+  // Every page load: the note appears after a moment and falls when dismissed.
   const [hint, setHint] = useState<HintPhase>(
     hintDismissed ? "gone" : "waiting",
   );
