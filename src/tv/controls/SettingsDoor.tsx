@@ -1,3 +1,4 @@
+import { useRef } from "preact/hooks";
 import { DOOR } from "../geometry";
 import styles from "./SettingsDoor.module.css";
 
@@ -9,7 +10,6 @@ export type SettingsDoorProps = {
   open: boolean;
   settings: Record<Switch, boolean>;
   limited: Partial<Record<Switch, boolean>>;
-  creditsAvailable: boolean;
   onDoor: (open: boolean) => void;
   onToggle: (name: Switch) => void;
   onCredits: () => void;
@@ -33,26 +33,26 @@ const CLOSE_STRIP = 20;
  * @param props.open - Whether the door is open.
  * @param props.settings - Viewer switch states.
  * @param props.limited - Switches the current channel limits, shown by an amber lamp.
- * @param props.creditsAvailable - Whether the Credits channel is registered.
  * @param props.onDoor - Opens or closes the door.
  * @param props.onToggle - Flips one switch.
- * @param props.onCredits - Tunes to the Credits channel.
+ * @param props.onCredits - Closes the door and tunes to the Credits channel; focus returns to the door.
  * @returns The door, its compartment and controls.
  */
 export function SettingsDoor({
   open,
   settings,
   limited,
-  creditsAvailable,
   onDoor,
   onToggle,
   onCredits,
 }: SettingsDoorProps) {
   const px = (value: number) => `${String(value)}px`;
+  const doorRef = useRef<HTMLButtonElement>(null);
   return (
     <>
       <button
         type="button"
+        ref={doorRef}
         className={styles.zone}
         aria-label="Settings door"
         aria-expanded={open}
@@ -101,13 +101,11 @@ export function SettingsDoor({
         <button
           type="button"
           className={styles.switch}
-          aria-label={
-            creditsAvailable
-              ? "CRD: Credits"
-              : "CRD: Credits, not available yet"
-          }
-          disabled={!creditsAvailable}
-          onClick={onCredits}
+          aria-label="CRD: Credits"
+          onClick={() => {
+            onCredits();
+            doorRef.current?.focus();
+          }}
         >
           <span className={styles.info} aria-hidden="true" />
           <span className={styles.short}>CRD</span>

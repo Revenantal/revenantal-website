@@ -29,7 +29,7 @@ From `content/buttons.json`: STEAM (link), GITHUB (link), DISCORD (copies the us
 
 The settings-door Credits button tunes to the channel ID `credits` through the same host/store action path as other channel changes. Resolve its assigned position from the registry; do not hard-code the number into the control. The initial position is 11. Close the settings door so it does not cover the roll, and begin the roll at the top. After activation, move focus to the channel Pause control, or its heading in the static reduced-motion view, so focus is not left inside the closed door. If already tuned to Credits, the button leaves the current roll in place; the channel provides its own Restart control.
 
-This replaces the settings-door credits panel. The button stays unavailable until the Credits manifest is registered; it must be available at launch. In List mode, keep the readable credits section rather than turning the TV on.
+This replaces the settings-door credits panel. Until the Credits channel is built, the button tunes to position 11 and shows NO SIGNAL (owner decision, 2026-10-19). Once the channel exists, focus moves to its Pause control instead of the door button. In List mode, keep the readable credits section rather than turning the TV on.
 
 ## Channel Change
 

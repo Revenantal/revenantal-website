@@ -14,9 +14,6 @@ const POSITIONS = new Map<string, number>([
   ["credits", 11],
 ]);
 
-// Channels whose manifests are registered; empty until each channel is approved and built.
-const REGISTERED = new Set<string>();
-
 /**
  * Display name for a dial position.
  *
@@ -45,14 +42,4 @@ export function channelLabel(position: number): string {
  */
 export function positionOf(id: string): number | undefined {
   return POSITIONS.get(id);
-}
-
-/**
- * Whether a channel's manifest is registered (built and approved).
- *
- * @param id - Channel ID.
- * @returns True once the channel exists.
- */
-export function isRegistered(id: string): boolean {
-  return REGISTERED.has(id);
 }

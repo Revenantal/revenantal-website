@@ -204,13 +204,19 @@ describe("TV view", () => {
     expect(
       screen.getByRole("button", { name: /^GLOW: Room glow, ON, limited/ }),
     ).toBeTruthy();
-    expect(
-      screen.getByRole<HTMLButtonElement>("button", {
-        name: "CRD: Credits, not available yet",
-      }).disabled,
-    ).toBe(true);
-
     fireEvent.click(screen.getByRole("button", { name: "Settings door" }));
     expect(store.getSnapshot().door).toBe(false);
+  });
+
+  it("closes the door and tunes to Credits from the CRD button", () => {
+    const { store } = renderTv();
+    fireEvent.click(screen.getByRole("button", { name: "Settings door" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "CRD: Credits" }));
+    expect(store.getSnapshot().door).toBe(false);
+    expect(store.getSnapshot().channel).toBe(11);
+    expect(document.activeElement?.getAttribute("aria-label")).toBe(
+      "Settings door",
+    );
   });
 });

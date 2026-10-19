@@ -8,13 +8,7 @@ import { PowerLed } from "./controls/PowerLed";
 import { SettingsDoor } from "./controls/SettingsDoor";
 import { useTvKeys } from "./controls/tv-keys";
 import { VolumeKnob } from "./controls/VolumeKnob";
-import {
-  SLOT_COUNT,
-  channelLabel,
-  channelName,
-  isRegistered,
-  positionOf,
-} from "./lineup";
+import { SLOT_COUNT, channelLabel, channelName, positionOf } from "./lineup";
 import { Osd } from "./Osd";
 import type { OsdState } from "./Osd";
 import { NO_SIGNAL, POWERED_OFF, roomGlowOpacity } from "./room-glow";
@@ -139,7 +133,6 @@ export function TvView({ snapshot, actions }: TvViewProps) {
                       picture.level !== false &&
                       picture.level < 1,
                   }}
-                  creditsAvailable={isRegistered("credits")}
                   onDoor={actions.setDoor}
                   onToggle={actions.toggleSetting}
                   onCredits={() => {
