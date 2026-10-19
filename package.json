@@ -56,6 +56,12 @@
       "path": "dist/assets/channel-tv-guide-*.js",
       "limit": "30 kB",
       "gzip": true
+    },
+    {
+      "name": "Credits channel",
+      "path": "dist/assets/channel-credits-*.js",
+      "limit": "30 kB",
+      "gzip": true
     }
   ],
   "dependencies": {

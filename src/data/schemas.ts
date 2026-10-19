@@ -99,6 +99,7 @@ export const creditSchema = z.strictObject({
   license: text,
   edits: text.optional(),
   usedFor: text,
+  department: text,
 });
 
 const captions = z.strictObject({

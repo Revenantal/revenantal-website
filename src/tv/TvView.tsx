@@ -115,6 +115,11 @@ export function TvView({
   const timerRef = useRef<number | undefined>(undefined);
   // Turning on from List mode puts focus on the dial.
   const [dialFocus, setDialFocus] = useState(startup === "warm" ? 1 : 0);
+  // The Credits button hands focus to the channel once it is on screen.
+  const [focusChannel, setFocusChannel] = useState<string | null>(null);
+  const [clearFocusChannel] = useState(() => () => {
+    setFocusChannel(null);
+  });
   useEffect(
     () => () => {
       window.clearTimeout(timerRef.current);
@@ -195,6 +200,8 @@ export function TvView({
   useAudioUnlock(unlockAudio);
 
   const tune = (position: number) => {
+    // Any other tune cancels a pending focus hand-off.
+    setFocusChannel(null);
     if (!actions.setChannel(position)) return false;
     audio.play("dial");
     const transition = manifestAt(position)?.display?.transition ?? "static";
@@ -368,6 +375,7 @@ export function TvView({
                     audio.play("toggle");
                     actions.setDoor(false);
                     tuneTo("credits");
+                    setFocusChannel("credits");
                   }}
                 />
                 <PowerLed power={power} onPower={changePower} />
@@ -416,6 +424,8 @@ export function TvView({
               detune={detune}
               bloom={effects.bloom}
               createAudioScope={createAudioScope}
+              focusChannel={focusChannel}
+              onFocusTaken={clearFocusChannel}
               onPowerOff={() => {
                 changePower(false);
               }}

@@ -1,3 +1,4 @@
+import { groupCredits } from "@data/credits";
 import type { DataView } from "@data/freshness";
 import type { Site } from "@data/types";
 import { useEffect, useRef } from "preact/hooks";
@@ -261,33 +262,42 @@ export function ListView({
         <footer className={styles.footer}>
           <details>
             <summary className={styles.summary}>Credits</summary>
-            <ul className={styles.list}>
-              {site.credits.map((credit) => (
-                <li
-                  className={styles.credit}
-                  key={`${credit.title}-${credit.url}`}
-                >
-                  <a
-                    href={credit.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {credit.title}
-                    <span className={styles["sr-only"]}>
-                      {" "}
-                      (opens in a new tab)
-                    </span>
-                  </a>
-                  <p>
-                    {credit.author} · {credit.license}
-                  </p>
-                  <p className={styles.meta}>
-                    {credit.usedFor}
-                    {credit.edits ? ` · ${credit.edits}` : ""}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            {groupCredits(site.credits).map((group) => (
+              <section
+                key={group.department}
+                className={styles.department}
+                aria-label={group.department}
+              >
+                <h3>{group.department}</h3>
+                <ul className={styles.list}>
+                  {group.credits.map((credit) => (
+                    <li
+                      className={styles.credit}
+                      key={`${credit.title}-${credit.url}`}
+                    >
+                      <a
+                        href={credit.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {credit.title}
+                        <span className={styles["sr-only"]}>
+                          {" "}
+                          (opens in a new tab)
+                        </span>
+                      </a>
+                      <p>
+                        {credit.author} · {credit.license}
+                      </p>
+                      <p className={styles.meta}>
+                        {credit.usedFor}
+                        {credit.edits ? ` · ${credit.edits}` : ""}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
           </details>
           <p className={styles.meta}>
             {validSnapshotTime ? (

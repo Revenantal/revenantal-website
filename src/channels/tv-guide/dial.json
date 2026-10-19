@@ -4,5 +4,11 @@
     "label": "CH 10",
     "title": "STATUS",
     "blurb": "The server rack: every project and game server, live."
+  },
+  {
+    "id": "credits",
+    "label": "CH 11",
+    "title": "CREDITS",
+    "blurb": "The closing credits: everyone whose work is on screen."
   }
 ]

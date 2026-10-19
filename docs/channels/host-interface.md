@@ -99,6 +99,7 @@ Each mounted channel gets a host scope. On leaving it, the host releases capture
 
 - `host.powerOff()` calls the normal `setPower(false)` action. Rev OS uses it for Shut Down. It does not manipulate the cabinet DOM or invent a power URL.
 - `host.tune(id)` resolves the stable channel ID through the registry and uses the same `setChannel` path as the dial. It returns false for an unregistered ID, inactive/stale scope or powered-off TV, with no URL/state change. It returns true for a registered target, including the current channel.
+- After a panel button tunes to a channel (the Credits button today), the frame moves focus into it once it is loaded and active: to the element marked `data-focus-first`, otherwise its first focusable control. Any other tune cancels the hand-off. Channels mark at most one element.
 - These mutations are accepted only from the current active channel. Navigating to a project remains a normal link; internal tune controls use the callback. Existing external `#chN` links remain supported by the TV URL layer.
 
 ## Captions and Broadcasts

@@ -140,6 +140,52 @@ describe("screen host", () => {
     expect(typeof received?.host.tune).toBe("function");
   });
 
+  it("hands focus to the channel's marked control once it is shown and active", async () => {
+    const Controls: ChannelModule["ChannelComponent"] = () => (
+      <div>
+        <button type="button">First</button>
+        <button type="button" data-focus-first="">
+          Marked
+        </button>
+      </div>
+    );
+    const manifest = fixture(() =>
+      Promise.resolve({ ChannelComponent: Controls }),
+    );
+    const onFocusTaken = vi.fn();
+    const view = render(
+      <Screen
+        {...props({
+          manifest,
+          visible: false,
+          focusChannel: "fixture",
+          onFocusTaken,
+        })}
+      />,
+    );
+    await screen.findByText("Marked");
+    expect(onFocusTaken).not.toHaveBeenCalled();
+    view.rerender(
+      <Screen
+        {...props({ manifest, focusChannel: "fixture", onFocusTaken })}
+      />,
+    );
+    expect(document.activeElement?.textContent).toBe("Marked");
+    expect(onFocusTaken).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves focus alone for a channel that was not asked to take it", async () => {
+    const Controls: ChannelModule["ChannelComponent"] = () => (
+      <button type="button">Only</button>
+    );
+    const manifest = fixture(() =>
+      Promise.resolve({ ChannelComponent: Controls }),
+    );
+    render(<Screen {...props({ manifest, focusChannel: "credits" })} />);
+    await screen.findByText("Only");
+    expect(document.activeElement).toBe(document.body);
+  });
+
   it("discards a load that finishes after the viewer tuned away", async () => {
     const late = deferred();
     const first = fixture(() => late.promise, { id: "first" });

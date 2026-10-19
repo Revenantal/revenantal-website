@@ -1,121 +1,11 @@
 [
   {
-    "title": "Michroma",
-    "url": "https://github.com/googlefonts/Michroma-font",
-    "author": "The Michroma Project Authors",
-    "license": "OFL 1.1",
-    "usedFor": "display font"
-  },
-  {
-    "title": "Archivo Narrow",
-    "url": "https://github.com/Omnibus-Type/ArchivoNarrow",
-    "author": "The Archivo Narrow Project Authors",
-    "license": "OFL 1.1",
-    "usedFor": "body font",
-    "edits": "Latin subset, weights 400 and 700"
-  },
-  {
-    "title": "VT323",
-    "url": "https://github.com/phoikoi/VT323",
-    "author": "The VT323 Project Authors",
-    "license": "OFL 1.1",
-    "usedFor": "TV on-screen display font",
-    "edits": "Latin subset, weight 400"
-  },
-  {
-    "title": "Permanent Marker",
-    "url": "https://github.com/googlefonts/permanentmarker",
-    "author": "Font Diner",
-    "license": "Apache 2.0",
-    "usedFor": "TV hint note font",
-    "edits": "Latin subset, weight 400"
-  },
-  {
-    "title": "Press Start 2P",
-    "url": "https://github.com/codeman38/PressStart2P",
-    "author": "CodeMan38",
-    "license": "OFL 1.1",
-    "usedFor": "Status channel LED signs",
-    "edits": "Latin subset, weight 400"
-  },
-  {
-    "title": "Archivo Black",
-    "url": "https://github.com/Omnibus-Type/Archivo",
-    "author": "The Archivo Project Authors (Omnibus-Type)",
-    "license": "OFL 1.1",
-    "usedFor": "TV Guide headers and clock",
-    "edits": "Latin subset, weight 400"
-  },
-  {
-    "title": "CRT TV Switches On",
-    "url": "https://freesound.org/people/Fission9/sounds/693860/",
-    "author": "Fission9",
-    "license": "CC0 1.0",
-    "usedFor": "power-on",
-    "edits": "cut to 0.12–3.95 s, faded, normalised, AAC"
-  },
-  {
-    "title": "Channel Switch.wav",
-    "url": "https://freesound.org/people/LimitSnap_Creations/sounds/279004/",
-    "author": "LimitSnap_Creations",
-    "license": "CC0 1.0",
-    "usedFor": "channel change static",
-    "edits": "trimmed, faded, normalised, AAC"
-  },
-  {
-    "title": "vcr_switch.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/364202/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "push buttons (press / release)",
-    "edits": "split into press and release, faded, normalised, AAC"
-  },
-  {
-    "title": "electrical_switch_02.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/139062/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "channel dial detent",
-    "edits": "trimmed, faded, normalised, AAC"
-  },
-  {
-    "title": "click_01.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/266018/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "volume tick",
-    "edits": "trimmed, faded, normalised, AAC"
-  },
-  {
-    "title": "rocker_switch.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/119415/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "settings toggles",
-    "edits": "trimmed, faded, normalised, AAC"
-  },
-  {
-    "title": "push_button_switch_04.wav",
-    "url": "https://freesound.org/people/joedeshon/sounds/134712/",
-    "author": "joedeshon",
-    "license": "CC BY 4.0",
-    "usedFor": "power button",
-    "edits": "trimmed, faded, normalised, AAC"
-  },
-  {
-    "title": "Tapedeck open and closing",
-    "url": "https://freesound.org/people/stecman/sounds/376059/",
-    "author": "stecman",
-    "license": "CC0 1.0",
-    "usedFor": "settings door open / close",
-    "edits": "first two takes cut out, faded, normalised, AAC"
-  },
-  {
     "title": "TV artwork",
     "url": "https://revenantal.com/",
     "author": "revenantal",
     "license": "Owner-supplied",
     "usedFor": "TV cabinet and controls",
+    "department": "Art Department",
     "edits": "Generated with ChatGPT and edited with Claude: screen keyed out, dial repainted without numerals, controls cut into sprites"
   },
   {
@@ -124,6 +14,7 @@
     "author": "revenantal",
     "license": "Owner-supplied",
     "usedFor": "room around the TV",
+    "department": "Art Department",
     "edits": "Generated with ChatGPT; the real TV is laid over its painted one"
   },
   {
@@ -132,7 +23,133 @@
     "author": "revenantal",
     "license": "Owner-supplied",
     "usedFor": "server rack on the Status channel",
+    "department": "Art Department",
     "edits": "Generated with ChatGPT and edited with Claude: backgrounds keyed out, rack-ear holes cut, cropped; grilles, ports and lights drawn in code"
+  },
+  {
+    "title": "Michroma",
+    "url": "https://github.com/googlefonts/Michroma-font",
+    "author": "The Michroma Project Authors",
+    "license": "OFL 1.1",
+    "usedFor": "display font",
+    "department": "Typography Department"
+  },
+  {
+    "title": "Archivo Narrow",
+    "url": "https://github.com/Omnibus-Type/ArchivoNarrow",
+    "author": "The Archivo Narrow Project Authors",
+    "license": "OFL 1.1",
+    "usedFor": "body font",
+    "department": "Typography Department",
+    "edits": "Latin subset, weights 400 and 700"
+  },
+  {
+    "title": "VT323",
+    "url": "https://github.com/phoikoi/VT323",
+    "author": "The VT323 Project Authors",
+    "license": "OFL 1.1",
+    "usedFor": "TV on-screen display font",
+    "department": "Typography Department",
+    "edits": "Latin subset, weight 400"
+  },
+  {
+    "title": "Permanent Marker",
+    "url": "https://github.com/googlefonts/permanentmarker",
+    "author": "Font Diner",
+    "license": "Apache 2.0",
+    "usedFor": "TV hint note font",
+    "department": "Typography Department",
+    "edits": "Latin subset, weight 400"
+  },
+  {
+    "title": "Press Start 2P",
+    "url": "https://github.com/codeman38/PressStart2P",
+    "author": "CodeMan38",
+    "license": "OFL 1.1",
+    "usedFor": "Status channel LED signs",
+    "department": "Typography Department",
+    "edits": "Latin subset, weight 400"
+  },
+  {
+    "title": "Archivo Black",
+    "url": "https://github.com/Omnibus-Type/Archivo",
+    "author": "The Archivo Project Authors (Omnibus-Type)",
+    "license": "OFL 1.1",
+    "usedFor": "TV Guide headers and clock",
+    "department": "Typography Department",
+    "edits": "Latin subset, weight 400"
+  },
+  {
+    "title": "CRT TV Switches On",
+    "url": "https://freesound.org/people/Fission9/sounds/693860/",
+    "author": "Fission9",
+    "license": "CC0 1.0",
+    "usedFor": "power-on",
+    "department": "Sound Department",
+    "edits": "cut to 0.12–3.95 s, faded, normalised, AAC"
+  },
+  {
+    "title": "Channel Switch.wav",
+    "url": "https://freesound.org/people/LimitSnap_Creations/sounds/279004/",
+    "author": "LimitSnap_Creations",
+    "license": "CC0 1.0",
+    "usedFor": "channel change static",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "vcr_switch.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/364202/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "push buttons (press / release)",
+    "department": "Sound Department",
+    "edits": "split into press and release, faded, normalised, AAC"
+  },
+  {
+    "title": "electrical_switch_02.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/139062/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "channel dial detent",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "click_01.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/266018/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "volume tick",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "rocker_switch.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/119415/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "settings toggles",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "push_button_switch_04.wav",
+    "url": "https://freesound.org/people/joedeshon/sounds/134712/",
+    "author": "joedeshon",
+    "license": "CC BY 4.0",
+    "usedFor": "power button",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "Tapedeck open and closing",
+    "url": "https://freesound.org/people/stecman/sounds/376059/",
+    "author": "stecman",
+    "license": "CC0 1.0",
+    "usedFor": "settings door open / close",
+    "department": "Sound Department",
+    "edits": "first two takes cut out, faded, normalised, AAC"
   },
   {
     "title": "Open-Meteo",
@@ -140,6 +157,7 @@
     "author": "Open-Meteo",
     "license": "CC BY 4.0",
     "usedFor": "TV Guide local forecast",
+    "department": "Weather Department",
     "edits": "Current conditions and three-day forecast, fetched by our server"
   },
   {
@@ -148,6 +166,7 @@
     "author": "RainViewer",
     "license": "RainViewer API terms",
     "usedFor": "TV Guide radar",
+    "department": "Weather Department",
     "edits": "Recent radar frames, fetched by our server"
   },
   {
@@ -156,6 +175,7 @@
     "author": "DB-IP",
     "license": "CC BY 4.0",
     "usedFor": "TV Guide approximate city (IP Geolocation by DB-IP)",
+    "department": "Weather Department",
     "edits": "Monthly database, read on our server only"
   },
   {
@@ -164,6 +184,7 @@
     "author": "Natural Earth",
     "license": "Public domain",
     "usedFor": "TV Guide radar base map",
+    "department": "Weather Department",
     "edits": "Release v5.1.2: 1:110m land, lakes and country borders, 1:50m state and province lines; simplified and rounded to 0.01°"
   }
 ]
