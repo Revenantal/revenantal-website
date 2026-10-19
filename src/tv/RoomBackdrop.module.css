@@ -47,10 +47,38 @@
     opacity 0.5s;
 }
 
+/* Flicker makes the room light breathe. */
+.spill[data-breathe="true"] {
+  animation: room-flicker 3.7s ease-in-out infinite;
+}
+
 .vignette {
   background: radial-gradient(
     ellipse at 50% 50%,
     transparent 35%,
     rgb(0 0 0 / 80%) 100%
   );
+}
+
+@keyframes room-flicker {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  23% {
+    filter: brightness(0.93);
+  }
+
+  24% {
+    filter: brightness(1.05);
+  }
+
+  61% {
+    filter: brightness(0.97);
+  }
+
+  78% {
+    filter: brightness(1.03);
+  }
 }

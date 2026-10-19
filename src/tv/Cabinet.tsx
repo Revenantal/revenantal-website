@@ -3,13 +3,15 @@ import { Badge } from "./Badge";
 import { RoomGlow } from "./RoomGlow";
 import { SCREEN, STAGE, boxStyle } from "./geometry";
 import type { Picture } from "./room-glow";
-import { roomGlowOpacity } from "./room-glow";
 import styles from "./Cabinet.module.css";
 
 /** The cabinet frames whatever the screen shows and lights the room from it. */
 export type CabinetProps = {
   picture: Picture;
-  glow: boolean;
+  /** Room spill strength from roomGlowOpacity. */
+  glowOpacity: number;
+  /** Flicker makes the room light breathe. */
+  breathe?: boolean;
   children?: ComponentChildren;
   controls?: ComponentChildren;
 };
@@ -21,12 +23,19 @@ const ASSETS = "/assets/tv";
  *
  * @param props - Current picture, glow switch, screen contents and controls.
  * @param props.picture - What the screen shows, for its colour and the room light.
- * @param props.glow - Viewer GLOW switch combined with power.
+ * @param props.glowOpacity - Room spill strength.
+ * @param props.breathe - Whether the room light breathes with the flicker.
  * @param props.children - Screen contents, clipped to the glass.
  * @param props.controls - Control sprites and hit zones, lit by the room glow.
  * @returns The cabinet in stage pixels.
  */
-export function Cabinet({ picture, glow, children, controls }: CabinetProps) {
+export function Cabinet({
+  picture,
+  glowOpacity,
+  breathe = false,
+  children,
+  controls,
+}: CabinetProps) {
   return (
     <>
       <div
@@ -45,7 +54,7 @@ export function Cabinet({ picture, glow, children, controls }: CabinetProps) {
         style={boxStyle({ left: 0, top: 0, ...STAGE })}
       />
       {controls}
-      <RoomGlow color={picture.glow} opacity={roomGlowOpacity(picture, glow)} />
+      <RoomGlow color={picture.glow} opacity={glowOpacity} breathe={breathe} />
       <Badge />
     </>
   );

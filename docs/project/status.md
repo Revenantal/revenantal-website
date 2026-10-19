@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 2, the TV shell: 2.4 part 2 (power and drag-tuning picture) in review, then 2.5 display effects. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
+**Current focus:** Phase 2, the TV shell: 2.5 display effects in review, then 2.6 the audio engine. Phase 1 and Gate 1 are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Phase 2 work goes on a branch with a PR. No individual channel is approved.
 
 **Last updated:** 2026-10-18
 
@@ -36,8 +36,8 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 2.1 Asset tools (sprites, sounds, fonts)
 - [x] 2.2 Stage and cabinet
 - [x] 2.3 Controls and compact dial
-- [ ] 2.4 Screen and channel host — registry, host, NO SIGNAL and static merged (#16); power and drag-tuning picture on `feat/2.4-power-tuning`
-- [ ] 2.5 Display effects
+- [x] 2.4 Screen and channel host
+- [ ] 2.5 Display effects — on `feat/2.5-display-effects`, awaiting PR
 - [ ] 2.6 Audio engine
 - [ ] 2.7 Persistence, URLs and TV/List transitions
 - [ ] 2.8 TV accessibility pass
@@ -139,6 +139,8 @@ Task 2.3, part 3 on `feat/2.3-hint-note`: first-visit "turn the dial →" note (
 Task 2.4, part 1 on `feat/2.4-channel-host`: shared channel types from the host-interface spec, validated position-keyed registry (`createLineup`: canonical safe-integer keys, unique IDs, loaders, slot count from the highest key, reserved IDs), the screen host in 760×570 channel space (safe inset or full bleed), lazy named loaders with stale results discarded, scoped `tune`/`powerOff` that die with the scope or while inactive, recoverable load/render errors, NO SIGNAL with animated snow and the 460 ms static burst (cut and FX-off skip it). Snow is drawn on a canvas from six pre-made noise frames: the first SVG-turbulence version only repainted on mouse movement in the owner's Chrome (screenshots force repaints, so automated checks missed it); the canvas frames change on their own and pause while the tab is hidden. Browser check: snow animates, static then NO SIGNAL on tune, axe clean, no errors. 154 tests; initial JS 45.5 kB.
 
 Task 2.4, part 2 on `feat/2.4-power-tuning`: 0.9 s boot on page load; 3.3 s warm-up with the degauss wobble at 3 s when the viewer powers on; power off collapses the picture to a line and point with a 3.2 s afterglow dot; drag-tuning shows the nearest channel live with blur, contrast loss, ghost jitter and snow by distance from the detent, and releasing on a detent settles with no static. Reduced motion skips static, boot, warm-up and collapse. The hint note hides while the TV is off. Channel changes no longer flash (owner request): measured screen brightness through a change went from a 52–151 swing to a steady 99–116 (soft blurred static, then a 0.22 s blur-to-sharp snap; snow draws its first frame before paint). Browser check covers each stage with no console errors. 156 tests.
+
+Task 2.5 on `feat/2.5-display-effects`: effect precedence resolver with exhaustive tests (viewer × channel × perf × reduced motion), scanlines that fade between strengths, a gentle flicker that also makes the room light breathe, phosphor bloom, vignette (heavier for title-safe channels) and glass dust, 1.35× room light during static, settings-door switches and amber lamps driven by the resolver, and the silent performance fallback (1.2 s settle, 1.5 s sample, under 42 fps drops bloom, then flicker). OSD softened by owner request. Browser check: switches toggle the layers, axe clean, no errors. 245 tests; initial JS 47.1 kB.
 
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 

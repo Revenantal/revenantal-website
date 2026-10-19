@@ -2,7 +2,12 @@ import { SCREEN } from "./geometry";
 import styles from "./RoomBackdrop.module.css";
 
 /** The room is lit by whatever the screen shows. */
-export type RoomBackdropProps = { color: string; opacity: number };
+export type RoomBackdropProps = {
+  color: string;
+  opacity: number;
+  /** Flicker makes the room light breathe. */
+  breathe?: boolean;
+};
 
 /**
  * The dark room around the TV: the room photo, screen light spilling onto it and a
@@ -11,9 +16,14 @@ export type RoomBackdropProps = { color: string; opacity: number };
  * @param props - Spill colour and strength, shared with the room glow.
  * @param props.color - Light colour of the current picture.
  * @param props.opacity - Spill strength from roomGlowOpacity.
+ * @param props.breathe - Whether the light breathes with the flicker.
  * @returns Decorative backdrop layers.
  */
-export function RoomBackdrop({ color, opacity }: RoomBackdropProps) {
+export function RoomBackdrop({
+  color,
+  opacity,
+  breathe = false,
+}: RoomBackdropProps) {
   return (
     <div
       className={styles.backdrop}
@@ -33,7 +43,9 @@ export function RoomBackdrop({ color, opacity }: RoomBackdropProps) {
         width={1536}
         height={1024}
       />
-      {opacity > 0 ? <div className={styles.spill} /> : null}
+      {opacity > 0 ? (
+        <div className={styles.spill} data-breathe={breathe} />
+      ) : null}
       <div className={styles.vignette} />
     </div>
   );

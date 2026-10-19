@@ -12,7 +12,7 @@ import type {
   ChannelModule,
   ChannelProps,
 } from "@channels/_shared/types";
-import { Screen } from "./Screen";
+import { Screen, pictureFilter } from "./Screen";
 import type { ScreenProps } from "./Screen";
 
 afterEach(() => {
@@ -199,5 +199,13 @@ describe("screen host", () => {
     rerender(<Screen {...props({ power: false, offKey: 1 })} />);
     expect(container.firstElementChild).not.toBeNull();
     expect(screen.queryByText("NO SIGNAL")).toBeNull();
+  });
+
+  it("builds the picture filter from bloom and drag distance", () => {
+    expect(pictureFilter(true, 0)).toBe("url(#crt-bloom)");
+    expect(pictureFilter(false, 0)).toBeUndefined();
+    expect(pictureFilter(true, 0.5)).toBe(
+      "url(#crt-bloom) blur(1.50px) contrast(0.82)",
+    );
   });
 });

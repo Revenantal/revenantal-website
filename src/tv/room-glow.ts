@@ -48,13 +48,17 @@ export function panelGlow(glow: string): string {
  *
  * @param picture - The current picture.
  * @param enabled - Viewer GLOW switch and power both on.
+ * @param switching - Static is showing, which lights the room brighter (1.35×).
  * @returns Spill opacity, 0 when off.
  */
-export function roomGlowOpacity(picture: Picture, enabled: boolean): number {
+export function roomGlowOpacity(
+  picture: Picture,
+  enabled: boolean,
+  switching = false,
+): number {
   if (!enabled || picture.level === false) return 0;
-  const brightness = Math.min(
-    1.3,
-    0.55 + Math.sqrt(luminance(picture.background)) * 1.3,
-  );
+  const brightness = switching
+    ? 1.35
+    : Math.min(1.3, 0.55 + Math.sqrt(luminance(picture.background)) * 1.3);
   return picture.level * brightness;
 }

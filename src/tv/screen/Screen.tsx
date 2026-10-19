@@ -1,4 +1,5 @@
 import type { ChannelManifest, ChannelProps } from "@channels/_shared/types";
+import { BLOOM_FILTER } from "../effects/BloomFilter";
 import { CHANNEL, SCREEN } from "../geometry";
 import { ChannelFrame } from "./ChannelFrame";
 import { NoSignal } from "./NoSignal";
@@ -27,11 +28,30 @@ export type ScreenProps = {
   offKey?: number;
   /** Drag-tuning distance from the nearest detent, 0 (on it) to 1 (halfway between). */
   detune?: number;
+  /** Phosphor bloom on the picture. */
+  bloom?: boolean;
 };
 
 // Title-safe channels are inset and slightly smaller; full-bleed ones fill the glass.
 const FULL = { left: 0, top: 0, scale: SCREEN.width / CHANNEL.width };
 const SAFE = { left: 52, top: 38, scale: 1.3 };
+
+/**
+ * The picture's CSS filter: phosphor bloom when allowed, plus drag-tuning blur and contrast loss.
+ *
+ * @param bloom - Whether the bloom filter applies.
+ * @param detune - Drag distance from the nearest detent, 0..1.
+ * @returns A CSS filter value, or undefined for none.
+ */
+export function pictureFilter(bloom: boolean, detune: number) {
+  const filters = [
+    bloom ? BLOOM_FILTER : "",
+    detune > 0
+      ? `blur(${(detune * 3).toFixed(2)}px) contrast(${(1 - detune * 0.35).toFixed(2)})`
+      : "",
+  ].filter(Boolean);
+  return filters.length ? filters.join(" ") : undefined;
+}
 
 /**
  * The channel host inside the glass: 760×570 channel space scaled into the screen, with the
@@ -52,6 +72,7 @@ const SAFE = { left: 52, top: 38, scale: 1.3 };
  * @param props.boot - Power-on animation to play.
  * @param props.offKey - Power-off collapse counter.
  * @param props.detune - Drag distance from the nearest detent.
+ * @param props.bloom - Whether the phosphor bloom filter applies.
  * @returns The screen contents.
  */
 export function Screen({
@@ -67,17 +88,18 @@ export function Screen({
   boot = { kind: "none", key: 0 },
   offKey = 0,
   detune = 0,
+  bloom = false,
 }: ScreenProps) {
   if (!power) return offKey > 0 ? <PowerOff key={offKey} /> : null;
   const frame = manifest?.safe && !switching ? SAFE : FULL;
   const running = visible;
-  const tuning =
-    detune > 0
-      ? {
-          filter: `blur(${(detune * 3).toFixed(2)}px) contrast(${(1 - detune * 0.35).toFixed(2)})`,
-          transform: `translateX(${(detune * 7 * (shown % 2 ? 1 : -1)).toFixed(1)}px)`,
-        }
-      : undefined;
+  const tuning = {
+    filter: pictureFilter(bloom, detune),
+    transform:
+      detune > 0
+        ? `translateX(${(detune * 7 * (shown % 2 ? 1 : -1)).toFixed(1)}px)`
+        : undefined,
+  };
   return (
     <div
       className={styles.space}

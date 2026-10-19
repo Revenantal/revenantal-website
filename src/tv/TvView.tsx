@@ -11,6 +11,10 @@ import { PanelButtons } from "./controls/PanelButtons";
 import { PowerLed } from "./controls/PowerLed";
 import { SettingsDoor } from "./controls/SettingsDoor";
 import { usePageVisible } from "./controls/page-visible";
+import { usePerfMonitor } from "./controls/perf-monitor";
+import { BloomFilter } from "./effects/BloomFilter";
+import { NO_SIGNAL_PROFILE, resolveEffects } from "./effects/resolve";
+import { ScreenEffects } from "./effects/ScreenEffects";
 import { TV_REDUCED_MOTION, useMediaQuery } from "./controls/media-query";
 import { useTvKeys } from "./controls/tv-keys";
 import { VolumeKnob } from "./controls/VolumeKnob";
@@ -35,7 +39,14 @@ import styles from "./TvView.module.css";
 export type TvViewProps = {
   snapshot: Pick<
     StoreSnapshot,
-    "channel" | "power" | "settings" | "door" | "site" | "hintDismissed" | "now"
+    | "channel"
+    | "power"
+    | "settings"
+    | "door"
+    | "site"
+    | "hintDismissed"
+    | "now"
+    | "perf"
   >;
   view: DataView | null;
   actions: Pick<
@@ -47,6 +58,7 @@ export type TvViewProps = {
     | "toggleSetting"
     | "dismissHint"
     | "setCaptions"
+    | "setPerf"
   >;
 };
 
@@ -180,16 +192,20 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
     },
   });
 
+  usePerfMonitor(power && visible, snapshot.perf, actions.setPerf);
   const manifest = manifestAt(shown);
+  const effects = resolveEffects({
+    viewer: settings,
+    profile: manifest ? manifest.display : NO_SIGNAL_PROFILE,
+    power,
+    perf: snapshot.perf,
+    reducedMotion,
+  });
   const picture: Picture = !power
     ? POWERED_OFF
     : manifest
-      ? {
-          background: manifest.bg,
-          glow: manifest.glow,
-          level: manifest.display?.glow ?? 1,
-        }
-      : NO_SIGNAL;
+      ? { background: manifest.bg, glow: manifest.glow, level: effects.glow }
+      : { ...NO_SIGNAL, level: effects.glow };
   const shownOsd: OsdState =
     hint === "shown"
       ? {
@@ -199,17 +215,25 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
           blink: true,
         }
       : osd;
-  const glowOpacity = roomGlowOpacity(picture, settings.glow && power);
+  const glowOpacity = roomGlowOpacity(picture, power, switching);
   return (
     <main className={styles.tv}>
       <h1 className={styles["sr-only"]}>revenantal</h1>
+      <BloomFilter />
       <div className={styles.set}>
         <Stage
-          backdrop={<RoomBackdrop color={picture.glow} opacity={glowOpacity} />}
+          backdrop={
+            <RoomBackdrop
+              color={picture.glow}
+              opacity={glowOpacity}
+              breathe={effects.flicker}
+            />
+          }
         >
           <Cabinet
             picture={picture}
-            glow={settings.glow && power}
+            glowOpacity={glowOpacity}
+            breathe={effects.flicker}
             controls={
               <>
                 <Dial
@@ -236,13 +260,7 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
                 <SettingsDoor
                   open={door}
                   settings={settings}
-                  limited={{
-                    glow:
-                      settings.glow &&
-                      power &&
-                      picture.level !== false &&
-                      picture.level < 1,
-                  }}
+                  limited={effects.limited}
                   onDoor={actions.setDoor}
                   onToggle={actions.toggleSetting}
                   onCredits={() => {
@@ -288,9 +306,16 @@ export function TvView({ snapshot, view, actions }: TvViewProps) {
               boot={boot}
               offKey={reducedMotion ? 0 : offKey}
               detune={detune}
+              bloom={effects.bloom}
               onPowerOff={() => {
                 changePower(false);
               }}
+            />
+            <ScreenEffects
+              scan={effects.scan}
+              flicker={effects.flicker}
+              safe={Boolean(manifest?.safe) && !switching}
+              power={power}
             />
             {power ? <Osd osd={shownOsd} /> : null}
           </Cabinet>
