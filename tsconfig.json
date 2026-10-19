@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": ["vite/client", "node"],
+    "paths": {
+      "@data/*": ["./src/data/*"],
+      "@tv/*": ["./src/tv/*"],
+      "@channels/*": ["./src/channels/*"],
+      "@list/*": ["./src/list/*"],
+      "@audio/*": ["./src/audio/*"],
+      "@styles/*": ["./src/styles/*"]
+    }
+  },
+  "include": [
+    "src",
+    "tools/**/*.ts",
+    "vite.config.ts",
+    "jobs/**/*.ts",
+    "agent/**/*.ts",
+    "api/**/*.ts"
+  ]
+}

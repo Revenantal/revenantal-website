@@ -1,0 +1,18 @@
+services:
+  site:
+    image: ghcr.io/revenantal/revenantal-site:${SITE_TAG:?Set a verified commit SHA}
+    restart: unless-stopped
+    read_only: true
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    expose: ["8080"]
+    volumes:
+      - type: bind
+        source: /srv/revenantal/live
+        target: /srv/revenantal-live
+        read_only: true
+        bind:
+          create_host_path: false

@@ -9,7 +9,7 @@ GitHub Actions builds, lints and tests everything. Coolify only runs what Action
 | `pre-commit` hook                       | ESLint, Stylelint and Prettier on staged files (auto-fix), `tsc --noEmit`                                                                                                                  |
 | `commit-msg` hook                       | commitlint (Conventional Commits), AI attribution check                                                                                                                                    |
 | `ci.yml` (every PR and push)            | `pnpm install --frozen-lockfile` → Prettier check → ESLint → Stylelint → `tsc --noEmit` → Vitest → `vite build` → size-limit → attribution check over commits and the PR body when present |
-| `deploy.yml` (push to `main`, after CI) | Build site, live job, forecast and Pelican agent images → push to GHCR tagged with commit SHA and `latest` → call the Coolify deploy webhook                                               |
+| `deploy.yml` (push to `main`, after CI) | Build site/live-job images (forecast image follows its implementation) → push to GHCR tagged with commit SHA and `latest` → call the Coolify deploy webhook                                |
 
 ## Hosting on Coolify
 
@@ -29,15 +29,14 @@ Keep the built site and generated data in separate directories:
 | App       | `/srv/site`            | Built HTML, hashed assets and `site.json` from its image | Served by Caddy; never covered by a persistent mount |
 | App       | `/srv/revenantal-live` | Host `/srv/revenantal/live`                              | Read-only bind mount                                 |
 | Live job  | `/data`                | The same host `/srv/revenantal/live`                     | Read-write bind mount                                |
-| Live job  | `/input/servers`       | Host `/srv/revenantal/servers` (agent drop folder)       | Read-only bind mount                                 |
 
-Caddy handles the exact path `/live.json` before the static-site route. That handler uses root `/srv/revenantal-live`, serves `live.json` with `Cache-Control: max-age=60`, and returns 404 if it is missing. It does not fall back to `index.html`. Only that file is exposed from the runtime directory; temporary files and the raw server drop folder have no public route. Keep the existing `/api/forecast` route separate; all site files come from `/srv/site`.
+Caddy handles the exact path `/live.json` before the static-site route. That handler uses root `/srv/revenantal-live`, serves `live.json` with `Cache-Control: max-age=60`, and returns 404 if it is missing. It does not fall back to `index.html`. Only that file is exposed from the runtime directory; temporary files and private counter state have no public route. Keep the existing `/api/forecast` route separate; all site files come from `/srv/site`.
 
-Provision the host directories with permissions that let only the job write live output and let Caddy read it. The agent's SSH drop user remains restricted to `/srv/revenantal/servers` and cannot write site files or `live.json`. Do not bind-mount a single `live.json` file: mounting its directory lets readers see atomic replacements.
+Provision the host directories with permissions that let only the job write live output and let Caddy read it. The live job calls Pelican directly; no SSH drop user or input mount is required. Private pelican-state.json contains numeric baselines only and has no public route. Do not bind-mount a single `live.json` file: mounting its directory lets readers see atomic replacements.
 
 Deployment replaces the app image while preserving the runtime directory. The job reads its previous output from `/data/live.json` for per-source fallback. Rollback changes the site image only; the loader must validate runtime data and degrade gracefully if it cannot read that snapshot.
 
-Before task 1.3 is complete, test two different app images against the same populated runtime directory. Confirm the second image serves its new HTML and hashed assets, still serves the saved `/live.json`, and can roll back. Confirm a missing snapshot returns 404, Caddy cannot write runtime data, and temporary/raw input files are unreachable.
+Before task 1.3 is complete, test two different app images against the same populated runtime directory. Confirm the second image serves its new HTML and hashed assets, still serves the saved `/live.json`, and can roll back. Confirm a missing snapshot returns 404, Caddy cannot write runtime data, and private/temporary files are unreachable.
 
 ## Repo Rules
 
@@ -49,7 +48,7 @@ Before task 1.3 is complete, test two different app images against the same popu
 ## Secrets
 
 - Actions holds only `COOLIFY_WEBHOOK` and `COOLIFY_TOKEN`. GHCR uses the built-in `GITHUB_TOKEN`.
-- Steam, GitHub and Pelican keys live only in Coolify or on the Pelican host. Never in Actions, never in the repo.
+- Steam, GitHub and Pelican keys live only in the scheduled job runtime configuration. Never in Actions, never in the repo.
 
 ## Tests (Vitest)
 
@@ -77,3 +76,7 @@ Laptop, cold cache, good connection. size-limit fails the build on the JS budget
 ## Authorship
 
 No AI attribution in commits, PRs, release notes, `CREDITS.md` or the site. The `commit-msg` hook and the CI attribution check both fail on `Co-Authored-By` AI trailers, "Generated with" footers and session links. See `docs/development/git-workflow.md`.
+
+## Implementation Status (2026-10-18)
+
+The local feature branch now contains `ci.yml` with pinned actions, frozen-lockfile install, formatting/lint/type/test/build-size checks and commit/PR attribution validation. Dependabot is configured. CI has not run remotely. Site/live-job Dockerfiles, separate mount examples, a ten-minute host timer and an opt-in deploy workflow are prepared. Publishing requires DEPLOY_ENABLED=true and successful same-repository main push CI; superseded heads are skipped. No image has been published and no webhook, secret, scheduler or branch protection has been provisioned. The owner will connect hosting later. Native Caddy route/cache/atomic-replacement checks passed across two versions and rollback; Docker is unavailable locally, so image permissions/replacement remain for Docker-enabled CI. Weather is disabled with private/no-store 503 responses. See deploy/README.md for the remaining setup. Temporary CI push triggers include the existing `master` baseline alongside `main`.

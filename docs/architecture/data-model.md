@@ -4,6 +4,12 @@ All content lives in `site.json` (built from hand-edited `content/*.json`) and `
 
 Types live in `src/data/types.ts`. Each `content/` file has a zod schema, so a typo fails the build instead of the page.
 
+## Content Compilation
+
+content/directory.json selects github or curated navigation and a limit of 1–30 (default ten). Curated entries live in projects.json; GitHub entries arrive in live.github.projects through the scheduled job. The store selects one source for all views. Retained repository links stay available with stale metadata, while old current-state telemetry is removed.
+
+links.json owns profile values. buttons.json refers to link/copy keys that the build resolves once; tune actions stay symbolic channel IDs. Optional server overrides default to an empty array and missing playlists to an empty map. Nonempty playlists must target registered broadcast channels. Hidden curated projects are removed from public site.json. credits.json also generates CREDITS.md; builds reject mismatched credits.
+
 ## Content Types
 
 ```ts
@@ -72,6 +78,7 @@ type BroadcastPlaylist = {
 /** Built from content/*.json at build time. */
 type Site = {
   projects: Project[];
+  directory?: { source: "curated" | "github"; limit: number };
   buttons: PanelButton[]; // the stack re-spaces itself; 4 fit at 72% size
   servers: ServerOverride[];
   links: { steam: string; github: string; discord: string };
@@ -161,13 +168,14 @@ type Live = {
     }[];
   };
   github?: {
+    projects?: Project[]; // navigation identities may remain when activity is stale
     repos: { name: string; pushedAt: string; lang: string; url: string }[];
   };
   status?: Record<
     string /* project id */,
     { state: "up" | "slow" | "down"; ms?: number }
   >;
-  servers?: LiveServer[]; // from the Pelican agent's servers.json
+  servers?: LiveServer[]; // from scheduled Pelican API collection
   errors?: string[]; // bounded public error codes; no raw diagnostics
 };
 

@@ -106,7 +106,48 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Remove accidental root `settings.json` (duplicate Markdown PR template), resolving F12. Preserve `.github/pull_request_template.md` and `.claude/settings.json`.
 - Film selection remains deferred to The Late Show review. No individual channel build is approved; accessibility, performance and deployment gates remain pending.
 
+### Foundation implementation (2026-10-18)
+
+- Build begins with tasks 1.1–1.2 on `feat/1.1-foundation`, branching from the committed `master` baseline. No channel implementation is approved.
+- Use Node 24, pnpm 11.9.0, Vite/Preact and exact package versions with a root lockfile. Keep the reference package independent. Pin TypeScript 6.0 while typescript-eslint supports versions below 6.1; ESLint 9 matches the declared peer support of jsx-a11y. Revisit tool versions together when peers support newer majors.
+- A minimal static holding screen proves the application mount/build; shared content and List mode follow after CI/deployment setup. No project data is invented.
+- CI is authored for PRs and pushes to main/master, with immutable action pins and no deployment side effects. Service images, deployment workflow and remote branch settings remain task 1.3 work.
+
+### Scheduled GitHub directory and hosting preparation (2026-10-18)
+
+- The owner confirmed the scheduled GitHub API feed for the latest public repositories under revenantal. Keep browser requests on the static same-origin snapshots; refresh the feed in the ten-minute live job.
+- content/directory.json selects github or curated navigation and a limit; default ten. GitHub projects use stable numeric repository IDs, public repository links and generic language descriptions. Do not publish homepage URLs, raw descriptions, owner profiles or account metadata. Exclude forks, archived/private repositories and obvious personal-site/resume listings. This filter is conservative; public repository names still need normal content review.
+- Retain last known repository navigation after a failed/expired feed, with its stale label. Suppress stale activity/current-state telemetry. A successful empty feed removes old navigation. The curated project file may remain empty.
+- GitHub authentication is optional for this public endpoint. A runtime token can raise shared anonymous rate limits; it never enters browser files or build inputs.
+- The owner requested deployment files only and will connect hosting later. Prepare site/live-job images and an opt-in publication workflow; do not configure secrets, deploy, or change the remote default branch. The existing remote default is master; production automation targets main and stays disabled pending deliberate setup.
+- Phase 1 content, store, job and List implementation proceeds locally. The Pelican agent still requires confirmation of one real redacted response from the installed version. No individual channel build is authorized.
+
+### Pelican discovery and verified beta38 mapping (2026-10-18)
+
+- The owner created status-bot and manually assigned it to the desired servers, with no selected subuser permissions. The owner declined an assignment automation script. Continue manual membership management; never grant the collector administrative access or add automatic membership changes.
+- The private-window Client API test returned one assigned server with server_owner=false and hidden variables. The resources request succeeded with the same restricted account. The earlier broader docs response is not evidence of bot privileges; browser session authentication can take precedence over its entered token. The agent uses token-only requests with no cookies.
+- Supplied beta38 responses now support the mapper. Store only deidentified fixtures, never raw production responses. Recheck API compatibility after an upgrade to v1; no upgrade is authorized.
+- Uptime is milliseconds; resource memory bytes convert to MiB; CPU is already a percentage of one core and may exceed 100. Network byte counters produce rates only across adjacent running samples with valid elapsed time, no restart and no counter reset. Omit rates on the first collection or a failed/reset baseline.
+- Wildcard allocations such as 0.0.0.0 and descriptive aliases are not connect addresses. Leave them unpublished even when opted in. Private query routing may supply a LAN target for GameDig without creating another server inventory or publishing that target.
+- Support local Minecraft Java/Bedrock and Valve query protocols initially. GameDig's Factorio adapter uses its external public listing API, so leave it disabled under the local-query design; Factorio's Pelican state/resources still work. Player counts for unsupported/unconfigured queries remain absent. Schedules and backups also remain absent without separately verified read permissions.
+- Prepare the collector image and opt-in SSH transfer, but leave uploads disabled and hosting disconnected. No agent has been installed or run against the panel by this build. No TV channel implementation is authorized.
+
+### Direct scheduled Pelican API collection (2026-10-18)
+
+- The owner confirmed the panel is publicly reachable and approved replacing the agent/push architecture with direct Pelican Client API collection in the existing ten-minute live job. This supersedes earlier agent, two-minute polling, servers.json drop-folder, SSH/rsync and local-only game-query decisions. Remove their runtime and deployment tooling; no Wings installation is needed.
+- Keep the restricted status-bot key on the job host and discover manual subuser assignments each run. The browser still reads static live.json once. No assignment automation or broader bot permissions are authorized.
+- Loop through discovered UUIDs for resources, then query supported games for counts. The standard Pelican resources response contains no player counts. Use one configurable GAME_QUERY_HOST; the owner confirmed games.revenantal.com as the only shared hostname. Combine it with each primary allocation port; changing the hostname later needs runtime configuration only.
+- GameDig supports Minecraft Java/Bedrock, Valve and Factorio. Factorio uses its public listing service and requires a listed/reachable game address; its listing-service timing is not game-server ping. Strip player identities and omit unsupported/unavailable query fields without changing good resource observations. No RCON password or command permission is needed.
+- Persist only numeric counter baselines privately under /data/pelican-state.json for average rates between ten-minute executions. Never serve that file. Preserve fifteen-minute server freshness and all current address opt-in/privacy rules.
+- Hosting stays disconnected; actual scheduled-host authentication and public game-query checks remain pending runtime setup. The previously generated Wings host-test archive is obsolete and withdrawn. No individual channel implementation is authorized.
+
+### Factorio player counts (2026-10-18)
+
+- The owner accepts Factorio servers without player counts. The real server is not on Factorio's public listing, and the owner chose not to list it publicly. Factorio servers still show state, uptime, CPU, memory and network rates. Keep the GameDig Factorio query; if a server is ever listed, counts appear without code changes.
+
 ## Clarifications
+
+- **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.
 
 - **README tone (2026-10-18, revised).** The root README is a vintage TV user manual, written as the finished visitor experience. Use operating instructions rather than channel listings or development status. Actual implementation progress remains in `status.md`; the manual does not mark any build task complete.
 
@@ -124,5 +165,5 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 - A hidden channel: wanted or not. Not needed for v1.
 - Exact Status game-server display fields: confirm when building channel 10.
-- Real project list: written in phase 1, task 1.10.
+- GitHub directory is implemented locally for task 1.10; hosting/scheduling and content review remain before launch.
 - Status of the patch panel / switch / UPS photo sprites: generated and cleaned; final art pass when channel 10 is built.

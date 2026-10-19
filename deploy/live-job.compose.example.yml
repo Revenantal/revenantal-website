@@ -1,0 +1,16 @@
+# Run once from a host scheduler every ten minutes.
+services:
+  live:
+    image: ghcr.io/revenantal/revenantal-live:${SITE_TAG:?Set a verified commit SHA}
+    restart: "no"
+    read_only: true
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    env_file: ./.env.live
+    volumes:
+      - type: bind
+        source: /srv/revenantal/live
+        target: /data
+        bind:
+          create_host_path: false

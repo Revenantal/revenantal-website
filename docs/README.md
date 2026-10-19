@@ -2,7 +2,7 @@
 
 This folder is the source of truth for revenantal.com: requirements, decisions, design, technical specs, the build plan and progress.
 
-**Status:** Planning and design are complete. The build has not started. Track progress in `project/status.md`.
+**Status:** The foundation is committed on `feat/1.1-foundation`; deployment files, shared data and GitHub-backed List mode are implemented locally. Hosting is deferred; Pelican collection is integrated into the ten-minute live job and awaits runtime verification. Track reviewed build progress in `project/status.md`.
 
 ## Reading Order
 
@@ -27,6 +27,7 @@ docs/
     asset-checklist.md          sounds, images, fonts, films and clips to source
   development/
     coding-practices.md         principles, TypeScript, comments, testing, pushback
+    local-development.md       installation, scripts, checks and scaffold limits
     git-workflow.md             branches, commits, PRs, CI checks, no AI attribution
     repo-layout.md              folder tree and import boundaries
   architecture/

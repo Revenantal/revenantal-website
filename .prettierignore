@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+pnpm-lock.yaml
+docs/reference/prototypes/pnpm-lock.yaml
+docs/reference/prototypes/node_modules/
+docs/reference/prototypes/renders/
+docs/reference/prototypes/**/*.html
+docs/reference/prototypes/build_rack.py

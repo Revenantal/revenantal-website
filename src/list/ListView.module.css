@@ -1,0 +1,201 @@
+.directory {
+  width: min(100%, var(--list-width));
+  margin-inline: auto;
+  padding: var(--space-section) var(--space-page);
+}
+
+.header {
+  padding-block: var(--space-section);
+  border-block: var(--border-width) solid var(--color-accent);
+}
+
+.model,
+.meta {
+  color: var(--color-muted);
+  font-size: var(--font-small);
+}
+
+.model {
+  letter-spacing: var(--tracking-label);
+}
+
+.wordmark {
+  margin-block: var(--space-item);
+  font-family: var(--font-brand);
+  font-size: clamp(1rem, 4vw, 1.8rem);
+  line-height: var(--line-body);
+  letter-spacing: var(--tracking-brand);
+  overflow-wrap: anywhere;
+}
+
+.intro {
+  color: var(--color-muted);
+}
+
+.section,
+.footer {
+  display: grid;
+  gap: var(--space-item);
+  margin-top: var(--space-section);
+}
+
+.section h2 {
+  margin: 0;
+  font-size: var(--font-section);
+}
+
+.section h3 {
+  margin: 0;
+  font-size: var(--font-item);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-item);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card,
+.project {
+  display: grid;
+  gap: var(--space-small);
+  padding: var(--space-item);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-panel);
+}
+
+.project {
+  color: inherit;
+  text-decoration: none;
+}
+
+.project:hover {
+  border-color: var(--color-accent);
+}
+
+.project-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-small);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.status {
+  color: var(--color-muted);
+  font-size: var(--font-small);
+}
+
+.status[data-state="up"],
+.status[data-state="running"] {
+  color: var(--color-up);
+}
+
+.status[data-state="slow"],
+.status[data-state="maintenance"] {
+  color: var(--color-slow);
+}
+
+.status[data-state="down"],
+.status[data-state="offline"] {
+  color: var(--color-down);
+}
+
+.empty {
+  color: var(--color-muted);
+}
+
+.profiles,
+.copy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-small);
+  align-items: center;
+}
+
+.copy {
+  flex-basis: 100%;
+}
+
+.copy [role="status"] {
+  flex-basis: 100%;
+}
+
+.button {
+  display: inline-flex;
+  min-height: var(--target-size);
+  padding: var(--space-small) var(--space-item);
+  align-items: center;
+  border: var(--border-width) solid var(--color-accent);
+  border-radius: var(--radius-control);
+  background: var(--color-button);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.value,
+.project p,
+.credit {
+  overflow-wrap: anywhere;
+}
+
+.repo {
+  display: flex;
+  min-height: var(--target-size);
+  gap: var(--space-small);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.repo time {
+  flex-shrink: 0;
+  color: var(--color-muted);
+  font-size: var(--font-small);
+}
+
+.summary {
+  min-height: var(--target-size);
+  padding-block: var(--space-small);
+  cursor: pointer;
+}
+
+.credit {
+  padding-block: var(--space-small);
+}
+
+.directory a {
+  color: var(--color-text);
+}
+
+.skip,
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.directory :focus-visible,
+.skip:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+.skip:focus {
+  z-index: 1;
+  width: auto;
+  height: auto;
+  padding: var(--space-item);
+  background: var(--color-panel);
+  color: var(--color-text);
+  clip-path: none;
+}

@@ -7,7 +7,7 @@ Where code goes and what may import what. Code is grouped by what it is: content
 ```txt
 revenantal/
 ├─ AGENTS.md / CLAUDE.md   # agent entry points
-├─ README.md               # setup, scripts, add a project, add a channel
+├─ README.md               # TV operating manual
 ├─ docs/                   # all project documentation
 ├─ content/                # hand-edited JSON only; the build merges it into site.json
 │  ├─ projects.json
@@ -39,7 +39,7 @@ revenantal/
 │  └─ styles/              # tokens.css, reset.css
 ├─ api/forecast/           # weather service: DB-IP Lite, Open-Meteo, radar proxy
 ├─ jobs/live/              # scheduled job → live.json
-├─ agent/pelican/          # runs on the Pelican host → servers.json
+│  └─ pelican/            # direct API/resources and optional game-query collection
 ├─ public/assets/          # frame, sprites, sounds, fonts, per-channel assets
 │  └─ channels/<id>/
 ├─ media/                  # broadcast video source list and LICENSES.md (video files are not in git)
@@ -57,15 +57,15 @@ Folder names under `channels/` match the channel `id`: `tv-guide`, `rev-os`, `te
 
 Enforced by `eslint-plugin-boundaries`, so a wrong import fails lint.
 
-| From                      | May import                                                                         |
-| ------------------------- | ---------------------------------------------------------------------------------- |
-| `channels/<id>/`          | `channels/_shared/`, types from `data/types.ts`, its own files, its own heavy deps |
-| `channels/index.ts`       | each channel's `manifest.ts` (lazy component import), `_shared/` registry types    |
-| `tv/`                     | `data/`, `audio/`, `channels/index.ts`, `channels/_shared/` types                  |
-| `list/`                   | `data/`                                                                            |
-| `audio/`                  | `data/` (settings only)                                                            |
-| `data/`                   | nothing in `src/` except itself                                                    |
-| `jobs/`, `agent/`, `api/` | `src/data/types.ts` and schemas only; no front-end runtime code                    |
+| From                | May import                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| `channels/<id>/`    | `channels/_shared/`, types from `data/types.ts`, its own files, its own heavy deps |
+| `channels/index.ts` | each channel's `manifest.ts` (lazy component import), `_shared/` registry types    |
+| `tv/`               | `data/`, `audio/`, `channels/index.ts`, `channels/_shared/` types                  |
+| `list/`             | `data/`                                                                            |
+| `audio/`            | `data/` (settings only)                                                            |
+| `data/`             | nothing in `src/` except itself                                                    |
+| `jobs/`, `api/`     | `src/data/types.ts` and schemas only; no front-end runtime code                    |
 
 Never:
 
@@ -73,7 +73,7 @@ Never:
 - The TV importing a channel folder directly.
 - Anything importing from `content/` except `data/` loaders and the build.
 
-`data/types.ts` contains content and serializable manifest metadata only. Preact-dependent props, save helpers, manifest loaders and the typed registry live in `channels/_shared/types.ts`, as specified in [the host interface](../channels/host-interface.md). This keeps data/jobs/agent imports independent of the frontend runtime.
+`data/types.ts` contains content and serializable manifest metadata only. Preact-dependent props, save helpers, manifest loaders and the typed registry live in `channels/_shared/types.ts`, as specified in [the host interface](../channels/host-interface.md). This keeps data/jobs imports independent of the frontend runtime.
 
 ## Adding a Channel
 
@@ -85,3 +85,7 @@ Never:
 ## Adding a Project
 
 Add an entry to `content/projects.json`. Every channel picks it up. No code changes.
+
+## Current Scaffold (2026-10-18)
+
+`src/main.tsx` mounts `src/App.tsx`, a temporary branded holding screen with adjacent CSS Module. The documented module folders contain ownership READMEs; content, services, TV and channels are not implemented. Build/configuration lives at the root, repository policy checks under `tools/checks/`, and the existing reference package remains independent. See [local development](local-development.md) for commands.

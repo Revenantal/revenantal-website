@@ -1,6 +1,6 @@
 # Architecture Overview
 
-A static front end (TypeScript + Preact, built with Vite), one scheduled live-data job, one agent on the Pelican host and one small weather service. No server rendering and no database.
+A static front end (TypeScript + Preact, built with Vite), one scheduled live-data job, and one small weather service. No server rendering and no database.
 
 ## Data Flow
 
@@ -10,7 +10,7 @@ Data flows one way, from sources to every view.
 content/*.json ──build──► site.json ─┐
                                      ├──► store ──► TV ──► current channel (props only)
 Steam, GitHub, HEAD checks ─┐        │          └──► List mode
-Pelican agent → servers.json ┴─job─► live.json ─┘
+Pelican API + game queries ─┴─job─► live.json ─┘
 
 Visitor IP ──► /api/forecast (DB-IP Lite + Open-Meteo) ──► TV Guide only, optional
 ```
@@ -30,11 +30,10 @@ API keys never leave the server. Content, playlists and live snapshots reach cha
 
 ## Back-End Pieces
 
-| Piece            | Runs on                              | Does                                 | Doc                     |
-| ---------------- | ------------------------------------ | ------------------------------------ | ----------------------- |
-| `jobs/live/`     | Coolify scheduled task, every 10 min | Writes `live.json`                   | `live-data.md`          |
-| `agent/pelican/` | Pelican host, Docker, every 2 min    | Pushes `servers.json` out over SSH   | `pelican-agent.md`      |
-| `api/forecast/`  | Coolify, own small image             | Local forecast and same-origin radar | `forecast-and-radar.md` |
+| Piece           | Runs on                              | Does                                 | Doc                     |
+| --------------- | ------------------------------------ | ------------------------------------ | ----------------------- |
+| `jobs/live/`    | Coolify scheduled task, every 10 min | Writes `live.json`                   | `live-data.md`          |
+| `api/forecast/` | Coolify, own small image             | Local forecast and same-origin radar | `forecast-and-radar.md` |
 
 ## Rules
 
