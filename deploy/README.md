@@ -31,3 +31,7 @@ docker compose --env-file deploy/.env -f deploy/live-job.compose.example.yml run
 Schedule that command every ten minutes with Coolify or the provided systemd service/timer, choosing one scheduler. The service assumes this directory is installed at /opt/revenantal and Docker Compose is available at /usr/bin/docker. Install both unit files into /etc/systemd/system only during hosting setup, then enable the timer. A oneshot service cannot overlap itself. For another scheduler, use a host lock to prevent overlapping runs. The job writes bounded failure codes and exits after an atomic snapshot; one unavailable provider does not stop the others.
 
 Refresh the live-job image/site.json when deploying changed content. Inspect source ages and confirm Caddy serves the new snapshot without exposing input/temporary files. These instructions and timer files have not been installed or verified on a hosting machine.
+
+## Pelican Collector
+
+The agent image and opt-in publication are prepared. For an initial local read-only test without image publication, follow [Pelican setup](pelican-setup.md) and use the upload-disabled test archive. The owner manages status-bot server assignments manually. No monitoring account privileges or assignments are changed by the collector.

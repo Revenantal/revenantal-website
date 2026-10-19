@@ -122,7 +122,19 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - The owner requested deployment files only and will connect hosting later. Prepare site/live-job images and an opt-in publication workflow; do not configure secrets, deploy, or change the remote default branch. The existing remote default is master; production automation targets main and stays disabled pending deliberate setup.
 - Phase 1 content, store, job and List implementation proceeds locally. The Pelican agent still requires confirmation of one real redacted response from the installed version. No individual channel build is authorized.
 
+### Pelican discovery and verified beta38 mapping (2026-10-18)
+
+- The owner created status-bot and manually assigned it to the desired servers, with no selected subuser permissions. The owner declined an assignment automation script. Continue manual membership management; never grant the collector administrative access or add automatic membership changes.
+- The private-window Client API test returned one assigned server with server_owner=false and hidden variables. The resources request succeeded with the same restricted account. The earlier broader docs response is not evidence of bot privileges; browser session authentication can take precedence over its entered token. The agent uses token-only requests with no cookies.
+- Supplied beta38 responses now support the mapper. Store only deidentified fixtures, never raw production responses. Recheck API compatibility after an upgrade to v1; no upgrade is authorized.
+- Uptime is milliseconds; resource memory bytes convert to MiB; CPU is already a percentage of one core and may exceed 100. Network byte counters produce rates only across adjacent running samples with valid elapsed time, no restart and no counter reset. Omit rates on the first collection or a failed/reset baseline.
+- Wildcard allocations such as 0.0.0.0 and descriptive aliases are not connect addresses. Leave them unpublished even when opted in. Private query routing may supply a LAN target for GameDig without creating another server inventory or publishing that target.
+- Support local Minecraft Java/Bedrock and Valve query protocols initially. GameDig's Factorio adapter uses its external public listing API, so leave it disabled under the local-query design; Factorio's Pelican state/resources still work. Player counts for unsupported/unconfigured queries remain absent. Schedules and backups also remain absent without separately verified read permissions.
+- Prepare the collector image and opt-in SSH transfer, but leave uploads disabled and hosting disconnected. No agent has been installed or run against the panel by this build. No TV channel implementation is authorized.
+
 ## Clarifications
+
+- **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.
 
 - **README tone (2026-10-18, revised).** The root README is a vintage TV user manual, written as the finished visitor experience. Use operating instructions rather than channel listings or development status. Actual implementation progress remains in `status.md`; the manual does not mark any build task complete.
 

@@ -20,6 +20,8 @@ pnpm check
 
 Runs formatting, ESLint/Stylelint, strict TypeScript, Vitest and production builds, including the 90 kB initial JavaScript gzip limit and the independent live-job bundle. pnpm preview serves the built site. Tests use fixtures, not live credentials.
 
+pnpm test:agent verifies the isolated built collector, public snapshot/live-job/freshness path and a real local Minecraft query without production keys. pnpm agent:package creates the upload-disabled host-test archive after the build; see deploy/pelican-setup.md.
+
 pnpm test:container requires Docker and verifies image replacement/rollback, runtime mounts, permissions, cache headers and missing-file behavior. CI runs it on Linux. On a machine with an official Caddy binary, set CADDY_BIN and run pnpm test:caddy for the routing checks without Docker; this does not verify container permissions.
 
 Husky installs on pnpm install. Pre-commit lints/formats staged files and type-checks; commit-msg checks Conventional Commits and attribution. Never bypass hooks. Application aliases are @data, @tv, @channels, @list, @audio and @styles. Reference tools retain their independent package under docs/reference/prototypes.

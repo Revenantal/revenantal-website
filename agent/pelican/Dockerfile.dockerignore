@@ -1,0 +1,9 @@
+**
+!agent/
+!agent/pelican/
+!agent/pelican/Dockerfile
+!dist/
+!dist/site.json
+!.cache/
+!.cache/pelican/
+!.cache/pelican/**

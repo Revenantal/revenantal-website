@@ -75,6 +75,51 @@ try {
     docker(["stop", id]);
     containers.pop();
   }
+  const agentImage = prefix + ":agent";
+  images.push(agentImage);
+  docker([
+    "build",
+    "--tag",
+    agentImage,
+    "--file",
+    "agent/pelican/Dockerfile",
+    ".",
+  ]);
+  assert.equal(
+    docker([
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--read-only",
+      "--cap-drop",
+      "ALL",
+      agentImage,
+      "id",
+      "-u",
+    ]),
+    "10001",
+  );
+  const agent = spawnSync(
+    "docker",
+    [
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--read-only",
+      "--cap-drop",
+      "ALL",
+      agentImage,
+      "node",
+      "/app/main.mjs",
+      "--once",
+    ],
+    { encoding: "utf8", timeout: 15000 },
+  );
+  assert.equal(agent.status, 1);
+  assert.match(agent.stderr, /agent_configuration_failed/);
+  assert.doesNotMatch(agent.stderr, /ERR_MODULE_NOT_FOUND|SyntaxError/);
   console.log(
     "Container checks passed: image updates/rollback preserve live data, writes are denied, runtime routes/cache headers are correct.",
   );

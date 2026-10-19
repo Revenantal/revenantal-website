@@ -1,0 +1,77 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "object": "server",
+      "attributes": {
+        "server_owner": false,
+        "identifier": "aaaaaaaa",
+        "internal_id": 1,
+        "uuid": "123e4567-e89b-42d3-a456-426614174000",
+        "name": "Fixture server",
+        "node": "fixture-node",
+        "is_node_under_maintenance": false,
+        "sftp_details": {
+          "ip": "example.invalid",
+          "alias": null,
+          "port": 2022
+        },
+        "description": "",
+        "limits": {
+          "memory": 3000,
+          "swap": 0,
+          "disk": 5000,
+          "io": 500,
+          "cpu": 300,
+          "threads": "",
+          "oom_disabled": true,
+          "oom_killer": false
+        },
+        "invocation": "fixture-private-command",
+        "docker_image": "fixture-image",
+        "egg_features": [],
+        "feature_limits": {
+          "databases": 0,
+          "allocations": 0,
+          "backups": 10
+        },
+        "status": null,
+        "is_suspended": false,
+        "is_installing": false,
+        "is_transferring": false,
+        "relationships": {
+          "allocations": {
+            "object": "list",
+            "data": [
+              {
+                "object": "allocation",
+                "attributes": {
+                  "id": 1,
+                  "ip": "0.0.0.0",
+                  "ip_alias": "Fixture label",
+                  "port": 34197,
+                  "notes": null,
+                  "is_default": true
+                }
+              }
+            ]
+          },
+          "variables": {
+            "object": "null_resource",
+            "attributes": null
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "total": 1,
+      "count": 1,
+      "per_page": 50,
+      "current_page": 1,
+      "total_pages": 1,
+      "links": {}
+    }
+  }
+}
