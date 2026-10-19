@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 3, launch: 3.6 Credits (plan review first). Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Status and the TV Guide are built; Credits still needs its plan review.
+**Current focus:** Phase 3, launch: the 3.7 launch check. Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Status, the TV Guide and Credits are built.
 
 **Last updated:** 2026-10-19
 
@@ -50,7 +50,7 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 3.3 Forecast endpoint
 - [x] 3.4 Channel 1 — TV Guide
 - [x] 3.5 TV Guide forecast and radar — local forecast over live radar with Natural Earth geography; static when unavailable
-- [ ] 3.6 Channel 11 — Credits and shared attributions
+- [x] 3.6 Channel 11 — Credits and shared attributions — film-style roll by department, VCR controls, channel music for the Guide and Credits
 - [ ] 3.7 Launch check
 - [ ] **Gate 3 — launch**
 
@@ -158,7 +158,7 @@ All individual channel builds are awaiting plan review and explicit owner confir
 
 | Ch  | Name             | Design                                                   | Build             |
 | --- | ---------------- | -------------------------------------------------------- | ----------------- |
-| 1   | TV Guide         | Mockup done (v3 with forecast and radar)                 | Not started (3.4) |
+| 1   | TV Guide         | Mockup done (v3 with forecast and radar)                 | Built (3.4, 3.5)  |
 | 2   | Rev OS           | Mockup done                                              | Not started (4.2) |
 | 3   | Terminal         | Approved early sketch                                    | Not started (4.1) |
 | 4   | Night Drive      | Mockup done; needs a cleaner, less "paint" look at build | Not started (5.2) |
@@ -167,8 +167,8 @@ All individual channel builds are awaiting plan review and explicit owner confir
 | 7   | Coin Drop        | Mockup done                                              | Not started (4.4) |
 | 8   | The Late Show    | Mockup done                                              | Not started (4.6) |
 | 9   | Paid Programming | Mockup done; clips not made                              | Not started (4.7) |
-| 10  | Status           | Rack design and sprites done                             | Not started (3.2) |
-| 11  | Credits          | Movie-style roll specified; no mockup yet                | Not started (3.6) |
+| 10  | Status           | Rack design and sprites done                             | Built (3.2)       |
+| 11  | Credits          | Movie-style roll with departments                        | Built (3.6)       |
 
 ## Latest Review (2026-10-18)
 
@@ -241,3 +241,5 @@ Task 3.3 (merged in #26): the private weather service in `api/forecast/` (truste
 Task 3.4 (merged in #27): the TV Guide at position 1. The large Local Forecast window (soft static and "Forecast not available" until 3.5 or while unavailable), the station box with the viewer's own clock and date and the channels on the dial, the half-hour time header, auto-drifting listings (projects with LIVE badges, game servers, Steam, latest GitHub push, other channels) that pause on hover, focus and when inactive, and a current-state LIVE ticker read once to screen readers. Full bleed with padded content and no Coming up, by owner request. Archivo Black credited. Browser check on real data: axe clean, no errors. 336 tests; Guide chunk about 5 kB of 30 kB. The forecast panel follows in 3.5.
 
 Task 3.5 on `feat/3.5-guide-forecast`: the Guide's forecast window. Current conditions with feels-like, humidity and wind (new service fields), three days, recent RainViewer radar over the bundled Natural Earth map with a city marker, a stationary credits footer (Open-Meteo, RainViewer, DB-IP, Natural Earth) and a privacy note, and a spoken summary. It fetches only while active, aborts on tune-away, keeps results in memory only, and skips entirely for Do Not Track or Save-Data. Soft static while unavailable. The four weather sources are in the shared credits. `pnpm dev` shows real weather with `FORECAST_DEV_IP` set. Browser check through the real service and providers: weather and radar render, axe clean, no errors. Owner review fixes: bloom off for the Guide (it blurred text), lakes, borders and state/province lines on the radar map at zoom 5, and the channel overlay now flashes briefly on load instead of holding while the hint note shows. Bloom became opt-in for every channel, which also sharpens Status, and the Guide's listings glide on their own GPU layer.
+
+Task 3.6 (merged in #29): the Credits channel at position 11. A film-style roll in white on black that rises from below the picture, grouped by department (Art, Typography, Sound, Weather; new required `department` field), each entry a role, a source link, the author, licence and edits. After the last line it cuts to static for a second and loops. A VCR bar (◀◀ REWIND, ❚❚ PAUSE / ▶ PLAY) fades in while the pointer moves and hides after two seconds; REWIND winds back with a tracking band, and a corner VCR display shows PAUSE or REW. Hover or link focus pauses without overriding a deliberate pause. Reduced motion shows a static list. The Credits button now hands focus to Pause through a new host focus step (`data-focus-first`). List mode and `CREDITS.md` group by department too, and the Guide's dial list includes Credits. Browser check: roll, bar, rewind and focus hand-off work, axe clean, no errors. 397 tests; chunk 2.4 kB of 30 kB. Channel music added on the same branch by owner choice: "Weather Forecast Type Beat" (YellowTree) on the Guide and "Epic Finale (loop)" (X3nus) on Credits, both CC BY 4.0 and credited, mono AAC under 300 KB from `pnpm assets:music`; Chromium decodes both without padding, so the loops are gapless. PAUSE fades the Credits music out and REWIND plays it at double speed.

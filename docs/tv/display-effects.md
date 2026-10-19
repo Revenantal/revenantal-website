@@ -47,7 +47,7 @@ If the TV is turned on with reduced motion: no flicker, static becomes a cut, no
 
 ## Build Notes
 
-Built in task 2.5: `src/tv/effects/resolve.ts` (precedence, override lamps), `ScreenEffects` (scanlines, flicker, vignette, glass dust), `BloomFilter` and `controls/perf-monitor.ts`. The flicker overlay runs at 3–5% opacity rather than the prototype's 7–11% (owner decision).
+Built in task 2.5: `src/tv/effects/resolve.ts` (precedence, override lamps), `ScreenEffects` (scanlines, flicker, vignette, glass dust), `BloomFilter` and `controls/perf-monitor.ts`. The flicker overlay runs at 2–3% opacity, switching every 100 ms, rather than the prototype's 7–11% every 75 ms (owner decisions; it was 3–5% until 2026-10-19). The room light breathes by at most 3.5% over a 3.7 s cycle, with no sudden jumps (owner decision, 2026-10-19; it was 7%, with a 12% step in 40 ms).
 
 ## Removed — Do Not Reintroduce
 

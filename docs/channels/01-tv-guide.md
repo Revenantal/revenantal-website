@@ -43,7 +43,7 @@ The forecast is the one place a channel fetches data. That fetch lives in a smal
 
 ## Sound
 
-Silent at launch. A smooth-jazz loop, row tick and promo stinger will be proposed for owner approval (see `soundscapes.md` → TV Guide).
+Music: "Weather Forecast Type Beat" by YellowTree (CC BY 4.0), inspired by the 80s and 90s weather channel. It plays to its natural ending and restarts, fades in after the static and ducks under the OSD (`public/assets/music/tv-guide.m4a`). A row tick and promo stinger may be proposed later (see `soundscapes.md` → TV Guide).
 
 ## Build Notes
 

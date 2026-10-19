@@ -152,6 +152,7 @@ const credits: Site["credits"] = [
     url: "https://credit-1.example.invalid/",
     license: "CC BY 4.0",
     usedFor: "Placeholder credit",
+    department: "Placeholder Department",
   },
 ];
 

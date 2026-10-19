@@ -33,6 +33,10 @@ export type ScreenProps = {
   bloom?: boolean;
   /** Creates each mounted channel's sound scope. */
   createAudioScope?: ChannelFrameProps["createAudioScope"];
+  /** Channel ID that should take focus once it is on screen (after a panel tune). */
+  focusChannel?: string | null;
+  /** Called once that channel has taken focus. */
+  onFocusTaken?: () => void;
 };
 
 // Title-safe channels are inset and slightly smaller; full-bleed ones fill the glass.
@@ -77,6 +81,8 @@ export function pictureFilter(bloom: boolean, detune: number) {
  * @param props.detune - Drag distance from the nearest detent.
  * @param props.bloom - Whether the phosphor bloom filter applies.
  * @param props.createAudioScope - Creates each channel's sound scope.
+ * @param props.focusChannel - Channel ID that should take focus once shown.
+ * @param props.onFocusTaken - Called after it does.
  * @returns The screen contents.
  */
 export function Screen({
@@ -94,6 +100,8 @@ export function Screen({
   detune = 0,
   bloom = false,
   createAudioScope,
+  focusChannel = null,
+  onFocusTaken,
 }: ScreenProps) {
   if (!power) return offKey > 0 ? <PowerOff key={offKey} /> : null;
   const frame = manifest?.safe && !switching ? SAFE : FULL;
@@ -130,6 +138,8 @@ export function Screen({
                 onTune={onTune}
                 onPowerOff={onPowerOff}
                 createAudioScope={createAudioScope}
+                takeFocus={focusChannel === manifest.id}
+                onFocusTaken={onFocusTaken}
               />
             ) : (
               <NoSignal key={shown} running={running} />

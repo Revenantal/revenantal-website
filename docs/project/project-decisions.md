@@ -66,6 +66,16 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Provide pause/resume, restart and keyboard-reachable source links. Reduced-motion TV mode uses a static scrollable list. Credits never captures the keyboard or uses the scheduled broadcast player.
 - Typography uses white text on black, and no extra channel music is required. See [the Credits channel specification](../channels/11-credits.md).
 
+### Credits channel approved (2026-10-19)
+
+- The owner approved building Credits (task 3.6) on 2026-10-19 with these changes to the plan:
+- **Departments:** credits are grouped like film credits (Art, Typography, Sound, Weather Department). Each credit gains a required `department`; departments keep first-seen order. List mode and `CREDITS.md` group the same way.
+- **Loop:** the roll starts below the picture and rises into view. After the last line rolls off it cuts to static for about a second and starts again, instead of holding the final frame.
+- **Controls:** a VCR-style bar (◀◀ REWIND, ❚❚ PAUSE / ▶ PLAY) fades in while the pointer moves over the picture and hides two seconds after it stops; it stays while a control has focus. REWIND winds back to the top in about a second with a tracking band; a corner VCR display shows PAUSE or REW. The owner chose this over always-visible buttons.
+- **Focus:** the Credits button hands focus to Pause. Generic host step: after a panel tune, the frame focuses the channel's `[data-focus-first]` element (or its first control) once it is loaded and active; any other tune cancels it.
+- **Display effects (2026-10-19):** Credits no longer limits any effect: scanlines, flicker, room glow and the static burst all run at their defaults, and the viewer's switches still decide. Owner rule for all channels: effects default on, and a channel limits one only for a specific, recorded reason. Bloom stays opt-in for text sharpness.
+- **Music (2026-10-19):** the owner chose "Weather Forecast Type Beat" by YellowTree for the TV Guide and "Epic Finale (loop)" by X3nus for Credits (Freesound, CC BY 4.0, credited in the Sound Department), replacing "no extra channel music" for Credits. Both are mono AAC at 36 kbps to stay within the 300 KB loop budget. The Guide track plays to its natural ending and restarts, because a mid-track loop point could not be verified. On Credits, PAUSE fades the music out and REWIND plays it at double speed.
+
 ### Per-channel plan review (2026-10-18)
 
 - Before building any individual channel, review its concrete plan with the project owner and get explicit confirmation to start. This applies to all channels, including launch channels and Credits.

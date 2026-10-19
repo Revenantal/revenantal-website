@@ -51,6 +51,7 @@ type Credit = {
   license: string;
   edits?: string;
   usedFor: string;
+  department: string; // film-style group, e.g. "Sound Department"; groups keep first-seen order
 };
 
 /** Captions for one playlist item. */

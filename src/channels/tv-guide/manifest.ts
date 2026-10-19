@@ -14,6 +14,12 @@ export const manifest: ChannelManifest = {
     glow: 0.8,
     transition: "static",
   },
+  // "Weather Forecast Type Beat" by YellowTree (CC BY 4.0), credited in content/credits.json.
+  audio: {
+    loops: {
+      music: { src: "/assets/music/tv-guide.m4a", kind: "music", gain: 0.58 },
+    },
+  },
   load: async () => ({
     ChannelComponent: (await import("./ChannelComponent")).ChannelComponent,
   }),

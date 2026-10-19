@@ -1,0 +1,269 @@
+/* CH 11 Credits: white film credits on black, authored at 760×570. */
+
+.root {
+  position: relative;
+  width: 760px;
+  height: 570px;
+
+  /* clip, not hidden: a hidden box can still be scrolled by focus, which shifts channels. */
+  overflow: clip;
+  color: #fff;
+  background: #000;
+  font-family: var(--font-body), sans-serif;
+}
+
+.viewport {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  mask-image: linear-gradient(
+    transparent 0,
+    #000 14%,
+    #000 86%,
+    transparent 100%
+  );
+}
+
+.track {
+  position: relative;
+  padding: 0 40px;
+  text-align: center;
+  will-change: transform;
+}
+
+.track[data-hidden] {
+  visibility: hidden;
+}
+
+.list {
+  position: absolute;
+  inset: 0;
+  padding: 48px 40px;
+  overflow-y: auto;
+  text-align: center;
+  scrollbar-color: #555 #000;
+  scrollbar-width: thin;
+}
+
+.opening {
+  margin-bottom: 90px;
+}
+
+.title {
+  margin: 0 0 28px;
+  font-family: var(--font-brand), sans-serif;
+  font-size: 40px;
+  font-weight: 400;
+  letter-spacing: var(--tracking-brand);
+}
+
+.title:focus {
+  outline: none;
+}
+
+.role {
+  margin: 0;
+  color: #b8b8b8;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.name {
+  margin: 4px 0 0;
+  font-size: 20px;
+}
+
+.department {
+  margin-top: 72px;
+}
+
+.department-name {
+  margin: 0 0 24px;
+  font-family: var(--font-brand), sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.entries {
+  display: grid;
+  gap: 18px;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 24px;
+  align-items: baseline;
+  text-align: left;
+}
+
+.entry .role {
+  padding-top: 3px;
+  text-align: right;
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.names a {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.names a:hover {
+  text-decoration: underline;
+}
+
+.names a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.author {
+  color: #ddd;
+  font-size: 15px;
+}
+
+.meta {
+  color: #9c9c9c;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.empty {
+  margin: 0;
+  color: #b8b8b8;
+  font-size: 16px;
+}
+
+.closing {
+  margin-top: 120px;
+  padding-bottom: 40px;
+}
+
+.thanks {
+  margin: 0;
+  font-family: var(--font-brand), sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.noise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+/* VCR status, like a deck's on-screen display; top left, clear of the TV's channel number. */
+.vcr {
+  position: absolute;
+  top: 26px;
+  left: 30px;
+  margin: 0;
+  color: var(--color-osd);
+  font-family: var(--font-osd), monospace;
+  font-size: 30px;
+  line-height: 1;
+  text-shadow:
+    0 0 8px rgb(95 255 122 / 60%),
+    2px 2px 1px rgb(0 0 0 / 70%);
+}
+
+/* A tracking band rolling down the picture while it rewinds. */
+.tracking {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 46px;
+  background: repeating-linear-gradient(
+    0deg,
+    rgb(255 255 255 / 0%) 0 2px,
+    rgb(255 255 255 / 28%) 2px 3px,
+    rgb(255 255 255 / 0%) 3px 6px
+  );
+  animation: tracking 0.45s linear infinite paused;
+}
+
+.root[data-active] .tracking {
+  animation-play-state: running;
+}
+
+@keyframes tracking {
+  from {
+    top: -46px;
+  }
+
+  to {
+    top: 570px;
+  }
+}
+
+/* The VCR bar: hidden until the pointer moves over the picture or a control has focus. */
+.controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 26px 0 16px;
+  background: linear-gradient(transparent, rgb(0 0 0 / 85%) 45%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.controls[data-shown],
+.controls:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.button {
+  min-width: 84px;
+  min-height: 30px;
+  padding: 2px 10px;
+  border: 1px solid rgb(95 255 122 / 45%);
+  border-radius: 3px;
+  color: var(--color-osd);
+  background: rgb(0 0 0 / 75%);
+  font-family: var(--font-osd), monospace;
+  font-size: 20px;
+  line-height: 1;
+  text-shadow: 0 0 6px rgb(95 255 122 / 55%);
+  cursor: pointer;
+}
+
+.button:hover {
+  background: rgb(95 255 122 / 12%);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

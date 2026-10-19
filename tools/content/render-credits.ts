@@ -1,3 +1,4 @@
+import { groupCredits } from "../../src/data/credits.ts";
 import type { Credit } from "../../src/data/types.ts";
 
 const escape = (value: string) =>
@@ -10,7 +11,7 @@ const escape = (value: string) =>
  * @returns Markdown ready for the repository formatter.
  */
 export function renderCredits(credits: Credit[]): string {
-  const rows = credits.map((credit) => {
+  const row = (credit: Credit) => {
     const licence =
       credit.license === "CC BY 4.0"
         ? "[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)"
@@ -22,15 +23,19 @@ export function renderCredits(credits: Credit[]): string {
               ? "[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)"
               : escape(credit.license);
     return `| [${escape(credit.title)}](<${credit.url.replaceAll("<", "%3C").replaceAll(">", "%3E")}>) | ${escape(credit.author)} | ${licence} | ${escape(credit.usedFor)} | ${escape(credit.edits ?? "—")} |`;
-  });
+  };
   return [
     "# Credits",
     "",
     "Source: `content/credits.json`. Run `pnpm credits:write` after changing an entry.",
-    "",
-    "| Asset | Author | Licence | Used for | Edits |",
-    "| --- | --- | --- | --- | --- |",
-    ...rows,
+    ...groupCredits(credits).flatMap((group) => [
+      "",
+      `## ${escape(group.department)}`,
+      "",
+      "| Asset | Author | Licence | Used for | Edits |",
+      "| --- | --- | --- | --- | --- |",
+      ...group.credits.map(row),
+    ]),
     "",
   ].join("\n");
 }

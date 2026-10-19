@@ -17,12 +17,12 @@
   transition: opacity 0.3s;
 }
 
-/* Gentler than the prototype (7–11%): the owner is sensitive to flashing. */
+/* Much gentler than the prototype (7–11%, 0.15 s): the owner is sensitive to flashing. */
 .flicker {
   position: absolute;
   inset: 0;
   background: #fff;
-  animation: tv-flicker 0.15s steps(2) infinite;
+  animation: tv-flicker 0.2s steps(2) infinite;
 }
 
 .vignette {
@@ -56,10 +56,10 @@
 @keyframes tv-flicker {
   0%,
   100% {
-    opacity: 0.03;
+    opacity: 0.02;
   }
 
   50% {
-    opacity: 0.05;
+    opacity: 0.03;
   }
 }
