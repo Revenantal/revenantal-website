@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 3, launch: 3.5 the TV Guide forecast and radar panel in review, then 3.6 Credits (plan review first). Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Status and the TV Guide are built; Credits still needs its plan review.
+**Current focus:** Phase 3, launch: 3.6 Credits (plan review first). Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Status and the TV Guide are built; Credits still needs its plan review.
 
 **Last updated:** 2026-10-19
 
@@ -49,7 +49,7 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 3.2 Channel 10 — Status
 - [x] 3.3 Forecast endpoint
 - [x] 3.4 Channel 1 — TV Guide
-- [ ] 3.5 TV Guide forecast and radar — on `feat/3.5-guide-forecast`, in review
+- [x] 3.5 TV Guide forecast and radar — local forecast over live radar with Natural Earth geography; static when unavailable
 - [ ] 3.6 Channel 11 — Credits and shared attributions
 - [ ] 3.7 Launch check
 - [ ] **Gate 3 — launch**
