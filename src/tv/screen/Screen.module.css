@@ -22,6 +22,12 @@
   background: #777;
 }
 
+.snow {
+  display: block;
+  width: 760px;
+  height: 570px;
+}
+
 .roll {
   position: absolute;
   right: 0;
