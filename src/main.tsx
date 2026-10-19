@@ -8,6 +8,7 @@ import "@fontsource/archivo-narrow/latin-400.css";
 import "@fontsource/archivo-narrow/latin-600.css";
 import "@fontsource/archivo-narrow/latin-700.css";
 import "@fontsource/vt323/latin-400.css";
+import "@fontsource/permanent-marker/latin-400.css";
 import "@styles/tokens.css";
 import "@styles/reset.css";
 

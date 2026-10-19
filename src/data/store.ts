@@ -143,7 +143,8 @@ export function createStore(options: StoreOptions = {}) {
       update({ door: snapshot.power && door });
     },
     dismissHint: () => {
-      update({ hintDismissed: true });
+      // Dismissal lasts for this page load only; the note returns on the next load.
+      if (!snapshot.hintDismissed) update({ hintDismissed: true });
     },
     setPerf: (perf: number) => {
       if (Number.isInteger(perf) && perf >= 0 && perf <= 2) update({ perf });

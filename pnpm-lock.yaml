@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/permanent-marker':
+        specifier: 5.3.0
+        version: 5.3.0
       '@fontsource/vt323':
         specifier: 5.3.0
         version: 5.3.0
@@ -445,6 +448,9 @@ packages:
 
   '@fontsource/michroma@5.3.0':
     resolution: {integrity: sha512-9sbGD7ek1hGvq0TmgNPFbuI3k7qwXVdZ+zCDsTHDGRIQqfYrpYWwEYcwH2fzOtvn8uiGqzAoJ72vuFE3v/hDdg==}
+
+  '@fontsource/permanent-marker@5.3.0':
+    resolution: {integrity: sha512-ZO/NtYW4SCc/iY8N3dmjWyDITcXJ/vhWZFgnwRcvzwCKKnScMrM/a2/6VHlsjCVuIgmPzNrCFbedEYhv+/jJBg==}
 
   '@fontsource/vt323@5.3.0':
     resolution: {integrity: sha512-3w33Rg/0+R1587HQfz4t7Q7e0GGeCqr3wmzIwqdGInUnrGEwMA5eX39GP4Z9wpTQnwfhVOhYuxuRwRUeIcicbw==}
@@ -3408,6 +3414,8 @@ snapshots:
   '@fontsource/archivo-narrow@5.3.0': {}
 
   '@fontsource/michroma@5.3.0': {}
+
+  '@fontsource/permanent-marker@5.3.0': {}
 
   '@fontsource/vt323@5.3.0': {}
 

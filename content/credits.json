@@ -23,6 +23,14 @@
     "edits": "Latin subset, weight 400"
   },
   {
+    "title": "Permanent Marker",
+    "url": "https://github.com/googlefonts/permanentmarker",
+    "author": "Font Diner",
+    "license": "Apache 2.0",
+    "usedFor": "TV hint note font",
+    "edits": "Latin subset, weight 400"
+  },
+  {
     "title": "CRT TV Switches On",
     "url": "https://freesound.org/people/Fission9/sounds/693860/",
     "author": "Fission9",

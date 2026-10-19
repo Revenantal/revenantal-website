@@ -219,4 +219,43 @@ describe("TV view", () => {
       "Settings door",
     );
   });
+
+  it("shows the note after a moment and drops it when clicked", () => {
+    vi.useFakeTimers();
+    renderTv();
+    expect(screen.queryByRole("note")).toBeNull();
+
+    void act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+    const note = screen.getByRole("button", { name: /Tip: turn the dial/ });
+    expect(screen.getByText("CH 01")).toBeTruthy();
+
+    fireEvent.click(note);
+    void act(() => {
+      vi.advanceTimersByTime(1400);
+    });
+    expect(screen.queryByRole("note")).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it("dismisses the note on the first channel change, and shows it again on the next page load", () => {
+    vi.useFakeTimers();
+    const { store } = renderTv();
+    void act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+    expect(screen.getByRole("note")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: /Channel dial/ }));
+    expect(store.getSnapshot().hintDismissed).toBe(true);
+    cleanup();
+
+    renderTv();
+    void act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+    expect(screen.getByRole("note")).toBeTruthy();
+    vi.useRealTimers();
+  });
 });
