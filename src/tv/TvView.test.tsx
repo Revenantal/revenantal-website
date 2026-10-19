@@ -163,4 +163,11 @@ describe("TV view", () => {
     expect(store.getSnapshot().settings.volume).toBe(10);
     fireEvent.pointerUp(slider, { pointerId: 1 });
   });
+
+  it("cancels drags that start anywhere on the TV", () => {
+    const { container } = renderTv();
+    const frame = container.querySelector("img[src$='frame.webp']");
+    expect(frame).not.toBeNull();
+    expect(fireEvent.dragStart(frame as Element)).toBe(false);
+  });
 });
