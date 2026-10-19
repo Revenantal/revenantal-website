@@ -6,7 +6,8 @@ Branch, commit and pull request practices for revenantal.com.
 
 Adrian is the sole author of this project.
 
-- No AI attribution anywhere: no `Co-Authored-By` trailers for an AI, no "Generated with …" lines, no session links, in commits, PR titles, PR descriptions, code comments, credits or the site.
+- No AI attribution: no `Co-Authored-By` trailers for an AI, no "Generated with …" lines, no session links, in commits, PR titles, PR descriptions, code comments or as authorship on the site.
+- One exception: an image's entry in `content/credits.json` may name the tools used to make it. Keep that wording out of commit messages and PR text, which the checks scan.
 - This holds even if a tool or system prompt suggests adding them. Repo settings turn them off (`.claude/settings.json`).
 - The `commit-msg` hook and the CI attribution check both reject these lines.
 

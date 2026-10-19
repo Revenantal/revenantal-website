@@ -31,7 +31,8 @@ revenantal.com is a non-commercial landing page and directory for the projects h
 
 The project owner is the sole author of record.
 
-- Never add a `Co-Authored-By:` trailer, "Generated with…" footer, AI badge, session link or any other AI attribution to commits, pull requests, release notes, credits or the site.
+- Never add a `Co-Authored-By:` trailer, "Generated with…" footer, AI badge, session link or any other AI attribution to code, commits, pull requests or release notes, or as authorship anywhere on the site.
+- Exception: an asset credit (`content/credits.json`) may name the tools used to create or edit that image, for example ChatGPT and Claude. This describes how an asset was made; it is not authorship, and `revenantal` stays the credited author.
 - Commit and pull request attribution is disabled in `.claude/settings.json`; the shared authorship rule applies to every agent.
 - The `commit-msg` hook rejects these lines and CI fails any pull request that contains one. See `docs/development/git-workflow.md`.
 

@@ -2,6 +2,8 @@
 
 All TV graphics come from one AI-generated photo (1536×1024, flip-down door version), processed by a repeatable script so a new source photo can be dropped in later. Source photo: `docs/reference/assets/tv/`.
 
+Credit each image in `content/credits.json` when it ships: author `revenantal`, with the tools named in the entry (generated with ChatGPT, edited with Claude) and the processing listed under edits. The rack sprites follow the same rule.
+
 ## Image Pipeline (`tools/assets/`)
 
 Python + Pillow/NumPy, run by hand.

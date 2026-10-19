@@ -155,7 +155,13 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 - Every external asset the site uses is credited, including CC0 sounds that do not legally require it. Credit only what ships: an entry is added in the same change that adds the asset. Sourced but unshipped sounds stay recorded in `docs/reference/sound-credits.md`.
 - The credits list now holds the two shipped fonts (Michroma and Archivo Narrow, OFL 1.1). The sound and TV-image entries were removed until those assets ship in phase 2.
-- Pending owner decision: how to credit the AI-generated TV and rack images, given the AGENTS.md ban on AI attribution in credits.
+- The TV and rack images were made with ChatGPT and edited with Claude. The owner chose to name those tools in their credits; AGENTS.md now allows tool names in asset credits only, while the ban on AI attribution in code, commits, PRs and site authorship stays. Add the entries when the images ship.
+- When an external asset is added or removed, update the credits in the same change.
+
+### GitHub descriptions and websites (2026-10-18)
+
+- The owner approved publishing each repository's own GitHub description and website, reversing the earlier "generic language descriptions, no homepage URLs" rule. Descriptions are whitespace-cleaned and capped at 200 characters, falling back to the language text. A valid HTTP(S) website becomes the project link and host (type `site`); otherwise the card links to the repository. Recent pushes still link to repositories. The personal-site/résumé filter still applies, and the owner reviews public repository text.
+- In List mode, the Status tune button (SERVERS) becomes a link to the Game servers section. Other tune buttons stay hidden there.
 
 ## Clarifications
 

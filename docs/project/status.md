@@ -120,6 +120,8 @@ Later the same day the owner deferred hosting until the project is complete. Ren
 
 Credits now list only shipped external assets: the two OFL fonts. Sound and TV-image credits return when those assets ship. The AI-generated image credit wording awaits an owner decision.
 
+Owner content review answers: GitHub projects now use each repository's description and website (with cleaning and fallbacks); the SERVERS button links to the Game servers section in List mode; image credits may name the tools used (AGENTS.md amended). 1.10 still needs the remaining answers: automatic vs curated list, whether this site's repo is listed, public Discord name and server renames/hides.
+
 Renamed the GitHub repository to `Revenantal/revenantal-website` so its README no longer replaces the account profile README; the local remote is updated.
 
 ## Channel Build Approvals
