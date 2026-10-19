@@ -4,7 +4,7 @@
 
 The home channel and the first thing new visitors see, so it sets the quality bar. A 90s cable guide channel built from glossy broadcast graphics, a mix of Prevue Channel and the Weather Channel.
 
-- **Kind:** directory · **Folder:** `tv-guide` · **Build:** tasks 3.4–3.5 (launch) · **Status:** grid, clock, ticker and station box built (3.4); forecast panel next (3.5)
+- **Kind:** directory · **Folder:** `tv-guide` · **Build:** tasks 3.4–3.5 (launch) · **Status:** built: listings, clock, ticker and station box (3.4); forecast and radar panel (3.5)
 
 ## Concept
 
@@ -48,7 +48,10 @@ Silent at launch. A smooth-jazz loop, row tick and promo stinger will be propose
 ## Build Notes
 
 - Grid scroll uses `transform` on one element, driven by `requestAnimationFrame`, and pauses when `active` is false.
-- Same-origin RainViewer radar over bundled Natural Earth land/coastlines loads only during the active forecast segment. Keep readable Open-Meteo, RainViewer, DB-IP and Natural Earth links in the panel footer. Follow the request, privacy, caching and fallback rules in `docs/architecture/forecast-and-radar.md`.
+- The forecast window (`ForecastWindow.tsx`, `RadarMap.tsx`, `weather.ts`) fetches `/api/forecast` while the channel is active, at most once per 30 minutes per visit (memory only, never storage), and aborts on tune-away. Do Not Track or Save-Data skip it with no request.
+- It shows the current temperature and conditions, "Feels · Humidity · Wind", three days (Today and the next two), and same-origin RainViewer radar (three recent frames at zoom 6, at most two tile requests in flight, looping only while active; the newest frame only with reduced motion) over the bundled Natural Earth land map (`public/assets/tv-guide/land-110m.json`, fetched only when the forecast shows). A city marker sits on the map. Missing coverage or failed tiles show "Radar unavailable".
+- A stationary footer credits "Weather data by Open-Meteo.com · Radar by RainViewer · IP Geolocation by DB-IP · Map: Natural Earth" with links, plus a Privacy button that shows the panel's privacy note and provider privacy links. Screen readers get one spoken summary of the forecast.
+- The contract allows only these requests (`WEATHER_PATHS` in `weather.ts`). Follow the request, privacy, caching and fallback rules in `docs/architecture/forecast-and-radar.md`.
 - °C by default, °F for US visitors (from the endpoint).
 - Add each newly built channel to `dial.json` (ID, label, title, one-line blurb); `tools/checks/tv-guide-dial.test.ts` fails until it matches the registry.
 - Keep the forecast fetch, radar and promo rotation in separate modules so the grid can ship first (3.4) and the forecast after (3.5).

@@ -26,6 +26,7 @@ describe("shipped asset credits", () => {
       ["public/assets/tv/frame.webp", "TV artwork"],
       ["public/assets/tv/room.webp", "Room artwork"],
       ["public/assets/status/server-1u.webp", "Status rack artwork"],
+      ["public/assets/tv-guide/land-110m.json", "Natural Earth 1:110m land"],
     ] as const)
       if (existsSync(file))
         expect(

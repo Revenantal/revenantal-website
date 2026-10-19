@@ -15,7 +15,15 @@ const forecast: Forecast = {
   latitude: 43.65,
   longitude: -79.38,
   observedAt: "2026-10-19T18:15:00.000Z",
-  current: { temperature: 12, weatherCode: 3, windSpeed: 14, isDay: true },
+  current: {
+    temperature: 12,
+    feelsLike: 10,
+    humidity: 64,
+    weatherCode: 3,
+    windSpeed: 14,
+    windDirection: 315,
+    isDay: true,
+  },
   daily: [],
 };
 const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);

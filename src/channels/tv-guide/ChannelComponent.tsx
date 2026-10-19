@@ -169,7 +169,7 @@ export function ChannelComponent(props: ChannelProps) {
           className={`${styles.glass ?? ""} ${styles.forecast ?? ""}`}
           aria-label="Local forecast"
         >
-          <ForecastWindow running={active && !reducedMotion} />
+          <ForecastWindow active={active} reducedMotion={reducedMotion} />
         </section>
 
         <section

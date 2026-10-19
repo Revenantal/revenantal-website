@@ -1,6 +1,8 @@
 import { fileURLToPath } from "node:url";
 import { contentPlugin } from "./tools/content/plugin.ts";
+import { weatherPlugin } from "./tools/dev/weather-plugin.ts";
 import preact from "@preact/preset-vite";
+import { loadEnv } from "vite";
 import { defineConfig } from "vitest/config";
 
 const aliases = Object.fromEntries(
@@ -10,8 +12,11 @@ const aliases = Object.fromEntries(
   ]),
 );
 
+// Development weather reads FORECAST_DEV_IP from the git-ignored .env.local (never sent to the browser).
+const devEnv = loadEnv("development", process.cwd(), "FORECAST_DEV_");
+
 export default defineConfig({
-  plugins: [contentPlugin(), preact()],
+  plugins: [contentPlugin(), weatherPlugin(devEnv.FORECAST_DEV_IP), preact()],
   resolve: { alias: aliases },
   server: { watch: { ignored: ["**/.cache/**"] } },
   build: {

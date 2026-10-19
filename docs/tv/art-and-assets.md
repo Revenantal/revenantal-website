@@ -57,3 +57,5 @@ Self-hosted through pinned `@fontsource` packages: import the Latin-subset CSS f
 ## Channel Art
 
 Per-channel art pipelines (rack sprites, Revscape fallback still) are in each channel's doc.
+
+**TV Guide base map:** `public/assets/tv-guide/land-110m.json`, built by `python tools/assets/natural_earth.py` from Natural Earth 1:110m land polygons, release v5.1.2 (`nvkelso/natural-earth-vector`, public domain: https://www.naturalearthdata.com/about/terms-of-use/). Processing: outer and inner rings kept, coordinates rounded to 0.01° and stored as flat integer arrays; 57 kB raw, about 25 kB gzipped. Served as a static file and fetched only when the forecast shows, so it stays out of the channel's JavaScript.

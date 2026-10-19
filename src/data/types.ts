@@ -206,8 +206,11 @@ export type Forecast = {
   observedAt: string; // ISO time of the current conditions
   current: {
     temperature: number;
+    feelsLike: number;
+    humidity: number; // percent
     weatherCode: number; // WMO code
     windSpeed: number;
+    windDirection: number; // degrees the wind comes from, 0 = north
     isDay: boolean;
   };
   daily: {

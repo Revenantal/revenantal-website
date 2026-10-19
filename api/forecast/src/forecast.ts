@@ -13,8 +13,11 @@ const openMeteoSchema = z.object({
   current: z.object({
     time: z.string().min(1).max(40),
     temperature_2m: number,
+    apparent_temperature: number,
+    relative_humidity_2m: number.min(0).max(100),
     weather_code: z.number().int().min(0).max(99),
     wind_speed_10m: number,
+    wind_direction_10m: number.min(0).max(360),
     is_day: z.union([z.literal(0), z.literal(1)]),
   }),
   utc_offset_seconds: z.number().int(),
@@ -53,7 +56,8 @@ export function openMeteoUrl(place: Place): URL {
   url.search = new URLSearchParams({
     latitude: place.latitude.toFixed(2),
     longitude: place.longitude.toFixed(2),
-    current: "temperature_2m,weather_code,wind_speed_10m,is_day",
+    current:
+      "temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day",
     daily:
       "temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max",
     temperature_unit: units === "F" ? "fahrenheit" : "celsius",
@@ -120,8 +124,11 @@ export function parseForecast(body: Uint8Array, place: Place): Forecast | null {
     observedAt,
     current: {
       temperature: Math.round(current.temperature_2m),
+      feelsLike: Math.round(current.apparent_temperature),
+      humidity: Math.round(current.relative_humidity_2m),
       weatherCode: current.weather_code,
       windSpeed: Math.round(current.wind_speed_10m),
+      windDirection: Math.round(current.wind_direction_10m) % 360,
       isDay: current.is_day === 1,
     },
     daily: days,

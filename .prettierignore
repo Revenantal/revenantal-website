@@ -7,3 +7,5 @@ docs/reference/prototypes/node_modules/
 docs/reference/prototypes/renders/
 docs/reference/prototypes/**/*.html
 docs/reference/prototypes/build_rack.py
+# Generated compact map data (tools/assets/natural_earth.py).
+public/assets/tv-guide/land-110m.json

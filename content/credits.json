@@ -133,5 +133,37 @@
     "license": "Owner-supplied",
     "usedFor": "server rack on the Status channel",
     "edits": "Generated with ChatGPT and edited with Claude: backgrounds keyed out, rack-ear holes cut, cropped; grilles, ports and lights drawn in code"
+  },
+  {
+    "title": "Open-Meteo",
+    "url": "https://open-meteo.com/",
+    "author": "Open-Meteo",
+    "license": "CC BY 4.0",
+    "usedFor": "TV Guide local forecast",
+    "edits": "Current conditions and three-day forecast, fetched by our server"
+  },
+  {
+    "title": "RainViewer",
+    "url": "https://www.rainviewer.com/",
+    "author": "RainViewer",
+    "license": "RainViewer API terms",
+    "usedFor": "TV Guide radar",
+    "edits": "Recent radar frames, fetched by our server"
+  },
+  {
+    "title": "DB-IP Lite City",
+    "url": "https://db-ip.com/",
+    "author": "DB-IP",
+    "license": "CC BY 4.0",
+    "usedFor": "TV Guide approximate city (IP Geolocation by DB-IP)",
+    "edits": "Monthly database, read on our server only"
+  },
+  {
+    "title": "Natural Earth 1:110m land",
+    "url": "https://www.naturalearthdata.com/",
+    "author": "Natural Earth",
+    "license": "Public domain",
+    "usedFor": "TV Guide radar base map",
+    "edits": "Release v5.1.2 land polygons, rounded to 0.01°"
   }
 ]

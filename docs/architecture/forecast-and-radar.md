@@ -67,7 +67,9 @@ The service is built and stays off until the 3.7 checks pass. Code is in `api/fo
 - **Logs:** a startup line and hourly aggregate counts by route and bounded code. No addresses, places or request details.
 - **Verified locally (2026-10-19):** the bundled service with the real database and providers (8.8.8.8 → Mountain View in °F and mph; a UK address → London in °C and km/h; three radar frames; a real PNG tile); then edge → Caddy 2.11.7 → service with a trusted and an untrusted edge, a forged `X-Real-IP`, a missing address and DNT. Logs held no addresses. CI builds the image without the database and checks that it starts read-only as user 10001 and fails closed.
 - **Pending (3.7):** two real visitors through the real ingress, platform log inspection, and the exact edge and Caddy peers.
-- DB-IP's requested attribution text is "IP Geolocation by DB-IP"; the panel footer (3.5) uses that wording.
+- DB-IP's requested attribution text is "IP Geolocation by DB-IP"; the panel footer uses that wording.
+- Since task 3.5 the forecast also carries `feelsLike`, `humidity` and `windDirection` (Open-Meteo `apparent_temperature`, `relative_humidity_2m`, `wind_direction_10m`).
+- Local development: `tools/dev/weather-plugin.ts` runs the service under `pnpm dev` and proxies the weather routes with `X-Real-IP` set to `FORECAST_DEV_IP` from `.env.local` (see `docs/development/local-development.md`). Production uses the Caddy route only.
 
 ## Local Time
 
