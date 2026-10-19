@@ -33,7 +33,7 @@ White text rises from below the picture and scrolls steadily upward over black. 
 - Black background, white centered text, clear section spacing and a restrained project heading.
 - Use existing self-hosted Archivo Narrow for entries and Michroma for the heading; no new font dependency.
 - Authored at 760×570 with `safe: true`.
-- Display profile: `scan: false`, `flicker: false`, `glow: 0.3`, `bloom: false`, `transition: cut`. Viewer effect switches still take precedence.
+- Display profile: none, so the TV defaults apply: full scanlines, flicker, full room glow and the static burst on tune-in (owner decision, 2026-10-19). Bloom stays off because it is opt-in. Viewer effect switches still take precedence.
 
 ## Sound
 

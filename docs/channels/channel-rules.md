@@ -30,6 +30,7 @@ For the launch lineup, the registry is `{ 1: tvGuide, 10: status, 11: credits }`
 - No network calls except shared broadcast media and the documented TV Guide forecast/radar helpers. No channel-owned audio nodes/elements: use `play`, `setLoop` and the shared player’s `volume` prop. No global listeners.
 - No imports from the store, audio, the TV or another channel (lint enforces this).
 - Every manifest declares its `kind` and a valid display profile.
+- Leave display effects on by default: scanlines, flicker, room glow and the static transition run unless a channel has a specific reason to limit one (record it in the channel spec). Omit `display` entirely when nothing needs limiting.
 - Keep text sharp: bloom is off unless the profile sets `bloom: true`, and only channels without small text (films, toys) should. Its SVG filter renders the picture at 760×570 and enlarges it, which blurs and colour-fringes text. Filters on large text layers have the same effect.
 - Clocks and dates use the viewer's time zone and locale via `Intl`.
 - Never show player names. Never show personal info.
