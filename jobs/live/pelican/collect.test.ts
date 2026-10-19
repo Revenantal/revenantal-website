@@ -16,16 +16,9 @@ describe("server collection lifecycle", () => {
       .mockResolvedValueOnce([]);
     const client = { list, resources: () => Promise.resolve(stats) };
     const query = vi.fn().mockResolvedValue(null);
-    const first = await collectServers(client, [], {}, new Map(), now, query);
+    const first = await collectServers(client, [], new Map(), now, query);
     expect(first.snapshot.servers).toHaveLength(1);
-    const next = await collectServers(
-      client,
-      [],
-      {},
-      first.counters,
-      now,
-      query,
-    );
+    const next = await collectServers(client, [], first.counters, now, query);
     expect(next.snapshot.servers).toEqual([]);
     expect(next.counters.size).toBe(0);
     expect(list).toHaveBeenCalledTimes(2);
@@ -42,7 +35,6 @@ describe("server collection lifecycle", () => {
         resources: () => Promise.resolve(stats),
       },
       [],
-      {},
       new Map(),
       now,
       () => Promise.resolve(null),
@@ -56,7 +48,6 @@ describe("server collection lifecycle", () => {
             : Promise.resolve(stats),
       },
       [],
-      {},
       first.counters,
       now,
       () => Promise.resolve(null),
@@ -75,7 +66,6 @@ describe("server collection lifecycle", () => {
     const hidden = await collectServers(
       client,
       [{ pelicanId: metadata.identifier, hidden: true }],
-      {},
       new Map(),
       now,
       query,
@@ -84,11 +74,11 @@ describe("server collection lifecycle", () => {
     expect(resources).not.toHaveBeenCalled();
     const result = await collectServers(
       client,
-      [],
-      { aaaaaaaa: { host: "127.0.0.1", gamedig: "protocol-valve" } },
+      [{ pelicanId: metadata.identifier, gamedig: "protocol-valve" }],
       new Map(),
       now,
       query,
+      "games.example.invalid",
     );
     expect(result.snapshot.servers[0]?.state).toBe("running");
     expect(result.snapshot.servers[0]?.players).toBeUndefined();
@@ -102,7 +92,6 @@ describe("server collection lifecycle", () => {
           resources: () => Promise.resolve(stats),
         },
         [],
-        {},
         new Map(),
         now,
         () => Promise.resolve(null),

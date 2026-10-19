@@ -132,6 +132,15 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - Support local Minecraft Java/Bedrock and Valve query protocols initially. GameDig's Factorio adapter uses its external public listing API, so leave it disabled under the local-query design; Factorio's Pelican state/resources still work. Player counts for unsupported/unconfigured queries remain absent. Schedules and backups also remain absent without separately verified read permissions.
 - Prepare the collector image and opt-in SSH transfer, but leave uploads disabled and hosting disconnected. No agent has been installed or run against the panel by this build. No TV channel implementation is authorized.
 
+### Direct scheduled Pelican API collection (2026-10-18)
+
+- The owner confirmed the panel is publicly reachable and approved replacing the agent/push architecture with direct Pelican Client API collection in the existing ten-minute live job. This supersedes earlier agent, two-minute polling, servers.json drop-folder, SSH/rsync and local-only game-query decisions. Remove their runtime and deployment tooling; no Wings installation is needed.
+- Keep the restricted status-bot key on the job host and discover manual subuser assignments each run. The browser still reads static live.json once. No assignment automation or broader bot permissions are authorized.
+- Loop through discovered UUIDs for resources, then query supported games for counts. The standard Pelican resources response contains no player counts. Use one configurable GAME_QUERY_HOST; the owner confirmed games.revenantal.com as the only shared hostname. Combine it with each primary allocation port; changing the hostname later needs runtime configuration only.
+- GameDig supports Minecraft Java/Bedrock, Valve and Factorio. Factorio uses its public listing service and requires a listed/reachable game address; its listing-service timing is not game-server ping. Strip player identities and omit unsupported/unavailable query fields without changing good resource observations. No RCON password or command permission is needed.
+- Persist only numeric counter baselines privately under /data/pelican-state.json for average rates between ten-minute executions. Never serve that file. Preserve fifteen-minute server freshness and all current address opt-in/privacy rules.
+- Hosting stays disconnected; actual scheduled-host authentication and public game-query checks remain pending runtime setup. The previously generated Wings host-test archive is obsolete and withdrawn. No individual channel implementation is authorized.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

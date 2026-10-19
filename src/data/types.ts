@@ -154,7 +154,7 @@ export type Live = {
     string /* project id */,
     { state: "up" | "slow" | "down"; ms?: number }
   >;
-  servers?: LiveServer[]; // from the Pelican agent's servers.json
+  servers?: LiveServer[]; // from scheduled Pelican API collection
   errors?: string[]; // bounded public error codes; no raw diagnostics
 };
 

@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "preview": "vite preview --host 127.0.0.1",
-    "build": "pnpm credits:check && vite build && size-limit && pnpm build:live && pnpm build:agent",
+    "build": "pnpm credits:check && vite build && size-limit && pnpm build:live",
     "lint": "eslint . --max-warnings 0 && stylelint \"src/**/*.css\"",
     "lint:fix": "eslint . --fix && stylelint \"src/**/*.css\" --fix",
     "format": "prettier . --write",
@@ -28,10 +28,7 @@
     "build:live": "node tools/build/build-live.ts",
     "live:run": "node jobs/live/main.ts",
     "live:preview": "node tools/build/run-local-live.ts",
-    "build:agent": "node tools/build/build-agent.ts",
-    "agent:run": "node agent/pelican/main.ts",
-    "test:agent": "node tools/checks/check-agent.ts",
-    "agent:package": "node tools/build/package-agent.ts"
+    "test:pelican": "node tools/checks/check-pelican.ts"
   },
   "size-limit": [
     {

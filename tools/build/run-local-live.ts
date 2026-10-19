@@ -15,7 +15,7 @@ const result = spawnSync(process.execPath, ["jobs/live/main.ts"], {
     ...process.env,
     SITE_PATH: resolve(directory, "site.json"),
     LIVE_PATH: resolve(directory, "live.json"),
-    SERVERS_PATH: resolve(directory, "servers.json"),
+    PELICAN_STATE_PATH: resolve(directory, "pelican-state.json"),
   },
 });
 if (result.error) throw result.error;

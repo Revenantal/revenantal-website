@@ -63,8 +63,3 @@ Desktop.ini
 
 # Local reference renders (approved mockups remain tracked)
 /docs/reference/prototypes/renders/
-
-# Private local Pelican runtime inputs and SSH material
-/deploy/pelican-data/
-/deploy/pelican-ssh/
-/deploy/pelican-config/

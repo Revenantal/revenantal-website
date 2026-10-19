@@ -9,15 +9,21 @@ try {
     .strictObject({
       host: z.string().min(1).max(253),
       port: z.number().int().min(1).max(65535),
-      type: z.enum(["minecraftvanilla", "minecraftbedrock", "protocol-valve"]),
+      type: z.enum([
+        "minecraftvanilla",
+        "minecraftbedrock",
+        "protocol-valve",
+        "factorio",
+      ]),
     })
     .parse(JSON.parse(input) as unknown);
   const result = queryResultSchema.parse(
     await GameDig.query({
       ...target,
-      type: target.type.startsWith("protocol-")
-        ? target.type
-        : "protocol-" + target.type,
+      type:
+        target.type === "factorio" || target.type.startsWith("protocol-")
+          ? target.type
+          : "protocol-" + target.type,
       requestPlayers: false,
       requestRules: false,
       maxRetries: 1,
@@ -28,6 +34,8 @@ try {
       debug: false,
     }),
   );
+  // Factorio measures its listing API, so that timing is not a game-server ping.
+  if (target.type === "factorio") delete result.ping;
   process.stdout.write(JSON.stringify(result));
   process.exit(0);
 } catch {

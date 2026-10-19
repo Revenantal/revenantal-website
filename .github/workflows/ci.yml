@@ -27,8 +27,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
-      - name: Verify built agent and local game query
-        run: pnpm test:agent
+      - name: Verify scheduled Pelican collection and game query
+        run: pnpm test:pelican
       - name: Verify site image, runtime mounts and rollback
         run: pnpm test:container
       - name: Check commit and pull request authorship

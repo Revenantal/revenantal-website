@@ -31,6 +31,7 @@ export async function verifySite(
     "/missing",
     "/assets/missing.js",
     "/servers.json",
+    "/pelican-state.json",
     "/live.json.tmp",
     "/input/servers/servers.json",
     "/.env",
@@ -76,6 +77,7 @@ export async function createSiteFixture(root: string) {
   await mkdir(runtime, { recursive: true });
   await writeFile(join(runtime, "live.json"), '{"version":1}');
   await writeFile(join(runtime, "servers.json"), '{"private":true}');
+  await writeFile(join(runtime, "pelican-state.json"), '{"private":true}');
   return { site, runtime };
 }
 

@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Finish phase 1 verification and review. Foundation is committed; deployment files, shared data and GitHub-backed List mode are implemented locally. Hosting is deferred by owner instruction; Pelican collection is now implemented against supplied beta38 responses; its host test is next.
+**Current focus:** Finish phase 1 verification and review. Foundation is committed; deployment files, shared data and GitHub-backed List mode are implemented locally. Hosting is deferred by owner instruction; Pelican now runs directly inside the ten-minute live job, using one runtime game hostname. Finish runtime credentials, scheduled-host/player-count verification and remote/container acceptance before Gate 1.
 
 **Last updated:** 2026-10-18
 
@@ -25,7 +25,7 @@ What is built and where things are. Tick an item when its task has reached `main
 - [ ] 1.4 Content schemas and files — implemented locally
 - [ ] 1.5 Store and shared UI actions — implemented and tested locally
 - [ ] 1.6 Live job — implemented; real public GitHub feed verified locally; host scheduler not installed
-- [ ] 1.7 Pelican agent — implemented and fixture-tested locally; host/container/SSH verification pending
+- [ ] 1.7 Direct Pelican provider — implemented in the live job; real host authentication/query verification pending
 - [ ] 1.8 Server merge and overrides — implemented and fixture-tested locally
 - [ ] 1.9 List mode — implemented; desktop/mobile browser and axe checks pass locally
 - [ ] 1.10 Real project list, links and credits — scheduled GitHub navigation, public links and shared credits implemented locally
@@ -88,11 +88,23 @@ Prepared non-root site/live-job Dockerfiles, opt-in CI publication, separate run
 
 Local browser checks passed at 1280×650 and 390×844, including reduced motion, real GitHub data, 0/1/30 projects, missing/malformed live data, no horizontal overflow and no axe violations. Further browser checks passed for clock expiry without polling, retained stale navigation with unknown status, keyboard skip navigation, clipboard success/denial, blocked storage and the actual built site served under Caddy/CSP. The complete pnpm check passed: formatting, lint, strict types, 74 tests and both production builds. Initial JavaScript is about 37.3 kB gzipped against 90 kB. Steam and game servers remain unavailable without runtime configuration; no observations are invented. The Pelican agent and remote acceptance keep Gate 1 open. No TV shell or individual channel is built.
 
-## Pelican Collector Build (2026-10-18)
+## Pelican Collector Build (2026-10-18, superseded by direct collection below)
 
 Implemented token-only bounded/paginated discovery, strict private projections, real-response resource mapping, adjacent-sample network rates, independent resource failure handling, manual-membership discovery, isolated local GameDig queries, atomic public snapshots and opt-in restricted SSH upload. Startup commands/variables, SFTP fields, raw responses and player identities do not enter output. Only deidentified real-response fixtures are tracked.
 
 Prepared a non-root read-only container, private environment/mount examples and disabled-by-default transfer. Standalone bundled execution and local Minecraft protocol checks pass through the live job and shared freshness view; unit coverage includes pagination, malformed/oversized responses, failed sources, resets, revocation and atomic output. The full pnpm check passes with 94 tests, all static checks and site/live/agent production builds. The host-test archive is prepared; the owner confirmed SSH and Docker Compose are available on the Wings machine. The build does not contact the real panel, install services, open ports, publish images or enable uploads. Host/container/SSH acceptance and v1 migration checks remain pending; Gate 1 stays open.
+
+## Direct Scheduled Collection and Handoff (2026-10-18)
+
+The owner approved replacing the Wings agent and SSH upload with direct public Pelican API collection inside the existing ten-minute live job. Reused the verified beta38 mapper under jobs/live/pelican/ and removed the standalone runtime/image, transfer code, archive tooling and obsolete deployment instructions. The previous generated Wings test archive was withdrawn; nothing was installed remotely.
+
+Each run discovers manual status-bot assignments, loops through UUID resource endpoints and queries supported running games using one GAME_QUERY_HOST plus each allocation port. The owner confirmed games.revenantal.com as that sole hostname; it remains runtime-configurable. Minecraft Java/Bedrock, Valve and Factorio are supported; missing/failed queries omit counts. Factorio uses its public listing service, so its request timing is not exposed as a game ping. Player identities remain stripped.
+
+Numeric network baselines persist privately for average rates between ten-minute executions; private state has no public route. Server freshness still expires after fifteen minutes from collection start. Tests cover one shared hostname across different ports, no future observation timestamps, per-server failures, manual removals, query failure isolation and ten-minute rate persistence. The standalone built live job passes the API-fixture → live.json → shared freshness path and a real local Minecraft query. Final pnpm check passes with 94 tests, lint, strict types, formatting and site/live builds. pnpm test:pelican and native Caddy checks pass, including private-state denial and two-version/rollback routing.
+
+A sanitized real query against the owner-supplied Factorio allocation via games.revenantal.com returned unavailable. This does not establish whether the cause is listing eligibility, DNS/routing or provider compatibility; actual player counts remain unverified and are not fabricated.
+
+**Left off:** Local code migration and documentation are complete. Hosting remains disconnected. Next configure the existing job's PELICAN_URL, restricted PELICAN_KEY and GAME_QUERY_HOST in its runtime environment, then verify scheduled-host resource collection and actual player counts. Docker-enabled CI, PR/merge/branch setup and remaining production acceptance keep Gate 1 open. Do not start the TV shell until that gate is settled. No individual channel is approved or built.
 
 ## Channel Build Approvals
 
@@ -168,6 +180,6 @@ Follow-up completed locally on 2026-10-18: F01–F03 are resolved in the specifi
 
 ## Blockers and Open Items
 
-Pelican Panel beta38 list/resources responses were supplied and mapped. The restricted account works with zero selected subuser permissions; the owner reports manual assignments complete. Host connectivity, container execution, GameDig routing and SSH delivery still require verification. Upgrade-to-v1 compatibility is unverified.
+Pelican Panel beta38 list/resources responses were supplied and mapped. The restricted account works with zero selected subuser permissions; the owner reports manual assignments complete. The owner confirmed public panel access and one shared games.revenantal.com hostname. The local agent/SSH approach is superseded. Scheduled-host authentication, container execution and actual player-count queries still require verification. Upgrade-to-v1 compatibility is unverified.
 
 See `project-decisions.md` → Open Items.

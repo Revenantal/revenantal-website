@@ -1,7 +1,9 @@
 # Scheduled Live Job
 
-main.ts reads validated site content and the previous snapshot, collects independent sources, then writes live.json by temporary-file rename. It runs once; the host scheduler supplies the ten-minute interval.
+main.ts loads validated shared content and previous live.json, collects independent Steam, GitHub, project-check and Pelican sources, then atomically replaces live.json. The host schedules this one-shot job every ten minutes.
 
-providers.ts projects Steam/GitHub responses into public fields. GitHub project navigation and activity share one request per run. project-check.ts performs bounded public HEAD checks with pinned DNS and no redirects. collect.ts preserves each source's original successful time on failure and applies current server publication policy.
+providers.ts projects Steam/GitHub data and calls pelican/provider.ts directly. GitHub navigation and status checks share one request. project-check.ts performs bounded public HEAD requests. pelican/ discovers manually assigned status-bot servers, reads resources and queries optional player counts using one runtime game hostname and each allocation port. No separate agent or SSH transfer exists.
 
-Only shared data types/schemas may be imported. Keep credentials in the job environment, errors bounded and raw server/player data out of output. Build with pnpm build:live; run locally with pnpm live:preview. See deploy/ for image and scheduler examples. Pelican collection is a separate unimplemented agent.
+collect.ts preserves each failed source's successful timestamp and reapplies server policy. Private numeric rate baselines live in pelican-state.json, which Caddy never serves. Never write raw responses, keys or player identities to public or private snapshots.
+
+Import shared data types/schemas only. Build with pnpm build:live, preview with pnpm live:preview, and verify the standalone scheduled path with pnpm test:pelican. Hosting remains disconnected until configured separately.

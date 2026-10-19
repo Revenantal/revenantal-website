@@ -77,14 +77,6 @@ jobs:
           push: true
           tags: ghcr.io/revenantal/revenantal-live:${{ env.TESTED_SHA }}
           labels: org.opencontainers.image.revision=${{ env.TESTED_SHA }}
-      - uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
-        if: steps.candidate.outputs.current == 'true'
-        with:
-          context: .
-          file: agent/pelican/Dockerfile
-          push: true
-          tags: ghcr.io/revenantal/revenantal-agent:${{ env.TESTED_SHA }}
-          labels: org.opencontainers.image.revision=${{ env.TESTED_SHA }}
       - name: Promote the current tested image
         if: steps.candidate.outputs.current == 'true'
         id: promotion
@@ -95,7 +87,6 @@ jobs:
           if [ "$current" = "$TESTED_SHA" ]; then
             docker buildx imagetools create --tag "$IMAGE:latest" "$IMAGE:$TESTED_SHA"
             docker buildx imagetools create --tag "ghcr.io/revenantal/revenantal-live:latest" "ghcr.io/revenantal/revenantal-live:$TESTED_SHA"
-            docker buildx imagetools create --tag "ghcr.io/revenantal/revenantal-agent:latest" "ghcr.io/revenantal/revenantal-agent:$TESTED_SHA"
             echo 'promoted=true' >> "$GITHUB_OUTPUT"
           fi
       - name: Request the configured Coolify deployment

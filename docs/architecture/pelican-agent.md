@@ -1,109 +1,42 @@
-# Pelican Agent
+# Pelican Collection
 
-Game-server status for the Status channel. The Pelican host stays isolated: nothing connects in to it. A small agent on that machine collects status and pushes it out.
+Pelican is publicly reachable. The existing ten-minute live job calls its Client API directly; there is no separate agent, SSH transfer or servers.json input. Code lives in jobs/live/pelican/.
 
-## How It Works (`agent/pelican/`)
+## Collection
 
-1. **Pelican Client API**, read locally: list servers with `GET /api/client`, then `GET /api/client/servers/{uuid}/resources` for each → state (running, starting, stopping, offline) and uptime, CPU, memory, network.
-2. **GameDig**, in an isolated child, against configured local Minecraft Java/Bedrock or Valve query ports → player counts, ping and password presence. No raw player list leaves the child. Factorio queries are disabled because that adapter calls an external listing API; Pelican resource monitoring still works. Other protocols are added only after validating their transport and fields.
-3. Every 2 minutes, write `servers.json` with an envelope `{ fetchedAt, servers }`. `fetchedAt` is the ISO time of this collection, not an upload or file modification time. Push it to the Coolify host with `rsync` over SSH, using a key locked to one folder by `rrsync`, so it can do nothing else. Use the default temporary-file-and-rename transfer; do not use `--inplace`.
-4. The live job merges `servers.json` into `live.json`, preserving the agent observation time for freshness (see `live-data.md`). If an individual server resource query fails, emit unknown state and omit its old counters rather than presenting an earlier sample as newly collected.
+1. PELICAN_URL and PELICAN_KEY configure the restricted status-bot Client API account at runtime. Requests use HTTPS, omit browser cookies, reject redirects and bound response size/time.
+2. GET /api/client/?include=egg discovers all assigned servers, following validated pagination. The owner manages assignments manually with zero selected subuser permissions, verified on Panel 1.0.0-beta38.
+3. Loop through discovered UUIDs and read /api/client/servers/{uuid}/resources, with at most four servers in flight. Shared content/servers.json controls names, visibility, protocol overrides and address publication.
+4. For a running server with a supported protocol, combine the single GAME_QUERY_HOST setting with that server's primary allocation port. The owner confirmed games.revenantal.com as the shared hostname; changing it later is a runtime configuration change. Never infer the host from SFTP metadata or a descriptive allocation alias.
+5. Query player counts, maximum players, ping and password presence using GameDig in a bounded child process. The supported protocols are Minecraft Java, Minecraft Bedrock, Valve and Factorio. Panel credentials are not inherited by query children; player names and raw query data never leave them.
+6. Return sanitized servers directly to the live job, which writes live.json atomically. Browser visitors fetch only that static snapshot.
 
-Runs as a Docker container on the Pelican host (Wings already needs Docker), `restart: unless-stopped`. Env: PELICAN_URL, PELICAN_KEY, optional COOLIFY_HOST and PUSH_ENABLED; the SSH key is mounted read-only.
+Pelican's standard resource response has no player counts. Looping over it yields state/resources; game query results supply the additional fields. Public panel access does not prove public game-query reachability. A failed query omits those fields and never changes a running Pelican server to offline. Unknown games remain resource-only until a verified protocol override is supplied.
 
-## What Pelican Needs
+## Factorio
 
-The reported Panel version is **1.0.0-beta38**; a move to v1 is being considered. Begin by signing into the panel and opening `/docs/api`, then selecting the Client API. The beta38 source confirms `GET /api/client` and `GET /api/client/servers/{server}/resources`. Obtain one redacted server entry and its resource response before implementing the mapper. Remove startup commands/variables, SFTP details, names, addresses and credentials; keep the JSON field structure and numeric resource values. Repeat this check after upgrading.
+GameDig's Factorio adapter queries Factorio's public multiplayer listing service using the resolved game address and allocation port. A server must be listed there for this method to work. It returns counts and password presence; raw player identities are stripped. Its measured ping is a listing-service request time, so do not expose it as game-server ping. No RCON access, command permission or game-server password is required.
 
-Sources: [installed API documentation](https://pelican.dev/docs/panel/advanced/api-docs/), [beta38 client routes](https://github.com/pelican/panel/blob/v1.0.0-beta38/routes/api-client.php), [versioning and beta migration](https://pelican.dev/docs/versioning/). These references do not certify the installed response shape or grant permission to upgrade.
+Source: [GameDig Factorio adapter](https://github.com/gamedig/node-gamedig/blob/master/protocols/factorio.js). Other games use their direct status/query protocols. Use the same scheduled host rather than adding a service to the Wings machine.
 
-- A dedicated panel user, `status-bot`, with a **client** API key limited to the agent's address. Never an admin (application) key.
-- **Which servers appear = which servers `status-bot` is a subuser on.** Adding or removing a server is done in the panel, not in code. Give it the fewest permissions that still allow reading resources; confirm the exact permission names on the installed Pelican version.
-- Schedule and backup read permissions only if those fields are wanted.
-- Query enabled on each game server that supports it (e.g. `enable-query` for Minecraft), reachable by the agent on the LAN only.
-- Outbound SSH from the Pelican host to the Coolify host. No inbound ports opened.
+## Units and Freshness
 
-## Finding Your Servers
+Wings uptime is milliseconds and converts to seconds. Memory bytes convert to MiB; the panel memory limit is already MiB. cpu_absolute is already percentage of one core, and may exceed 100. Raw cumulative network bytes are never presented as bytes/second.
 
-- In the Pelican admin area, **Servers** lists every server with its egg (the game). Opening one shows its short identifier in the URL (`/server/1a2b3c4d`).
-- Once `status-bot` exists, `agent --list` prints every server it can see with the GameDig type it guessed from the egg, so mismatches are easy to spot.
+Private numeric baselines persist in /data/pelican-state.json across scheduled executions. Calculate an average rate only across running samples at most fifteen minutes apart, with monotonic counters and uptime consistent with elapsed time. Missing/reset/old baselines produce no rate. Failed per-server resources remove that baseline. The private state file is mode 600 and has no public Caddy route; only live.json is served from that directory.
 
-## Overrides
+Server source age is measured conservatively from the scheduled collection start, independent of final file write time. A source failure retains its previous success time and becomes stale immediately. Fresh server observations expire after fifteen minutes; a resource failure within otherwise successful discovery produces unknown state without old telemetry. Successful empty discovery removes old servers. Failed/partial discovery does not publish an empty replacement.
 
-`content/servers.json` is optional. It only renames, retypes or hides a server (`ServerOverride` in `data-model.md`).
+## Privacy and Publication
 
-Connect addresses currently use usable numeric Pelican allocation IP:port and are published **only** for servers with showAddress: true. Wildcard bindings and descriptive aliases are omitted. The observed allocations use 0.0.0.0, so no address is invented.
+The client projects metadata into an allowlist before mapping. Commands, variables, SFTP, account fields, passwords and player identities never enter live.json or private counter state. Only deidentified owner-supplied beta38 fixtures are tracked. Keep API keys only in the scheduled job's runtime environment.
 
-## Server Fields
+Addresses are published only under showAddress=true and only when Pelican supplies a usable numeric allocation. Wildcard 0.0.0.0/:: binds and descriptive labels are not connect addresses. GAME_QUERY_HOST routes queries without automatically publishing a connect address. Schedules/backups and optional map/version fields remain absent until verified separately; do not increase the bot's permissions for player counts.
 
-Pelican kept Pterodactyl's client API. The owner supplied real beta38 list/resources responses. Deidentified fixtures and mapping tests are now in agent/pelican/**fixtures**/. Confirm again after upgrading.
+## Setup and Verification
 
-| Field                      | Source                                  | On the Status rack                                       |
-| -------------------------- | --------------------------------------- | -------------------------------------------------------- |
-| State, uptime              | Pelican: server resources               | v1: status light, state word, "up 4d"                    |
-| Players and max players    | GameDig                                 | v1: "3/20 players"                                       |
-| Connect address            | Pelican: allocations (alias or IP:port) | v1, opt-in per server (`showAddress`)                    |
-| Ping, password-protected   | GameDig                                 | v1: latency beside the address, padlock icon             |
-| CPU %, memory used / limit | Pelican: resources and limits           | v1: two small bars on the display                        |
-| Next scheduled restart     | Pelican: schedules (needs permission)   | Deferred until its response and permissions are verified |
-| Network in / out           | Pelican: resources                      | v1: drive-tray lights blink faster with traffic          |
-| Suspended or installing    | Pelican: server list                    | v1: amber MAINTENANCE state                              |
-| Map or world, game version | GameDig / startup variables             | Later                                                    |
-| Last backup                | Pelican: backups (needs permission)     | Later                                                    |
-| Player names               | GameDig                                 | **Never shown.** Other people's names stay off the site  |
+Configure the existing live job using deploy/.env.live.example. Set PELICAN_URL to the panel base URL, PELICAN_KEY to the restricted bot key, and GAME_QUERY_HOST to the single game hostname. The existing /data mount is sufficient; no agent input mount or SSH key is needed. Do not commit .env.live or paste the key into chat.
 
-Games that don't answer queries simply leave those lines off their display. The exact v1 set is confirmed when channel 10 is built.
+pnpm check validates code and builds the site/live job. pnpm test:pelican runs the standalone bundled job against deidentified API fixtures, checks its output through shared freshness filtering, and performs a real local Minecraft query. Tests use no production credentials. Caddy routing checks confirm private counter state stays unreachable.
 
-## Setup, Step by Step
-
-The two machines are on different networks.
-
-1. **Coolify host:** create a drop user and folder.
-
-   ```bash
-   sudo adduser --disabled-password --gecos "" status-drop
-   sudo mkdir -p /srv/revenantal/servers
-   sudo chown status-drop: /srv/revenantal/servers
-   which rrsync   # ships with rsync 3.2.4+; install rsync if missing
-   ```
-
-2. **Pelican host:** make a key used for nothing else.
-
-   ```bash
-   ssh-keygen -t ed25519 -f ~/.ssh/revenantal_status -N "" -C pelican-status
-   ```
-
-3. **Coolify host:** add the public key to `/home/status-drop/.ssh/authorized_keys`, locked to write-only uploads into the one folder.
-
-   ```txt
-   command="rrsync -wo /srv/revenantal/servers",restrict ssh-ed25519 AAAA… pelican-status
-   ```
-
-4. **Pelican host:** test the push. It should succeed, and an `ssh` login with the same key should be refused.
-
-   ```bash
-   echo '{}' > /tmp/servers.json
-   rsync -e "ssh -i ~/.ssh/revenantal_status" /tmp/servers.json status-drop@COOLIFY_HOST:
-   ```
-
-5. **Pelican host:** run the agent container with its env and the key mounted read-only. It loops every 2 minutes.
-6. **Coolify:** mount `/srv/revenantal/servers` read-only at `/input/servers` in the live job. Keep this drop folder separate from the runtime output directory `/srv/revenantal/live` and from the built site.
-7. **Firewall:** if SSH on the Coolify host only allows known IPs, add the Pelican host's public IP. If that IP changes, rely on the key lock instead.
-
-## Updates
-
-`deploy.yml` builds the agent image. The Pelican host pulls it on its own schedule (Watchtower or a manual `docker compose pull`).
-
-## Verified Local Implementation (2026-10-18)
-
-The owner manually assigned status-bot to the selected servers and declined assignment automation. Zero selected subuser permissions were sufficient for the real server-list and resources tests. Discovery runs each collection, follows bounded pagination and removes unassigned servers after the next successful list. A failed list does not emit an empty replacement or refresh the old output timestamp. One resource failure emits unknown state without old telemetry. Successful empty discovery writes an empty set.
-
-The client sends only a Bearer key with cookies omitted and redirects rejected. It requires HTTPS, bounds each JSON body to 1 MiB and each request to five seconds. Game queries have a six-second child lifetime, no inherited panel secrets and an allowlist of local protocols. Failures omit query fields without declaring a running Pelican server offline.
-
-Wings uptime is milliseconds; convert it to seconds. Memory bytes convert to MiB; the panel memory limit is already MiB. cpu_absolute is already percentage of one core. network_rx_bytes/network_tx_bytes are cumulative: derive bytes/second only from adjacent running samples at most five minutes apart, with increasing uptime consistent with elapsed time and nondecreasing counters. First samples, restarts, missing samples and counter resets have no rates. Private baselines stay in memory and disappear on restart. Source: [Wings uptime contract](https://github.com/pelican/wings/blob/main/environment/environment.go), [GameDig query protocol documentation](https://github.com/gamedig/node-gamedig), [Factorio adapter](https://github.com/gamedig/node-gamedig/blob/master/protocols/factorio.js).
-
-The standalone bundle and real local Minecraft query pass pnpm test:agent, including the public snapshot → live job → shared freshness view and exact expiry. Docker image/permissions, actual panel networking and restricted SSH delivery still require host verification. No production agent or upload is running.
-
-## First Host Test — Uploads Disabled
-
-See deploy/pelican-setup.md for the staged setup. Keep the existing restricted account and manual server assignments. No inbound ports are opened on the Pelican host. Test --list, then --once with PUSH_ENABLED=false before enabling the loop or SSH transfer. Never paste keys or raw panel responses into chat or commit them. The list command shows IDs, names and inferred games only; review these locally.
+The owner verified real beta38 list/resources responses. Actual scheduled-host authentication and player-count reachability still require runtime configuration/testing; no production job or hosting connection has been enabled. Recheck the responses after an upgrade to v1. Sources: [beta38 routes](https://github.com/pelican/panel/blob/v1.0.0-beta38/routes/api-client.php), [Pelican API docs](https://pelican.dev/docs/panel/advanced/api-docs/), [Wings uptime](https://github.com/pelican/wings/blob/main/environment/environment.go).

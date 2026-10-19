@@ -244,7 +244,7 @@ export const liveEnvelopeSchema = z.strictObject({
   errors: z.array(z.string().regex(/^[a-z][a-z0-9_]{0,63}$/)).optional(),
 });
 
-/** The agent collection timestamp is retained when the live job rereads it. */
+/** Internal server collection envelope carries its own observation timestamp. */
 export const serverSnapshotSchema = z.strictObject({
   fetchedAt: z.iso.datetime({ offset: true }),
   servers: z.array(liveServerSchema),

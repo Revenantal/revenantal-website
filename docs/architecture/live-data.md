@@ -11,24 +11,24 @@ Node + TypeScript, run by a Coolify scheduled task. Image `ghcr.io/revenantal/re
 1. **Steam Web API** (key in env): `GetPlayerSummaries` for online status, `GetRecentlyPlayedGames` for the last two weeks, `GetOwnedGames` for the library count, `GetSteamLevel`.
 2. **GitHub REST** (optional runtime token): `GET /users/revenantal/repos?sort=pushed&per_page=30`. Publish up to the configured limit of public, non-fork, non-archived repositories, newest push first. Filter obvious personal-site/resume listings. Project links and activity share the same request. Publish generic language descriptions and stable numeric-repository IDs; omit raw descriptions, homepages and account fields.
 3. **Project status:** for each project with a URL, an HTTP `HEAD` with a 5 s timeout → `up` (under 1.5 s), `slow`, or `down`. A completed check reporting a timeout or unreachable project is a new down observation; a failure of the job or mapper is a source failure.
-4. **Game servers:** validate `/input/servers/servers.json` from the read-only agent drop folder. Its envelope contains `fetchedAt` (the agent observation time) and `servers`. The source `lastSuccessAt` is that observation time, never the file modification time or the time the job rereads it. A sample at least 15 minutes old is stale.
+4. **Game servers:** call the public Pelican Client API directly using restricted status-bot runtime credentials. Discover assigned servers and loop over UUID resource endpoints; optionally query counts using one GAME_QUERY_HOST and each allocation port. Return sanitized data directly to the shared collector. No agent, servers.json input or SSH transfer exists. Private numeric network-rate baselines persist in /data/pelican-state.json and are never served. See pelican-agent.md for mapping/query details.
 5. Read the previous `/data/live.json` if valid. On each source attempt, record `lastAttemptAt` and whether it `failed`. On success, replace that source and update its `lastSuccessAt`. On failure, retain its previous value and successful timestamp; use `null` if it has never succeeded. One source failure does not discard the others. A successful empty response replaces old data with an empty result.
 6. Set aggregate `fetchedAt` to the output write time. Write a temporary file under `/data`, then atomically rename it to `/data/live.json`. This timestamp never proves that an individual source is fresh. Record only bounded public error codes in `errors`; keep raw diagnostics in private logs.
 
 The host runtime directory is mounted read-write at `/data` in the job and read-only at a separate path in Caddy. Never write into the built site directory. Exact mounts and routing: `hosting-and-ci.md` → Runtime Data and Routing.
 
-Env: `STEAM_KEY`, `STEAM_ID`, optional `GITHUB_TOKEN`. These live only in Coolify, never in Actions or the front end.
+Env: `STEAM_KEY`, `STEAM_ID`, optional `GITHUB_TOKEN`, `PELICAN_URL`, `PELICAN_KEY` and `GAME_QUERY_HOST`. These live only in Coolify, never in Actions or the front end.
 
 ## Freshness
 
 The store derives freshness from each source metadata record and the current time. Both TV channels and List mode receive the same filtered view.
 
-| Source         | Maximum age of last successful observation |
-| -------------- | ------------------------------------------ |
-| Steam          | 30 minutes                                 |
-| GitHub         | 30 minutes                                 |
-| Project status | 30 minutes                                 |
-| Game servers   | 15 minutes, measured from the agent sample |
+| Source         | Maximum age of last successful observation           |
+| -------------- | ---------------------------------------------------- |
+| Steam          | 30 minutes                                           |
+| GitHub         | 30 minutes                                           |
+| Project status | 30 minutes                                           |
+| Game servers   | 15 minutes, measured from scheduled collection start |
 
 A source is fresh only when the latest attempt did not fail and its successful observation is younger than its maximum age. At the age limit it becomes stale. Missing metadata, a null/invalid/future timestamp, or missing data makes that source unavailable; it must never be assumed fresh. An empty array or map is valid data, not a missing source.
 
@@ -53,10 +53,10 @@ Recompute age on the shared 20-second clock, and immediately on returning to a v
 
 ## Testing
 
-- Mappers are unit-tested with isolated structural fixtures. A real public GitHub feed was exercised locally; recorded private Steam/Pelican responses are still pending. Tests never call providers.
+- Mappers are unit-tested with isolated structural fixtures. A real public GitHub feed was exercised locally; Pelican mappers also use deidentified real beta38 responses supplied by the owner; private Steam fixtures are still pending. Tests never call providers.
 - A failing source leaves the other sources intact and does not advance its own `lastSuccessAt`.
 - A failed first attempt has no prior value; an empty successful result removes old entries.
-- A stopped agent ages servers from their original observation time even if the job rereads the same file.
+- A stopped job ages servers from their original collection time.
 - A stopped job and an open page crossing the 15- or 30-minute boundary both lose fresh status without another fetch. Check the exact boundary and tab resume.
 - Missing, malformed and future timestamps never produce a green current-state indicator. Old Steam online status, server players/uptime and project response times cannot leak through filtered props or totals.
 - The deployment test verifies atomic replacements remain visible through the directory mount.
@@ -67,4 +67,4 @@ The TV Guide's local forecast calls `/api/forecast` (see `forecast-and-radar.md`
 
 ## Local Implementation (2026-10-18)
 
-The one-shot Node job and bundled image are prepared. pnpm live:preview runs the same collector into ignored local files. Independent-source failures, retained timestamps, successful empties, agent sample age, address opt-in and public projection are fixture-tested. Public HEAD checks pin a validated DNS result, reject private/reserved targets, disallow redirects and use an integer five-second deadline. Scheduling and runtime credentials are configured later using deploy/; no production job is running.
+The one-shot Node job and bundled image are prepared. pnpm live:preview runs the same collector into ignored local files. Independent-source failures, retained timestamps, successful empties, server sample age, address opt-in and public projection are fixture-tested. Public HEAD checks pin a validated DNS result, reject private/reserved targets, disallow redirects and use an integer five-second deadline. Scheduling and runtime credentials are configured later using deploy/; no production job is running.

@@ -7,11 +7,10 @@ import { pathToFileURL } from "node:url";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { promisify } from "node:util";
-import { serverSnapshotSchema, siteSchema } from "../../src/data/schemas.ts";
-import { collectSnapshot } from "../../jobs/live/collect.ts";
+import { liveSchema, siteSchema } from "../../src/data/schemas.ts";
 import { filterFreshData } from "../../src/data/freshness.ts";
 const run = promisify(execFile);
-const root = await mkdtemp(join(tmpdir(), "rv-agent-smoke-"));
+const root = await mkdtemp(join(tmpdir(), "rv-pelican-smoke-"));
 assert(resolve(root).startsWith(resolve(tmpdir()) + requireSeparator()));
 const sockets = new Set<Socket>();
 const server = createServer((socket) => {
@@ -40,18 +39,18 @@ const server = createServer((socket) => {
   });
 });
 try {
-  await cp(resolve(".cache/pelican"), join(root, "runtime"), {
+  await cp(resolve(".cache/live"), join(root, "runtime"), {
     recursive: true,
   });
-  await cp(resolve("agent/pelican/__fixtures__"), join(root, "fixtures"), {
+  await cp(resolve("jobs/live/pelican/__fixtures__"), join(root, "fixtures"), {
     recursive: true,
   });
   await writeFile(
     join(root, "mock-panel.mjs"),
     `import {readFile} from "node:fs/promises";
- globalThis.fetch=async(url,options)=>{if(options.credentials!=="omit"||options.redirect!=="error"||options.headers.Authorization!=="Bearer fixture-key")throw new Error("Wrong authentication");const u=new URL(url);const file=u.pathname.endsWith("/resources")?"resources-beta38.json":"servers-beta38.json";return new Response(await readFile(new URL("./fixtures/"+file,import.meta.url),"utf8"),{headers:{"Content-Type":"application/json"}});};`,
+ globalThis.fetch=async(url,options)=>{if(new URL(url).hostname==="example.invalid"&&(options.credentials!=="omit"||options.redirect!=="error"||options.headers.Authorization!=="Bearer fixture-key"))throw new Error("Wrong authentication");const u=new URL(url);if(u.hostname!=="example.invalid")return new Response("[]",{headers:{"Content-Type":"application/json"}});const file=u.pathname.endsWith("/resources")?"resources-beta38.json":"servers-beta38.json";return new Response(await readFile(new URL("./fixtures/"+file,import.meta.url),"utf8"),{headers:{"Content-Type":"application/json"}});};`,
   );
-  const output = join(root, "servers.json");
+  const output = join(root, "live.json");
   await run(
     process.execPath,
     [
@@ -69,18 +68,21 @@ try {
         PELICAN_URL: "https://example.invalid",
         PELICAN_KEY: "fixture-key",
         SITE_PATH: resolve("dist/site.json"),
-        SERVERS_OUTPUT: output,
-        QUERY_TARGETS_PATH: "",
-        PUSH_ENABLED: "false",
+        LIVE_PATH: output,
+        PELICAN_STATE_PATH: join(root, "pelican-state.json"),
+        GAME_QUERY_HOST: "",
+        STEAM_KEY: "",
+        STEAM_ID: "",
+        GITHUB_TOKEN: "",
       },
       timeout: 15000,
       windowsHide: true,
     },
   );
-  const snapshot = serverSnapshotSchema.parse(
+  const snapshot = liveSchema.parse(
     JSON.parse(await readFile(output, "utf8")) as unknown,
   );
-  assert.equal(snapshot.servers.length, 1);
+  assert.equal(snapshot.servers?.length, 1);
   assert.equal(snapshot.servers[0]?.state, "running");
   assert.equal(snapshot.servers[0].uptimeSec, 298546.289);
   assert.doesNotMatch(
@@ -91,22 +93,7 @@ try {
     JSON.parse(await readFile("dist/site.json", "utf8")) as unknown,
   );
   const now = new Date();
-  const unavailable = () => Promise.reject(new Error("Fixture unavailable"));
-  const live = await collectSnapshot(
-    null,
-    {
-      steam: unavailable,
-      github: unavailable,
-      status: () => Promise.resolve({ data: {} }),
-      servers: () =>
-        Promise.resolve({
-          data: snapshot.servers,
-          observedAt: snapshot.fetchedAt,
-        }),
-    },
-    site,
-    now,
-  );
+  const live = snapshot;
   const view = filterFreshData(site, live, now);
   assert.equal(view.servers[0]?.state, "running");
   assert.equal(view.freshness.servers.state, "fresh");
@@ -163,7 +150,7 @@ try {
   assert.equal((JSON.parse(query) as { numplayers: number }).numplayers, 4);
   assert.doesNotMatch(query, /fixture-private|players":\[/);
   console.log(
-    "Agent checks passed: isolated built runtime, token-only discovery, public snapshot → live job → freshness view, exact expiry and real local GameDig query without player identities.",
+    "Pelican checks passed: standalone scheduled live job → API fixture → live.json → freshness view, exact expiry and real game query without player identities.",
   );
 } finally {
   for (const socket of sockets) socket.destroy();

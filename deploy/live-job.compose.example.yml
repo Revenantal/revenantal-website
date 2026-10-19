@@ -14,9 +14,3 @@ services:
         target: /data
         bind:
           create_host_path: false
-      - type: bind
-        source: /srv/revenantal/servers
-        target: /input/servers
-        read_only: true
-        bind:
-          create_host_path: false

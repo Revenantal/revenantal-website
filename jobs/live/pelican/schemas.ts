@@ -53,17 +53,6 @@ export const resourcesSchema = z.object({
     }),
   }),
 });
-/** Local query routing is private and does not decide which servers are discovered. */
-export const queryTargetsSchema = z.record(
-  z.string().regex(/^[a-f0-9]{8}$/),
-  z.strictObject({
-    host: z.string().regex(/^[a-zA-Z0-9.:-]+$/),
-    port: z.number().int().min(1).max(65535).optional(),
-    gamedig: z
-      .enum(["minecraftvanilla", "minecraftbedrock", "protocol-valve"])
-      .optional(),
-  }),
-);
 /** Public projection of game query results never contains a player list or raw data. */
 export const queryResultSchema = z.object({
   numplayers: z.number().int().nonnegative().optional(),
@@ -73,7 +62,11 @@ export const queryResultSchema = z.object({
 });
 /** Validated private server metadata, never serialized directly. */
 export type PanelServer = z.infer<typeof serverSchema>["attributes"];
-/** Private local query routing overrides keyed by discovered short identifier. */
-export type QueryTargets = z.infer<typeof queryTargetsSchema>;
 /** Allowed query summary with player identities removed. */
 export type QueryResult = z.infer<typeof queryResultSchema>;
+
+/** Private counter baselines persist across scheduled executions without entering live.json. */
+export const counterStateSchema = z.record(
+  z.string().regex(/^[a-f0-9]{8}$/),
+  z.strictObject({ at: count, uptime: count, rx: count, tx: count }),
+);

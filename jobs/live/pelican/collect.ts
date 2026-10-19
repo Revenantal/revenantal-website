@@ -1,9 +1,9 @@
-import { serverSnapshotSchema } from "../../src/data/schemas.ts";
-import type { LiveServer, ServerOverride } from "../../src/data/types.ts";
+import { serverSnapshotSchema } from "../../../src/data/schemas.ts";
+import type { LiveServer, ServerOverride } from "../../../src/data/types.ts";
 import type { PanelClient } from "./client.ts";
 import { mapServer, queryTarget } from "./mapping.ts";
 import type { CounterSample } from "./mapping.ts";
-import type { QueryResult, QueryTargets } from "./schemas.ts";
+import type { QueryResult } from "./schemas.ts";
 /** One collection returns strictly public output and private in-memory rate baselines. */
 export type Collection = {
   snapshot: { fetchedAt: string; servers: LiveServer[] };
@@ -14,16 +14,15 @@ export type Collection = {
  * Discovers assigned servers each cycle and isolates failures without carrying old telemetry forward.
  * @param client - Authenticated read-only panel transport.
  * @param policies - Current shared publication overrides.
- * @param targets - Private local query-routing overrides.
  * @param previous - Counters from the preceding successful collection.
  * @param now - Collection start; public age is conservative across the whole cycle.
  * @param query - Injectable game-query transport.
+ * @param defaultHost - Optional shared public game hostname for allocation ports.
  * @returns Public server snapshot, current rate baselines and bounded failure count.
  */
 export async function collectServers(
   client: PanelClient,
   policies: ServerOverride[],
-  targets: QueryTargets,
   previous: Map<string, CounterSample>,
   now: Date,
   query: (target: {
@@ -31,6 +30,7 @@ export async function collectServers(
     port: number;
     type: string;
   }) => Promise<QueryResult | null>,
+  defaultHost?: string,
 ): Promise<Collection> {
   const servers = await client.list();
   const output: LiveServer[] = [];
@@ -58,7 +58,7 @@ export async function collectServers(
           policy,
         );
         if (mapped.server.state === "running") {
-          const target = queryTarget(metadata, targets, policy);
+          const target = queryTarget(metadata, policy, defaultHost);
           if (target) {
             const result = await query(target).catch(() => null);
             if (result) {

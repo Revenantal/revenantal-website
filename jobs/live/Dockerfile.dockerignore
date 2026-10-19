@@ -6,4 +6,4 @@
 !dist/site.json
 !.cache/
 !.cache/live/
-!.cache/live/main.mjs
+!.cache/live/**

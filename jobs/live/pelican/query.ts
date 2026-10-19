@@ -5,9 +5,9 @@ import type { QueryResult } from "./schemas.ts";
 /**
  * Runs GameDig in an isolated child so timeouts close all sockets and raw players stay private.
  * @param target - Validated query routing for a discovered server.
- * @param target.host - Private LAN query host.
+ * @param target.host - Configured game query host.
  * @param target.port - Exact query port.
- * @param target.type - Allowed local protocol.
+ * @param target.type - Supported game-query protocol.
  * @returns Only sanitized counters, ping and password-presence; null on failure.
  */
 export function queryGame(target: {

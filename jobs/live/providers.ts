@@ -1,6 +1,5 @@
-import { readFile } from "node:fs/promises";
 import { z } from "zod";
-import { serverSnapshotSchema } from "../../src/data/schemas.ts";
+import { readPelican } from "./pelican/provider.ts";
 import type { Live, Site } from "../../src/data/types.ts";
 import type { SourceReaders } from "./collect.ts";
 import { checkProject } from "./project-check.ts";
@@ -159,6 +158,7 @@ export function createReaders(
   fetcher: typeof fetch = fetch,
   previousGithub?: Live["github"],
 ): SourceReaders {
+  const observedAt = new Date();
   let githubRequest: Promise<NonNullable<Live["github"]>> | undefined;
   const github = () => {
     githubRequest ??= json(
@@ -221,15 +221,7 @@ export function createReaders(
       return { data: observations };
     },
     servers: async () => {
-      const snapshot = serverSnapshotSchema.parse(
-        JSON.parse(
-          await readFile(
-            env.SERVERS_PATH ?? "/input/servers/servers.json",
-            "utf8",
-          ),
-        ) as unknown,
-      );
-      return { data: snapshot.servers, observedAt: snapshot.fetchedAt };
+      return readPelican(site, env, fetcher, observedAt);
     },
   };
 }

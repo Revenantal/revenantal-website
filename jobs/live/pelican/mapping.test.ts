@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, expect, it } from "vitest";
 import listing from "./__fixtures__/servers-beta38.json";
 import stats from "./__fixtures__/resources-beta38.json";
-import { serverSnapshotSchema } from "../../src/data/schemas.ts";
+import { serverSnapshotSchema } from "../../../src/data/schemas.ts";
 import { listingSchema, queryResultSchema } from "./schemas.ts";
 import { allocationAddress, mapServer, queryTarget } from "./mapping.ts";
 const entry = listingSchema.parse(listing).data[0];
@@ -49,7 +49,7 @@ describe("beta38 public resource mapping", () => {
       if (reason === "restart")
         counter.uptime = stats.attributes.resources.uptime - 1000;
       if (reason === "reset") counter.rx += 1;
-      if (reason === "old") counter.at -= 600000;
+      if (reason === "old") counter.at -= 1200000;
       if (reason === "future") counter.at += 120000;
       expect(
         mapServer(metadata, stats, now + 120000, counter).server.netRxBps,
@@ -93,15 +93,28 @@ describe("beta38 public resource mapping", () => {
       }).server.address,
     ).toBe("203.0.113.1:34197");
   });
-  it("requires configured routing for wildcard binds and excludes external Factorio lookup", () => {
-    expect(queryTarget(metadata, {}, undefined)).toBeNull();
+  it("uses the one runtime hostname with allocation ports for supported games", () => {
+    expect(queryTarget(metadata)).toBeNull();
     expect(
-      queryTarget(metadata, {
-        aaaaaaaa: { host: "127.0.0.1", gamedig: "protocol-valve" },
-      }),
-    ).toMatchObject({ host: "127.0.0.1", port: 34197, type: "protocol-valve" });
+      queryTarget(
+        metadata,
+        { pelicanId: "aaaaaaaa", gamedig: "factorio" },
+        "games.example.invalid",
+      ),
+    ).toEqual({ host: "games.example.invalid", port: 34197, type: "factorio" });
     expect(
-      queryTarget(metadata, {}, { pelicanId: "aaaaaaaa", gamedig: "factorio" }),
+      queryTarget(
+        metadata,
+        { pelicanId: "aaaaaaaa", gamedig: "protocol-valve" },
+        "changed.example.invalid",
+      )?.host,
+    ).toBe("changed.example.invalid");
+    expect(
+      queryTarget(
+        metadata,
+        { pelicanId: "aaaaaaaa", gamedig: "unsupported" },
+        "games.example.invalid",
+      ),
     ).toBeNull();
   });
   it("strips all game query identity/raw fields before public mapping", () => {

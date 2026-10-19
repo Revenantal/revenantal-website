@@ -1,7 +1,7 @@
 import { isIP } from "node:net";
-import type { LiveServer, ServerOverride } from "../../src/data/types.ts";
+import type { LiveServer, ServerOverride } from "../../../src/data/types.ts";
 import { resourcesSchema } from "./schemas.ts";
-import type { PanelServer, QueryResult, QueryTargets } from "./schemas.ts";
+import type { PanelServer, QueryResult } from "./schemas.ts";
 /** Previous private counters permit rate calculation across successful adjacent samples. */
 export type CounterSample = {
   at: number;
@@ -12,16 +12,18 @@ export type CounterSample = {
 /** Private collection result keeps counters separate from its public server projection. */
 export type MappedServer = { server: LiveServer; counter?: CounterSample };
 /**
- * Identifies supported local query protocols from an optional egg name or display metadata.
+ * Identifies supported remote game-query protocols from an optional egg name or display metadata.
  * @param server - Validated private server metadata.
- * @returns Display game and an optional LAN query protocol.
+ * @returns Display game and an optional game-query protocol.
  */
 export function identifyGame(server: PanelServer): {
   game: string;
   query?: string;
 } {
   const hint = server.relationships.egg?.attributes.name ?? server.name;
-  if (/factorio/i.test(hint)) return { game: "Factorio" };
+  if (/factorio/i.test(hint)) return { game: "Factorio", query: "factorio" };
+  if (/bedrock/i.test(hint))
+    return { game: "Minecraft", query: "minecraftbedrock" };
   if (/minecraft|paper|forge|fabric|pixelmon/i.test(hint))
     return { game: "Minecraft", query: "minecraftvanilla" };
   return { game: server.relationships.egg?.attributes.name ?? "Game server" };
@@ -48,46 +50,42 @@ export function allocationAddress(server: PanelServer): string | undefined {
   );
 }
 /**
- * Builds a private query target only for a discovered server and a supported local protocol.
+ * Builds a private query target only for a discovered server and a supported game protocol.
  * @param server - Discovered metadata.
- * @param targets - Private routing overrides, required for wildcard allocations.
  * @param policy - Shared optional server policy.
- * @returns A bounded local query request or null when unsupported/unconfigured.
+ * @param host - Shared externally reachable game hostname, never published.
+ * @returns A bounded remote query request or null when unsupported/unconfigured.
  */
 export function queryTarget(
   server: PanelServer,
-  targets: QueryTargets,
   policy?: ServerOverride,
+  host?: string,
 ): { host: string; port: number; type: string } | null {
   const allocation = server.relationships.allocations.data.find(
     (item) => item.attributes.is_default,
   )?.attributes;
-  const override = targets[server.identifier];
-  const host =
-    override?.host ??
-    (allocation &&
-    isIP(allocation.ip) &&
-    !["0.0.0.0", "::"].includes(allocation.ip)
-      ? allocation.ip
-      : undefined);
-  const type =
-    override?.gamedig ?? policy?.gamedig ?? identifyGame(server).query;
-  const port = override?.port ?? allocation?.port;
+  const type = policy?.gamedig ?? identifyGame(server).query;
   if (
     !host ||
-    !port ||
+    !allocation ||
     !type ||
-    !["minecraftvanilla", "minecraftbedrock", "protocol-valve"].includes(type)
+    ![
+      "minecraftvanilla",
+      "minecraftbedrock",
+      "protocol-valve",
+      "factorio",
+    ].includes(type)
   )
     return null;
-  return { host, port, type };
+  return { host, port: allocation.port, type };
 }
+
 /**
  * Converts one validated resource observation into the strictly public server fields.
  * @param metadata - Private identity, limits and allocation metadata.
  * @param raw - Untrusted resource response; null means the query failed.
  * @param now - Observation time in milliseconds.
- * @param previous - Previous adjacent successful counters, kept only in memory.
+ * @param previous - Previous adjacent successful counters, persisted privately between scheduled runs.
  * @param policy - Current display/address policy.
  * @param query - Optional sanitized game query result.
  * @returns Public fields plus private counters for the next sample.
@@ -146,7 +144,7 @@ export function mapServer(
   if (
     previous &&
     elapsed > 0 &&
-    elapsed <= 300 &&
+    elapsed <= 900 &&
     counter.uptime > previous.uptime &&
     Math.abs(counter.uptime - previous.uptime - elapsed * 1000) <= 5000 &&
     counter.rx >= previous.rx &&

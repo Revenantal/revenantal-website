@@ -20,7 +20,7 @@ pnpm check
 
 Runs formatting, ESLint/Stylelint, strict TypeScript, Vitest and production builds, including the 90 kB initial JavaScript gzip limit and the independent live-job bundle. pnpm preview serves the built site. Tests use fixtures, not live credentials.
 
-pnpm test:agent verifies the isolated built collector, public snapshot/live-job/freshness path and a real local Minecraft query without production keys. pnpm agent:package creates the upload-disabled host-test archive after the build; see deploy/pelican-setup.md.
+pnpm test:pelican verifies the standalone scheduled live job, direct Pelican API mapping, public output/freshness and a real local Minecraft query without production keys. Configure PELICAN_URL/PELICAN_KEY at runtime for real collection; GAME_QUERY_HOST supplies the one shared game hostname. No separate collector is installed on Wings.
 
 pnpm test:container requires Docker and verifies image replacement/rollback, runtime mounts, permissions, cache headers and missing-file behavior. CI runs it on Linux. On a machine with an official Caddy binary, set CADDY_BIN and run pnpm test:caddy for the routing checks without Docker; this does not verify container permissions.
 

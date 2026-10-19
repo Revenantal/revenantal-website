@@ -2,13 +2,13 @@
 
 Project-wide coding practices for revenantal.com.
 
-This is a small static site with one playful front end, a scheduled data job and a tiny agent. Keep it that way. Each channel can be as rich as it likes inside its own folder, but the shared code should stay simple.
+This is a small static site with one playful front end, a scheduled data job and an optional weather service. Keep it that way. Each channel can be as rich as it likes inside its own folder, but the shared code should stay simple.
 
 ## Core Principles
 
 - Keep the implementation lightweight and easy to understand.
 - One data source: views render from `site.json` and `live.json`. Nothing is hard-coded in components.
-- Keep code grouped by what it is. Content, the TV, channels, the live job and the Pelican agent never share a folder (see `repo-layout.md`).
+- Keep code grouped by what it is. Content, the TV, channels, the live job and its Pelican provider never share a folder (see `repo-layout.md`).
 - Channels are self-contained. A channel can be deleted by deleting its folder and its line in `channels/index.ts`.
 - Avoid unnecessary dependencies. Check bundle size before adding one.
 - Accessibility, performance and privacy are requirements, not polish.
@@ -47,7 +47,7 @@ If the person still wants the original approach after the trade-off is explained
 ## TypeScript
 
 - `strict` plus `noUncheckedIndexedAccess`. `any` is a lint error; use `unknown` and narrow.
-- `.tsx` for components, `.ts` for everything else. No plain JavaScript in `src/`, `jobs/` or `agent/`.
+- `.tsx` for components, `.ts` for everything else. No plain JavaScript in `src/`, `jobs/`.
 - Named exports only. One component per file.
 - File names: components `PascalCase.tsx`; other modules `kebab-case.ts`.
 - Use `import type` for type-only imports.
@@ -98,7 +98,7 @@ The goal: another developer (or agent) can read any file cold.
 
 ### Folder READMEs
 
-- Each folder under `src/`, plus `jobs/live/`, `agent/pelican/` and `tools/assets/`, has a short `README.md`: what it owns, what it may import, and how to add to it.
+- Each folder under `src/`, plus `jobs/live/`, `jobs/live/pelican/` and `tools/assets/`, has a short `README.md`: what it owns, what it may import, and how to add to it.
 - The root `README.md` is the TV operating manual, written from the finished visitor experience. Keep setup, scripts, content/channel instructions and actual build progress in `docs/`, linked through its documentation index.
 
 ### Example
