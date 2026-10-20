@@ -123,12 +123,14 @@ jobs:
           fi
           test -n "$COOLIFY_TOKEN"
           case "$COOLIFY_WEBHOOK" in https://*) ;; *) exit 1 ;; esac
-          # On failure, show the start of Coolify's reply (an error message, never a secret).
+          # Show the start of Coolify's reply: what it queued, or why it refused (never a secret).
           status=$(curl --request POST --silent --show-error --max-time 30 --output reply.txt \
             --write-out '%{http_code}' \
             --header "Authorization: Bearer $COOLIFY_TOKEN" "$COOLIFY_WEBHOOK")
           case "$status" in
-            2??) ;;
+            2??)
+              echo "::notice::Coolify: $(head -c 300 reply.txt | tr -d '\r\n')"
+              ;;
             *)
               echo "::error::Coolify answered $status: $(head -c 300 reply.txt | tr -d '\r\n')"
               exit 1
