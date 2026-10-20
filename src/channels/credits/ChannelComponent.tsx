@@ -83,9 +83,26 @@ function CreditsBody({
                     </a>
                     <span className={styles.author}>{credit.author}</span>
                     <span className={styles.meta}>
-                      {credit.license}
+                      {credit.licenseUrl ? (
+                        <a
+                          href={credit.licenseUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {credit.license}
+                          <span className={styles["sr-only"]}>
+                            {" "}
+                            (opens in a new tab)
+                          </span>
+                        </a>
+                      ) : (
+                        credit.license
+                      )}
                       {credit.edits ? ` · ${credit.edits}` : ""}
                     </span>
+                    {credit.notice ? (
+                      <span className={styles.notice}>{credit.notice}</span>
+                    ) : null}
                   </span>
                 </li>
               ))}

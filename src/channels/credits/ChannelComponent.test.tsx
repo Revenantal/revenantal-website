@@ -254,6 +254,24 @@ describe("Credits channel", () => {
     expect(loop.mock.calls.length).toBe(calls);
   });
 
+  it("links a licence that has a URL and shows a credit's notice", () => {
+    show({
+      credits: [
+        credit("Menu", "Art Department", {
+          license: "Example Rules",
+          licenseUrl: "https://rules.example.invalid/",
+          notice: "Example © Owner. Used under the Example Rules.",
+        }),
+      ],
+    });
+    const rules = screen.getByRole("link", { name: /Example Rules/ });
+    expect(rules.getAttribute("href")).toBe("https://rules.example.invalid/");
+    expect(rules.getAttribute("target")).toBe("_blank");
+    expect(
+      screen.getByText("Example © Owner. Used under the Example Rules."),
+    ).toBeTruthy();
+  });
+
   it("says so when there are no credits", () => {
     show({ credits: [] });
     expect(screen.getByText("No credits yet.")).toBeTruthy();

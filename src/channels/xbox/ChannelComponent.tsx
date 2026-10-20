@@ -3,12 +3,12 @@ import type { ChannelProps } from "../_shared/types";
 import styles from "./Xbox.module.css";
 
 const STILL = "/assets/xbox/menu.webp";
-const RULES = "https://www.xbox.com/en-US/developers/rules";
 
 /**
  * CH 07 XBOX: the original Halo main menu, as if the TV's input were an Xbox left on the
  * menu. A muted video loop plays only while the channel is active; reduced motion shows
- * its first frame. The music is the manifest's loop, played by the host.
+ * its first frame. The music is the manifest's loop, played by the host. Microsoft's
+ * notice lives with the Halo credits (Credits channel, List mode and CREDITS.md).
  *
  * @param props - Channel props; only activity and motion are read.
  * @param props.active - Whether the channel is tuned in and visible.
@@ -56,16 +56,6 @@ export function ChannelComponent({ active, reducedMotion }: ChannelProps) {
           <source src="/assets/xbox/menu.mp4" type="video/mp4" />
         </video>
       )}
-      <p className={styles.notice}>
-        Halo © Microsoft Corporation. revenantal was created under Microsoft's
-        &ldquo;
-        <a href={RULES} target="_blank" rel="noopener noreferrer">
-          Game Content Usage Rules
-          <span className={styles["sr-only"]}> (opens in a new tab)</span>
-        </a>
-        &rdquo; using assets from Halo, and it is not endorsed by or affiliated
-        with Microsoft.
-      </p>
     </div>
   );
 }

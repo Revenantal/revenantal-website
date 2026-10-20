@@ -287,12 +287,30 @@ export function ListView({
                         </span>
                       </a>
                       <p>
-                        {credit.author} · {credit.license}
+                        {credit.author} ·{" "}
+                        {credit.licenseUrl ? (
+                          <a
+                            href={credit.licenseUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {credit.license}
+                            <span className={styles["sr-only"]}>
+                              {" "}
+                              (opens in a new tab)
+                            </span>
+                          </a>
+                        ) : (
+                          credit.license
+                        )}
                       </p>
                       <p className={styles.meta}>
                         {credit.usedFor}
                         {credit.edits ? ` · ${credit.edits}` : ""}
                       </p>
+                      {credit.notice ? (
+                        <p className={styles.meta}>{credit.notice}</p>
+                      ) : null}
                     </li>
                   ))}
                 </ul>

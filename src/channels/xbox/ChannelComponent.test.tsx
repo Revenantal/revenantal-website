@@ -62,21 +62,12 @@ describe("XBOX channel", () => {
     expect(play).not.toHaveBeenCalled();
   });
 
-  it("carries Microsoft's notice with a link to the rules", () => {
-    render(<ChannelComponent {...channelProps()} />);
-    const link = screen.getByRole("link", { name: /Game Content Usage Rules/ });
-    expect(link.getAttribute("href")).toBe(
-      "https://www.xbox.com/en-US/developers/rules",
-    );
-    expect(link.getAttribute("target")).toBe("_blank");
-    expect(link.getAttribute("rel")).toContain("noopener");
-    const notice = link.closest("p")?.textContent.replace(/\s+/g, " ");
-    expect(notice).toContain("Halo © Microsoft Corporation.");
-    expect(notice).toContain(
-      "revenantal was created under Microsoft's “Game Content Usage Rules (opens in a new tab)” using assets from Halo, and it is not endorsed by or affiliated with Microsoft.",
-    );
+  it("describes itself to screen readers and leaves the notice to the credits", () => {
+    const { container } = render(<ChannelComponent {...channelProps()} />);
     expect(
       screen.getByText("Xbox: the Halo main menu with its theme."),
     ).toBeTruthy();
+    expect(container.textContent).not.toContain("Microsoft");
+    expect(screen.queryByRole("link")).toBeNull();
   });
 });

@@ -98,6 +98,8 @@ export const creditSchema = z.strictObject({
   url: webUrlSchema,
   license: text,
   edits: text.optional(),
+  licenseUrl: webUrlSchema.optional(),
+  notice: text.optional(),
   usedFor: text,
   department: text,
 });
