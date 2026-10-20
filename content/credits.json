@@ -28,12 +28,12 @@
   },
   {
     "title": "Halo main menu",
-    "url": "https://halome.nu/",
-    "author": "halome.nu (capture); Halo © Microsoft Corporation",
+    "url": "https://archive.org/details/halo-combat-evolved-xbox-pal-gameplay-full-game-longplay",
+    "author": "Internet Archive upload (original Xbox PAL capture); Halo © Microsoft Corporation",
     "license": "Microsoft Game Content Usage Rules",
     "usedFor": "XBOX channel menu loop",
     "department": "Art Department",
-    "edits": "Letterboxed to 760×478 at 24 fps, re-encoded to VP9 and H.264; first frame as the still"
+    "edits": "Menu flyby cut from 0:19.6 to 0:93.0 with a 1.5 s dissolve back to the start, scaled to 760×570, re-encoded to VP9 and H.264; first frame as the still"
   },
   {
     "title": "Michroma",

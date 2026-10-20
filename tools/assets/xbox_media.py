@@ -2,11 +2,16 @@
 
 Usage: python tools/assets/xbox_media.py [--source DIR]
 
-Sources: halome.nu's Halo menu loop (loop.webm) and music (loop.ogg), kept out of
-git in .cache/xbox-360/. Halo (c) Microsoft Corporation; capture by halome.nu; used
-under Microsoft's Game Content Usage Rules (see docs/channels/07-xbox.md).
+Sources, kept out of git in .cache/xbox-360/:
+  halo-xbox-pal-menu.mp4  the first 4 minutes of "Halo Combat Evolved Xbox PAL Gameplay
+                          (Full Demostration).mp4" from https://archive.org/details/
+                          halo-combat-evolved-xbox-pal-gameplay-full-game-longplay
+                          (original Xbox, 4:3; marked public domain by its uploader)
+  loop.ogg                halome.nu's loop of the menu music
+Halo (c) Microsoft Corporation; used under Microsoft's Game Content Usage Rules (see
+docs/channels/07-xbox.md).
 
-Writes, for the 760x570 channel (the widescreen menu letterboxed, as on a 4:3 TV):
+Writes, for the 760x570 channel (the original Xbox menu, natively 4:3):
   public/assets/xbox/menu.webm   VP9 loop, no audio
   public/assets/xbox/menu.mp4    H.264 loop, no audio (for browsers without VP9)
   public/assets/xbox/menu.webp   first frame: poster and reduced-motion still
@@ -30,9 +35,17 @@ SOURCE = ROOT / ".cache/xbox-360"
 VIDEO_OUT = ROOT / "public/assets/xbox"
 MUSIC_OUT = ROOT / "public/assets/music/xbox.m4a"
 
-# Trim a sliver from each side of the 1920x1080 capture so the letterbox bars are thinner,
-# keeping the full HALO logo, then scale to the channel's width.
-FRAME = "crop=1720:1080,scale=760:-2,fps=24"
+# The menu's camera flyby runs from 19.6 s until the demo reel interrupts it near 93 s,
+# before the circuit completes, so the end dissolves back into the start over 1.5 s while
+# the logo and menu stay still.
+START, END, DISSOLVE = 19.6, 93.0, 1.5
+SCALE = "scale=760:570,setsar=1,fps=25"
+LOOP = (
+    f"[0:v]trim={START + DISSOLVE}:{END},setpts=PTS-STARTPTS,{SCALE}[body];"
+    f"[0:v]trim={START}:{START + DISSOLVE},setpts=PTS-STARTPTS,{SCALE}[head];"
+    f"[body][head]xfade=transition=fade:duration={DISSOLVE}:"
+    f"offset={END - START - 2 * DISSOLVE:.3f}[out]"
+)
 MAX_KB = {"menu.webm": 1600, "menu.mp4": 1600, "menu.webp": 120, "xbox.m4a": 1100}
 MUSIC_KBPS = 36
 
@@ -55,21 +68,23 @@ def main() -> None:
     ffmpeg = shutil.which("ffmpeg")
     if not ffmpeg:
         raise SystemExit("ffmpeg is required.")
-    video = args.source / "loop.webm"
+    video = args.source / "halo-xbox-pal-menu.mp4"
     VIDEO_OUT.mkdir(parents=True, exist_ok=True)
 
     webm = VIDEO_OUT / "menu.webm"
-    run(ffmpeg, "-i", str(video), "-vf", FRAME, "-an", "-c:v", "libvpx-vp9", "-b:v", "0",
+    run(ffmpeg, "-i", str(video), "-filter_complex", LOOP, "-map", "[out]", "-an",
+        "-c:v", "libvpx-vp9", "-b:v", "0",
         "-crf", "46", "-deadline", "good", "-cpu-used", "2", "-row-mt", "1",
         "-pix_fmt", "yuv420p", "-map_metadata", "-1", str(webm))
     checked(webm)
     mp4 = VIDEO_OUT / "menu.mp4"
-    run(ffmpeg, "-i", str(video), "-vf", FRAME, "-an", "-c:v", "libx264", "-preset", "slow",
+    run(ffmpeg, "-i", str(video), "-filter_complex", LOOP, "-map", "[out]", "-an",
+        "-c:v", "libx264", "-preset", "slow",
         "-crf", "34", "-profile:v", "main", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
         "-map_metadata", "-1", str(mp4))
     checked(mp4)
     still = VIDEO_OUT / "menu.webp"
-    run(ffmpeg, "-i", str(video), "-vf", FRAME, "-frames:v", "1", "-c:v", "libwebp",
+    run(ffmpeg, "-i", str(webm), "-frames:v", "1", "-c:v", "libwebp",
         "-quality", "70", "-map_metadata", "-1", str(still))
     checked(still)
 

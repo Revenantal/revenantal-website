@@ -21,7 +21,7 @@ None. The channel uses no site data.
 
 ## Look
 
-- A seamless muted video loop of the menu (halome.nu's capture of the widescreen Halo PC menu), letterboxed on the 760×570 picture with a sliver trimmed from each side so the full HALO logo stays.
+- A muted video loop of the original Xbox menu in its native 4:3, filling the 760×570 picture: the camera flyby from a PAL capture on the Internet Archive, with its end dissolving back into its start over 1.5 s (the game's demo reel interrupts the flyby before it completes a circuit).
 - A still frame from the same loop shows while the video loads, and in its place with reduced motion.
 - A small notice at the very bottom, in Microsoft's required form with a link to the Rules: "Halo © Microsoft Corporation. revenantal was created under Microsoft's 'Game Content Usage Rules' using assets from Halo, and it is not endorsed by or affiliated with Microsoft."
 - No Xbox logos or Microsoft branding; "XBOX" is a referential channel label.
@@ -33,10 +33,10 @@ The Halo main menu music, 3–4 minutes, as the channel's `music` loop through t
 
 ## Build Notes
 
-- **Asset sources:** halome.nu's Halo loop and music files, used by owner decision without asking halome.nu, and credited to halome.nu and Microsoft. Nothing is extracted from game files. The source files stay out of git (`.cache/xbox-360/`); `pnpm assets:xbox` (`tools/assets/xbox_media.py`) rebuilds `public/assets/xbox/menu.{webm,mp4,webp}` and `public/assets/music/xbox.m4a`.
-- **Media:** video 1.4 MB (VP9 WebM) or 1.3 MB (H.264 MP4 fallback); each browser downloads one. Still 24 KB, music 1.07 MB (mono AAC, 36 kbps). Owner-approved exception to the toy art budget and the 300 KB loop budget; everything loads only on channel 7. Code stays well under 80 KB.
+- **Asset sources:** the video comes from "Halo Combat Evolved Xbox PAL Gameplay" on the Internet Archive (an original Xbox capture its uploader marked public domain); the music is halome.nu's loop, used by owner decision without asking halome.nu. Both are credited, with Microsoft. Nothing is extracted from game files. The source files stay out of git (`.cache/xbox-360/`); `pnpm assets:xbox` (`tools/assets/xbox_media.py`) rebuilds `public/assets/xbox/menu.{webm,mp4,webp}` and `public/assets/music/xbox.m4a`.
+- **Media:** video 820 KB (VP9 WebM) or 1.05 MB (H.264 MP4 fallback), 72 s; each browser downloads one. Still 12 KB, music 1.07 MB (mono AAC, 36 kbps). Owner-approved exception to the toy art budget and the 300 KB loop budget; everything loads only on channel 7. Code stays well under 80 KB.
 - **Lifecycle:** the video plays only while `active` and pauses when inactive, hidden or unmounted; no timers while inactive. The shared contract's `allowMutedVideo` option lets a channel play muted `<video>` elements only; anything audible still fails, as the Guide has `allowNetwork` for its weather requests.
-- **Credits:** Art and Sound department entries for the menu loop and the music: halome.nu (capture) and Halo © Microsoft Corporation, under the Game Content Usage Rules.
+- **Credits:** Art and Sound department entries for the menu loop (Internet Archive capture) and the music (halome.nu), with Halo © Microsoft Corporation, under the Game Content Usage Rules.
 
 ## Acceptance
 
