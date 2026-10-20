@@ -2,7 +2,7 @@
 
 What is built and where things are. Tick an item when its task has reached `main`, through a PR or an allowed direct fix. Update **Current focus** whenever it changes.
 
-**Current focus:** Phase 3, launch: the 3.7 launch check. Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Status, the TV Guide and Credits are built.
+**Current focus:** Gate 3 reached: revenantal.com is live with TV Guide (1), Status (10) and Credits (11). Next: phase 4 channels, each after its plan review. Phases 1 and 2 and their gates are complete on `main`. Hosting is deferred to the launch check (3.7) by owner instruction. Status, the TV Guide and Credits are built.
 
 **Last updated:** 2026-10-19
 
@@ -51,7 +51,7 @@ What is built and where things are. Tick an item when its task has reached `main
 - [x] 3.4 Channel 1 — TV Guide
 - [x] 3.5 TV Guide forecast and radar — local forecast over live radar with Natural Earth geography; static when unavailable
 - [x] 3.6 Channel 11 — Credits and shared attributions — film-style roll by department, VCR controls, channel music for the Guide and Credits
-- [ ] 3.7 Launch check
+- [x] 3.7 Launch check — live on Coolify behind Cloudflare with automatic deploys, weather, branch protection and a cross-browser review
 - [ ] **Gate 3 — launch**
 
 ## Phase 4 — Lighter Channels
@@ -245,3 +245,5 @@ Task 3.5 on `feat/3.5-guide-forecast`: the Guide's forecast window. Current cond
 Task 3.6 (merged in #29): the Credits channel at position 11. A film-style roll in white on black that rises from below the picture, grouped by department (Art, Typography, Sound, Weather; new required `department` field), each entry a role, a source link, the author, licence and edits. After the last line it cuts to static for a second and loops. A VCR bar (◀◀ REWIND, ❚❚ PAUSE / ▶ PLAY) fades in while the pointer moves and hides after two seconds; REWIND winds back with a tracking band, and a corner VCR display shows PAUSE or REW. Hover or link focus pauses without overriding a deliberate pause. Reduced motion shows a static list. The Credits button now hands focus to Pause through a new host focus step (`data-focus-first`). List mode and `CREDITS.md` group by department too, and the Guide's dial list includes Credits. Browser check: roll, bar, rewind and focus hand-off work, axe clean, no errors. 397 tests; chunk 2.4 kB of 30 kB. Channel music added on the same branch by owner choice: "Weather Forecast Type Beat" (YellowTree) on the Guide and "Epic Finale (loop)" (X3nus) on Credits, both CC BY 4.0 and credited, mono AAC under 300 KB from `pnpm assets:music`; Chromium decodes both without padding, so the loops are gapless. PAUSE fades the Credits music out and REWIND plays it at double speed.
 
 Task 3.7 in progress (2026-10-20): revenantal.com is live on Coolify behind Cloudflare. GitHub Actions publishes three private GHCR images (site, forecast, live job) after CI and keeps two versions of each; one Coolify compose resource runs them with health checks, and a Coolify Scheduled Task runs the live job every ten minutes (first run: all four sources fresh, no errors). The Coolify deploy webhook and token are in the `production` environment. Remaining: automatic deploy and rollback checks, weather (trusted edge and privacy checks), branch protection, and the cross-browser, accessibility, budget and privacy review.
+
+Task 3.7 complete (2026-10-20). Automatic deploys verified end to end (merge, CI, publish, Coolify webhook as a POST, fresh pull through `pull_policy: always`); each package keeps two versions. Weather is on behind Cloudflare: the visitor's own city resolves, faked forwarding headers are ignored, cross-site requests get 403, and responses are uncached. The radar CSP fix (`blob:` images) is live. Branch protection on `main`: the Checks job is required, force pushes and deletion are blocked, and admins keep the direct small-fix path. The rollback test was skipped by owner choice. Final review on the live site in Chromium, Firefox and WebKit: TV mode on channels 1, 10 and 11 (radar drawn, city correct), phone List mode with no overflow, reduced motion shows List mode, axe clean everywhere, no cookies, only `rv-ch` stored. Budgets on the live build: initial JS 54 KB, Guide chunk 10 KB, frame and sprites 129 KB (room backdrop 78 KB more), shell fonts 73 KB (122 KB with the Guide and hint-note fonts), TV sounds 85 KB, load event 0.34 s. Owner follow-ups: switch off Cloudflare Web Analytics, which injects a beacon the CSP blocks (the project uses no analytics), and confirm the forecast logs hold no addresses.
