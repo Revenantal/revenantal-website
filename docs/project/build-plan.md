@@ -12,7 +12,7 @@ Build the data pipeline and a useful List mode first, then add the TV shell over
 Phase 1  Foundation, data and List → tooling, CI, shared store and data; useful simple directory
 Phase 2  TV shell                  → cabinet, controls, effects and audio over the existing store
 Phase 3  Launch                    → channel contract, Status, TV Guide, Credits; site goes live
-Phase 4  Lighter channels          → XBOX 360 (Halo 3 menu), Terminal, Rev OS, Coin Drop, The Late Show, Paid Programming
+Phase 4  Lighter channels          → XBOX (Halo menu), Terminal, Rev OS, Coin Drop, The Late Show, Paid Programming
 Phase 5  Heavy channels            → Side Quest, Night Drive, Revscape (last)
 ```
 
@@ -76,16 +76,16 @@ Follow [Before Building a Channel](../channels/channel-rules.md#before-building-
 
 Each channel is its own release, behind its own gate (contract tests plus a look on the real TV).
 
-| Task | Work                                                                                                      | Adds                 | Docs                              |
-| ---- | --------------------------------------------------------------------------------------------------------- | -------------------- | --------------------------------- |
-| 4.1  | Channel 7 — XBOX 360: the Halo 3 main menu with its theme and Microsoft's Game Content Usage Rules notice | —                    | `channels/07-xbox-360.md`         |
-| 4.2  | Channel 3 — Terminal                                                                                      | —                    | `channels/03-terminal.md`         |
-| 4.3  | Channel 2 — Rev OS                                                                                        | —                    | `channels/02-rev-os.md`           |
-| 4.4  | Input capture, PRESS START and saves                                                                      | first game systems   | `channels/channel-rules.md`       |
-| 4.5  | Channel 12 — Coin Drop                                                                                    | first physics        | `channels/12-coin-drop.md`        |
-| 4.6  | Broadcast player: host-provided playlists, HLS, live schedule, effective volume and persistent captions   | first media pipeline | `channels/channel-rules.md`       |
-| 4.7  | Channel 8 — The Late Show                                                                                 | —                    | `channels/08-late-show.md`        |
-| 4.8  | Channel 9 — Paid Programming                                                                              | —                    | `channels/09-paid-programming.md` |
+| Task | Work                                                                                                         | Adds                 | Docs                              |
+| ---- | ------------------------------------------------------------------------------------------------------------ | -------------------- | --------------------------------- |
+| 4.1  | Channel 7 — XBOX: the original Halo main menu with its theme and Microsoft's Game Content Usage Rules notice | —                    | `channels/07-xbox.md`             |
+| 4.2  | Channel 3 — Terminal                                                                                         | —                    | `channels/03-terminal.md`         |
+| 4.3  | Channel 2 — Rev OS                                                                                           | —                    | `channels/02-rev-os.md`           |
+| 4.4  | Input capture, PRESS START and saves                                                                         | first game systems   | `channels/channel-rules.md`       |
+| 4.5  | Channel 12 — Coin Drop                                                                                       | first physics        | `channels/12-coin-drop.md`        |
+| 4.6  | Broadcast player: host-provided playlists, HLS, live schedule, effective volume and persistent captions      | first media pipeline | `channels/channel-rules.md`       |
+| 4.7  | Channel 8 — The Late Show                                                                                    | —                    | `channels/08-late-show.md`        |
+| 4.8  | Channel 9 — Paid Programming                                                                                 | —                    | `channels/09-paid-programming.md` |
 
 **Gate 4:** input capture, saves and video playback proven on the live site for the channels included in the release. Record any omitted channel-specific work; shared requirements for included channels still apply.
 
