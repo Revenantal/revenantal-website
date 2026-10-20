@@ -308,7 +308,7 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - One Coolify Docker Compose resource (`deploy/coolify.compose.yml`) runs all three. The live job idles in its container and a Coolify Scheduled Task runs it every ten minutes; it shares `live.json` with the site through a Coolify-managed volume. No SSH, host folders, systemd timer or settings files on the server; live-job keys are Coolify environment variables.
 - Deploys stay automatic through the Coolify deploy webhook, with `COOLIFY_WEBHOOK` and `COOLIFY_TOKEN` as `production` environment secrets in GitHub (owner choice over a server-side watcher or manual redeploys). The webhook step skips with a notice until those secrets exist.
 - **Image retention (owner, 2026-10-19):** each package keeps two versions, the current image and one rollback. The publish workflow deletes older ones after each deploy, which keeps storage within the free plan's 500 MB if GitHub ever bills the container registry (free today). Rollback reaches back one deploy.
-- Weather reaches the forecast service over a private network as `weather-api:8090`; the service trusts only that network's container addresses. The plain-server deploy files were removed.
+- Weather: the site reaches the forecast service as `forecast:8090` on the resource's own network, and the service trusts only the `site` container, looked up by name every 30 seconds (`TRUSTED_PEER_HOSTS`). A custom private network was dropped on 2026-10-19, because Coolify's proxy can pick a container's address on a network it is not on. All three services have health checks. The plain-server deploy files were removed.
 
 ## Clarifications
 

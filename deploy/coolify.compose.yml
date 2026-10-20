@@ -1,8 +1,9 @@
 # revenantal.com on Coolify: paste this into a "Docker Compose Empty" resource.
 # GitHub Actions builds and publishes every image; Coolify only pulls and runs them.
 # Settings marked ${...} appear in Coolify's Environment Variables; see deploy/README.md.
+# All services share Coolify's network for this resource; only `site` gets a domain.
 services:
-  # The site and its Caddy. Coolify's proxy routes revenantal.com to port 8080.
+  # The site and its Caddy. Give this service the domains, on internal port 8080.
   site:
     image: ghcr.io/revenantal/revenantal-site:${SITE_TAG:-latest}
     restart: unless-stopped
@@ -16,16 +17,28 @@ services:
     environment:
       # Coolify's proxy address, the only peer allowed to name the visitor (set in task 3.7).
       TRUSTED_EDGE: ${TRUSTED_EDGE:-192.0.2.1/32}
-      # Weather stays off (an uncached 503) until this is set to weather-api:8090.
+      # Weather stays off (an uncached 503) until this is set to forecast:8090.
       FORECAST_UPSTREAM: ${FORECAST_UPSTREAM:-127.0.0.1:9}
     volumes:
       - live-data:/srv/revenantal-live:ro
-    networks:
-      default: {}
-      weather: {}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-q",
+          "-O",
+          "/dev/null",
+          "http://127.0.0.1:8080/healthz",
+        ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
     depends_on: [live]
 
-  # The weather service, reachable only from the site over the private weather network.
+  # The weather service. No domain: only the site calls it, and it trusts only the site,
+  # looked up by service name, to name a visitor's address.
   forecast:
     image: ghcr.io/revenantal/revenantal-forecast:${SITE_TAG:-latest}
     restart: unless-stopped
@@ -33,16 +46,22 @@ services:
     user: "10001:10001"
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
+    expose: ["8090"]
     environment:
-      # Container addresses on the weather network, excluding its gateway (.1).
-      TRUSTED_PEERS: 172.30.88.2/31,172.30.88.4/31,172.30.88.6/32
-    networks:
-      weather:
-        # Scoped to the weather network, so the site always reaches it there.
-        aliases: [weather-api]
+      TRUSTED_PEER_HOSTS: site
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:8090/healthz').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
-  # The live-data job. It idles; Coolify's Scheduled Task runs `node /app/main.mjs` in this
-  # container every ten minutes, writing /data/live.json for the site to serve.
+  # The live-data job. No domain. It idles; Coolify's Scheduled Task runs `node /app/main.mjs`
+  # in this container every ten minutes, writing /data/live.json for the site to serve.
   live:
     image: ghcr.io/revenantal/revenantal-live:${SITE_TAG:-latest}
     restart: unless-stopped
@@ -60,15 +79,18 @@ services:
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
     volumes:
       - live-data:/data
-    networks:
-      default: {}
+    # Healthy while the shared volume is mounted and writable.
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('node:fs').accessSync('/data', require('node:fs').constants.W_OK)"
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
 volumes:
   # live.json and the private rate baselines; only the live job writes here.
   live-data: {}
-
-networks:
-  weather:
-    ipam:
-      config:
-        - subnet: 172.30.88.0/29
