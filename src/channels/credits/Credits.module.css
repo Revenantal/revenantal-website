@@ -115,6 +115,10 @@
   gap: 2px;
 }
 
+.meta a {
+  color: inherit;
+}
+
 .names a {
   color: #fff;
   font-size: 18px;
@@ -139,6 +143,14 @@
 .meta {
   color: #9c9c9c;
   font-size: 12px;
+  line-height: 1.4;
+}
+
+.notice {
+  margin-top: 4px;
+  color: #b8b8b8;
+  font-size: 11px;
+  font-style: italic;
   line-height: 1.4;
 }
 

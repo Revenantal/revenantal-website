@@ -32,6 +32,8 @@ describe("shipped asset credits", () => {
       ["public/assets/tv/room.webp", "Room artwork"],
       ["public/assets/status/server-1u.webp", "Status rack artwork"],
       ["public/assets/tv-guide/base-map.json", "Natural Earth map data"],
+      ["public/assets/xbox/menu.webm", "Halo main menu"],
+      ["public/assets/music/xbox.m4a", "Halo main menu music"],
     ] as const)
       if (existsSync(file))
         expect(

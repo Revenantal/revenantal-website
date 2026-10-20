@@ -1,0 +1,29 @@
+/* CH 07 XBOX: the widescreen Halo menu letterboxed on a 4:3 picture, as on an old TV. */
+
+.root {
+  position: relative;
+  width: 760px;
+  height: 570px;
+
+  /* clip, not hidden: a hidden box can still be scrolled by focus, which shifts channels. */
+  overflow: clip;
+  background: #000;
+  font-family: var(--font-body), sans-serif;
+}
+
+.menu {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

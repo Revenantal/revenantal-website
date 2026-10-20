@@ -27,6 +27,17 @@
     "edits": "Generated with ChatGPT and edited with Claude: backgrounds keyed out, rack-ear holes cut, cropped; grilles, ports and lights drawn in code"
   },
   {
+    "title": "Halo main menu",
+    "url": "https://archive.org/details/halo-combat-evolved-xbox-pal-gameplay-full-game-longplay",
+    "author": "Internet Archive upload (original Xbox PAL capture); Halo © Microsoft Corporation",
+    "license": "Microsoft Game Content Usage Rules",
+    "usedFor": "XBOX channel menu loop",
+    "department": "Art Department",
+    "edits": "Menu flyby cut from 0:19.6 to 0:93.0 with a 1.5 s dissolve back to the start, scaled to 760×570, re-encoded to VP9 and H.264; first frame as the still",
+    "licenseUrl": "https://www.xbox.com/en-US/developers/rules",
+    "notice": "Halo © Microsoft Corporation. revenantal was created under Microsoft's “Game Content Usage Rules” using assets from Halo, and it is not endorsed by or affiliated with Microsoft."
+  },
+  {
     "title": "Michroma",
     "url": "https://github.com/googlefonts/Michroma-font",
     "author": "The Michroma Project Authors",
@@ -168,6 +179,16 @@
     "usedFor": "Credits music",
     "department": "Sound Department",
     "edits": "short fades at the loop join, mono, level-matched, AAC"
+  },
+  {
+    "title": "Halo main menu music",
+    "url": "https://halome.nu/",
+    "author": "Microsoft Corporation (Halo); loop by halome.nu",
+    "license": "Microsoft Game Content Usage Rules",
+    "usedFor": "XBOX channel music",
+    "department": "Sound Department",
+    "edits": "Trailing silence trimmed, mono, level-matched, AAC",
+    "licenseUrl": "https://www.xbox.com/en-US/developers/rules"
   },
   {
     "title": "Open-Meteo",

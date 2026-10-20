@@ -9,4 +9,6 @@ Needs Python 3.12 with `pip install -r tools/assets/requirements.txt`, and ffmpe
 
 - `pnpm assets:music` runs `channel_music.py`: cuts each channel's music to its loop, fades the join, matches levels and writes mono AAC `.m4a` within 300 KB to `public/assets/music/`.
 
-All take `--out DIR` to write elsewhere for comparison. When a shipped asset is added or removed, update `content/credits.json` in the same change; `tools/checks/asset-credits.test.ts` checks the sound sources and TV artwork.
+- `pnpm assets:xbox` runs `xbox_media.py`: cuts the XBOX channel's Halo menu loop (VP9 and H.264), still and music from the source files in `.cache/xbox-360/` into `public/assets/xbox/` and `public/assets/music/`.
+
+The sprite, sound and music scripts take `--out DIR` to write elsewhere for comparison; the XBOX script takes `--source DIR`. When a shipped asset is added or removed, update `content/credits.json` in the same change; `tools/checks/asset-credits.test.ts` checks the sound sources and TV artwork.

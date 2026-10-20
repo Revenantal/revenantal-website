@@ -25,7 +25,7 @@ One-shots and loops are declared in each manifest’s `audio` metadata. Channels
 | Paid Programming | Cheesy 80s jingle bumper between clips                                              | New narration per clip, cash-register ding, applause                                                              | Original or AI narration; Freesound CC0 applause                                     |
 | Status           | None                                                                                | Quiet server-room hum (pending approval)                                                                          | Freesound CC0                                                                        |
 
-Shipped music: TV Guide plays "Weather Forecast Type Beat" by YellowTree and Credits plays "Epic Finale (loop)" by X3nus (both CC BY 4.0, chosen by the owner on 2026-10-19). On Credits, PAUSE fades the music out and REWIND plays it at double speed; it has no other effects.
+Shipped music: TV Guide plays "Weather Forecast Type Beat" by YellowTree and Credits plays "Epic Finale (loop)" by X3nus (both CC BY 4.0, chosen by the owner on 2026-10-19). On Credits, PAUSE fades the music out and REWIND plays it at double speed; it has no other effects. XBOX (channel 7) plays the Halo main menu music (Halo © Microsoft; loop by halome.nu), owner decision on 2026-10-20.
 
 ## Audio File List
 

@@ -32,6 +32,7 @@
     "assets:sprites": "python tools/assets/tv_sprites.py",
     "assets:sounds": "python tools/assets/tv_sounds.py",
     "assets:music": "python tools/assets/channel_music.py",
+    "assets:xbox": "python tools/assets/xbox_media.py",
     "live:run": "node jobs/live/main.ts",
     "live:preview": "node tools/build/run-local-live.ts",
     "test:pelican": "node tools/checks/check-pelican.ts"
@@ -55,6 +56,12 @@
     {
       "name": "TV Guide channel",
       "path": "dist/assets/channel-tv-guide-*.js",
+      "limit": "30 kB",
+      "gzip": true
+    },
+    {
+      "name": "XBOX channel",
+      "path": "dist/assets/channel-xbox-*.js",
       "limit": "30 kB",
       "gzip": true
     },

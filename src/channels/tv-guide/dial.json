@@ -1,5 +1,11 @@
 [
   {
+    "id": "xbox",
+    "label": "CH 07",
+    "title": "XBOX",
+    "blurb": "An Xbox left on the Halo menu, theme and all."
+  },
+  {
     "id": "status",
     "label": "CH 10",
     "title": "STATUS",

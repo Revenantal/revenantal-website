@@ -50,6 +50,8 @@ type Credit = {
   url: string;
   license: string;
   edits?: string;
+  licenseUrl?: string; // links the licence, e.g. terms a notice must point to
+  notice?: string; // a required legal notice shown with this credit
   usedFor: string;
   department: string; // film-style group, e.g. "Sound Department"; groups keep first-seen order
 };

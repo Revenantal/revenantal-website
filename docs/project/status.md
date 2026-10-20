@@ -56,7 +56,7 @@ What is built and where things are. Tick an item when its task has reached `main
 
 ## Phase 4 — Lighter Channels
 
-- [ ] 4.1 XBOX, the Halo menu (channel 7) — approved 2026-10-20; waiting on the owner's files
+- [x] 4.1 XBOX, the Halo menu (channel 7) — original Xbox 4:3 menu loop with the Halo theme
 - [ ] 4.2 Terminal
 - [ ] 4.3 Rev OS
 - [ ] 4.4 Input capture and saves
@@ -165,7 +165,7 @@ All individual channel builds are awaiting plan review and explicit owner confir
 | 4   | Night Drive      | Mockup done; needs a cleaner, less "paint" look at build | Not started (5.2) |
 | 5   | Side Quest       | Mockup done                                              | Not started (5.1) |
 | 6   | Revscape         | 3D prototype done                                        | Not started (5.3) |
-| 7   | XBOX             | Plan approved; Halo menu modelled on halome.nu           | Not started (4.1) |
+| 7   | XBOX             | Halo menu modelled on halome.nu                          | Built (4.1)       |
 | 8   | The Late Show    | Mockup done                                              | Not started (4.7) |
 | 9   | Paid Programming | Mockup done; clips not made                              | Not started (4.8) |
 | 10  | Status           | Rack design and sprites done                             | Built (3.2)       |
@@ -249,3 +249,5 @@ Task 3.6 (merged in #29): the Credits channel at position 11. A film-style roll 
 Task 3.7 in progress (2026-10-20): revenantal.com is live on Coolify behind Cloudflare. GitHub Actions publishes three private GHCR images (site, forecast, live job) after CI and keeps two versions of each; one Coolify compose resource runs them with health checks, and a Coolify Scheduled Task runs the live job every ten minutes (first run: all four sources fresh, no errors). The Coolify deploy webhook and token are in the `production` environment. Remaining: automatic deploy and rollback checks, weather (trusted edge and privacy checks), branch protection, and the cross-browser, accessibility, budget and privacy review.
 
 Task 3.7 complete (2026-10-20). Automatic deploys verified end to end (merge, CI, publish, Coolify webhook as a POST, fresh pull through `pull_policy: always`); each package keeps two versions. Weather is on behind Cloudflare: the visitor's own city resolves, faked forwarding headers are ignored, cross-site requests get 403, and responses are uncached. The radar CSP fix (`blob:` images) is live. Branch protection on `main`: the Checks job is required, force pushes and deletion are blocked, and admins keep the direct small-fix path. The rollback test was skipped by owner choice. Final review on the live site in Chromium, Firefox and WebKit: TV mode on channels 1, 10 and 11 (radar drawn, city correct), phone List mode with no overflow, reduced motion shows List mode, axe clean everywhere, no cookies, only `rv-ch` stored. Budgets on the live build: initial JS 54 KB, Guide chunk 10 KB, frame and sprites 129 KB (room backdrop 78 KB more), shell fonts 73 KB (122 KB with the Guide and hint-note fonts), TV sounds 85 KB, load event 0.34 s. The owner confirmed the forecast logs hold no addresses. Cloudflare Web Analytics stays blocked by owner decision: the CSP refuses its beacon, and switching off Cloudflare's automatic injection removes the console errors.
+
+Task 4.1 (2026-10-20): channel 7 XBOX, the original Halo main menu. A 72 s muted loop of the original Xbox 4:3 menu flyby (Internet Archive PAL capture, end dissolving into start) plays only while the channel is active, with the still for reduced motion, and the 3:50 menu theme (halome.nu's loop) through the host's music loop. Media 820 KB video (VP9; 1.05 MB H.264 fallback), 12 KB still and 1.07 MB music, loaded only on channel 7 (owner-approved exception); code 0.7 KB. Microsoft's notice moved to the Halo credits by owner decision, using new optional `notice` and `licenseUrl` credit fields shown in the Credits channel, List mode and `CREDITS.md`. The contract gained `allowMutedVideo`. Browser check on the dev server: video plays and stops on tune-away, music loop starts, axe clean, no errors. 417 tests.

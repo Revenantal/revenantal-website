@@ -12,8 +12,9 @@ const escape = (value: string) =>
  */
 export function renderCredits(credits: Credit[]): string {
   const row = (credit: Credit) => {
-    const licence =
-      credit.license === "CC BY 4.0"
+    const licence = credit.licenseUrl
+      ? `[${escape(credit.license)}](<${credit.licenseUrl}>)`
+      : credit.license === "CC BY 4.0"
         ? "[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)"
         : credit.license === "CC0 1.0"
           ? "[CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)"
@@ -24,6 +25,9 @@ export function renderCredits(credits: Credit[]): string {
               : escape(credit.license);
     return `| [${escape(credit.title)}](<${credit.url.replaceAll("<", "%3C").replaceAll(">", "%3E")}>) | ${escape(credit.author)} | ${licence} | ${escape(credit.usedFor)} | ${escape(credit.edits ?? "—")} |`;
   };
+  const notices = credits.flatMap((credit) =>
+    credit.notice ? [`- ${escape(credit.notice)}`] : [],
+  );
   return [
     "# Credits",
     "",
@@ -36,6 +40,7 @@ export function renderCredits(credits: Credit[]): string {
       "| --- | --- | --- | --- | --- |",
       ...group.credits.map(row),
     ]),
+    ...(notices.length > 0 ? ["", "## Notices", "", ...notices] : []),
     "",
   ].join("\n");
 }
