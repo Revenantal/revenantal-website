@@ -21,7 +21,7 @@ Publishing runs only when the repository variable `DEPLOY_ENABLED` is `true`. Un
 
 ## Files
 
-- `coolify.compose.yml`: the Coolify Docker Compose resource (site, forecast, live job, the `live-data` volume and the private `weather` network).
+- `coolify.compose.yml`: the Coolify Docker Compose resource (site, forecast, live job and the `live-data` volume), with health checks on all three.
 - `Caddyfile`: baked into the site image. Serves exactly `/live.json` from the volume (404 when missing, `max-age=60`), weather routes through to the forecast service, and everything else from the image.
 - `.env.live.example`: every live-job setting, for reference and local previews.
 
@@ -38,7 +38,7 @@ Publishing runs only when the repository variable `DEPLOY_ENABLED` is `true`. Un
 4. **Settings → Advanced → API and MCP:** enable the API (the deploy webhook needs it).
 5. **Servers → (server) → Registries:** add the GHCR preset with the GitHub username and the token from step 1, then **Log in**.
 6. **+ New Resource → Docker Compose Empty:** paste `coolify.compose.yml`.
-7. **Domains:** on the `site` service, `https://revenantal.com:8080,https://www.revenantal.com:8080`. The port tells Coolify's proxy where to send traffic; visitors use plain HTTPS.
+7. **Domains:** only on the `site` service: `https://revenantal.com` and `https://www.revenantal.com` with internal port **8080**. `forecast` and `live` get no domain; a domain on the wrong service, or another port, gives a 502.
 8. **Environment Variables:**
    - `SITE_TAG`: `latest` (automatic deploys). A commit SHA pins a version for rollback.
    - `PELICAN_URL`, `PELICAN_KEY`, `GAME_QUERY_HOST`, `STEAM_KEY`, `STEAM_ID` and optional `GITHUB_TOKEN`: the live-job settings (see `.env.live.example`). Deploys are blocked until the two Pelican values are set.
@@ -60,9 +60,9 @@ Publishing runs only when the repository variable `DEPLOY_ENABLED` is `true`. Un
 Weather stays off (an uncached `{"error":"weather_unavailable"}` 503) until both settings are made, after the privacy checks in `docs/architecture/forecast-and-radar.md`:
 
 - `TRUSTED_EDGE`: the exact address of Coolify's proxy as the site container sees it (or the CDN's ranges if one sits in front). Only it may name the visitor's address.
-- `FORECAST_UPSTREAM`: `weather-api:8090`, the forecast service's name on the private network.
+- `FORECAST_UPSTREAM`: `forecast:8090`, the forecast service's name on the resource's network.
 
-The forecast service trusts only container addresses on the `weather` network, so nothing else on the server can name a visitor's address to it.
+The forecast service trusts only the `site` container, looked up by name every 30 seconds (`TRUSTED_PEER_HOSTS`). Other containers on the network, including Coolify's proxy, can connect but can never name a visitor's address. Leave Coolify's "Connect to Predefined Network" off, so `site` cannot resolve to another resource's container.
 
 ## Rollback
 
@@ -70,7 +70,7 @@ Set `SITE_TAG` to the previous commit SHA (the one other version kept in each pa
 
 ## Checks
 
-`pnpm test:container` (CI) builds the images and checks: two site versions and a rollback against the same live data, denied writes, cache headers, the weather service failing closed, and `coolify.compose.yml` end to end (the job's `live.json` reaches the site through the volume, and only the site reaches weather, as a trusted peer).
+`pnpm test:container` (CI) builds the images and checks: two site versions and a rollback against the same live data, denied writes, cache headers, the weather service failing closed, and `coolify.compose.yml` end to end (health checks pass, the job's `live.json` reaches the site through the volume, and only the site can name a visitor to weather).
 
 ## Pelican API and Player Counts
 

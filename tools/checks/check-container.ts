@@ -171,7 +171,7 @@ try {
     SITE_TAG: tag,
     PELICAN_URL: "https://panel.example.invalid",
     PELICAN_KEY: "smoke",
-    FORECAST_UPSTREAM: "weather-api:8090",
+    FORECAST_UPSTREAM: "forecast:8090",
     // Test only: the Docker gateway stands in for Coolify's proxy, so the forwarded public
     // address reaches weather as the visitor's.
     TRUSTED_EDGE: "private_ranges",
@@ -206,8 +206,8 @@ try {
     "The site must serve the job's live.json.",
   );
   assert.equal(typeof ((await snapshot.json()) as object), "object");
-  // Weather allows 10 forecasts a minute per visitor; only a trusted peer's visitor reaches
-  // that limit, so the 11th answer proves the private link and the trust setting.
+  // Weather allows 10 forecasts a minute per visitor, and only a trusted peer's visitor
+  // reaches that limit: the 11th answer through the site proves it trusts the site by name.
   const statuses: number[] = [];
   for (let request = 0; request < 11; request += 1) {
     const answer = await fetch(`${siteBase}/api/forecast`, {
@@ -219,7 +219,9 @@ try {
     statuses.push(answer.status);
   }
   assert.equal(statuses.at(-1), 429, `Weather answers: ${statuses.join(",")}`);
-  const reach = spawnSync(
+  // Any other container on the network can connect but is never trusted: 11 requests that
+  // name a visitor all stay unavailable and never reach the limit.
+  const other = spawnSync(
     "docker",
     [
       ...composeArgs,
@@ -228,19 +230,19 @@ try {
       "live",
       "node",
       "-e",
-      "fetch('http://weather-api:8090/healthz').then(() => process.exit(0), () => process.exit(1))",
+      "(async () => { const codes = []; for (let i = 0; i < 11; i += 1) codes.push((await fetch('http://forecast:8090/api/forecast', { headers: { 'Sec-Fetch-Site': 'same-origin', 'X-Real-IP': '1.1.1.1' } })).status); console.log(codes.join(',')); })()",
     ],
     { encoding: "utf8" },
   );
-  assert.notEqual(
-    reach.status,
-    0,
-    "Only the site may reach the weather service.",
+  assert.equal(
+    other.stdout.trim(),
+    Array.from({ length: 11 }, () => "503").join(","),
+    `Only the site may name a visitor to weather: ${other.stdout}${other.stderr}`,
   );
   assert.doesNotMatch(compose(["logs", "forecast"]), /8\.8\.8\.8/);
 
   console.log(
-    "Container checks passed: image updates/rollback preserve live data, writes are denied, runtime routes/cache headers are correct, the weather service starts locked down and fails closed, and the Coolify compose shares live.json and keeps weather private.",
+    "Container checks passed: image updates/rollback preserve live data, writes are denied, runtime routes/cache headers are correct, the weather service starts locked down and fails closed, and the Coolify compose shares live.json and lets only the site name a visitor to weather.",
   );
 } finally {
   if (composeArgs.length > 0)

@@ -1,15 +1,15 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import type { BlockList } from "node:net";
 import { clientAddress } from "./client-address.ts";
 import type { ForecastSource } from "./forecast.ts";
 import type { ClientLimiter } from "./limits.ts";
 import type { Locator } from "./locate.ts";
 import { parseTilePath } from "./radar.ts";
 import type { RadarSource } from "./radar.ts";
+import type { PeerCheck } from "./trusted-peers.ts";
 
 /** Everything the handler needs; tests pass fakes. */
 export type Services = {
-  trusted: BlockList;
+  trusted: PeerCheck;
   locate: Locator | null;
   forecast: ForecastSource;
   radar: RadarSource;

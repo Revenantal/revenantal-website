@@ -1,4 +1,5 @@
 import { BlockList, isIP } from "node:net";
+import type { PeerCheck } from "./trusted-peers.ts";
 
 /** Ranges that never identify a public visitor. */
 const NOT_PUBLIC = new BlockList();
@@ -103,7 +104,7 @@ export function parsePeers(value: string | undefined): BlockList {
 export function clientAddress(
   peer: string | undefined,
   realIp: string | string[] | undefined,
-  trusted: BlockList,
+  trusted: PeerCheck,
 ): string | null {
   const from = normaliseAddress(peer);
   if (!from || !trusted.check(from, familyOf(from))) return null;
