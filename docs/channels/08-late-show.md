@@ -4,7 +4,7 @@
 
 Public-domain feature films on a fixed "live" schedule, like a late-night movie channel.
 
-- **Kind:** broadcast · **Folder:** `late-show` · **Build:** task 4.6 (needs the broadcast player, 4.5) · **Status:** design done
+- **Kind:** broadcast · **Folder:** `late-show` · **Build:** task 4.7 (needs the broadcast player, 4.6) · **Status:** design done
 
 ## Concept
 

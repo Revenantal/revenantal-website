@@ -24,7 +24,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 
 ### Channels (2026-10-18)
 
-- Planned v1 lineup: TV Guide, Rev OS, Terminal, Night Drive, Side Quest, Revscape, Coin Drop, The Late Show, Paid Programming, Status, Credits. Individual optional channels may be deferred or omitted; their positions stay empty. Credits occupies position 11 and is required at launch; additional blank slots may be configured explicitly. See `docs/channels/README.md`.
+- Planned v1 lineup: TV Guide, Rev OS, Terminal, Night Drive, Side Quest, Revscape, Halo 3, The Late Show, Paid Programming, Status, Credits, Coin Drop (positions 1–12; Halo 3 took 7 and Coin Drop moved to 12 on 2026-10-20). Individual optional channels may be deferred or omitted; their positions stay empty. Credits occupies position 11 and is required at launch; additional blank slots may be configured explicitly. See `docs/channels/README.md`.
 - Each channel can tone down or switch off TV display effects when tuned to. It can never turn on an effect the viewer switched off.
 - Channel 1 keeps the name **TV Guide**.
 - The TV Guide uses 90s broadcast graphics, a local forecast for the visitor's city and the visitor's own clock.
@@ -230,7 +230,7 @@ Approved decisions, clarifications and open items. Where this file conflicts wit
 - "Pauses when inactive" is checked as: no timers or animation frames left scheduled, and no `play`, `setLoop(id, true)`, `tune`, `powerOff`, `requestCapture` or `save.store` calls while inactive or after unmount.
 - Directory and game channels must render every project as a new-tab link in the DOM with 30 projects. Revisit if a channel's approved design pages its listings.
 - The registry validates each manifest's kind, colours, display profile and audio at startup (`manifest-check.ts`), so a bad manifest fails before it reaches the dial.
-- Capture, PRESS START, saves, captions and media checks join the contract with tasks 4.3 and 4.5, where those host features are built.
+- Capture, PRESS START, saves, captions and media checks join the contract with tasks 4.4 and 4.6, where those host features are built.
 
 ### CH 10 Status: approved (2026-10-19)
 
@@ -302,6 +302,12 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - The TV's audio engine is shared for the page (`tv/tv-audio.ts`) so sound stays unlocked across TV/List switches; List mode's Turn on the TV click also unlocks it.
 - The skip link "Skip to the simple list" is the TV's first Tab stop and turns the TV off into List mode, which focuses its heading on arrival.
 
+### Halo 3 channel added to the lineup (2026-10-20)
+
+- The owner added a Halo 3 channel at dial position 7 as the first Phase 4 build (task 4.1), as the simplest and lightest channel. Coin Drop moves from 7 to 12 (task 4.5); the other Phase 4 tasks shift by one. Nothing built moves.
+- Concept: recreate the Halo 3 main menu with the Halo theme playing, modelled on [halome.nu](https://halome.nu/). A small notice at the very bottom of the screen in Microsoft's standard Game Content Usage Rules form: "Halo 3 © Microsoft Corporation. revenantal was created under Microsoft's 'Game Content Usage Rules' using assets from Halo 3, and it is not endorsed by or affiliated with Microsoft."
+- This is a lineup decision, not build approval. The plan review covers the current Game Content Usage Rules for the music and menu assets on this site, the kind and display profile, assets and credits, audio, accessibility and the toy-channel budgets. See [the Halo 3 channel specification](../channels/07-halo-3.md).
+
 ### Hosting on Coolify (2026-10-19)
 
 - GitHub Actions builds and publishes the site, forecast and live-job images to private GHCR packages; Coolify only pulls and runs them, so nothing builds on the server. Coolify pulls with a read-only `read:packages` token in its registry settings.
@@ -334,4 +340,3 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - Volume knob graphic: the photo's printed rim marks plus the moving tick read as "double dots". Revisit later, for example by repainting the rim without marks in `tv_sprites.py` or using a different indicator.
 - GitHub directory is implemented locally for task 1.10; hosting/scheduling and content review remain before launch.
 - Status rack sprites: used as cleaned for the build (2026-10-19); the owner judges them on the real TV.
-- Halo 3 channel idea (owner, 2026-10-19): a channel that recreates the Halo 3 main menu with the Halo theme playing, modelled on [halome.nu](https://halome.nu/). A small notice at the very bottom of the screen in Microsoft's standard Game Content Usage Rules form: "Halo 3 © Microsoft Corporation. revenantal was created under Microsoft's 'Game Content Usage Rules' using assets from Halo 3, and it is not endorsed by or affiliated with Microsoft." Idea only: no position, kind or build approval. At plan review, check the current rules against the use of the music and menu assets on this site, and how the channel fits the lineup and the toy-channel budgets.

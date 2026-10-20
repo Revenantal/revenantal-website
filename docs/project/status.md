@@ -56,13 +56,14 @@ What is built and where things are. Tick an item when its task has reached `main
 
 ## Phase 4 — Lighter Channels
 
-- [ ] 4.1 Terminal
-- [ ] 4.2 Rev OS
-- [ ] 4.3 Input capture and saves
-- [ ] 4.4 Coin Drop
-- [ ] 4.5 Broadcast player
-- [ ] 4.6 The Late Show
-- [ ] 4.7 Paid Programming
+- [ ] 4.1 Halo 3 (channel 7)
+- [ ] 4.2 Terminal
+- [ ] 4.3 Rev OS
+- [ ] 4.4 Input capture and saves
+- [ ] 4.5 Coin Drop (channel 12)
+- [ ] 4.6 Broadcast player
+- [ ] 4.7 The Late Show
+- [ ] 4.8 Paid Programming
 - [ ] **Gate 4**
 
 ## Phase 5 — Heavy Channels
@@ -159,16 +160,17 @@ All individual channel builds are awaiting plan review and explicit owner confir
 | Ch  | Name             | Design                                                   | Build             |
 | --- | ---------------- | -------------------------------------------------------- | ----------------- |
 | 1   | TV Guide         | Mockup done (v3 with forecast and radar)                 | Built (3.4, 3.5)  |
-| 2   | Rev OS           | Mockup done                                              | Not started (4.2) |
-| 3   | Terminal         | Approved early sketch                                    | Not started (4.1) |
+| 2   | Rev OS           | Mockup done                                              | Not started (4.3) |
+| 3   | Terminal         | Approved early sketch                                    | Not started (4.2) |
 | 4   | Night Drive      | Mockup done; needs a cleaner, less "paint" look at build | Not started (5.2) |
 | 5   | Side Quest       | Mockup done                                              | Not started (5.1) |
 | 6   | Revscape         | 3D prototype done                                        | Not started (5.3) |
-| 7   | Coin Drop        | Mockup done                                              | Not started (4.4) |
-| 8   | The Late Show    | Mockup done                                              | Not started (4.6) |
-| 9   | Paid Programming | Mockup done; clips not made                              | Not started (4.7) |
+| 7   | Halo 3           | Idea; modelled on halome.nu, plan review next            | Not started (4.1) |
+| 8   | The Late Show    | Mockup done                                              | Not started (4.7) |
+| 9   | Paid Programming | Mockup done; clips not made                              | Not started (4.8) |
 | 10  | Status           | Rack design and sprites done                             | Built (3.2)       |
 | 11  | Credits          | Movie-style roll with departments                        | Built (3.6)       |
+| 12  | Coin Drop        | Mockup done                                              | Not started (4.5) |
 
 ## Latest Review (2026-10-18)
 

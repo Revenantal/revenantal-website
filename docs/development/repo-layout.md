@@ -51,7 +51,7 @@ revenantal/
    └─ pull_request_template.md
 ```
 
-Folder names under `channels/` match the channel `id`: `tv-guide`, `rev-os`, `terminal`, `night-drive`, `side-quest`, `revscape`, `coin-drop`, `late-show`, `paid-programming`, `status`, `credits`.
+Folder names under `channels/` match the channel `id`: `tv-guide`, `rev-os`, `terminal`, `night-drive`, `side-quest`, `revscape`, `halo-3`, `coin-drop`, `late-show`, `paid-programming`, `status`, `credits`.
 
 ## Import Boundaries
 

@@ -4,7 +4,7 @@
 
 A phosphor shell called `revenantal.sh`. Visitors type commands or click command chips to browse projects.
 
-- **Kind:** directory · **Folder:** `terminal` · **Build:** task 4.1 · **Status:** approved sketch
+- **Kind:** directory · **Folder:** `terminal` · **Build:** task 4.2 · **Status:** approved sketch
 
 ## Concept
 

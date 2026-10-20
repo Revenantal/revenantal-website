@@ -1,10 +1,10 @@
-# CH 07 — Coin Drop
+# CH 12 — Coin Drop
 
 ## Summary
 
 A physics incremental toy. Coins fall through pegs into multiplier bins; spend coins on upgrades. Just for fun.
 
-- **Kind:** toy · **Folder:** `coin-drop` · **Build:** task 4.4 (first physics, saves and input capture) · **Status:** design done
+- **Kind:** toy · **Folder:** `coin-drop` · **Build:** task 4.5 (first physics, saves and input capture; moved from position 7 on 2026-10-20) · **Status:** design done
 
 ## Concept
 

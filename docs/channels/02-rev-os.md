@@ -4,7 +4,7 @@
 
 A faithful Windows 98-style desktop where projects are programs and folders. Full of easter eggs.
 
-- **Kind:** directory · **Folder:** `rev-os` · **Build:** task 4.2 · **Status:** design done (v3)
+- **Kind:** directory · **Folder:** `rev-os` · **Build:** task 4.3 · **Status:** design done (v3)
 
 ## Concept
 

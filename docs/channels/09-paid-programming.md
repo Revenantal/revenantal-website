@@ -4,7 +4,7 @@
 
 An 80s infomercial channel: 10–30 s parody clips about Revenantal, looping with station bumpers.
 
-- **Kind:** broadcast · **Folder:** `paid-programming` · **Build:** task 4.7 · **Status:** design done; clips not made
+- **Kind:** broadcast · **Folder:** `paid-programming` · **Build:** task 4.8 · **Status:** design done; clips not made
 
 ## Concept
 
