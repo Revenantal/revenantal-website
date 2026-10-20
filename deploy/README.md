@@ -14,7 +14,7 @@ All three run as UID/GID 10001 with a read-only root filesystem, no capabilities
 
 1. A push to `main` passes the Checks workflow.
 2. `deploy.yml` builds the three images from that exact commit, pushes them tagged with its SHA, and moves `latest` to them if `main` has not moved on.
-3. It calls Coolify's deploy webhook. Coolify pulls `latest` and restarts the services.
+3. It calls Coolify's deploy webhook (a POST). Coolify restarts the services, and `pull_policy: always` in the compose file makes it download the new `latest` first; without it Coolify reuses the images it already has. Expect a few seconds of downtime per deploy.
 4. It deletes older image versions (`tools/deploy/prune-images.ts`), keeping two per package: the current one and one rollback. Each image is one plain manifest (no attestations), and the cleanup never deletes anything a kept image points to.
 
 Publishing runs only when the repository variable `DEPLOY_ENABLED` is `true`. Until the `production` environment has both Coolify secrets, the workflow publishes and skips the webhook with a notice.

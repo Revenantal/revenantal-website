@@ -2,10 +2,13 @@
 # GitHub Actions builds and publishes every image; Coolify only pulls and runs them.
 # Settings marked ${...} appear in Coolify's Environment Variables; see deploy/README.md.
 # All services share Coolify's network for this resource; only `site` gets a domain.
+# pull_policy: always makes each deploy fetch the new `latest`; Coolify otherwise reuses the
+# copy it already has.
 services:
   # The site and its Caddy. Give this service the domains, on internal port 8080.
   site:
     image: ghcr.io/revenantal/revenantal-site:${SITE_TAG:-latest}
+    pull_policy: always
     restart: unless-stopped
     read_only: true
     user: "10001:10001"
@@ -41,6 +44,7 @@ services:
   # looked up by service name, to name a visitor's address.
   forecast:
     image: ghcr.io/revenantal/revenantal-forecast:${SITE_TAG:-latest}
+    pull_policy: always
     restart: unless-stopped
     read_only: true
     user: "10001:10001"
@@ -64,6 +68,7 @@ services:
   # in this container every ten minutes, writing /data/live.json for the site to serve.
   live:
     image: ghcr.io/revenantal/revenantal-live:${SITE_TAG:-latest}
+    pull_policy: always
     restart: unless-stopped
     read_only: true
     user: "10001:10001"
