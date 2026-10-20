@@ -302,6 +302,13 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - The TV's audio engine is shared for the page (`tv/tv-audio.ts`) so sound stays unlocked across TV/List switches; List mode's Turn on the TV click also unlocks it.
 - The skip link "Skip to the simple list" is the TV's first Tab stop and turns the TV off into List mode, which focuses its heading on arrival.
 
+### Hosting on Coolify (2026-10-19)
+
+- GitHub Actions builds and publishes the site, forecast and live-job images to private GHCR packages; Coolify only pulls and runs them, so nothing builds on the server. Coolify pulls with a read-only `read:packages` token in its registry settings.
+- One Coolify Docker Compose resource (`deploy/coolify.compose.yml`) runs all three. The live job idles in its container and a Coolify Scheduled Task runs it every ten minutes; it shares `live.json` with the site through a Coolify-managed volume. No SSH, host folders, systemd timer or settings files on the server; live-job keys are Coolify environment variables.
+- Deploys stay automatic through the Coolify deploy webhook, with `COOLIFY_WEBHOOK` and `COOLIFY_TOKEN` as `production` environment secrets in GitHub (owner choice over a server-side watcher or manual redeploys). The webhook step skips with a notice until those secrets exist.
+- Weather reaches the forecast service over a private network as `weather-api:8090`; the service trusts only that network's container addresses. The plain-server deploy files were removed.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

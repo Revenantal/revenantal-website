@@ -107,6 +107,11 @@ jobs:
           COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
           COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
         run: |
+          # Until Coolify is connected, publish without asking it to deploy.
+          if [ -z "$COOLIFY_WEBHOOK" ] && [ -z "$COOLIFY_TOKEN" ]; then
+            echo "::notice::Images published; no Coolify secrets yet, so no deploy was requested."
+            exit 0
+          fi
           test -n "$COOLIFY_TOKEN"
           case "$COOLIFY_WEBHOOK" in https://*) ;; *) exit 1 ;; esac
           curl --fail --silent --show-error --max-time 30 --output /dev/null \

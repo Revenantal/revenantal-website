@@ -16,6 +16,7 @@ const { runtime } = await createSiteFixture(root);
 const prefix = `revenantal-smoke-${String(Date.now())}`;
 const images: string[] = [];
 const containers: string[] = [];
+let composeArgs: string[] = [];
 
 try {
   for (const marker of ["a1b2c3d4", "e5f6a7b8"]) {
@@ -145,10 +146,107 @@ try {
   docker(["rm", "--force", forecastId]);
   containers.pop();
 
+  // The Coolify compose file end to end, with these images standing in for the published
+  // ones: the scheduled job writes live.json into the shared volume, the site serves it, and
+  // the site reaches weather over the private network as its one trusted peer.
+  const liveContext = join(root, "live");
+  await mkdir(join(liveContext, ".cache"), { recursive: true });
+  await cp(".cache/live", join(liveContext, ".cache", "live"), {
+    recursive: true,
+  });
+  await cp("jobs/live/Dockerfile", join(liveContext, "Dockerfile"));
+  const tag = `smoke-${String(Date.now())}`;
+  const published = (name: string) =>
+    `ghcr.io/revenantal/revenantal-${name}:${tag}`;
+  images.push(published("live"), published("site"), published("forecast"));
+  docker(["build", "--tag", published("live"), liveContext]);
+  docker(["tag", `${prefix}:a1b2c3d4`, published("site")]);
+  docker(["tag", forecastImage, published("forecast")]);
+  const override = join(root, "compose.test.yml");
+  await writeFile(
+    override,
+    'services:\n  site:\n    ports: ["127.0.0.1::8080"]\n',
+  );
+  Object.assign(process.env, {
+    SITE_TAG: tag,
+    PELICAN_URL: "https://panel.example.invalid",
+    PELICAN_KEY: "smoke",
+    FORECAST_UPSTREAM: "weather-api:8090",
+    // Test only: the Docker gateway stands in for Coolify's proxy, so the forwarded public
+    // address reaches weather as the visitor's.
+    TRUSTED_EDGE: "private_ranges",
+  });
+  composeArgs = [
+    "compose",
+    "--project-name",
+    `${prefix}-compose`,
+    "--file",
+    "deploy/coolify.compose.yml",
+    "--file",
+    override,
+  ];
+  const compose = (args: string[]) => docker([...composeArgs, ...args]);
+  compose(["up", "--detach", "--pull", "never", "--wait"]);
+  // What the Coolify Scheduled Task runs. Providers are unreachable here; the job still
+  // writes a snapshot with each source marked unavailable.
+  spawnSync(
+    "docker",
+    [...composeArgs, "exec", "-T", "live", "node", "/app/main.mjs"],
+    { encoding: "utf8", timeout: 120_000 },
+  );
+  const sitePort = /127\.0\.0\.1:(\d+)/.exec(
+    compose(["port", "site", "8080"]),
+  )?.[1];
+  assert(sitePort, "The compose site must publish a loopback test port.");
+  const siteBase = `http://127.0.0.1:${sitePort}`;
+  const snapshot = await fetch(`${siteBase}/live.json`);
+  assert.equal(
+    snapshot.status,
+    200,
+    "The site must serve the job's live.json.",
+  );
+  assert.equal(typeof ((await snapshot.json()) as object), "object");
+  // Weather allows 10 forecasts a minute per visitor; only a trusted peer's visitor reaches
+  // that limit, so the 11th answer proves the private link and the trust setting.
+  const statuses: number[] = [];
+  for (let request = 0; request < 11; request += 1) {
+    const answer = await fetch(`${siteBase}/api/forecast`, {
+      headers: {
+        "Sec-Fetch-Site": "same-origin",
+        "X-Forwarded-For": "8.8.8.8",
+      },
+    });
+    statuses.push(answer.status);
+  }
+  assert.equal(statuses.at(-1), 429, `Weather answers: ${statuses.join(",")}`);
+  const reach = spawnSync(
+    "docker",
+    [
+      ...composeArgs,
+      "exec",
+      "-T",
+      "live",
+      "node",
+      "-e",
+      "fetch('http://weather-api:8090/healthz').then(() => process.exit(0), () => process.exit(1))",
+    ],
+    { encoding: "utf8" },
+  );
+  assert.notEqual(
+    reach.status,
+    0,
+    "Only the site may reach the weather service.",
+  );
+  assert.doesNotMatch(compose(["logs", "forecast"]), /8\.8\.8\.8/);
+
   console.log(
-    "Container checks passed: image updates/rollback preserve live data, writes are denied, runtime routes/cache headers are correct, and the weather service starts locked down and fails closed.",
+    "Container checks passed: image updates/rollback preserve live data, writes are denied, runtime routes/cache headers are correct, the weather service starts locked down and fails closed, and the Coolify compose shares live.json and keeps weather private.",
   );
 } finally {
+  if (composeArgs.length > 0)
+    spawnSync("docker", [...composeArgs, "down", "--volumes"], {
+      stdio: "ignore",
+    });
   for (const id of containers)
     spawnSync("docker", ["rm", "--force", id], { stdio: "ignore" });
   for (const image of images)
