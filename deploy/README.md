@@ -30,28 +30,29 @@ Publishing runs only when the repository variable `DEPLOY_ENABLED` is `true`. Un
 
 1. Create a classic personal access token with only `read:packages`, for Coolify to pull the private images.
 2. Set the repository variable `DEPLOY_ENABLED=true`. The next push to `main` publishes the images.
+3. After the first publish, set each package to **Private** (package **Settings → Danger Zone → Change visibility**). Packages from a public repository start public. Check: an anonymous manifest request to `ghcr.io` must return 403.
 
 ### Coolify
 
-3. **Settings → Advanced → API and MCP:** enable the API (the deploy webhook needs it).
-4. **Servers → (server) → Registries:** add the GHCR preset with the GitHub username and the token from step 1, then **Log in**.
-5. **+ New Resource → Docker Compose Empty:** paste `coolify.compose.yml`.
-6. **Domains:** on the `site` service, `https://revenantal.com:8080,https://www.revenantal.com:8080`. The port tells Coolify's proxy where to send traffic; visitors use plain HTTPS.
-7. **Environment Variables:**
+4. **Settings → Advanced → API and MCP:** enable the API (the deploy webhook needs it).
+5. **Servers → (server) → Registries:** add the GHCR preset with the GitHub username and the token from step 1, then **Log in**.
+6. **+ New Resource → Docker Compose Empty:** paste `coolify.compose.yml`.
+7. **Domains:** on the `site` service, `https://revenantal.com:8080,https://www.revenantal.com:8080`. The port tells Coolify's proxy where to send traffic; visitors use plain HTTPS.
+8. **Environment Variables:**
    - `SITE_TAG`: `latest` (automatic deploys). A commit SHA pins a version for rollback.
    - `PELICAN_URL`, `PELICAN_KEY`, `GAME_QUERY_HOST`, `STEAM_KEY`, `STEAM_ID` and optional `GITHUB_TOKEN`: the live-job settings (see `.env.live.example`). Deploys are blocked until the two Pelican values are set.
    - `TRUSTED_EDGE` and `FORECAST_UPSTREAM`: leave at their defaults; weather stays off. See Weather below.
-8. **Deploy** once and check the site on Coolify's temporary URL.
-9. **Scheduled Tasks → + Add:** name `live`, command `node /app/main.mjs`, frequency `*/10 * * * *`, container `live`. Each run writes `live.json` atomically into the volume; one unavailable provider does not stop the others.
-10. Copy the resource's **Webhooks → Deploy webhook** URL, and create an API token under **Keys & Tokens → API Tokens** with only the **Deploy** permission.
+9. **Deploy** once and check the site on Coolify's temporary URL.
+10. **Scheduled Tasks → + Add:** name `live`, command `node /app/main.mjs`, frequency `*/10 * * * *`, container `live`. Each run writes `live.json` atomically into the volume; one unavailable provider does not stop the others.
+11. Copy the resource's **Webhooks → Deploy webhook** URL, and create an API token under **Keys & Tokens → API Tokens** with only the **Deploy** permission.
 
 ### GitHub Again
 
-11. **Settings → Environments → production:** limit deployment branches to `main` and add the secrets `COOLIFY_WEBHOOK` and `COOLIFY_TOKEN`. Never paste them into project files.
+12. **Settings → Environments → production:** limit deployment branches to `main` and add the secrets `COOLIFY_WEBHOOK` and `COOLIFY_TOKEN`. Never paste them into project files.
 
 ### DNS
 
-12. Point `revenantal.com` and `www` at the server. Coolify issues the certificates.
+13. Point `revenantal.com` and `www` at the server. Coolify issues the certificates.
 
 ## Weather
 
