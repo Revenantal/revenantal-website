@@ -57,12 +57,22 @@ Publishing runs only when the repository variable `DEPLOY_ENABLED` is `true`. Un
 
 ## Weather
 
-Weather stays off (an uncached `{"error":"weather_unavailable"}` 503) until both settings are made, after the privacy checks in `docs/architecture/forecast-and-radar.md`:
+The site sits behind Cloudflare's proxy (orange-cloud DNS, no tunnel). The visitor's address travels Cloudflare → Coolify's proxy (Traefik) → site (Caddy) → forecast, and each hop must trust only the one before it:
 
-- `TRUSTED_EDGE`: the exact address of Coolify's proxy as the site container sees it (or the CDN's ranges if one sits in front). Only it may name the visitor's address.
-- `FORECAST_UPSTREAM`: `forecast:8090`, the forecast service's name on the resource's network.
+1. **Coolify proxy:** Servers → (server) → Proxy, add to `command:` and restart the proxy:
+   - `--entrypoints.http.forwardedHeaders.trustedIPs=<Cloudflare ranges>,127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,::1/128,fc00::/7`
+   - the same for `--entrypoints.https.forwardedHeaders.trustedIPs`
+
+   Without this, Traefik replaces the visitor's address with Cloudflare's, and every forecast shows Cloudflare's data centre city.
+
+2. **`TRUSTED_EDGE`:** `private_ranges` followed by the same Cloudflare ranges, separated by spaces.
+3. **`FORECAST_UPSTREAM`:** `forecast:8090`. Unset, weather answers an uncached `{"error":"weather_unavailable"}` 503.
+
+Cloudflare's ranges are published at https://www.cloudflare.com/ips-v4 and https://www.cloudflare.com/ips-v6 (22 ranges on 2026-10-20). If forecasts start showing a Cloudflare city, refresh both lists. A direct connection that bypasses Cloudflare is trusted by neither hop, so it cannot name a visitor.
 
 The forecast service trusts only the `site` container, looked up by name every 30 seconds (`TRUSTED_PEER_HOSTS`). Other containers on the network, including Coolify's proxy, can connect but can never name a visitor's address. Leave Coolify's "Connect to Predefined Network" off, so `site` cannot resolve to another resource's container.
+
+Checks (2026-10-20): the visitor's own city resolves; faked `X-Forwarded-For`, `X-Real-IP` and `CF-Connecting-IP` headers do not change it; cross-site requests get 403; responses are `private, no-store` and not cached by Cloudflare.
 
 ## Rollback
 
