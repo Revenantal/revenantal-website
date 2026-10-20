@@ -67,6 +67,9 @@ jobs:
         with:
           context: .
           push: true
+          # One plain manifest per image, so each publish is one package version.
+          provenance: false
+          sbom: false
           tags: ghcr.io/revenantal/revenantal-site:${{ env.TESTED_SHA }}
           labels: org.opencontainers.image.revision=${{ env.TESTED_SHA }}
       - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
@@ -75,6 +78,9 @@ jobs:
           context: .
           file: jobs/live/Dockerfile
           push: true
+          # One plain manifest per image, so each publish is one package version.
+          provenance: false
+          sbom: false
           tags: ghcr.io/revenantal/revenantal-live:${{ env.TESTED_SHA }}
           labels: org.opencontainers.image.revision=${{ env.TESTED_SHA }}
       - name: Fetch the DB-IP Lite city database for the weather service
@@ -86,6 +92,9 @@ jobs:
           context: .
           file: api/forecast/Dockerfile
           push: true
+          # One plain manifest per image, so each publish is one package version.
+          provenance: false
+          sbom: false
           tags: ghcr.io/revenantal/revenantal-forecast:${{ env.TESTED_SHA }}
           labels: org.opencontainers.image.revision=${{ env.TESTED_SHA }}
       - name: Promote the current tested image
@@ -96,9 +105,9 @@ jobs:
         run: |
           current=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
           if [ "$current" = "$TESTED_SHA" ]; then
-            docker buildx imagetools create --tag "$IMAGE:latest" "$IMAGE:$TESTED_SHA"
-            docker buildx imagetools create --tag "ghcr.io/revenantal/revenantal-live:latest" "ghcr.io/revenantal/revenantal-live:$TESTED_SHA"
-            docker buildx imagetools create --tag "ghcr.io/revenantal/revenantal-forecast:latest" "ghcr.io/revenantal/revenantal-forecast:$TESTED_SHA"
+            docker buildx imagetools create --prefer-index=false --tag "$IMAGE:latest" "$IMAGE:$TESTED_SHA"
+            docker buildx imagetools create --prefer-index=false --tag "ghcr.io/revenantal/revenantal-live:latest" "ghcr.io/revenantal/revenantal-live:$TESTED_SHA"
+            docker buildx imagetools create --prefer-index=false --tag "ghcr.io/revenantal/revenantal-forecast:latest" "ghcr.io/revenantal/revenantal-forecast:$TESTED_SHA"
             echo 'promoted=true' >> "$GITHUB_OUTPUT"
           fi
       - name: Request the configured Coolify deployment
@@ -116,3 +125,8 @@ jobs:
           case "$COOLIFY_WEBHOOK" in https://*) ;; *) exit 1 ;; esac
           curl --fail --silent --show-error --max-time 30 --output /dev/null \
             --header "Authorization: Bearer $COOLIFY_TOKEN" "$COOLIFY_WEBHOOK"
+      - name: Keep only the current image and one rollback
+        if: steps.promotion.outputs.promoted == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node tools/deploy/prune-images.ts

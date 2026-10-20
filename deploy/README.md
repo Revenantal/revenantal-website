@@ -15,6 +15,7 @@ All three run as UID/GID 10001 with a read-only root filesystem, no capabilities
 1. A push to `main` passes the Checks workflow.
 2. `deploy.yml` builds the three images from that exact commit, pushes them tagged with its SHA, and moves `latest` to them if `main` has not moved on.
 3. It calls Coolify's deploy webhook. Coolify pulls `latest` and restarts the services.
+4. It deletes older image versions (`tools/deploy/prune-images.ts`), keeping two per package: the current one and one rollback. Each image is one plain manifest (no attestations), and the cleanup never deletes anything a kept image points to.
 
 Publishing runs only when the repository variable `DEPLOY_ENABLED` is `true`. Until the `production` environment has both Coolify secrets, the workflow publishes and skips the webhook with a notice.
 
@@ -65,7 +66,7 @@ The forecast service trusts only container addresses on the `weather` network, s
 
 ## Rollback
 
-Set `SITE_TAG` to an earlier commit SHA and redeploy. Set it back to `latest` to resume automatic deploys. The `live-data` volume survives deploys and rollbacks; the job reads its previous snapshot for per-source fallback.
+Set `SITE_TAG` to the previous commit SHA (the one other version kept in each package) and redeploy. Set it back to `latest` to resume automatic deploys. The `live-data` volume survives deploys and rollbacks; the job reads its previous snapshot for per-source fallback.
 
 ## Checks
 
