@@ -14,7 +14,7 @@ GitHub Actions builds, lints and tests everything. Coolify only runs what Action
 ## Hosting on Coolify
 
 - **App:** image `ghcr.io/revenantal/revenantal-site`, Caddy serving the `vite build` output copied into `/srv/site` in the image. No persistent volume mounts over `/srv/site`. Long cache on hashed assets; `no-cache` on `index.html`; `max-age=60` on `/live.json`.
-- **Live job:** image `ghcr.io/revenantal/revenantal-live`, Coolify scheduled task every 10 minutes. Bind-mount `/srv/revenantal/live` from the host at `/data` read-write in this container only. Write `/data/live.json` using a temporary file and atomic rename within that directory.
+- **Live job:** image `ghcr.io/revenantal/revenantal-live`, an idle container in the same Coolify compose resource. A Coolify Scheduled Task runs `node /app/main.mjs` in it every 10 minutes. It mounts the `live-data` volume at `/data` read-write and writes `/data/live.json` with a temporary file and atomic rename.
 - **Forecast:** image `ghcr.io/revenantal/revenantal-forecast`, routed at `/api/forecast` and `/api/radar/*` through app Caddy, reachable only on its private network. The trusted-peer configuration, cache bypass, log suppression and pre-enable checks in [Forecast and Radar](forecast-and-radar.md) are mandatory.
 - **Domains:** `revenantal.com` and `www` → app. Existing subdomains unaffected.
 - **Deploy:** Actions calls the webhook; Coolify pulls the new tag and restarts. Rollback = redeploy the previous SHA tag.
@@ -27,12 +27,12 @@ Keep the built site and generated data in separate directories:
 | Container | Path                   | Contents                                                 | Access                                               |
 | --------- | ---------------------- | -------------------------------------------------------- | ---------------------------------------------------- |
 | App       | `/srv/site`            | Built HTML, hashed assets and `site.json` from its image | Served by Caddy; never covered by a persistent mount |
-| App       | `/srv/revenantal-live` | Host `/srv/revenantal/live`                              | Read-only bind mount                                 |
-| Live job  | `/data`                | The same host `/srv/revenantal/live`                     | Read-write bind mount                                |
+| App       | `/srv/revenantal-live` | The `live-data` volume                                   | Read-only mount                                      |
+| Live job  | `/data`                | The same `live-data` volume                              | Read-write mount                                     |
 
 Caddy handles the exact path `/live.json` before the static-site route. That handler uses root `/srv/revenantal-live`, serves `live.json` with `Cache-Control: max-age=60`, and returns 404 if it is missing. It does not fall back to `index.html`. Only that file is exposed from the runtime directory; temporary files and private counter state have no public route. Keep the existing `/api/forecast` route separate; all site files come from `/srv/site`.
 
-Provision the host directories with permissions that let only the job write live output and let Caddy read it. The live job calls Pelican directly; no SSH drop user or input mount is required. Private pelican-state.json contains numeric baselines only and has no public route. Do not bind-mount a single `live.json` file: mounting its directory lets readers see atomic replacements.
+Both images create their mount point owned by UID 10001, so a new volume is writable by the job and the site mounts it read-only. Nothing is provisioned on the host by hand and no SSH is needed. The live job calls Pelican directly. Private pelican-state.json contains numeric baselines only and has no public route. Mount the whole volume, never a single `live.json` file, so readers see atomic replacements.
 
 Deployment replaces the app image while preserving the runtime directory. The job reads its previous output from `/data/live.json` for per-source fallback. Rollback changes the site image only; the loader must validate runtime data and degrade gracefully if it cannot read that snapshot.
 
@@ -77,6 +77,6 @@ Laptop, cold cache, good connection. size-limit fails the build on the JS budget
 
 No AI attribution in commits, PRs, release notes, `CREDITS.md` or the site. The `commit-msg` hook and the CI attribution check both fail on `Co-Authored-By` AI trailers, "Generated with" footers and session links. See `docs/development/git-workflow.md`.
 
-## Implementation Status (2026-10-18)
+## Implementation Status (2026-10-19)
 
-`main` contains `ci.yml` with pinned actions, frozen-lockfile install, formatting/lint/type/test/build-size checks and commit/PR attribution validation. Dependabot is configured. CI runs on PRs and `main` pushes and passes, including the Docker container checks. Site/live-job Dockerfiles, separate mount examples, a ten-minute host timer and an opt-in deploy workflow are prepared. Publishing requires DEPLOY_ENABLED=true and successful same-repository main push CI; superseded heads are skipped. No image has been published and no webhook, secret, scheduler or branch protection has been provisioned. The owner will connect hosting later. Native Caddy route/cache/atomic-replacement checks passed across two versions and rollback. Weather is disabled with private/no-store 503 responses. See deploy/README.md for the remaining setup. Hosting setup is deferred to the launch check (task 3.7).
+CI (`ci.yml`) runs formatting, lint, types, tests, the build with size limits, the container checks and the attribution check on every PR and `main` push. Hosting runs on one Coolify Docker Compose resource (`deploy/coolify.compose.yml`): site, forecast and an idle live-job container sharing a `live-data` volume, with a Scheduled Task running the job every ten minutes and no SSH or host files. The container checks run that compose file end to end in CI. Publishing needs `DEPLOY_ENABLED=true` and successful `main` push CI, and the webhook step skips with a notice until the Coolify secrets exist. The plain-server files (bind-mount compose examples and the systemd timer) were removed on 2026-10-19 by owner decision. Nothing has been published or provisioned yet; `deploy/README.md` lists every setup step (task 3.7).

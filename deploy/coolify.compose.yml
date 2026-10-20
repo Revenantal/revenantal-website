@@ -1,0 +1,74 @@
+# revenantal.com on Coolify: paste this into a "Docker Compose Empty" resource.
+# GitHub Actions builds and publishes every image; Coolify only pulls and runs them.
+# Settings marked ${...} appear in Coolify's Environment Variables; see deploy/README.md.
+services:
+  # The site and its Caddy. Coolify's proxy routes revenantal.com to port 8080.
+  site:
+    image: ghcr.io/revenantal/revenantal-site:${SITE_TAG:-latest}
+    restart: unless-stopped
+    read_only: true
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    expose: ["8080"]
+    environment:
+      # Coolify's proxy address, the only peer allowed to name the visitor (set in task 3.7).
+      TRUSTED_EDGE: ${TRUSTED_EDGE:-192.0.2.1/32}
+      # Weather stays off (an uncached 503) until this is set to weather-api:8090.
+      FORECAST_UPSTREAM: ${FORECAST_UPSTREAM:-127.0.0.1:9}
+    volumes:
+      - live-data:/srv/revenantal-live:ro
+    networks:
+      default: {}
+      weather: {}
+    depends_on: [live]
+
+  # The weather service, reachable only from the site over the private weather network.
+  forecast:
+    image: ghcr.io/revenantal/revenantal-forecast:${SITE_TAG:-latest}
+    restart: unless-stopped
+    read_only: true
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    environment:
+      # Container addresses on the weather network, excluding its gateway (.1).
+      TRUSTED_PEERS: 172.30.88.2/31,172.30.88.4/31,172.30.88.6/32
+    networks:
+      weather:
+        # Scoped to the weather network, so the site always reaches it there.
+        aliases: [weather-api]
+
+  # The live-data job. It idles; Coolify's Scheduled Task runs `node /app/main.mjs` in this
+  # container every ten minutes, writing /data/live.json for the site to serve.
+  live:
+    image: ghcr.io/revenantal/revenantal-live:${SITE_TAG:-latest}
+    restart: unless-stopped
+    read_only: true
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    command: ["node", "-e", "setInterval(() => {}, 2147483647)"]
+    environment:
+      PELICAN_URL: ${PELICAN_URL:?}
+      PELICAN_KEY: ${PELICAN_KEY:?}
+      GAME_QUERY_HOST: ${GAME_QUERY_HOST:-games.revenantal.com}
+      STEAM_KEY: ${STEAM_KEY:-}
+      STEAM_ID: ${STEAM_ID:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+    volumes:
+      - live-data:/data
+    networks:
+      default: {}
+
+volumes:
+  # live.json and the private rate baselines; only the live job writes here.
+  live-data: {}
+
+networks:
+  weather:
+    ipam:
+      config:
+        - subnet: 172.30.88.0/29

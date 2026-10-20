@@ -8,6 +8,8 @@ RUN cp /usr/bin/caddy /tmp/caddy && mv /tmp/caddy /usr/bin/caddy
 ENV XDG_CONFIG_HOME=/tmp/caddy/config XDG_DATA_HOME=/tmp/caddy/data
 COPY deploy/Caddyfile /etc/caddy/Caddyfile
 COPY dist/ /srv/site/
+# The live-data volume's mount point, owned like the job's, whichever container starts first.
+RUN mkdir -p /srv/revenantal-live && chown 10001:10001 /srv/revenantal-live
 USER 10001:10001
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
