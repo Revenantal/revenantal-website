@@ -302,11 +302,14 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - The TV's audio engine is shared for the page (`tv/tv-audio.ts`) so sound stays unlocked across TV/List switches; List mode's Turn on the TV click also unlocks it.
 - The skip link "Skip to the simple list" is the TV's first Tab stop and turns the TV off into List mode, which focuses its heading on arrival.
 
-### Halo 3 channel added to the lineup (2026-10-20)
+### XBOX 360 channel: Halo 3 menu (2026-10-20)
 
-- The owner added a Halo 3 channel at dial position 7 as the first Phase 4 build (task 4.1), as the simplest and lightest channel. Coin Drop moves from 7 to 12 (task 4.5); the other Phase 4 tasks shift by one. Nothing built moves.
-- Concept: recreate the Halo 3 main menu with the Halo theme playing, modelled on [halome.nu](https://halome.nu/). A small notice at the very bottom of the screen in Microsoft's standard Game Content Usage Rules form: "Halo 3 © Microsoft Corporation. revenantal was created under Microsoft's 'Game Content Usage Rules' using assets from Halo 3, and it is not endorsed by or affiliated with Microsoft."
-- This is a lineup decision, not build approval. The plan review covers the current Game Content Usage Rules for the music and menu assets on this site, the kind and display profile, assets and credits, audio, accessibility and the toy-channel budgets. See [the Halo 3 channel specification](../channels/07-halo-3.md).
+- The owner added a channel at dial position 7 as the first Phase 4 build (task 4.1), as the simplest and lightest channel. Coin Drop moves from 7 to 12 (task 4.5); the other Phase 4 tasks shift by one. Nothing built moves.
+- **Approved by the owner on 2026-10-20** after plan review. The channel is named **XBOX 360** (id `xbox-360`), as if the TV's input were an Xbox 360 sitting on the Halo 3 main menu. A pure tribute modelled on [halome.nu](https://halome.nu/): nothing to click, the dial leaves.
+- **Assets:** the owner records the menu from their own copy of Halo 3 (video and game audio, no microphone or overlays), or takes the menu music from the official Halo 3 soundtrack. Nothing is extracted from game files, which Microsoft's Game Content Usage Rules forbid. The rules explicitly allow Halo 3's music in non-profit ventures. Raw recordings stay out of git; only processed files are committed, with the script that made them.
+- **Media:** a seamless 10–20 second muted video loop (about 1–2 MB) plus a still frame for loading and reduced motion, and 3–4 minutes of the menu music (about 1 MB) through the host's music loop. **Owner-approved budget exception** over the toy art budget (120 KB) and the 300 KB loop budget; all of it loads only on channel 7.
+- **Notice** at the very bottom, with a link to the Rules: "Halo 3 © Microsoft Corporation. revenantal was created under Microsoft's 'Game Content Usage Rules' using assets from Halo 3, and it is not endorsed by or affiliated with Microsoft." No Xbox logos or Microsoft branding; "XBOX 360" is a referential label.
+- TV display defaults with bloom off. The video plays only while the channel is active; the shared contract gains a narrow allowance for one muted decorative video. See [the channel specification](../channels/07-xbox-360.md).
 
 ### Hosting on Coolify (2026-10-19)
 

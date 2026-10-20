@@ -22,7 +22,7 @@ The shared data and callbacks are defined in [the host interface](host-interface
 | 4    | Night Drive      | `night-drive`      | game      | scan 0.8, flicker, glow 1, full-bleed         | 5.2        | `04-night-drive.md`      |
 | 5    | Side Quest       | `side-quest`       | game      | scan 0.6, flicker, glow 0.9, full-bleed       | 5.1        | `05-side-quest.md`       |
 | 6    | Revscape         | `revscape`         | game      | scan 0.4, no flicker, glow 0.7, full-bleed    | 5.3        | `06-revscape.md`         |
-| 7    | Halo 3           | `halo-3`           | toy       | TV defaults (confirm at plan review)          | 4.1        | `07-halo-3.md`           |
+| 7    | XBOX 360         | `xbox-360`         | toy       | TV defaults, no bloom                         | 4.1        | `07-xbox-360.md`         |
 | 8    | The Late Show    | `late-show`        | broadcast | scan 1, flicker, glow 0.6                     | 4.7        | `08-late-show.md`        |
 | 9    | Paid Programming | `paid-programming` | broadcast | scan 0.8, flicker, glow 0.8                   | 4.8        | `09-paid-programming.md` |
 | 10   | Status           | `status`           | directory | no scan, no flicker, glow 0.4, cut transition | 3.2        | `10-status.md`           |

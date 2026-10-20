@@ -56,7 +56,7 @@ What is built and where things are. Tick an item when its task has reached `main
 
 ## Phase 4 — Lighter Channels
 
-- [ ] 4.1 Halo 3 (channel 7)
+- [ ] 4.1 XBOX 360, the Halo 3 menu (channel 7) — approved 2026-10-20; waiting on the owner's recording and soundtrack
 - [ ] 4.2 Terminal
 - [ ] 4.3 Rev OS
 - [ ] 4.4 Input capture and saves
@@ -165,7 +165,7 @@ All individual channel builds are awaiting plan review and explicit owner confir
 | 4   | Night Drive      | Mockup done; needs a cleaner, less "paint" look at build | Not started (5.2) |
 | 5   | Side Quest       | Mockup done                                              | Not started (5.1) |
 | 6   | Revscape         | 3D prototype done                                        | Not started (5.3) |
-| 7   | Halo 3           | Idea; modelled on halome.nu, plan review next            | Not started (4.1) |
+| 7   | XBOX 360         | Plan approved; Halo 3 menu modelled on halome.nu         | Not started (4.1) |
 | 8   | The Late Show    | Mockup done                                              | Not started (4.7) |
 | 9   | Paid Programming | Mockup done; clips not made                              | Not started (4.8) |
 | 10  | Status           | Rack design and sprites done                             | Built (3.2)       |
