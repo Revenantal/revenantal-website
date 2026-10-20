@@ -124,7 +124,7 @@ jobs:
           test -n "$COOLIFY_TOKEN"
           case "$COOLIFY_WEBHOOK" in https://*) ;; *) exit 1 ;; esac
           # On failure, show the start of Coolify's reply (an error message, never a secret).
-          status=$(curl --silent --show-error --max-time 30 --output reply.txt \
+          status=$(curl --request POST --silent --show-error --max-time 30 --output reply.txt \
             --write-out '%{http_code}' \
             --header "Authorization: Bearer $COOLIFY_TOKEN" "$COOLIFY_WEBHOOK")
           case "$status" in
