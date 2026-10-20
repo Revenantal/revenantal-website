@@ -18,6 +18,8 @@ export type ContractOptions = {
   allowNetwork?: (url: string) => boolean;
   /** The manifest file, from the repository root. Defaults to `src/channels/<id>/manifest.ts`. */
   manifestPath?: string;
+  /** A decorative background: the channel may play muted `<video>` elements, and nothing audible. */
+  allowMutedVideo?: boolean;
 };
 
 type Channel = ComponentType<ChannelProps>;
@@ -179,9 +181,13 @@ export function checkSideEffects(
     vi.spyOn(Storage.prototype, "setItem"),
     vi.spyOn(Storage.prototype, "removeItem"),
   ];
+  const played: HTMLMediaElement[] = [];
   const media = vi
     .spyOn(HTMLMediaElement.prototype, "play")
-    .mockImplementation(() => Promise.resolve());
+    .mockImplementation(function (this: HTMLMediaElement) {
+      played.push(this);
+      return Promise.resolve();
+    });
   const audioNodes = vi.fn();
   vi.stubGlobal(
     "fetch",
@@ -234,7 +240,15 @@ export function checkSideEffects(
       "own audio nodes (use play and setLoop)",
     ).not.toHaveBeenCalled();
     if (kind !== "broadcast")
-      expect(media, "own media playback").not.toHaveBeenCalled();
+      if (options.allowMutedVideo)
+        expect(
+          played.filter(
+            (element) =>
+              !(element instanceof HTMLVideoElement && element.muted),
+          ),
+          "own audible media playback (only muted video is allowed)",
+        ).toEqual([]);
+      else expect(media, "own media playback").not.toHaveBeenCalled();
   } finally {
     vi.useRealTimers();
     vi.unstubAllGlobals();

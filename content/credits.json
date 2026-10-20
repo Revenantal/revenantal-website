@@ -27,6 +27,15 @@
     "edits": "Generated with ChatGPT and edited with Claude: backgrounds keyed out, rack-ear holes cut, cropped; grilles, ports and lights drawn in code"
   },
   {
+    "title": "Halo main menu",
+    "url": "https://halome.nu/",
+    "author": "halome.nu (capture); Halo © Microsoft Corporation",
+    "license": "Microsoft Game Content Usage Rules",
+    "usedFor": "XBOX channel menu loop",
+    "department": "Art Department",
+    "edits": "Letterboxed to 760×478 at 24 fps, re-encoded to VP9 and H.264; first frame as the still"
+  },
+  {
     "title": "Michroma",
     "url": "https://github.com/googlefonts/Michroma-font",
     "author": "The Michroma Project Authors",
@@ -168,6 +177,15 @@
     "usedFor": "Credits music",
     "department": "Sound Department",
     "edits": "short fades at the loop join, mono, level-matched, AAC"
+  },
+  {
+    "title": "Halo main menu music",
+    "url": "https://halome.nu/",
+    "author": "Microsoft Corporation (Halo); loop by halome.nu",
+    "license": "Microsoft Game Content Usage Rules",
+    "usedFor": "XBOX channel music",
+    "department": "Sound Department",
+    "edits": "Trailing silence trimmed, mono, level-matched, AAC"
   },
   {
     "title": "Open-Meteo",
