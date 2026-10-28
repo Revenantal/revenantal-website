@@ -269,6 +269,43 @@ describe("Terminal shell", () => {
     );
   });
 
+  it("puts the cursor in the input when the window is clicked", async () => {
+    render(<ChannelComponent {...shell()} />);
+    const input = screen.getByLabelText<HTMLInputElement>("Terminal command");
+    expect(document.activeElement).not.toBe(input);
+
+    await act(() => {
+      fireEvent.click(screen.getByRole("log"));
+    });
+    expect(document.activeElement).toBe(input);
+
+    input.blur();
+    await act(() => {
+      fireEvent.click(screen.getByText(/revenantal.sh/));
+    });
+    expect(document.activeElement).toBe(input);
+  });
+
+  it("leaves links and chips alone, and does not interrupt a text selection", async () => {
+    const props = shell();
+    render(<ChannelComponent {...props} />);
+    const input = screen.getByLabelText<HTMLInputElement>("Terminal command");
+    const link = document.querySelector("a");
+    if (link)
+      await act(() => {
+        fireEvent.click(link);
+      });
+    expect(document.activeElement).not.toBe(input);
+
+    vi.spyOn(window, "getSelection").mockReturnValue({
+      toString: () => "selected text",
+    } as Selection);
+    await act(() => {
+      fireEvent.click(screen.getByRole("log"));
+    });
+    expect(document.activeElement).not.toBe(input);
+  });
+
   it("handles live = null and 0 projects without throwing", () => {
     const { container } = render(
       <ChannelComponent

@@ -8,7 +8,7 @@ import type { ChannelManifest } from "../_shared/types";
  */
 const clack = (name: string) => ({
   src: `/assets/sounds/terminal/${name}.m4a`,
-  gain: 0.55,
+  gain: 0.825,
 });
 
 /** CH 03 Terminal: boot screen and revenantal.sh shell. Approved by the owner on 2026-10-28. */

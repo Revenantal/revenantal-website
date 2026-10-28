@@ -43,6 +43,7 @@ Unknown commands get a friendly "command not found" with a suggestion.
 - A real text input. Tab completes project and command names; ↑/↓ cycle history.
 - The input keeps its own keys, so arrow keys don't turn the dial while it's focused. Esc blurs the input and gives the keys back.
 - Command chips along the bottom (help, ls, open …, servers, git log, discord, credits) run the command when clicked. A long project name is shortened on its chip (`open some-long-p..`) but the command uses the full name.
+- A click anywhere in the window puts the cursor in the input, except on a link or chip, or when it ends a text selection.
 - Every project is also a real new-tab link in the `ls` listing.
 
 ## Look
@@ -57,7 +58,7 @@ The original sketch included gothic references (`cd /graveyard`, `/dev/ghost`). 
 
 ## Sound
 
-A key click on every keypress, through the host's `play` with the manifest's sounds (`soundscapes.md` → Terminal): six click variants picked at random and never the same twice in a row, a heavier `enter` thunk for Enter and Space (Space softer and higher), and a softer `back` for Backspace. Pitch and level vary slightly on every press, and presses closer than 35 ms apart are dropped so a held key stays a patter. Pressing a chip plays the Enter sound. Arrows, Escape, Shift and shortcuts such as Ctrl+C are silent, and nothing plays while the channel is inactive. The sounds follow the volume knob and SND switch. The boot itself is silent; the TV's mains hum and CRT whine carry it.
+A key click on every keypress, through the host's `play` with the manifest's sounds (`soundscapes.md` → Terminal): six click variants picked at random and never the same twice in a row, a heavier `enter` thunk for Enter and Space (Space softer and higher), and a softer `back` for Backspace. The sounds play at 82.5% of their file level (raised 50% on 2026-10-28 after the first listen). Pitch and level vary slightly on every press, and presses closer than 35 ms apart are dropped so a held key stays a patter. Pressing a chip plays the Enter sound. Arrows, Escape, Shift and shortcuts such as Ctrl+C are silent, and nothing plays while the channel is inactive. The sounds follow the volume knob and SND switch. The boot itself is silent; the TV's mains hum and CRT whine carry it.
 
 ## Build Notes
 

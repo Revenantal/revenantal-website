@@ -1,4 +1,4 @@
-import type { JSX, TargetedKeyboardEvent } from "preact";
+import type { JSX, TargetedKeyboardEvent, TargetedMouseEvent } from "preact";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import type { ChannelProps } from "../_shared/types";
 import { Boot } from "./Boot";
@@ -176,6 +176,14 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
     }
   };
 
+  // A click anywhere in the window puts the cursor in the input, unless it hit a control or
+  // ended a text selection.
+  const focusOnClick = (event: TargetedMouseEvent<HTMLDivElement>) => {
+    if ((event.target as HTMLElement).closest("a, button, input")) return;
+    if (window.getSelection()?.toString()) return;
+    inputRef.current?.focus();
+  };
+
   const renderLine = (line: OutputLine) => {
     if (line.kind === "prompt") {
       return (
@@ -248,6 +256,8 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
       {/* The shell is always mounted, so its project links exist; it stays hidden until the boot ends. */}
       <div
         className={styles.screen}
+        role="presentation"
+        onClick={focusOnClick}
         data-booting={booting ? "" : undefined}
         aria-hidden={booting ? "true" : undefined}
       >
