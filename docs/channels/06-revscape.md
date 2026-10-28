@@ -135,7 +135,7 @@ The channel is built in small, separate parts. Each one ends with something the 
 
 Notes:
 
-- **Where it lives while unfinished.** Each milestone merges to `main` without putting Revscape on the dial; it is added at position 6 only when the owner says it is ready. For viewing meanwhile, the channel loads in the dev server only.
+- **Where it lives while unfinished.** The whole of Revscape is built on one long-running branch, `feat/revscape` (owner decision, 2026-10-28). Milestones are commits on it, each approved by the owner before it is built; nothing merges to `main` until the owner says the channel is ready, and then it is one PR that also registers position 6. It stays dev-only on the branch (open `#ch6` in the dev server).
 - **Testing.** M1 and M2 are the risky ones (size, speed, feel), so they come first and are the spike. The simulation (grid, pathfinding, tick, camera maths) is pure code with unit tests; the renderer and panels are checked in the browser.
 - **Reordering.** M6 and M7 can swap, and M8 can move earlier if you want music sooner. M1 to M3 stay first.
 

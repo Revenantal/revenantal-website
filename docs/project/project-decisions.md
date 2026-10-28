@@ -356,6 +356,7 @@ The owner promoted Revscape ahead of the other remaining channels and answered t
 - **Ambient life:** NPCs wander around. No day and night.
 - **Milestones:** the build is split into ten parts (M1 to M10, in the spec). The owner approves each milestone separately before it is built; none is approved yet.
 - **M1 (look around) approved 2026-10-28** with the owner's choices: pitch 25° to 65° starting at 40°; a 40×40 tile world with about a 12-tile draw distance, growing when the projects need more room; and dev-only registration. The owner also approved making the PRESS START overlay customisable ahead of Revscape's own menu (done in M1 as a `compact` strip; full restyling comes with the interface frame in M4).
+- **Branch:** all of Revscape is built on the long-running branch `feat/revscape` and merges to `main` only when the owner says it is ready (decided 2026-10-28). Milestones are commits on it, not separate PRs.
 - **Registration:** Revscape is dev-only while it is built; it is added at position 6 only when the owner says it is ready.
 - **Open:** which tracks to source (count, style, licences) and the remaining tab contents.
 
