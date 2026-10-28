@@ -3,6 +3,7 @@
 Shared channel props, input capture, save access, media helpers and fixtures belong here. Import serializable data types only.
 
 - `types.ts`: the host interface every channel receives.
+- `CaptureOverlay.tsx`: the shared PRESS START screen, "ESC to release" tag and `useCaptureFocus` for game channels.
 - `lineup.ts` and `manifest-check.ts`: registry and manifest validation.
 - `testing/`: the channel contract suite, its fixtures and a sample reference channel. Test-only; lint rejects imports from application code.
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { AppStore, StoreSnapshot } from "@data/store";
 import type { DataView } from "@data/freshness";
 import type { Picture } from "./room-glow";
@@ -19,6 +19,7 @@ import { BloomFilter } from "./effects/BloomFilter";
 import { NO_SIGNAL_PROFILE, resolveEffects } from "./effects/resolve";
 import { ScreenEffects } from "./effects/ScreenEffects";
 import { TV_REDUCED_MOTION, useMediaQuery } from "./controls/media-query";
+import { useCapture } from "./controls/capture";
 import { useTvKeys } from "./controls/tv-keys";
 import { VolumeKnob } from "./controls/VolumeKnob";
 import {
@@ -64,6 +65,7 @@ export type TvViewProps = {
     | "dismissHint"
     | "setCaptions"
     | "setPerf"
+    | "saveFor"
   >;
 };
 
@@ -251,15 +253,21 @@ export function TvView({
     setAnnouncement(on ? "TV on" : "TV off");
   };
 
-  useTvKeys({
-    channel: (delta) => {
-      if (power) tune(wrapPosition(channel + delta, SLOT_COUNT));
+  // A channel can hold the keyboard only while it is the live picture.
+  const channelActive = power && visible && detune === 0 && !switching;
+  const capture = useCapture(shown, channelActive);
+  useTvKeys(
+    {
+      channel: (delta) => {
+        if (power) tune(wrapPosition(channel + delta, SLOT_COUNT));
+      },
+      volume: (delta) => {
+        const next = Math.max(0, Math.min(10, settings.volume + delta));
+        if (next !== settings.volume) changeVolume(next);
+      },
     },
-    volume: (delta) => {
-      const next = Math.max(0, Math.min(10, settings.volume + delta));
-      if (next !== settings.volume) changeVolume(next);
-    },
-  });
+    capture.captured,
+  );
 
   usePerfMonitor(power && visible, snapshot.perf, actions.setPerf);
   useChannelHash(channel, SLOT_COUNT, tune);
@@ -276,6 +284,12 @@ export function TvView({
     audio.setDucked(power && osd !== null);
   }, [audio, power, osd]);
   const manifest = manifestAt(shown);
+  const manifestId = manifest?.id;
+  const { saveFor } = actions;
+  const save = useMemo(
+    () => (manifestId ? saveFor(manifestId) : INERT_SAVE),
+    [manifestId, saveFor],
+  );
   const effects = resolveEffects({
     viewer: settings,
     profile: manifest ? manifest.display : NO_SIGNAL_PROFILE,
@@ -410,13 +424,14 @@ export function TvView({
                 // The frame replaces these with the channel's own sound scope.
                 play: () => undefined,
                 setLoop: () => undefined,
-                // Capture and saves arrive in 4.3; until then these are inert.
                 captions: settings.captions,
                 setCaptions: actions.setCaptions,
-                captured: false,
-                requestCapture: () => undefined,
-                releaseCapture: () => undefined,
-                save: INERT_SAVE,
+                // Bound to the shown position, so an old scope can never hold or drop
+                // a newer scope's keys.
+                captured: capture.captured,
+                requestCapture: capture.requestFor(shown),
+                releaseCapture: capture.releaseFor(shown),
+                save,
               }}
               onTune={tuneTo}
               boot={boot}

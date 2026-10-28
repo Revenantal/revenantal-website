@@ -55,7 +55,7 @@ For the launch lineup, the registry is `{ 1: tvGuide, 10: status, 11: credits }`
 
 ## Game and Toy Channels
 
-- **Press start.** Show a PRESS START overlay and take the keyboard only after a click, Enter or Space. Until then the arrow keys still turn the dial.
+- **Press start.** Show the shared PRESS START overlay (`channels/_shared/CaptureOverlay.tsx`) and take the keyboard only after a click, Enter or Space. Until then the arrow keys still turn the dial. Focus the game surface with `useCaptureFocus` and handle keys there; do not add global listeners.
 - **While captured,** arrows, WASD and Space go to the game and a small "ESC to release" tag shows. Esc, clicking outside the glass, or tuning away hands the keys back.
 - **Pause when away.** `active: false` freezes the loop; coming back resumes where it stopped.
 - **Saves.** Progress is stored per device in `rv-save-<channel id>`, versioned, with a Reset in each game.
@@ -107,6 +107,6 @@ The contract (`src/channels/_shared/testing/`) loads the channel through its man
 - adds no window or document listeners, makes no network requests (unless allowed with `allowNetwork`, for the TV Guide forecast), never touches storage directly and creates no audio of its own;
 - leaves no timers or animation frames scheduled, and plays, tunes, captures and saves nothing, while inactive or after unmounting.
 
-`channelProps()` and `FIXTURE_CASES` in `fixtures.ts` give the channel's own tests the same data. `sample/` is a minimal reference channel that passes the contract. Lint keeps these test-only files out of application code. Capture, PRESS START and save checks join the contract with task 4.3, and caption and media checks with the broadcast player (4.5).
+`channelProps()` and `FIXTURE_CASES` in `fixtures.ts` give the channel's own tests the same data. `sample/` is a minimal reference channel that passes the contract. Lint keeps these test-only files out of application code. Task 4.4 added the PRESS START check (for `game` channels, or any channel that sets `pressStart: true`): no capture request before a click, one request after it, an "ESC to release" tag while captured, and PRESS START again once released. Caption and media checks with the broadcast player (4.5).
 
 Registry tests (`src/tv/lineup.test.ts`, `src/channels/_shared/lineup.test.ts`) cover the launch positions (1, 10 and 11), gaps, omitted channels, stable hashes, the SERVERS button and the settings-door Credits button. `src/tv/host-actions.test.tsx` runs `host.tune` and `host.powerOff` through the real TV and store.
