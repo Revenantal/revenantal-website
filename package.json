@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "preview": "vite preview --host 127.0.0.1",
+    "size:revscape": "VITE_REVSCAPE_PREVIEW=1 vite build --outDir dist-revscape --emptyOutDir && size-limit --config .size-limit.revscape.json",
     "build": "pnpm credits:check && vite build && size-limit && pnpm build:live && pnpm build:forecast",
     "lint": "eslint . --max-warnings 0 && stylelint \"src/**/*.css\"",
     "lint:fix": "eslint . --fix && stylelint \"src/**/*.css\" --fix",
@@ -86,6 +87,7 @@
     "@fontsource/vt323": "5.3.0",
     "mmdb-lib": "3.0.3",
     "preact": "11.0.1",
+    "three": "0.186.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
@@ -100,6 +102,7 @@
     "@size-limit/file": "14.2.0",
     "@testing-library/preact": "3.2.4",
     "@types/node": "24.19.2",
+    "@types/three": "0.186.0",
     "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.5",

@@ -1,10 +1,19 @@
 import { createLineup } from "./_shared/lineup";
 import type { ChannelRegistry } from "./_shared/types";
 import { manifest as credits } from "./credits/manifest";
+import { manifest as revscape } from "./revscape/manifest";
 import { manifest as status } from "./status/manifest";
 import { manifest as terminal } from "./terminal/manifest";
 import { manifest as tvGuide } from "./tv-guide/manifest";
 import { manifest as xbox } from "./xbox/manifest";
+
+/**
+ * Whether the dev-only Revscape channel is registered at position 6 (owner decision,
+ * 2026-10-28): in the dev server, or in a build made with `VITE_REVSCAPE_PREVIEW=1`
+ * (`pnpm size:revscape`). Production builds leave position 6 as NO SIGNAL and drop the channel.
+ */
+const PREVIEW =
+  import.meta.env.DEV || import.meta.env.VITE_REVSCAPE_PREVIEW === "1";
 
 /**
  * The sole channel registry: explicit dial positions mapped to manifests. Missing keys and
@@ -14,6 +23,7 @@ import { manifest as xbox } from "./xbox/manifest";
 export const registry: ChannelRegistry = {
   1: tvGuide,
   3: terminal,
+  ...(PREVIEW ? { 6: revscape } : {}),
   7: xbox,
   10: status,
   11: credits,

@@ -1,6 +1,16 @@
 import { useEffect } from "preact/hooks";
 import styles from "./CaptureOverlay.module.css";
 
+/**
+ * Joins the class names that apply.
+ *
+ * @param names - Class names, or false to leave one out.
+ * @returns One class attribute value.
+ */
+function classes(...names: (string | false | undefined)[]): string {
+  return names.filter(Boolean).join(" ");
+}
+
 /** Props for the shared PRESS START overlay. */
 export type CaptureOverlayProps = {
   /** Whether the channel currently holds the keyboard (`ChannelProps.captured`). */
@@ -9,6 +19,11 @@ export type CaptureOverlayProps = {
   onStart: () => void;
   /** What the keys do once captured, for example "Arrows or WASD to move". */
   hint?: string;
+  /**
+   * A small strip along the bottom instead of a full screen, for channels whose mouse
+   * controls work without the keyboard. The "ESC to release" tag takes the same place along the bottom.
+   */
+  compact?: boolean;
 };
 
 /**
@@ -21,17 +36,22 @@ export type CaptureOverlayProps = {
  * @param props.captured - Whether the channel holds the keyboard.
  * @param props.onStart - Requests capture from the host.
  * @param props.hint - What the keys do while captured.
+ * @param props.compact - A bottom strip instead of a full screen.
  * @returns The PRESS START button, or the release tag.
  */
 export function CaptureOverlay({
   captured,
   onStart,
   hint = "Arrow keys, WASD and Space play",
+  compact = false,
 }: CaptureOverlayProps) {
   if (captured)
     return (
       <>
-        <div className={styles.tag} aria-hidden="true">
+        <div
+          className={classes(styles.tag, compact && styles["tag-strip"])}
+          aria-hidden="true"
+        >
           ESC to release
         </div>
         <p className={styles["sr-only"]} role="status">
@@ -40,7 +60,11 @@ export function CaptureOverlay({
       </>
     );
   return (
-    <button type="button" className={styles.start} onClick={onStart}>
+    <button
+      type="button"
+      className={classes(styles.start, compact && styles.strip)}
+      onClick={onStart}
+    >
       <span className={styles.title}>PRESS START</span>
       <span className={styles.hint}>{hint}</span>
       <span className={styles["sr-only"]}>

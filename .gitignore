@@ -4,6 +4,7 @@ node_modules/
 
 # Build output and tooling caches
 dist/
+dist-revscape/
 coverage/
 .vite/
 .cache/

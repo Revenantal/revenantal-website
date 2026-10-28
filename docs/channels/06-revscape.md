@@ -4,7 +4,7 @@
 
 A real-time low-poly 3D town in the style of classic RuneScape, with its interface. Projects are buildings to visit. The most complex channel, built last.
 
-- **Kind:** game · **Folder:** `revscape` · **Build:** task 5.3 · **Status:** 3D prototype done
+- **Kind:** game · **Folder:** `revscape` · **Build:** task 5.3 · **Status:** M1 (look around) built, dev-only; M2 to M10 not started
 
 ## Concept
 
@@ -26,7 +26,7 @@ A small town square on a tile grid with black fog at the draw distance, like the
 - PRESS START to capture keys.
 - Click a tile to walk there (A* on the tile grid; a yellow X marks the spot).
 - Right-click opens Visit / Examine / Walk here / Cancel. Hover text sits top-left.
-- Camera: fixed pitch about 40°. ←/→ (while captured) or middle-drag rotates; wheel zooms within limits; click the compass to face north.
+- Camera: pitch adjustable from 25° to 65°, starting at 40°. Dragging turns and tilts; ←/→ turn and ↑/↓ tilt while captured; wheel and Page Up/Down zoom within limits; click the compass to face north.
 - Visiting a building opens the project in a new tab and awards XP (XP drop + level-up).
 - Chat box filter buttons (All, Game, Public, …) filter the live feed.
 
@@ -138,6 +138,68 @@ Notes:
 - **Where it lives while unfinished.** Each milestone merges to `main` without putting Revscape on the dial; it is added at position 6 only when the owner says it is ready. For viewing meanwhile, the channel loads in the dev server only.
 - **Testing.** M1 and M2 are the risky ones (size, speed, feel), so they come first and are the spike. The simulation (grid, pathfinding, tick, camera maths) is pure code with unit tests; the renderer and panels are checked in the browser.
 - **Reordering.** M6 and M7 can swap, and M8 can move earlier if you want music sooner. M1 to M3 stay first.
+
+## M1 Plan: Look Around (approved 2026-10-28, built)
+
+**Goal:** a still low-poly town the visitor can look around. No player, NPCs, clicks or interface. It proves the three.js size, speed and pixel look before anything else is built.
+
+### What you can do
+
+- Rotate (drag with the middle or left mouse button, or ←/→ once PRESS START has captured the keys), tilt (drag up and down, or ↑/↓ while captured) and zoom (wheel) within limits.
+- Click the compass to face north. The compass needle turns with the camera.
+- See one building per project around the fountain square, the Server Hall, trees, a fence, a market stall, crates, and black fog at the draw distance.
+
+### Layout and data
+
+- Full-bleed 760×570 canvas rendered at 512×334 and scaled up with `image-rendering: pixelated`. Display profile: scan 0.4, no flicker, glow 0.7.
+- Buildings come from `projects` in order. Plots are placed on rings around the square, so 0, 1 and 30 projects all work and the town grows outward. The Server Hall is always there; `servers` is not used until M5.
+- Each building gets a small deterministic variation (wall colour, roof colour, size) from its project ID, so the town looks the same on every visit.
+- No saves, sound or live data in M1.
+
+### Technology
+
+- three.js with named imports only, loaded with the channel. The size must come in at or under 150 KB gzip for three.js plus scene code, measured by `size-limit`.
+- The world is generated in code (boxes, prisms, icospheres, vertex-coloured ground) and merged into a few meshes. Target under 5,000 triangles.
+- Camera maths (yaw, pitch and zoom limits, easing) lives in a three-free module with unit tests. The channel is a thin renderer around it.
+- The compass is a small DOM button over the canvas, so it is keyboard-reachable and has a label.
+- Uses the shared PRESS START overlay. Without PRESS START, only mouse drag, wheel and the compass work, and the arrow keys keep turning the dial.
+
+### Accessibility and fallback
+
+- Every project is also in a visually hidden list of links, in the same order as the buildings, so keyboard and screen-reader visitors can reach each one. The contract's new-tab link check applies.
+- Reduced motion turns off camera easing and fog drift; the camera snaps.
+- Without WebGL, M1 shows a plain message plus the same list of project links. The pre-rendered still with hotspots comes in M10.
+- The render loop runs only while `active`, and the renderer, geometries and materials are disposed on unmount and on context loss.
+
+### M1 as built (2026-10-28)
+
+- **Files:** `camera.ts` (orbit, drag, wheel, pan, held keys, easing and limits), `town.ts` (layout), `mesh-builder.ts` and `world.ts` (flat-shaded triangles in chunks), `scene.ts` (the only file that imports three.js), `ChannelComponent.tsx` and `Revscape.module.css`. Everything except `scene.ts` is three-free and unit-tested.
+- **Opening it:** `pnpm dev`, then go to `http://localhost:5173/#ch6`. It is registered only in the dev server and in a preview build (`VITE_REVSCAPE_PREVIEW=1`), so the production site is unchanged. `pnpm size:revscape` builds the preview and checks the chunk.
+- **Controls:** drag to turn and tilt, wheel to zoom, Shift+drag to move the view (a temporary aid; the camera will follow the player from M2), compass to face north. PRESS START is a strip along the bottom, not a full screen, because the mouse works without the keyboard. After it, ←/→ turn, ↑/↓ tilt, Page Up/Down zoom, Esc releases.
+- **The town:** the Server Hall sits on the nearest plot (with a chimney), then each project in order on plots spiralling outward. Looks come from a hash of the project ID, so a project never changes. The world is 40×40 tiles, growing by two tiles at a time when 30 projects need more room. Ground, roofs, doors, windows, trees, a fountain, a market stall, crates and a fence are all generated in code.
+- **Render:** a 512×384 canvas scaled up pixelated, flat-shaded Lambert with vertex colours, black fog from 6 to 10 tiles beyond the view's centre, one mesh per 10-tile chunk so chunks out of view are skipped.
+- **Measured** (headless Chromium, software WebGL, 1920×1080): about 3,400 triangles and 9 to 14 draw calls per frame with 0 projects, 3,900 with 8 and 4,400 with 30, all under the 5,000 budget. Chunk: 135 KB gzip against 150 KB. Twenty tune-away and back cycles left one canvas and raised no WebGL context warnings. Under a 4× CPU throttle with no GPU, holding a key ran at about 16 fps, which says little about a real laptop.
+- **No WebGL:** a plain message and the project links. A lost context frees the scene and shows the same.
+- **Left for later milestones:** the visible build of PRESS START as the game's main menu (M4), the Pixelify Sans font (M4), the pre-rendered still with hotspots (M10).
+- **To do on the real TV:** judge the look and the feel of the camera.
+
+### Not in M1
+
+The player, pathfinding, NPCs, hover text, menus, interface frame, minimap, tabs, chat, sounds, music, saves and the fallback still.
+
+### Validation
+
+- Unit tests for the camera maths and the town layout (0, 1 and 30 projects, no overlapping plots, deterministic).
+- The shared contract test, with PRESS START.
+- Size-limit entry for the Revscape chunk (150 KB).
+- Browser checks in headless Chromium: it renders, the camera rotates, tilts and zooms, the compass resets north, there are no console errors, and 20 mount/unmount cycles leave no leaked WebGL contexts. `renderer.info` gives the triangle and draw-call counts. This VM has no GPU, so frame rates are pessimistic.
+- You look at it on the real TV and judge the look.
+
+### Choices (settled)
+
+1. **Registration (decided 2026-10-28): dev-only.** Revscape stays off the dial until the owner says it is ready. A dev-only way to open it is part of M1.
+2. **Pitch range (approved):** 25° to 65°, starting at 40°.
+3. **Town size (approved):** a 40×40 tile world with a draw distance of about 12 tiles. The world grows in steps when there are more projects than fit.
 
 ## References
 

@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Revscape channel (preview build)",
+    "path": "dist-revscape/assets/channel-revscape-*.js",
+    "limit": "150 kB",
+    "gzip": true
+  }
+]

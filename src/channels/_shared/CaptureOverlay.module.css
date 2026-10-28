@@ -37,6 +37,27 @@
   color: #d2ffdc;
 }
 
+/* A strip along the bottom: the view underneath stays usable with the mouse. */
+.strip {
+  inset: auto 0 0;
+  flex-direction: row;
+  gap: 12px;
+  width: fit-content;
+  padding: 4px 10px;
+  margin: 0 auto 32px;
+  background: rgb(0 0 0 / 70%);
+  border: 1px solid var(--color-osd);
+}
+
+.strip .title {
+  font-size: 24px;
+  animation: none;
+}
+
+.strip .hint {
+  font-size: 20px;
+}
+
 .tag {
   position: absolute;
   top: 8px;
@@ -50,6 +71,11 @@
   pointer-events: none;
   background: rgb(0 0 0 / 70%);
   border: 1px solid var(--color-osd);
+}
+
+.tag-strip {
+  inset: auto auto 32px 50%;
+  transform: translateX(-50%);
 }
 
 .sr-only {
