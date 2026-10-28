@@ -27,9 +27,7 @@ function createInitialLines(projects: ChannelProps["projects"]): OutputLine[] {
           {"\n  █▄▀▄▀▄█    "}
           <span className={styles["logo-sub"]}>type </span>
           <span className={styles.question}>help</span>
-          <span className={styles["logo-sub"]}>
-            , or click a command below.
-          </span>
+          <span className={styles["logo-sub"]}>, for the commands.</span>
         </div>
       ),
     },
@@ -129,11 +127,6 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
     setInput("");
   };
 
-  const runChip = (commandStr: string) => {
-    clack({ key: "Enter", ctrlKey: false, metaKey: false, altKey: false });
-    runCommand(commandStr);
-  };
-
   const handleKeyDown = (e: TargetedKeyboardEvent<HTMLInputElement>) => {
     // Keep keys inside terminal input; do not let arrow keys turn the TV dial
     e.stopPropagation();
@@ -176,7 +169,7 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
     }
   };
 
-  // A click anywhere in the window puts the cursor in the input, unless it hit a control or
+  // A click anywhere in the window puts the cursor in the input, unless it hit a link or
   // ended a text selection.
   const focusOnClick = (event: TargetedMouseEvent<HTMLDivElement>) => {
     if ((event.target as HTMLElement).closest("a, button, input")) return;
@@ -244,13 +237,6 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
     );
   };
 
-  const firstProjId = props.projects[0]?.id;
-  // The chip must fit the bar, so a long name is shortened on the button but run in full.
-  const firstProjLabel =
-    firstProjId && firstProjId.length > 12
-      ? `${firstProjId.slice(0, 10)}..`
-      : firstProjId;
-
   return (
     <div className={styles.root} data-active={String(props.active)}>
       {/* The shell is always mounted, so its project links exist; it stays hidden until the boot ends. */}
@@ -290,75 +276,6 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
               autoCorrect="off"
             />
           </div>
-        </div>
-
-        <div className={styles["chips-bar"]}>
-          <span className={styles["chip-label"]}>try:</span>
-          <button
-            type="button"
-            className={styles.chip}
-            onClick={() => {
-              runChip("help");
-            }}
-          >
-            help
-          </button>
-          <button
-            type="button"
-            className={styles.chip}
-            onClick={() => {
-              runChip("ls");
-            }}
-          >
-            ls
-          </button>
-          {firstProjId ? (
-            <button
-              type="button"
-              className={styles.chip}
-              onClick={() => {
-                runChip(`open ${firstProjId}`);
-              }}
-            >
-              open {firstProjLabel}
-            </button>
-          ) : null}
-          <button
-            type="button"
-            className={styles.chip}
-            onClick={() => {
-              runChip("servers");
-            }}
-          >
-            servers
-          </button>
-          <button
-            type="button"
-            className={styles.chip}
-            onClick={() => {
-              runChip("git log");
-            }}
-          >
-            git log
-          </button>
-          <button
-            type="button"
-            className={styles.chip}
-            onClick={() => {
-              runChip("discord");
-            }}
-          >
-            discord
-          </button>
-          <button
-            type="button"
-            className={styles.chip}
-            onClick={() => {
-              runChip("credits");
-            }}
-          >
-            credits
-          </button>
         </div>
       </div>
 

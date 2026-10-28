@@ -49,6 +49,37 @@
   cursor: text;
 }
 
+/* A blocky scrollbar in the phosphor green: a dim thumb on black, brighter on hover. */
+.terminal::-webkit-scrollbar {
+  width: 14px;
+}
+
+.terminal::-webkit-scrollbar-track {
+  background: #000;
+  border-left: 1px solid var(--dim);
+}
+
+.terminal::-webkit-scrollbar-thumb {
+  background: var(--dim);
+  border: 2px solid #000;
+}
+
+.terminal::-webkit-scrollbar-thumb:hover {
+  background: var(--fg);
+}
+
+.terminal::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Firefox has no pseudo-elements, only these two properties; Chromium would ignore the above if they were set. */
+@supports not selector(::-webkit-scrollbar) {
+  .terminal {
+    scrollbar-width: thin;
+    scrollbar-color: var(--dim) #000;
+  }
+}
+
 .system {
   color: var(--dim);
   white-space: pre-wrap;
@@ -161,46 +192,6 @@
   caret-color: var(--bright);
   margin-left: 8px;
   padding: 0;
-}
-
-.chips-bar {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 44px;
-  padding: 0 16px;
-  overflow: clip;
-  background: #000;
-  border-top: 2px solid var(--dim);
-  box-sizing: border-box;
-}
-
-.chip-label {
-  color: var(--dim);
-  margin-right: 2px;
-}
-
-.chip {
-  flex: none;
-  background: transparent;
-  border: 1px solid var(--fg);
-  color: var(--fg);
-  font-family: inherit;
-  font-size: inherit;
-  padding: 4px 8px;
-  cursor: pointer;
-  line-height: 1;
-  border-radius: 0;
-}
-
-.chip:hover,
-.chip:focus-visible {
-  border-color: var(--bright);
-  color: #000;
-  background: var(--bright);
-  outline: none;
 }
 
 /* The power-on screens sit over the shell until they finish or are skipped. */

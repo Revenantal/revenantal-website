@@ -2,7 +2,7 @@
 
 ## Summary
 
-A DOS-era machine called `revenantal.sh`. It runs a BIOS-style power-on test and a loading screen, then drops to a command prompt. Visitors type commands or click command chips to browse projects, and every key clicks like an old keyboard. Approved by the owner on 2026-10-28 as the second Phase 4 build (task 4.2); the boot sequence, VGA font and key sounds were added to the approved scope the same day (see `project-decisions.md`).
+A DOS-era machine called `revenantal.sh`. It runs a BIOS-style power-on test and a loading screen, then drops to a command prompt. Visitors type commands to browse projects, or click a project link in the listing, and every key clicks like an old keyboard. Approved by the owner on 2026-10-28 as the second Phase 4 build (task 4.2); the boot sequence, VGA font and key sounds were added to the approved scope the same day (see `project-decisions.md`).
 
 - **Kind:** directory · **Dial:** 3 · **Folder:** `terminal` · **Build:** task 4.2 · **Status:** built, awaiting the owner's look on the real TV
 
@@ -42,14 +42,14 @@ Unknown commands get a friendly "command not found" with a suggestion.
 
 - A real text input. Tab completes project and command names; ↑/↓ cycle history.
 - The input keeps its own keys, so arrow keys don't turn the dial while it's focused. Esc blurs the input and gives the keys back.
-- Command chips along the bottom (help, ls, open …, servers, git log, discord, credits) run the command when clicked. A long project name is shortened on its chip (`open some-long-p..`) but the command uses the full name.
-- A click anywhere in the window puts the cursor in the input, except on a link or chip, or when it ends a text selection.
-- Every project is also a real new-tab link in the `ls` listing.
+- There is no button bar: it was removed on 2026-10-28 at the owner's request. Projects stay reachable without typing through the real new-tab links in the `ls` listing.
+- A click anywhere in the window puts the cursor in the input, except on a link, or when it ends a text selection.
 
 ## Look
 
 - Pure black background and one phosphor green in four brightnesses, like a monochrome monitor (owner request, 2026-10-28): normal `#33d65a` for text, bright `#5fff7a` (the TV's own on-screen green) for the prompt, folders, executables, OK and the logo, near-white green `#d2ffdc` for emphasis, typed commands and errors, and dim `#1f8a38` for files and secondary text. Hover and focus use inverse video (black on bright green).
 - Font: **PxPlus IBM VGA 8x16** by VileR, from the Ultimate Oldschool PC Font Pack (CC BY-SA 4.0), bundled unmodified with the channel in `src/channels/terminal/fonts/` with its licence text, credited in the Typography Department. The `WebPlus` variant is used because the original-DOS set lacks the em dash, ellipsis and curly quotes the output uses. 20 px with 22 px lines gives 72 columns across the content box.
+- A thin scrollbar in the same green, with a block thumb on a black track (Firefox gets the standard thin, coloured one).
 - Display profile: scan 1, flicker, glow 0.7. `safe: true`.
 
 ## Content Note
@@ -58,7 +58,7 @@ The original sketch included gothic references (`cd /graveyard`, `/dev/ghost`). 
 
 ## Sound
 
-A key click on every keypress, through the host's `play` with the manifest's sounds (`soundscapes.md` → Terminal): six click variants picked at random and never the same twice in a row, a heavier `enter` thunk for Enter and Space (Space softer and higher), and a softer `back` for Backspace. The sounds play at 82.5% of their file level (raised 50% on 2026-10-28 after the first listen). Pitch and level vary slightly on every press, and presses closer than 35 ms apart are dropped so a held key stays a patter. Pressing a chip plays the Enter sound. Arrows, Escape, Shift and shortcuts such as Ctrl+C are silent, and nothing plays while the channel is inactive. The sounds follow the volume knob and SND switch. The boot itself is silent; the TV's mains hum and CRT whine carry it.
+A key click on every keypress, through the host's `play` with the manifest's sounds (`soundscapes.md` → Terminal): six click variants picked at random and never the same twice in a row, a heavier `enter` thunk for Enter and Space (Space softer and higher), and a softer `back` for Backspace. The sounds play at 82.5% of their file level (raised 50% on 2026-10-28 after the first listen). Pitch and level vary slightly on every press, and presses closer than 35 ms apart are dropped so a held key stays a patter. Arrows, Escape, Shift and shortcuts such as Ctrl+C are silent, and nothing plays while the channel is inactive. The sounds follow the volume knob and SND switch. The boot itself is silent; the TV's mains hum and CRT whine carry it.
 
 ## Build Notes
 
@@ -71,7 +71,7 @@ A key click on every keypress, through the host's `play` with the manifest's sou
 
 ## Acceptance
 
-- Every project reachable with `ls` + `open` and with the chips alone (no typing required).
+- Every project reachable with `ls` + `open`, and by clicking its link in the `ls` listing (no typing required).
 - `servers` never shows addresses unless `showAddress: true`.
 - Works with `live = null` without error (live commands print "no signal from upstream").
 - The boot runs about 6 s, can be skipped by click or key, pauses while inactive and is skipped with reduced motion.

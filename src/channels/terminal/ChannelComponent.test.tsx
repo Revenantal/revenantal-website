@@ -36,13 +36,14 @@ describe("Terminal boot", () => {
   it("shows the boot first, then hands over to the shell", async () => {
     render(<ChannelComponent {...channelProps()} />);
     expect(screen.getByRole("button", SKIP)).toBeTruthy();
-    expect(screen.queryByRole("button", { name: "help" })).toBeNull();
+    // The shell is hidden from assistive technology until the boot ends.
+    expect(screen.queryByRole("log")).toBeNull();
 
     await act(() => {
       vi.advanceTimersByTime(BOOT_DURATION_MS + 100);
     });
     expect(screen.queryByRole("button", SKIP)).toBeNull();
-    expect(screen.getByRole("button", { name: "help" })).toBeTruthy();
+    expect(screen.getByRole("log")).toBeTruthy();
   });
 
   it("does not take the keyboard when it ends by itself", async () => {
@@ -105,7 +106,7 @@ describe("Terminal boot", () => {
   it("goes straight to the shell with reduced motion", () => {
     render(<ChannelComponent {...shell()} />);
     expect(screen.queryByRole("button", SKIP)).toBeNull();
-    expect(screen.getByRole("button", { name: "help" })).toBeTruthy();
+    expect(screen.getByRole("log")).toBeTruthy();
     expect(vi.getTimerCount()).toBe(0);
   });
 
@@ -230,45 +231,6 @@ describe("Terminal shell", () => {
     expect(document.activeElement).not.toBe(input);
   });
 
-  it("runs commands via bottom chips", async () => {
-    render(<ChannelComponent {...shell()} />);
-
-    await act(() => {
-      fireEvent.click(screen.getByRole("button", { name: "help" }));
-    });
-    expect(screen.getByText("Available commands:")).toBeTruthy();
-
-    await act(() => {
-      fireEvent.click(screen.getByRole("button", { name: "servers" }));
-    });
-    expect(screen.getByText(/PLAYERS/)).toBeTruthy();
-  });
-
-  it("shortens a long project name on its chip but opens the whole name", async () => {
-    const open = vi.spyOn(window, "open").mockReturnValue(null);
-    const props = shell();
-    const long = {
-      ...(props.projects[0] ?? { name: "x", type: "tool" as const }),
-      id: "a-very-long-project-name",
-      name: "a-very-long-project-name",
-      url: "https://long.example.invalid/",
-      host: "long.example.invalid",
-      desc: "",
-    };
-    render(<ChannelComponent {...{ ...props, projects: [long] }} />);
-    const chip = screen.getByRole("button", { name: /^open a-very-lon/ });
-    expect(chip.textContent).toBe("open a-very-lon..");
-
-    await act(() => {
-      fireEvent.click(chip);
-    });
-    expect(open).toHaveBeenCalledWith(
-      "https://long.example.invalid/",
-      "_blank",
-      "noopener,noreferrer",
-    );
-  });
-
   it("puts the cursor in the input when the window is clicked", async () => {
     render(<ChannelComponent {...shell()} />);
     const input = screen.getByLabelText<HTMLInputElement>("Terminal command");
@@ -286,7 +248,7 @@ describe("Terminal shell", () => {
     expect(document.activeElement).toBe(input);
   });
 
-  it("leaves links and chips alone, and does not interrupt a text selection", async () => {
+  it("leaves links alone, and does not interrupt a text selection", async () => {
     const props = shell();
     render(<ChannelComponent {...props} />);
     const input = screen.getByLabelText<HTMLInputElement>("Terminal command");
@@ -391,16 +353,5 @@ describe("Terminal key sounds", () => {
     ids.slice(1).forEach((id, index) => {
       expect(id).not.toBe(ids[index]);
     });
-  });
-
-  it("clicks when a chip is pressed", async () => {
-    const props = shell();
-    render(<ChannelComponent {...props} />);
-    vi.spyOn(performance, "now").mockReturnValue(5000);
-
-    await act(() => {
-      fireEvent.click(screen.getByRole("button", { name: "help" }));
-    });
-    expect(props.play).toHaveBeenCalledWith("enter", expect.anything());
   });
 });

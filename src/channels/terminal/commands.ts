@@ -275,10 +275,7 @@ export function executeCommand(
             "text",
             "A directory of things I host: sandbox projects, tools, and game servers.",
           );
-          add(
-            "text",
-            "Type 'help' to see commands, or click any chip along the bottom.",
-          );
+          add("text", "Type 'help' to see the commands.");
         }
       } else if (target === "launch.sh" && ctx.cwd.startsWith("~/projects/")) {
         const projId = ctx.cwd.replace("~/projects/", "");
