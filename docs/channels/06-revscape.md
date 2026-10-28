@@ -201,6 +201,56 @@ The player, pathfinding, NPCs, hover text, menus, interface frame, minimap, tabs
 2. **Pitch range (approved):** 25° to 65°, starting at 40°.
 3. **Town size (approved):** a 40×40 tile world with a draw distance of about 12 tiles. The world grows in steps when there are more projects than fit.
 
+## M2 Plan: Walk (2026-10-28, draft, awaiting owner approval)
+
+**Goal:** a player stands in the town. Click the ground and they walk there, one tile per 600 ms game tick, round the buildings, with a yellow X where you clicked. The camera follows them. Still no NPCs, hover text, menus or interface.
+
+### What you can do
+
+- Click a ground tile: the player turns, walks the shortest route and stops on it. A yellow X marks the spot until they arrive.
+- Click somewhere else mid-walk: they finish the step they are on, then head for the new spot.
+- Drag to turn and tilt, wheel to zoom, compass to face north, as in M1. A click is a press and release within a few pixels; anything longer is a drag, so the two never clash.
+- The camera glides to keep the player in the middle. Shift+drag panning from M1 goes, since the camera now follows.
+
+### How it works (the original game's rules, as I know them)
+
+- **The tick:** the game moves on a fixed 600 ms tick. Walking is one tile per tick. The player glides between tile centres over the tick, so movement looks smooth but stays on the grid.
+- **Tiles:** tile (i, j) covers the unit square from (i, j). A tile is blocked if a building, the fountain, a tree, a stall, crate or fence post covers any part of it, or it lies outside the world. Doors are part of the wall; nobody walks into a building (M3 handles Visit).
+- **Paths:** eight directions, diagonals cost one step like straight moves. A diagonal step is allowed only if both tiles beside it are free, so nobody cuts a corner. The search is A* with a fixed neighbour order, so a given click always takes the same route. A tile that cannot be reached is ignored, with no walk and no X.
+- **Clicking:** the click is turned into a tile by casting a ray from the camera onto the ground (on the ground height, to allow for the gentle hills beyond the plots). A click on a blocked tile does nothing in M2; the right-click menu and Visit arrive in M3.
+- **The player:** a blocky figure from the prototype (legs, body, arms, head, hat) in red, about 60 triangles, with legs and arms swinging while they walk and a smooth turn towards where they are heading. It starts on the lane just south of the fountain.
+- **The X:** two crossed yellow bars flat on the ground, 4 triangles.
+
+### Code
+
+Three-free modules, each unit-tested: `grid.ts` (blocked tiles from the town), `path.ts` (A*), `player.ts` (the tick, the path queue and the glide) and `picking.ts` (screen point to tile). `scene.ts` gains the player and the X; `ChannelComponent.tsx` gains click handling and the follow camera. No new dependencies.
+
+### Rules it keeps
+
+- Paused while inactive: the tick stops and the player stays where they are, and carries on when the channel returns.
+- Reduced motion: the camera snaps to the player and the player steps tile to tile on the tick with no glide.
+- Frames are drawn only while something moves, as in M1. Walking is mouse-only; keyboard and screen-reader visitors reach every project through the project list, and walking is decoration.
+- Nothing is saved yet: the player starts at the same spot each visit (saves come in M9).
+
+### Budget
+
+About 70 more triangles, a few more draw calls and roughly 4 KB gzip on the 135 KB chunk (limit 150 KB).
+
+### Validation
+
+- Unit tests: every plot, the fountain, trees and props block their tiles and the lanes stay clear; a route round a building; no corner cutting; an unreachable tile; the longest route in a 30-project town; one tile per 600 ms however the frames arrive (including a long gap); a new click mid-walk; pause and resume; picking agrees with three.js's own projection at several camera angles.
+- The component: a click walks, a drag does not, the X appears and clears, the player stops when inactive and the loop leaves nothing scheduled.
+- Browser (headless Chromium): click to a far plot and watch the player arrive, click a building and nothing happens, 20 mount/unmount cycles, triangles still under 5,000 with 30 projects.
+- You play it on the real TV and judge the walk and the camera.
+
+### Choices for you
+
+1. **Blocked clicks.** Ignore a click on a building or tree (the original does nothing for the ground), or walk to the nearest open tile? I recommend ignore.
+2. **Hover tile.** The earlier milestone table listed a hover tile. The original highlights nothing, so I recommend leaving it out and relying on the hover text in M3.
+3. **Path shape.** The original prefers diagonals first, which gives its familiar staircase routes. I recommend copying that.
+4. **Keyboard walking.** None in the original. I recommend none now.
+5. **Player colour.** Red, as in the prototype and the mockup's minimap dot.
+
 ## References
 
 - `docs/reference/mockups/ch06-revscape.png` — mockup with the full interface.
