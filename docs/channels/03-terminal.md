@@ -2,9 +2,9 @@
 
 ## Summary
 
-A phosphor shell called `revenantal.sh`. Visitors type commands or click command chips to browse projects.
+A phosphor shell called `revenantal.sh`. Visitors type commands or click command chips to browse projects. Approved by the owner on 2026-10-28 as the second Phase 4 build (task 4.2).
 
-- **Kind:** directory · **Folder:** `terminal` · **Build:** task 4.2 · **Status:** approved sketch
+- **Kind:** directory · **Dial:** 3 · **Folder:** `terminal` · **Build:** task 4.2 · **Status:** approved 2026-10-28
 
 ## Concept
 
@@ -14,7 +14,7 @@ It boots with fake BIOS lines and an ASCII logo, then drops to a `guest@revenant
 
 | Command                                        | Output                                                            |
 | ---------------------------------------------- | ----------------------------------------------------------------- |
-| `help`                                         | Command list                                                      |
+| `help`                                         | Command list and descriptions                                     |
 | `ls`                                           | Projects as folders, servers as executables, `README.md`          |
 | `cd <project> && cat README` / `cat <project>` | Name, desc, host, status                                          |
 | `open <project>`                               | Opens the project in a new tab                                    |
@@ -32,32 +32,40 @@ Unknown commands get a friendly "command not found" with a suggestion.
 - A real text input. Tab completes project and command names; ↑/↓ cycle history.
 - The input keeps its own keys, so arrow keys don't turn the dial while it's focused. Esc blurs the input and gives the keys back.
 - Command chips along the bottom (help, ls, open …, servers, git log, discord, drive) run the command when clicked.
+- Mouse clicks anywhere in the terminal window focus the input.
 
 ## Look
 
-- Near-black background with red prompt, blue folders, green executables, yellow highlights.
-- Font: VT323.
+- Near-black background (`#070303`) with red prompt (`#ff2a36`), blue folders (`#7cc4ff`), green executables (`#5ef28a`), yellow highlights (`#ffb347`), and error text (`#ff6b6b`).
+- Font: VT323 (monospaced CRT style).
 - Display profile: scan 1, flicker, glow 0.7. `safe: true`.
 
 ## Content Note
 
-The sketch includes `cd /graveyard` → "permission denied — let the dead rest" and boot lines like "mounting /dev/ghost". These lean toward the death theme the brief rules out. Swap them for non-gothic jokes at build time (e.g. `cd /secret` → "permission denied — nice try"), and record the final lines in `project-decisions.md`.
+The original sketch included gothic references (`cd /graveyard`, `/dev/ghost`). Per the project brief, these are replaced with non-gothic jokes:
+
+- Boot line: `[ OK ] mounting /dev/nvme0n1`
+- `cd /secret` → `bash: cd: /secret: permission denied — nice try.`
+- `sudo <cmd>` → `guest is not in the sudoers file. This incident will be reported.`
+- `rm -rf /` → `nice try, rm is read-only here.`
 
 ## Sound
 
-Mechanical key presses at random, an error beep and a modem handshake on `connect`. See `soundscapes.md` → Terminal.
+None at launch; the mains hum and CRT whine carry the channel. Mechanical key presses at random and an error beep may be proposed later.
 
 ## Build Notes
 
-- Commands are a table of `{ name, run(args, props) }` in `terminal/commands.ts`, so adding one is one entry.
-- Output is plain DOM text, not canvas, so screen readers can read it. The output log is `aria-live="polite"`.
-- Cap scrollback (e.g. 200 lines).
+- Commands are a table of `{ name, run(args, props, ctx) }` in `terminal/commands.ts`, so adding one is one entry.
+- Output is plain DOM text with `role="log"` and `aria-live="polite"`, not canvas, so screen readers can read it.
+- Scrollback buffer capped at 200 lines.
+- Autocomplete matches commands and project slugs on `Tab`.
 
 ## Acceptance
 
-- Every project reachable with `ls` + `open` and with the chips alone (no typing).
-- `servers` never shows addresses unless published.
-- Works with `live = null` (live commands print "no signal from upstream").
+- Every project reachable with `ls` + `open` and with the chips alone (no typing required).
+- `servers` never shows addresses unless `showAddress: true`.
+- Works with `live = null` without error (live commands print "no signal from upstream").
+- Shared channel contract tests pass.
 
 ## References
 

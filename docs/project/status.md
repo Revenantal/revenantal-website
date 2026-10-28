@@ -57,7 +57,7 @@ What is built and where things are. Tick an item when its task has reached `main
 ## Phase 4 — Lighter Channels
 
 - [x] 4.1 XBOX, the Halo menu (channel 7) — original Xbox 4:3 menu loop with the Halo theme
-- [ ] 4.2 Terminal
+- [x] 4.2 Terminal (channel 3) — revenantal.sh command shell with chips, history and Tab completion
 - [ ] 4.3 Rev OS
 - [ ] 4.4 Input capture and saves
 - [ ] 4.5 Coin Drop (channel 12)
@@ -161,7 +161,7 @@ All individual channel builds are awaiting plan review and explicit owner confir
 | --- | ---------------- | -------------------------------------------------------- | ----------------- |
 | 1   | TV Guide         | Mockup done (v3 with forecast and radar)                 | Built (3.4, 3.5)  |
 | 2   | Rev OS           | Mockup done                                              | Not started (4.3) |
-| 3   | Terminal         | Approved early sketch                                    | Not started (4.2) |
+| 3   | Terminal         | Approved sketch                                          | Built (4.2)       |
 | 4   | Night Drive      | Mockup done; needs a cleaner, less "paint" look at build | Not started (5.2) |
 | 5   | Side Quest       | Mockup done                                              | Not started (5.1) |
 | 6   | Revscape         | 3D prototype done                                        | Not started (5.3) |
@@ -251,3 +251,5 @@ Task 3.7 in progress (2026-10-20): revenantal.com is live on Coolify behind Clou
 Task 3.7 complete (2026-10-20). Automatic deploys verified end to end (merge, CI, publish, Coolify webhook as a POST, fresh pull through `pull_policy: always`); each package keeps two versions. Weather is on behind Cloudflare: the visitor's own city resolves, faked forwarding headers are ignored, cross-site requests get 403, and responses are uncached. The radar CSP fix (`blob:` images) is live. Branch protection on `main`: the Checks job is required, force pushes and deletion are blocked, and admins keep the direct small-fix path. The rollback test was skipped by owner choice. Final review on the live site in Chromium, Firefox and WebKit: TV mode on channels 1, 10 and 11 (radar drawn, city correct), phone List mode with no overflow, reduced motion shows List mode, axe clean everywhere, no cookies, only `rv-ch` stored. Budgets on the live build: initial JS 54 KB, Guide chunk 10 KB, frame and sprites 129 KB (room backdrop 78 KB more), shell fonts 73 KB (122 KB with the Guide and hint-note fonts), TV sounds 85 KB, load event 0.34 s. The owner confirmed the forecast logs hold no addresses. Cloudflare Web Analytics stays blocked by owner decision: the CSP refuses its beacon, and switching off Cloudflare's automatic injection removes the console errors.
 
 Task 4.1 (2026-10-20): channel 7 XBOX, the original Halo main menu. A 72 s muted loop of the original Xbox 4:3 menu flyby (Internet Archive PAL capture, end dissolving into start) plays only while the channel is active, with the still for reduced motion, and the 3:50 menu theme (halome.nu's loop) through the host's music loop. Media 820 KB video (VP9; 1.05 MB H.264 fallback), 12 KB still and 1.07 MB music, loaded only on channel 7 (owner-approved exception); code 0.7 KB. Microsoft's notice moved to the Halo credits by owner decision, using new optional `notice` and `licenseUrl` credit fields shown in the Credits channel, List mode and `CREDITS.md`. The contract gained `allowMutedVideo`. Browser check on the dev server: video plays and stops on tune-away, music loop starts, axe clean, no errors. 417 tests.
+
+Task 4.2 (2026-10-28, on `feat/4.2-terminal`): channel 3 Terminal, the `revenantal.sh` shell. Fake BIOS boot and logo, then a real text input with `help`, `ls`, `cd`, `cat`, `open`, `servers`, `git log`, `steam`, `links`, `discord`, `credits`, `clear` and a few joke commands (non-gothic: `cd /secret` is "permission denied — nice try"). Tab completes, ↑/↓ cycle history, Esc blurs the input, and the input stops key events so arrows do not turn the dial. Chips along the bottom run commands without typing; every project is also a new-tab link. Output is a polite `role="log"`, capped at 200 lines. Server addresses show only when published; stale or missing data prints "no signal". Silent at launch. Registered at position 3 and added to the TV Guide dial list. 444 tests; Terminal chunk 4.5 kB of 30 kB; `pnpm check` passes. Not yet done: a look on the real TV in a browser (layout at 760×570, axe, keyboard run) and the owner's review of the look.

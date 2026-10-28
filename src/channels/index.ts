@@ -2,16 +2,18 @@ import { createLineup } from "./_shared/lineup";
 import type { ChannelRegistry } from "./_shared/types";
 import { manifest as credits } from "./credits/manifest";
 import { manifest as status } from "./status/manifest";
+import { manifest as terminal } from "./terminal/manifest";
 import { manifest as tvGuide } from "./tv-guide/manifest";
 import { manifest as xbox } from "./xbox/manifest";
 
 /**
  * The sole channel registry: explicit dial positions mapped to manifests. Missing keys and
  * null slots show NO SIGNAL; the highest key sets the dial's slot count. Launch positions:
- * TV Guide 1, Status 10, Credits 11; XBOX 7 (Phase 4).
+ * TV Guide 1, Status 10, Credits 11; XBOX 7, Terminal 3 (Phase 4).
  */
 export const registry: ChannelRegistry = {
   1: tvGuide,
+  3: terminal,
   7: xbox,
   10: status,
   11: credits,

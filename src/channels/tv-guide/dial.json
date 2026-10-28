@@ -1,5 +1,11 @@
 [
   {
+    "id": "terminal",
+    "label": "CH 03",
+    "title": "TERMINAL",
+    "blurb": "The phosphor shell: browse projects, servers and stats from the prompt."
+  },
+  {
     "id": "xbox",
     "label": "CH 07",
     "title": "XBOX",

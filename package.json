@@ -66,6 +66,12 @@
       "gzip": true
     },
     {
+      "name": "Terminal channel",
+      "path": "dist/assets/channel-terminal-*.js",
+      "limit": "30 kB",
+      "gzip": true
+    },
+    {
       "name": "Credits channel",
       "path": "dist/assets/channel-credits-*.js",
       "limit": "30 kB",

@@ -322,6 +322,15 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - **Image retention (owner, 2026-10-19):** each package keeps two versions, the current image and one rollback. The publish workflow deletes older ones after each deploy, which keeps storage within the free plan's 500 MB if GitHub ever bills the container registry (free today). Rollback reaches back one deploy.
 - Weather: the site reaches the forecast service as `forecast:8090` on the resource's own network, and the service trusts only the `site` container, looked up by name every 30 seconds (`TRUSTED_PEER_HOSTS`). A custom private network was dropped on 2026-10-19, because Coolify's proxy can pick a container's address on a network it is not on. All three services have health checks. The plain-server deploy files were removed.
 
+### CH 03 Terminal: approved (2026-10-28)
+
+- Approved by the owner on 2026-10-28 as task 4.2.
+- The channel is **TERMINAL** (id `terminal`), dial position 3. A phosphor command shell (`revenantal.sh`) that acts as a directory over projects, servers, git and steam activity.
+- Non-gothic jokes replace prototype sketch lines: boot line uses `/dev/nvme0n1` instead of `/dev/ghost`, `cd /secret` returns "permission denied — nice try", `sudo` returns the standard sudoers incident notice, and `rm -rf /` returns "nice try, rm is read-only here".
+- Interactive text input with Tab completion, command history (↑/↓), and clickable command chips along the bottom for mouse and touch visitors without typing.
+- Font is VT323; display profile uses `scan: 1`, `flicker: true`, `glow: 0.7`, `safe: true`.
+- Silent at launch (mains hum and CRT whine carry the channel); mechanical keyboard typing sounds and error beeps may be proposed for approval later.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

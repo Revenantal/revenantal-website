@@ -1,0 +1,197 @@
+/* CH 03 Terminal: phosphor shell, authored at 760×570. */
+
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 760px;
+  height: 570px;
+  overflow: clip;
+  background: #070303;
+  color: #e8d5d5;
+  font-family: var(--font-osd), ui-monospace, monospace;
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.terminal {
+  position: relative;
+  flex: 1;
+  overflow: hidden auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: text;
+}
+
+.system {
+  color: #6e5050;
+  white-space: pre-wrap;
+}
+
+.ok {
+  color: #5ef28a;
+}
+
+.question {
+  color: #ffb347;
+}
+
+.logo {
+  color: #ff2a36;
+  font-weight: 600;
+  white-space: pre;
+  line-height: 1.1;
+  margin: 4px 0;
+}
+
+.logo-sub {
+  color: #e8d5d5;
+  font-weight: 400;
+}
+
+.prompt-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  white-space: pre-wrap;
+}
+
+.prompt-user {
+  color: #ff2a36;
+}
+
+.prompt-sep {
+  color: #e8d5d5;
+}
+
+.prompt-dir {
+  color: #ffb347;
+}
+
+.prompt-cmd {
+  color: #e8d5d5;
+  margin-left: 6px;
+}
+
+.text {
+  color: #e8d5d5;
+  white-space: pre-wrap;
+}
+
+.highlight {
+  color: #ffb347;
+  white-space: pre-wrap;
+}
+
+.error {
+  color: #ff6b6b;
+  white-space: pre-wrap;
+}
+
+.folder {
+  color: #7cc4ff;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.folder:hover,
+.folder:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+.file {
+  color: #6e5050;
+  display: inline-block;
+}
+
+.executable {
+  color: #5ef28a;
+  display: inline-block;
+}
+
+.folder-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 4px 0;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.cmd-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: #e8d5d5;
+  caret-color: #ff2a36;
+  margin-left: 6px;
+  padding: 0;
+}
+
+.cmd-input:focus-visible {
+  outline: none;
+}
+
+.chips-bar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px;
+  background: #120506;
+  border-top: 1px solid #3a0a0f;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.chip-label {
+  color: #6e5050;
+  margin-right: 2px;
+}
+
+.chip {
+  background: transparent;
+  border: 1px solid #6e0b12;
+  color: #e8d5d5;
+  font-family: inherit;
+  font-size: 15px;
+  padding: 4px 8px;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 2px;
+}
+
+.chip:hover,
+.chip:focus-visible {
+  border-color: #ff2a36;
+  color: #ff2a36;
+  outline: none;
+}
+
+.chip-hint {
+  margin-left: auto;
+  color: #6e5050;
+  font-size: 14px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
