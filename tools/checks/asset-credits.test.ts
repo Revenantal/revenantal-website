@@ -11,6 +11,7 @@ describe("shipped asset credits", () => {
     const pipeline = [
       "tools/assets/tv_sounds.py",
       "tools/assets/channel_music.py",
+      "tools/assets/terminal_sounds.py",
     ]
       .map((file) => readFileSync(file, "utf8"))
       .join("\n");
@@ -34,6 +35,10 @@ describe("shipped asset credits", () => {
       ["public/assets/tv-guide/base-map.json", "Natural Earth map data"],
       ["public/assets/xbox/menu.webm", "Halo main menu"],
       ["public/assets/music/xbox.m4a", "Halo main menu music"],
+      [
+        "src/channels/terminal/fonts/WebPlus_IBM_VGA_8x16.woff",
+        "PxPlus IBM VGA 8x16",
+      ],
     ] as const)
       if (existsSync(file))
         expect(

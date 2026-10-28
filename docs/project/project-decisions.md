@@ -322,6 +322,26 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - **Image retention (owner, 2026-10-19):** each package keeps two versions, the current image and one rollback. The publish workflow deletes older ones after each deploy, which keeps storage within the free plan's 500 MB if GitHub ever bills the container registry (free today). Rollback reaches back one deploy.
 - Weather: the site reaches the forecast service as `forecast:8090` on the resource's own network, and the service trusts only the `site` container, looked up by name every 30 seconds (`TRUSTED_PEER_HOSTS`). A custom private network was dropped on 2026-10-19, because Coolify's proxy can pick a container's address on a network it is not on. All three services have health checks. The plain-server deploy files were removed.
 
+### CH 03 Terminal: approved (2026-10-28)
+
+- Approved by the owner on 2026-10-28 as task 4.2.
+- The channel is **TERMINAL** (id `terminal`), dial position 3. A phosphor command shell (`revenantal.sh`) that acts as a directory over projects, servers, git and steam activity.
+- Non-gothic jokes replace prototype sketch lines: boot line uses `/dev/nvme0n1` instead of `/dev/ghost`, `cd /secret` returns "permission denied — nice try", `sudo` returns the standard sudoers incident notice, and `rm -rf /` returns "nice try, rm is read-only here".
+- Interactive text input with Tab completion, command history (↑/↓), and clickable command chips along the bottom for mouse and touch visitors without typing.
+- Font is VT323; display profile uses `scan: 1`, `flicker: true`, `glow: 0.7`, `safe: true`.
+- Silent at launch (mains hum and CRT whine carry the channel); mechanical keyboard typing sounds and error beeps may be proposed for approval later.
+
+### CH 03 Terminal: DOS-era boot, VGA font and key sounds (2026-10-28)
+
+The owner widened the approved scope on 2026-10-28 after seeing the first build, with three choices made in the plan review:
+
+- **Boot sequence (about 6 s, skippable):** a BIOS-style self test (memory count-up, device detection) replaces the earlier "mounting / waking / summoning" lines, then a larger loading screen with a block-letter logo and progress bar flips to the prompt. Click or any key skips; reduced motion skips it; it plays on every tune-in. See [the channel specification](../channels/03-terminal.md).
+- **Font:** an authentic IBM VGA text font, **PxPlus IBM VGA 8x16** by VileR (Ultimate Oldschool PC Font Pack, CC BY-SA 4.0), replacing VT323 in this channel. It has no `@fontsource` package, so the unmodified `WebPlus` woff is bundled in `src/channels/terminal/fonts/` with its licence text and credited. The share-alike term covers the font file only, not the site's code. The channel also moves to pure black.
+- **Key sounds:** every keypress clicks, using five CC0 Freesound recordings processed by `pnpm assets:terminal` (six clicks, Enter/Space, Backspace; 25 KB). This replaces "silent at launch" and the planned error beep and modem sound, which are not built. Real recordings, as the brief prefers; the owner approves the picks by listening on the real TV.
+- **Palette (later the same day):** the owner chose classic green-on-black monochrome over the VGA multi-colour text palette. One phosphor green in four brightnesses replaces the colours, with the TV's on-screen green as the bright tone, and the room glow turns green to match.
+- **Button bar removed (later the same day):** the bottom row of command chips (try: help, ls, open, servers, git log, discord, credits) is gone at the owner's request, and the terminal fills the glass. Projects stay reachable without typing through the `ls` listing's links. The scrollbar is styled in the same green.
+- Font size is 20 px (72 columns) rather than the VGA-native 16 px, so text stays legible at the 1280×650 minimum; the owner can change it.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.

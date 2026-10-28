@@ -1,0 +1,268 @@
+/* CH 03 Terminal: a DOS-era boot screen and shell, authored at 760×570. */
+
+/* PxPlus IBM VGA 8x16 by VileR (CC BY-SA 4.0), used unmodified. See CREDITS.md. */
+@font-face {
+  font-family: "PxPlus IBM VGA 8x16";
+  src: url("./fonts/WebPlus_IBM_VGA_8x16.woff") format("woff");
+  font-display: swap;
+}
+
+.root {
+  /* One phosphor green in five brightnesses, like a monochrome monitor. */
+  --fg: #33d65a;
+  --bright: #5fff7a;
+  --max: #d2ffdc;
+  --dim: #1f8a38;
+
+  position: relative;
+  width: 760px;
+  height: 570px;
+  overflow: clip;
+  background: #000;
+  color: var(--fg);
+  font-family: "PxPlus IBM VGA 8x16", ui-monospace, monospace;
+  font-size: 20px;
+  line-height: 22px;
+  text-rendering: optimizespeed;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hidden, not removed, while the boot runs: its links stay in the page but out of the tab order. */
+.screen[data-booting] {
+  visibility: hidden;
+}
+
+.terminal {
+  position: relative;
+  flex: 1;
+  overflow: hidden auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  cursor: text;
+}
+
+/* A blocky scrollbar in the phosphor green: a dim thumb on black, brighter on hover. */
+.terminal::-webkit-scrollbar {
+  width: 14px;
+}
+
+.terminal::-webkit-scrollbar-track {
+  background: #000;
+  border-left: 1px solid var(--dim);
+}
+
+.terminal::-webkit-scrollbar-thumb {
+  background: var(--dim);
+  border: 2px solid #000;
+}
+
+.terminal::-webkit-scrollbar-thumb:hover {
+  background: var(--fg);
+}
+
+.terminal::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Firefox has no pseudo-elements, only these two properties; Chromium would ignore the above if they were set. */
+@supports not selector(::-webkit-scrollbar) {
+  .terminal {
+    scrollbar-width: thin;
+    scrollbar-color: var(--dim) #000;
+  }
+}
+
+.system {
+  color: var(--dim);
+  white-space: pre-wrap;
+}
+
+.ok {
+  color: var(--bright);
+}
+
+.question {
+  color: var(--max);
+}
+
+.logo {
+  color: var(--bright);
+  white-space: pre;
+  line-height: 22px;
+  margin: 4px 0 10px;
+}
+
+.logo-sub {
+  color: var(--fg);
+}
+
+.prompt-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  white-space: pre-wrap;
+}
+
+.prompt-user {
+  color: var(--bright);
+}
+
+.prompt-sep {
+  color: var(--fg);
+}
+
+.prompt-dir {
+  color: var(--fg);
+}
+
+.prompt-cmd {
+  color: var(--max);
+  margin-left: 8px;
+}
+
+.text {
+  color: var(--fg);
+  white-space: pre-wrap;
+}
+
+.highlight {
+  color: var(--max);
+  white-space: pre-wrap;
+}
+
+.error {
+  color: var(--max);
+  white-space: pre-wrap;
+}
+
+.folder {
+  color: var(--bright);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.folder:hover,
+.folder:focus-visible {
+  color: #000;
+  background: var(--bright);
+  outline: none;
+}
+
+.file {
+  color: var(--dim);
+  display: inline-block;
+}
+
+.executable {
+  color: var(--bright);
+  display: inline-block;
+}
+
+.folder-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin: 2px 0;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.cmd-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: var(--max);
+  caret-color: var(--bright);
+  margin-left: 8px;
+  padding: 0;
+}
+
+/* The power-on screens sit over the shell until they finish or are skipped. */
+.boot {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  padding: 16px 20px;
+  overflow: clip;
+  background: #000;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.boot:focus-visible {
+  outline: 2px solid var(--bright);
+  outline-offset: -6px;
+}
+
+.boot-line {
+  white-space: pre;
+  min-height: 22px;
+}
+
+.boot-logo {
+  font-size: 24px;
+  line-height: 26px;
+  min-height: 26px;
+}
+
+.boot-hint {
+  position: absolute;
+  right: 20px;
+  bottom: 14px;
+  font-size: 16px;
+  color: var(--dim);
+}
+
+.tone-dim {
+  color: var(--dim);
+}
+
+.tone-ok {
+  color: var(--bright);
+}
+
+.tone-warn {
+  color: var(--max);
+}
+
+.tone-bright {
+  color: var(--max);
+}
+
+.tone-red,
+.tone-logo {
+  color: var(--bright);
+}
+
+.cursor::after {
+  content: "_";
+  color: var(--fg);
+  animation: blink 1s steps(1) infinite;
+}
+
+.boot[data-active="false"] .cursor::after {
+  animation-play-state: paused;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

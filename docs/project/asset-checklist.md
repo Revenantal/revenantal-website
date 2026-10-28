@@ -38,7 +38,7 @@ Full list with links: `docs/channels/soundscapes.md`.
 
 - [ ] TV Guide: music loop, row tick, stinger
 - [ ] Rev OS: startup chord, clicks, window sounds, error, CD-ROM, modem
-- [ ] Terminal: key presses, beep
+- [x] Terminal: key presses (six clicks, Enter/Space, Backspace); no error beep or modem sound
 - [ ] Night Drive: music, engine, whoosh, indicator, exit chime
 - [ ] Side Quest: music, 8-bit effects
 - [ ] Revscape: music, walk, door, XP, level-up, chat

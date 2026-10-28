@@ -33,6 +33,7 @@
     "assets:sounds": "python tools/assets/tv_sounds.py",
     "assets:music": "python tools/assets/channel_music.py",
     "assets:xbox": "python tools/assets/xbox_media.py",
+    "assets:terminal": "python tools/assets/terminal_sounds.py",
     "live:run": "node jobs/live/main.ts",
     "live:preview": "node tools/build/run-local-live.ts",
     "test:pelican": "node tools/checks/check-pelican.ts"
@@ -62,6 +63,12 @@
     {
       "name": "XBOX channel",
       "path": "dist/assets/channel-xbox-*.js",
+      "limit": "30 kB",
+      "gzip": true
+    },
+    {
+      "name": "Terminal channel",
+      "path": "dist/assets/channel-terminal-*.js",
       "limit": "30 kB",
       "gzip": true
     },
