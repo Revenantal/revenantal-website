@@ -4,7 +4,7 @@
 
 A real-time low-poly 3D town in the style of classic RuneScape, with its interface. Projects are buildings to visit. The most complex channel, built last.
 
-- **Kind:** game · **Folder:** `revscape` · **Build:** task 5.3 · **Status:** M1 (look around) built, dev-only; M2 to M10 not started
+- **Kind:** game · **Folder:** `revscape` · **Build:** task 5.3 · **Status:** M1 (look around) and M2 (walk) built, dev-only; M3 to M10 not started
 
 ## Concept
 
@@ -175,7 +175,7 @@ Notes:
 
 - **Files:** `camera.ts` (orbit, drag, wheel, pan, held keys, easing and limits), `town.ts` (layout), `mesh-builder.ts` and `world.ts` (flat-shaded triangles in chunks), `scene.ts` (the only file that imports three.js), `ChannelComponent.tsx` and `Revscape.module.css`. Everything except `scene.ts` is three-free and unit-tested.
 - **Opening it:** `pnpm dev`, then go to `http://localhost:5173/#ch6`. It is registered only in the dev server and in a preview build (`VITE_REVSCAPE_PREVIEW=1`), so the production site is unchanged. `pnpm size:revscape` builds the preview and checks the chunk.
-- **Controls:** drag to turn and tilt, wheel to zoom, Shift+drag to move the view (a temporary aid; the camera will follow the player from M2), compass to face north. PRESS START is a strip along the bottom, not a full screen, because the mouse works without the keyboard. After it, ←/→ turn, ↑/↓ tilt, Page Up/Down zoom, Esc releases.
+- **Controls:** drag to turn and tilt, wheel to zoom, Shift+drag to move the view (a temporary aid, replaced in M2 when the camera began to follow the player), compass to face north. PRESS START is a strip along the bottom, not a full screen, because the mouse works without the keyboard. After it, ←/→ turn, ↑/↓ tilt, Page Up/Down zoom, Esc releases.
 - **The town:** the Server Hall sits on the nearest plot (with a chimney), then each project in order on plots spiralling outward. Looks come from a hash of the project ID, so a project never changes. The world is 40×40 tiles, growing by two tiles at a time when 30 projects need more room. Ground, roofs, doors, windows, trees, a fountain, a market stall, crates and a fence are all generated in code.
 - **Render:** a 512×384 canvas scaled up pixelated, flat-shaded Lambert with vertex colours, black fog from 6 to 10 tiles beyond the view's centre, one mesh per 10-tile chunk so chunks out of view are skipped.
 - **Measured** (headless Chromium, software WebGL, 1920×1080): about 3,400 triangles and 9 to 14 draw calls per frame with 0 projects, 3,900 with 8 and 4,400 with 30, all under the 5,000 budget. Chunk: 135 KB gzip against 150 KB. Twenty tune-away and back cycles left one canvas and raised no WebGL context warnings. Under a 4× CPU throttle with no GPU, holding a key ran at about 16 fps, which says little about a real laptop.
@@ -201,7 +201,7 @@ The player, pathfinding, NPCs, hover text, menus, interface frame, minimap, tabs
 2. **Pitch range (approved):** 25° to 65°, starting at 40°.
 3. **Town size (approved):** a 40×40 tile world with a draw distance of about 12 tiles. The world grows in steps when there are more projects than fit.
 
-## M2 Plan: Walk (2026-10-28, draft, awaiting owner approval)
+## M2 Plan: Walk (approved 2026-10-28, built)
 
 **Goal:** a player stands in the town. Click the ground and they walk there, one tile per 600 ms game tick, round the buildings, with a yellow X where you clicked. The camera follows them. Still no NPCs, hover text, menus or interface.
 
@@ -243,13 +243,27 @@ About 70 more triangles, a few more draw calls and roughly 4 KB gzip on the 135 
 - Browser (headless Chromium): click to a far plot and watch the player arrive, click a building and nothing happens, 20 mount/unmount cycles, triangles still under 5,000 with 30 projects.
 - You play it on the real TV and judge the walk and the camera.
 
-### Choices for you
+### Choices (approved on the recommendations)
 
 1. **Blocked clicks.** Ignore a click on a building or tree (the original does nothing for the ground), or walk to the nearest open tile? I recommend ignore.
 2. **Hover tile.** The earlier milestone table listed a hover tile. The original highlights nothing, so I recommend leaving it out and relying on the hover text in M3.
 3. **Path shape.** The original prefers diagonals first, which gives its familiar staircase routes. I recommend copying that.
 4. **Keyboard walking.** None in the original. I recommend none now.
 5. **Player colour.** Red, as in the prototype and the mockup's minimap dot.
+
+### M2 as built (2026-10-28)
+
+- **Files:** `grid.ts` (blocked tiles), `props.ts` (what the small props cover), `path.ts` (routes), `player.ts` (the tick, the route and the glide), `picking.ts` (screen point to tile) and `figure.ts` (the player and the X). All three-free and unit-tested. `scene.ts` draws them; `ChannelComponent.tsx` handles clicks and the follow camera.
+- **Routes:** a breadth-first flood from the goal, then a walk back from the start. It takes a diagonal that closes the gap on both axes first, then straight, so routes keep the original's diagonal-then-straight shape without zigzagging, and are always as short as any route allows. A diagonal needs both neighbouring tiles free, so there is no corner cutting.
+- **The tick:** 600 ms, one tile per tick, however the frames arrive. A new click mid-step finishes the step, then re-routes.
+- **Clicks:** a press that moves 4 glass pixels or less is a click; more is a drag. The ground under the click is found by casting a ray onto the ground, and refined for the gentle hills. Clicks on buildings, trees, the fountain and props do nothing.
+- **Hidden players:** roofs can hide the player, so a faint see-through copy of them shows through any building in the way, and the yellow X is always drawn on top. (The original game hides roofs; this keeps the town intact.)
+- **Chunk size:** see `pnpm size:revscape` (the budget is 150 KB gzip).
+- **Zoom:** the farthest zoom is now 22 tiles (it was 30 in the first draft) so a 30-project town stays under the triangle budget at every angle.
+- **Measured** (headless Chromium, software WebGL): 30 projects at the start 3,900 triangles; zoomed all the way out at the lowest pitch 4,790, the worst case found; 21 to 31 draw calls. Twenty tune-away cycles left one canvas and raised no WebGL warnings. No console errors.
+- **Camera:** follows the player; the first draft's Shift+drag panning is gone.
+- **Noticed:** at the spawn the houses on the south side of the lane sit close to the camera and their roofs fill much of the lower picture. Roof hiding, a different spawn or a higher default pitch could all help; the owner's call when they have seen it.
+- **Not done:** NPCs, hover text, menus, the interface frame, saves (the player always starts at the spawn).
 
 ## References
 

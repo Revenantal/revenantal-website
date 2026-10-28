@@ -49,6 +49,40 @@ export function groundHeight(x: number, z: number, flat: number): number {
   return noise * 0.4 * Math.min(1, edge / 4);
 }
 
+/**
+ * How far from the centre the ground stays flat: across every plot, rolling beyond.
+ *
+ * @param town - The layout.
+ * @returns Radius in tiles.
+ */
+export function flatRadius(town: Town): number {
+  return Math.max(
+    ...town.plots.map((p) => Math.max(Math.abs(p.x), Math.abs(p.z)) + 4),
+    8,
+  );
+}
+
+/**
+ * The ground's height at any point, blended between the four corners of its tile.
+ *
+ * @param x - World x in tiles.
+ * @param z - World z in tiles.
+ * @param flat - Radius within which the ground stays flat.
+ * @returns Height in tiles.
+ */
+export function surfaceHeight(x: number, z: number, flat: number): number {
+  const i = Math.floor(x);
+  const j = Math.floor(z);
+  const fx = x - i;
+  const fz = z - j;
+  const north =
+    groundHeight(i, j, flat) * (1 - fx) + groundHeight(i + 1, j, flat) * fx;
+  const south =
+    groundHeight(i, j + 1, flat) * (1 - fx) +
+    groundHeight(i + 1, j + 1, flat) * fx;
+  return north * (1 - fz) + south * fz;
+}
+
 function addHouse(builder: MeshBuilder, plot: Plot) {
   const { x, z, ry, wall } = plot;
   const sin = Math.sin(ry);
@@ -163,10 +197,7 @@ export function buildWorld(town: Town): Chunk[] {
     return builder;
   };
 
-  const flat = Math.max(
-    ...town.plots.map((p) => Math.max(Math.abs(p.x), Math.abs(p.z)) + 4),
-    8,
-  );
+  const flat = flatRadius(town);
   const noise = random(3);
   for (let i = -town.half; i < town.half; i += 1) {
     for (let j = -town.half; j < town.half; j += 1) {

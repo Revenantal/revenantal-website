@@ -157,20 +157,20 @@ All individual channel builds are awaiting plan review and explicit owner confir
 
 ## Channel Status at a Glance
 
-| Ch  | Name             | Design                                                   | Build               |
-| --- | ---------------- | -------------------------------------------------------- | ------------------- |
-| 1   | TV Guide         | Mockup done (v3 with forecast and radar)                 | Built (3.4, 3.5)    |
-| 2   | Rev OS           | Mockup done                                              | Not started (4.3)   |
-| 3   | Terminal         | Approved sketch                                          | Built (4.2)         |
-| 4   | Night Drive      | Mockup done; needs a cleaner, less "paint" look at build | Not started (5.2)   |
-| 5   | Side Quest       | Mockup done                                              | Not started (5.1)   |
-| 6   | Revscape         | 3D prototype done; M1 built, M2 to M10 planned           | M1 built (dev-only) |
-| 7   | XBOX             | Halo menu modelled on halome.nu                          | Built (4.1)         |
-| 8   | The Late Show    | Mockup done                                              | Not started (4.7)   |
-| 9   | Paid Programming | Mockup done; clips not made                              | Not started (4.8)   |
-| 10  | Status           | Rack design and sprites done                             | Built (3.2)         |
-| 11  | Credits          | Movie-style roll with departments                        | Built (3.6)         |
-| 12  | Coin Drop        | Mockup done                                              | Not started (4.5)   |
+| Ch  | Name             | Design                                                   | Build                   |
+| --- | ---------------- | -------------------------------------------------------- | ----------------------- |
+| 1   | TV Guide         | Mockup done (v3 with forecast and radar)                 | Built (3.4, 3.5)        |
+| 2   | Rev OS           | Mockup done                                              | Not started (4.3)       |
+| 3   | Terminal         | Approved sketch                                          | Built (4.2)             |
+| 4   | Night Drive      | Mockup done; needs a cleaner, less "paint" look at build | Not started (5.2)       |
+| 5   | Side Quest       | Mockup done                                              | Not started (5.1)       |
+| 6   | Revscape         | 3D prototype done; M1, M2 built; M3 to M10 planned       | M1, M2 built (dev-only) |
+| 7   | XBOX             | Halo menu modelled on halome.nu                          | Built (4.1)             |
+| 8   | The Late Show    | Mockup done                                              | Not started (4.7)       |
+| 9   | Paid Programming | Mockup done; clips not made                              | Not started (4.8)       |
+| 10  | Status           | Rack design and sprites done                             | Built (3.2)             |
+| 11  | Credits          | Movie-style roll with departments                        | Built (3.6)             |
+| 12  | Coin Drop        | Mockup done                                              | Not started (4.5)       |
 
 ## Latest Review (2026-10-18)
 
@@ -257,3 +257,5 @@ Task 4.2 (2026-10-28, on `feat/4.2-terminal`): channel 3 Terminal, the `revenant
 Task 4.4 (2026-10-28, on `feat/4.4-input-capture`): input capture, PRESS START and saves. The TV input layer now grants a channel the keyboard only for the live picture, and only after a user gesture where the browser reports it. While captured the arrow keys stand down (volume +/− still work). Esc, a press outside the picture, tuning away, power-off, a hidden tab or detuning hands the keys back, and a stale scope can never take or drop a newer scope's keys. Channels get a shared `CaptureOverlay` (PRESS START, then an "ESC to release" tag) and `useCaptureFocus`. Saves live under `rv-save-<id>` as a versioned envelope (finite JSON, up to 100,000 characters), through `src/data/channel-save.ts` and `store.saveFor(id)`; storage and parser failures are contained and an ended scope cannot write. The contract gained a PRESS START check for `game` channels, with a sample game. New tests cover the capture rules through the real TV and the save helper. No channel uses it yet; Revscape is the first.
 
 Revscape M1, look around (2026-10-28, on the long-running `feat/revscape` branch, dev-only): the first of ten milestones for channel 6. A still low-poly town in three.js (0.186.1, pinned) that you look around: drag to turn and tilt, wheel to zoom, Shift+drag to move, a compass that faces north, and the arrow keys after a PRESS START strip. One building per project spiralling outward from a fountain, the Server Hall on the nearest plot, trees, stall, crates and fence, with fog closing in at about 12 tiles. Drawn at 512×384 and scaled up pixelated. 3,400 to 4,400 triangles with 0, 8 and 30 projects; chunk 135 KB gzip of 150 KB. Without WebGL it shows the project links. Registered only in the dev server (open `#ch6`) and in the `pnpm size:revscape` preview build; production is unchanged. `CaptureOverlay` gained a `compact` strip. Not yet done: the owner's look on the real TV, and milestones M2 to M10 (each needs its own approval).
+
+Revscape M2, walk (2026-10-28, on `feat/revscape`, dev-only): a red blocky player stands on the lane south of the fountain. Click the ground and they walk there, one tile per 600 ms tick, by the shortest route round buildings, trees, the fountain and props, with no corner cutting and the original's diagonal-then-straight shape; a yellow X marks the spot until they arrive, and a new click mid-step re-routes after the step. The camera follows them. A faint see-through copy of the player and an always-visible X show through roofs. Clicks that move more than 4 pixels are drags and still turn and tilt the camera; blocked tiles and the right and middle buttons do nothing. Paused while inactive, no glide with reduced motion, no saves yet. Farthest zoom lowered to 22 tiles so 30 projects stay under 5,000 triangles at every angle (worst case measured 4,790). New three-free modules (`grid`, `path`, `player`, `picking`, `figure`) with unit tests, including a check that picking agrees with three.js's own projection. Not yet done: the owner's play on the real TV, and milestones M3 to M10 (each needs its own approval).

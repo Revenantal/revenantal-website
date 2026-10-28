@@ -158,6 +158,42 @@ export class MeshBuilder {
   }
 
   /**
+   * Adds one flat rectangle lying on the ground, facing up: two triangles.
+   *
+   * @param cx - Centre x.
+   * @param y - Height.
+   * @param cz - Centre z.
+   * @param w - Length along local x.
+   * @param d - Width along local z.
+   * @param color - Its colour.
+   * @param ry - Turn about the vertical axis, in radians.
+   */
+  flat(
+    cx: number,
+    y: number,
+    cz: number,
+    w: number,
+    d: number,
+    color: Rgb,
+    ry = 0,
+  ) {
+    const sin = Math.sin(ry);
+    const cos = Math.cos(ry);
+    const at = (lx: number, lz: number): Vec => [
+      cx + lx * cos + lz * sin,
+      y,
+      cz - lx * sin + lz * cos,
+    ];
+    this.quad(
+      at(-w / 2, d / 2),
+      at(w / 2, d / 2),
+      at(w / 2, -d / 2),
+      at(-w / 2, -d / 2),
+      color,
+    );
+  }
+
+  /**
    * Adds a gable roof: two slopes, two end triangles, and an underside.
    *
    * @param cx - Centre x.

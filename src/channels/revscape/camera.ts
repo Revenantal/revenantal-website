@@ -11,6 +11,8 @@ export type CameraState = {
   z: number;
 };
 
+/** The camera's vertical field of view, in degrees. */
+export const FOV = 46;
 /** Lowest camera pitch, in degrees: low and scenic. */
 export const PITCH_MIN = 25;
 /** Highest camera pitch, in degrees: almost top-down. */
@@ -18,7 +20,7 @@ export const PITCH_MAX = 65;
 /** Closest the camera may zoom, in tiles. */
 export const DIST_MIN = 10;
 /** Furthest the camera may zoom, in tiles. */
-export const DIST_MAX = 30;
+export const DIST_MAX = 22;
 
 /** Where the camera starts: south of the fountain, looking north at 40°. */
 export const START: Readonly<CameraState> = {
@@ -35,7 +37,6 @@ const WHEEL_ZOOM = 0.01; // tiles per wheel delta unit
 const KEY_YAW = 110; // degrees per second held
 const KEY_PITCH = 60;
 const KEY_ZOOM = 10; // tiles per second held
-const PAN_PER_PIXEL = 0.04; // tiles per pixel at distance 14
 
 const clamp = (value: number, low: number, high: number) =>
   Math.min(high, Math.max(low, value));
@@ -93,30 +94,6 @@ export function drag(state: CameraState, dx: number, dy: number): CameraState {
  */
 export function wheel(state: CameraState, deltaY: number): CameraState {
   return { ...state, dist: state.dist + deltaY * WHEEL_ZOOM };
-}
-
-/**
- * Slides the target over the ground, relative to the view, as when panning with Shift held.
- * A temporary look-around aid: once a player exists the camera follows them instead.
- *
- * @param state - The wanted camera state.
- * @param dx - Pixels dragged right.
- * @param dy - Pixels dragged down.
- * @returns The new wanted state, before limits.
- */
-export function pan(state: CameraState, dx: number, dy: number): CameraState {
-  const scale = PAN_PER_PIXEL * (state.dist / START.dist);
-  const yaw = (state.yaw * Math.PI) / 180;
-  const rightX = Math.cos(yaw);
-  const rightZ = -Math.sin(yaw);
-  const forwardX = -Math.sin(yaw);
-  const forwardZ = -Math.cos(yaw);
-  // Dragging the ground right moves the view left; dragging it down moves the view forward.
-  return {
-    ...state,
-    x: state.x - dx * scale * rightX + dy * scale * forwardX,
-    z: state.z - dx * scale * rightZ + dy * scale * forwardZ,
-  };
 }
 
 /** Held keys that move the camera. */

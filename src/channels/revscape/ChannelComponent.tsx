@@ -14,14 +14,23 @@ import {
   drag,
   ease,
   limit,
-  pan,
   wheel,
 } from "./camera";
 import type { CameraState, HeldKeys } from "./camera";
-import { createScene } from "./scene";
+import { SPAWN, buildGrid } from "./grid";
+import { pickTile } from "./picking";
+import {
+  animatePlayer,
+  createPlayer,
+  isMoving,
+  position,
+  updatePlayer,
+  walkTo,
+} from "./player";
+import { VIEW, createScene } from "./scene";
 import type { SceneView } from "./scene";
 import { layoutTown } from "./town";
-import { buildWorld } from "./world";
+import { buildWorld, flatRadius, surfaceHeight } from "./world";
 import styles from "./Revscape.module.css";
 
 type Status = "loading" | "ready" | "unavailable";
@@ -37,8 +46,10 @@ const KEYS: Record<string, keyof HeldKeys> = {
 
 const LINE_PIXELS = 16;
 const GLASS_WIDTH = 760;
+/** A press that moves less than this many glass pixels is a click, not a drag. */
+const CLICK_SLOP = 4;
 const FRAME_FALLBACK_SECONDS = 1 / 60;
-const MAX_FRAME_SECONDS = 0.1;
+const MAX_FRAME_SECONDS = 0.25;
 
 /**
  * The project links, in building order. Visible when 3D is unavailable, otherwise hidden
@@ -73,10 +84,11 @@ function ProjectList({
 }
 
 /**
- * CH 06 Revscape, milestone 1: a still low-poly town to look around. The 3D view is a canvas
- * drawn at 512×384 and scaled up pixelated; the compass is DOM over it. The camera turns and
- * tilts by dragging (or the arrow keys after PRESS START), zooms with the wheel, and the
- * compass faces north. Frames are drawn only while something moves, and only while active.
+ * CH 06 Revscape, milestones 1 and 2: a low-poly town to look around and walk in. The 3D view
+ * is a canvas drawn at 512×384 and scaled up pixelated; the compass is DOM over it. Drag to
+ * turn and tilt (or the arrow keys after PRESS START), wheel to zoom, click the ground to
+ * walk there. The camera follows the player. Frames are drawn only while something moves,
+ * and only while active.
  *
  * @param props - Host props.
  * @returns The channel.
@@ -99,12 +111,31 @@ export function ChannelComponent(props: ChannelProps) {
   const keysRef = useRef<HeldKeys>({ ...NO_KEYS });
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
-  const draggingRef = useRef<{ x: number; y: number; pan: boolean } | null>(
-    null,
-  );
-  const liveRef = useRef({ active, reducedMotion, half: town.half });
+  const draggingRef = useRef<{
+    x: number;
+    y: number;
+    startX: number;
+    startY: number;
+    moved: number;
+  } | null>(null);
+  const grid = useMemo(() => buildGrid(town), [town]);
+  const flat = useMemo(() => flatRadius(town), [town]);
+  const playerRef = useRef(createPlayer(SPAWN));
+  // A new world puts the player back at the start.
   useEffect(() => {
-    liveRef.current = { active, reducedMotion, half: town.half };
+    playerRef.current = createPlayer(SPAWN);
+    shownRef.current = { ...START, x: SPAWN.i + 0.5, z: SPAWN.j + 0.5 };
+    wantedRef.current = { ...shownRef.current };
+  }, [grid]);
+  const liveRef = useRef({
+    active,
+    reducedMotion,
+    half: town.half,
+    grid,
+    flat,
+  });
+  useEffect(() => {
+    liveRef.current = { active, reducedMotion, half: town.half, grid, flat };
   });
 
   // Draws a frame, then keeps drawing only while the camera is still moving.
@@ -124,8 +155,17 @@ export function ChannelComponent(props: ChannelProps) {
           : Math.min(MAX_FRAME_SECONDS, (time - lastTimeRef.current) / 1000);
       lastTimeRef.current = time;
       const reach = settings.half - 2;
+      const player = playerRef.current;
+      updatePlayer(player, seconds * 1000);
+      animatePlayer(player, seconds);
+      const at = position(player, !settings.reducedMotion);
+      // The camera follows the player; dragging and keys still turn, tilt and zoom it.
       wantedRef.current = limit(
-        applyKeys(wantedRef.current, keysRef.current, seconds),
+        {
+          ...applyKeys(wantedRef.current, keysRef.current, seconds),
+          x: at.x,
+          z: at.z,
+        },
         reach,
       );
       const next = ease(
@@ -135,7 +175,25 @@ export function ChannelComponent(props: ChannelProps) {
         settings.reducedMotion,
       );
       shownRef.current = next.state;
-      scene.render(shownRef.current);
+      const height = (x: number, z: number) =>
+        surfaceHeight(x, z, settings.flat);
+      const goal = player.goal;
+      scene.render(shownRef.current, {
+        player: {
+          ...at,
+          y: height(at.x, at.z),
+          facing: player.facing,
+          swing: player.swing,
+          phase: player.phase,
+        },
+        marker: goal
+          ? {
+              x: goal.i + 0.5,
+              y: height(goal.i + 0.5, goal.j + 0.5) + 0.03,
+              z: goal.j + 0.5,
+            }
+          : null,
+      });
       if (needleRef.current)
         needleRef.current.style.transform = `rotate(${shownRef.current.yaw.toFixed(1)}deg)`;
       if (rootRef.current) {
@@ -143,7 +201,7 @@ export function ChannelComponent(props: ChannelProps) {
         rootRef.current.dataset["triangles"] = String(stats.triangles);
         rootRef.current.dataset["calls"] = String(stats.calls);
       }
-      if (!next.settled || anyKey(keysRef.current)) {
+      if (!next.settled || anyKey(keysRef.current) || isMoving(player)) {
         frameRef.current = requestAnimationFrame(tickRef.current);
       } else {
         lastTimeRef.current = null;
@@ -209,7 +267,9 @@ export function ChannelComponent(props: ChannelProps) {
     draggingRef.current = {
       x: event.clientX,
       y: event.clientY,
-      pan: event.shiftKey,
+      startX: event.clientX,
+      startY: event.clientY,
+      moved: 0,
     };
     // jsdom and a few old browsers lack pointer capture.
     if (typeof event.currentTarget.setPointerCapture === "function")
@@ -224,16 +284,39 @@ export function ChannelComponent(props: ChannelProps) {
       event.currentTarget.getBoundingClientRect().width / GLASS_WIDTH || 1;
     const dx = (event.clientX - start.x) / scale;
     const dy = (event.clientY - start.y) / scale;
-    draggingRef.current = { ...start, x: event.clientX, y: event.clientY };
-    change(
-      start.pan
-        ? pan(wantedRef.current, dx, dy)
-        : drag(wantedRef.current, dx, dy),
-    );
+    draggingRef.current = {
+      ...start,
+      x: event.clientX,
+      y: event.clientY,
+      moved: Math.hypot(
+        (event.clientX - start.startX) / scale,
+        (event.clientY - start.startY) / scale,
+      ),
+    };
+    if (draggingRef.current.moved > CLICK_SLOP)
+      change(drag(wantedRef.current, dx, dy));
   };
-  const endDrag = (event: TargetedPointerEvent<HTMLCanvasElement>) => {
+  const onPointerCancel = (event: TargetedPointerEvent<HTMLCanvasElement>) => {
     draggingRef.current = null;
     delete event.currentTarget.dataset["dragging"];
+  };
+  const onPointerUp = (event: TargetedPointerEvent<HTMLCanvasElement>) => {
+    const press = draggingRef.current;
+    onPointerCancel(event);
+    // A left press that barely moved is a click: walk to the tile under it.
+    if (!press || event.button !== 0 || press.moved > CLICK_SLOP) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    const settings = liveRef.current;
+    if (!settings.active) return;
+    const tile = pickTile(
+      shownRef.current,
+      ((event.clientX - rect.left) / rect.width) * 2 - 1,
+      1 - ((event.clientY - rect.top) / rect.height) * 2,
+      VIEW.width / VIEW.height,
+      (x, z) => surfaceHeight(x, z, settings.flat),
+    );
+    if (tile && walkTo(playerRef.current, settings.grid, tile)) schedule();
   };
   const onWheel = (event: TargetedWheelEvent<HTMLCanvasElement>) => {
     event.preventDefault();
@@ -301,8 +384,8 @@ export function ChannelComponent(props: ChannelProps) {
           aria-label="A low-poly town square with a building for each project. The project list has a link for every building."
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerCancel={endDrag}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerCancel}
           onWheel={onWheel}
         />
       </div>
@@ -315,7 +398,7 @@ export function ChannelComponent(props: ChannelProps) {
         <div ref={needleRef} className={styles.needle} />
       </button>
       <p className={styles.help} aria-hidden="true">
-        Drag: turn and tilt · Wheel: zoom · Shift+drag: move
+        Click: walk · Drag: turn and tilt · Wheel: zoom
       </p>
       <ProjectList projects={projects} visible={false} />
       <CaptureOverlay

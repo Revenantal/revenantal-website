@@ -11,7 +11,6 @@ import {
   drag,
   ease,
   limit,
-  pan,
   pose,
   wheel,
   wrapDegrees,
@@ -60,17 +59,6 @@ describe("mouse input", () => {
   it("zooms out when the wheel scrolls away", () => {
     expect(wheel(start, 100).dist).toBeGreaterThan(start.dist);
     expect(wheel(start, -100).dist).toBeLessThan(start.dist);
-  });
-
-  it("pans relative to the view", () => {
-    // Facing north, dragging the ground down brings the view forward (north, -z).
-    expect(pan(start, 0, 50).z).toBeLessThan(0);
-    // Dragging the ground left moves the view right (east, +x).
-    expect(pan(start, -50, 0).x).toBeGreaterThan(0);
-    // Turned to face east (yaw 90), forward is +x.
-    const east = pan({ ...start, yaw: 90 }, 0, 50);
-    expect(east.x).toBeLessThan(0.0001 + 0);
-    expect(Math.abs(east.z)).toBeLessThan(0.0001);
   });
 });
 

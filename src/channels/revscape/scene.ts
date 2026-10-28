@@ -1,6 +1,10 @@
+import type { Material } from "three";
 import {
   BufferGeometry,
   Color,
+  Group,
+  GreaterDepth,
+  MeshBasicMaterial,
   DirectionalLight,
   Float32BufferAttribute,
   Fog,
@@ -13,8 +17,10 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three";
-import { pose } from "./camera";
+import { FOV, pose } from "./camera";
 import type { CameraState } from "./camera";
+import { HIP, SHOULDER, buildFigure, buildMarker } from "./figure";
+import type { Part } from "./figure";
 import type { Chunk } from "./world";
 
 /** The picture's size in pixels. The canvas is drawn this small and scaled up, pixelated. */
@@ -24,10 +30,23 @@ export const VIEW = { width: 512, height: 384 } as const;
 const FOG_NEAR = 6;
 const FOG_FAR = 10;
 
+/** What moves: the player and the destination marker, in world units. */
+export type Entities = {
+  player: {
+    x: number;
+    y: number;
+    z: number;
+    facing: number;
+    swing: number;
+    phase: number;
+  };
+  marker: { x: number; y: number; z: number } | null;
+};
+
 /** A running 3D view. */
 export type SceneView = {
-  /** Draws the town from a camera state. */
-  render: (state: CameraState) => void;
+  /** Draws the town and what moves in it from a camera state. */
+  render: (state: CameraState, entities: Entities) => void;
   /** What the last frame cost. */
   stats: () => { triangles: number; calls: number };
   /** Frees the GPU memory and the WebGL context. Safe to call twice. */
@@ -62,7 +81,7 @@ export function createScene(
   sun.position.set(-8, 14, 6);
   scene.add(sun);
 
-  const camera = new PerspectiveCamera(46, VIEW.width / VIEW.height, 0.1, 40);
+  const camera = new PerspectiveCamera(FOV, VIEW.width / VIEW.height, 0.1, 40);
   const material = new MeshLambertMaterial({
     vertexColors: true,
     flatShading: true,
@@ -82,6 +101,57 @@ export function createScene(
     return geometry;
   });
 
+  const geometryOf = (part: Part) => {
+    const geometry = new BufferGeometry();
+    geometry.setAttribute(
+      "position",
+      new Float32BufferAttribute(part.positions, 3),
+    );
+    geometry.setAttribute("color", new Float32BufferAttribute(part.colors, 3));
+    geometries.push(geometry);
+    return geometry;
+  };
+  const figure = buildFigure();
+  const bodyGeometry = geometryOf(figure.body);
+  const legGeometry = geometryOf(figure.leg);
+  const armGeometry = geometryOf(figure.arm);
+  // One person made of five meshes; the same geometry is drawn twice, solid and, where a
+  // building hides them, as a faint see-through shape.
+  const makePerson = (shown: Material) => {
+    const group = new Group();
+    const legs = [-1, 1].map((side) => {
+      const mesh = new Mesh(legGeometry, shown);
+      mesh.position.set(side * HIP.x, HIP.y, 0);
+      return mesh;
+    });
+    const arms = [-1, 1].map((side) => {
+      const mesh = new Mesh(armGeometry, shown);
+      mesh.position.set(side * SHOULDER.x, SHOULDER.y, 0);
+      return mesh;
+    });
+    group.add(new Mesh(bodyGeometry, shown), ...legs, ...arms);
+    scene.add(group);
+    return { group, legs, arms };
+  };
+  const ghostMaterial = new MeshBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.45,
+    depthWrite: false,
+    // Only where something nearer is in the way.
+    depthFunc: GreaterDepth,
+  });
+  const people = [makePerson(material), makePerson(ghostMaterial)];
+  // The destination X is always drawn on top, even behind a roof.
+  const markerMaterial = new MeshBasicMaterial({
+    vertexColors: true,
+    depthTest: false,
+  });
+  const marker = new Mesh(geometryOf(buildMarker()), markerMaterial);
+  marker.renderOrder = 10;
+  marker.visible = false;
+  scene.add(marker);
+
   let lost = false;
   const handleLost = (event: Event) => {
     event.preventDefault();
@@ -92,8 +162,26 @@ export function createScene(
 
   let disposed = false;
   return {
-    render: (state) => {
+    render: (state, entities) => {
       if (disposed || lost) return;
+      const { player } = entities;
+      const swing = Math.sin(player.phase) * 0.8 * player.swing;
+      for (const { group, legs, arms } of people) {
+        group.position.set(player.x, player.y, player.z);
+        group.rotation.y = player.facing;
+        // Opposite arms and legs swing together, as in a walk.
+        legs[0]?.rotation.set(swing, 0, 0);
+        legs[1]?.rotation.set(-swing, 0, 0);
+        arms[0]?.rotation.set(-swing, 0, 0);
+        arms[1]?.rotation.set(swing, 0, 0);
+      }
+      marker.visible = entities.marker !== null;
+      if (entities.marker)
+        marker.position.set(
+          entities.marker.x,
+          entities.marker.y,
+          entities.marker.z,
+        );
       const { position, target } = pose(state);
       camera.position.set(...position);
       camera.lookAt(...target);
@@ -116,6 +204,8 @@ export function createScene(
       canvas.removeEventListener("webglcontextlost", handleLost);
       for (const geometry of geometries) geometry.dispose();
       material.dispose();
+      markerMaterial.dispose();
+      ghostMaterial.dispose();
       renderer.dispose();
       renderer.forceContextLoss();
     },
