@@ -342,7 +342,20 @@ The owner widened the approved scope on 2026-10-28 after seeing the first build,
 - **Button bar removed (later the same day):** the bottom row of command chips (try: help, ls, open, servers, git log, discord, credits) is gone at the owner's request, and the terminal fills the glass. Projects stay reachable without typing through the `ls` listing's links. The scrollbar is styled in the same green.
 - Font size is 20 px (72 columns) rather than the VGA-native 16 px, so text stays legible at the 1280×650 minimum; the owner can change it.
 
-## Clarifications
+## CH 06 Revscape: planning (2026-10-28)
+
+The owner promoted Revscape ahead of the other remaining channels and answered the first planning questions. This is **not** build approval: more planning comes first, then a plan review and an explicit go-ahead (see `AGENTS.md` → Channel Plan Approval).
+
+- **Order:** Revscape is promoted. It follows task 4.4 (input capture, PRESS START and saves), which it needs, and comes before 4.3 and 4.5 to 4.8. The exact task numbers are settled when the plan is approved.
+- **Goal:** copy old-school RuneScape's look, navigation and controls (mechanics and feel only; original assets only).
+- **Interface tabs:** the owner wants all of them usable. Quest tab shows GitHub activity. Stats tab shows the game servers. The Music tab lists Revscape's own tracks and the visitor can switch between them, shown in the OSRS music-tab style. The owner decided Revscape starts its own music library; it does not reuse the other channels' tracks, so the host rule on channel-declared sounds is unchanged and the XBOX/Halo theme is out. Other tabs are open for discussion.
+- **Chat:** visitors can type in the chat box. What they type also appears above the character's head, as in the game. It stays local: nothing is sent or stored.
+- **Guide NPC:** the chat name is "Visitor". The guide uses click-to-continue dialogue, short and friendly, with a joke.
+- **Movement:** walking only for now; running is revisited near the end.
+- **Camera:** pitch is adjustable, as in the game.
+- **Ambient life:** NPCs wander around. No day and night.
+- **Milestones:** the build is split into ten parts (M1 to M10, in the spec). The owner approves each milestone separately before it is built; none is approved yet.
+- **Open:** which tracks to source (count, style, licences) and the remaining tab contents.
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.
 

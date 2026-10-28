@@ -164,7 +164,7 @@ All individual channel builds are awaiting plan review and explicit owner confir
 | 3   | Terminal         | Approved sketch                                          | Built (4.2)       |
 | 4   | Night Drive      | Mockup done; needs a cleaner, less "paint" look at build | Not started (5.2) |
 | 5   | Side Quest       | Mockup done                                              | Not started (5.1) |
-| 6   | Revscape         | 3D prototype done                                        | Not started (5.3) |
+| 6   | Revscape         | 3D prototype done; planning (promoted)                   | Not started (5.3) |
 | 7   | XBOX             | Halo menu modelled on halome.nu                          | Built (4.1)       |
 | 8   | The Late Show    | Mockup done                                              | Not started (4.7) |
 | 9   | Paid Programming | Mockup done; clips not made                              | Not started (4.8) |

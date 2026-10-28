@@ -91,11 +91,13 @@ Each channel is its own release, behind its own gate (contract tests plus a look
 
 ## Phase 5 — Heavy Channels
 
-| Task | Work                                                | Docs                         |
-| ---- | --------------------------------------------------- | ---------------------------- |
-| 5.1  | Channel 5 — Side Quest                              | `channels/05-side-quest.md`  |
-| 5.2  | Channel 4 — Night Drive                             | `channels/04-night-drive.md` |
-| 5.3  | Channel 6 — Revscape (three.js, pathfinding) — last | `channels/06-revscape.md`    |
+| Task | Work                                                               | Docs                         |
+| ---- | ------------------------------------------------------------------ | ---------------------------- |
+| 5.1  | Channel 5 — Side Quest                                             | `channels/05-side-quest.md`  |
+| 5.2  | Channel 4 — Night Drive                                            | `channels/04-night-drive.md` |
+| 5.3  | Channel 6 — Revscape (three.js, pathfinding) — promoted, see below | `channels/06-revscape.md`    |
+
+Revscape was promoted on 2026-10-28: after 4.4 it is built before the other open channels, and its task number is reset when its plan is approved. See `project-decisions.md` → CH 06 Revscape: planning.
 
 **Gate 5:** all channels selected for v1 live; deferred or omitted channels recorded with their positions left empty; v1 acceptance criteria met for the selected lineup.
 
