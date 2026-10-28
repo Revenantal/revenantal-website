@@ -173,6 +173,10 @@ export function executeCommand(
       add("text", "  discord         Copy Discord username to clipboard");
       add("text", "  credits         Show site credits and attributions");
       add("text", "  clear           Clear the terminal screen");
+      add(
+        "system",
+        "Tab completes, Up/Down walk history, Esc hands the keys back.",
+      );
       break;
     }
 

@@ -5,6 +5,7 @@ Photo and sound pipelines for the TV. Run by hand; outputs are committed under `
 Needs Python 3.12 with `pip install -r tools/assets/requirements.txt`, and ffmpeg on PATH for sound encoding.
 
 - `pnpm assets:sprites` runs `tv_sprites.py`: keys the screen, repaints the dial without numerals, cuts the knob, volume ring/cap, button housing/faces and door, and writes WebP to `public/assets/tv/`.
+- `pnpm assets:terminal` runs `terminal_sounds.py`: the same steps for the Terminal's eight key sounds (`public/assets/sounds/terminal/`), cut from CC0 Freesound recordings kept in `docs/reference/assets/sounds/`.
 - `pnpm assets:sounds` runs `tv_sounds.py`: cuts, trims, fades and normalises each TV sound, then writes AAC `.m4a` to `public/assets/sounds/`. Pass `--wav` to check the processing without ffmpeg.
 
 - `pnpm assets:music` runs `channel_music.py`: cuts each channel's music to its loop, fades the join, matches levels and writes mono AAC `.m4a` within 300 KB to `public/assets/music/`.

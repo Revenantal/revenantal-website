@@ -1,17 +1,35 @@
-/* CH 03 Terminal: phosphor shell, authored at 760×570. */
+/* CH 03 Terminal: a DOS-era boot screen and shell, authored at 760×570. */
+
+/* PxPlus IBM VGA 8x16 by VileR (CC BY-SA 4.0), used unmodified. See CREDITS.md. */
+@font-face {
+  font-family: "PxPlus IBM VGA 8x16";
+  src: url("./fonts/WebPlus_IBM_VGA_8x16.woff") format("woff");
+  font-display: swap;
+}
 
 .root {
   position: relative;
-  display: flex;
-  flex-direction: column;
   width: 760px;
   height: 570px;
   overflow: clip;
-  background: #070303;
-  color: #e8d5d5;
-  font-family: var(--font-osd), ui-monospace, monospace;
-  font-size: 19px;
-  line-height: 1.35;
+  background: #000;
+  color: #aaa;
+  font-family: "PxPlus IBM VGA 8x16", ui-monospace, monospace;
+  font-size: 20px;
+  line-height: 22px;
+  text-rendering: optimizespeed;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hidden, not removed, while the boot runs: its links stay in the page but out of the tab order. */
+.screen[data-booting] {
+  visibility: hidden;
 }
 
 .terminal {
@@ -21,34 +39,32 @@
   padding: 16px 20px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 0;
   cursor: text;
 }
 
 .system {
-  color: #6e5050;
+  color: #555;
   white-space: pre-wrap;
 }
 
 .ok {
-  color: #5ef28a;
+  color: #5f5;
 }
 
 .question {
-  color: #ffb347;
+  color: #ff5;
 }
 
 .logo {
-  color: #ff2a36;
-  font-weight: 600;
+  color: #f55;
   white-space: pre;
-  line-height: 1.1;
-  margin: 4px 0;
+  line-height: 22px;
+  margin: 4px 0 10px;
 }
 
 .logo-sub {
-  color: #e8d5d5;
-  font-weight: 400;
+  color: #aaa;
 }
 
 .prompt-row {
@@ -59,64 +75,65 @@
 }
 
 .prompt-user {
-  color: #ff2a36;
+  color: #f55;
 }
 
 .prompt-sep {
-  color: #e8d5d5;
+  color: #aaa;
 }
 
 .prompt-dir {
-  color: #ffb347;
+  color: #ff5;
 }
 
 .prompt-cmd {
-  color: #e8d5d5;
-  margin-left: 6px;
+  color: #fff;
+  margin-left: 8px;
 }
 
 .text {
-  color: #e8d5d5;
+  color: #aaa;
   white-space: pre-wrap;
 }
 
 .highlight {
-  color: #ffb347;
+  color: #fff;
   white-space: pre-wrap;
 }
 
 .error {
-  color: #ff6b6b;
+  color: #f55;
   white-space: pre-wrap;
 }
 
 .folder {
-  color: #7cc4ff;
+  color: #6aa5ff;
   text-decoration: none;
   display: inline-block;
 }
 
 .folder:hover,
 .folder:focus-visible {
-  text-decoration: underline;
+  color: #fff;
+  background: #6aa5ff;
   outline: none;
 }
 
 .file {
-  color: #6e5050;
+  color: #555;
   display: inline-block;
 }
 
 .executable {
-  color: #5ef28a;
+  color: #5f5;
   display: inline-block;
 }
 
 .folder-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 14px;
-  margin: 4px 0;
+  gap: 0 24px;
+  margin: 2px 0;
 }
 
 .input-row {
@@ -133,14 +150,11 @@
   outline: none;
   font-family: inherit;
   font-size: inherit;
-  color: #e8d5d5;
-  caret-color: #ff2a36;
-  margin-left: 6px;
+  line-height: inherit;
+  color: #fff;
+  caret-color: #f55;
+  margin-left: 8px;
   padding: 0;
-}
-
-.cmd-input:focus-visible {
-  outline: none;
 }
 
 .chips-bar {
@@ -151,47 +165,107 @@
   gap: 8px;
   height: 44px;
   padding: 0 16px;
-  background: #120506;
-  border-top: 1px solid #3a0a0f;
-  font-size: 16px;
+  overflow: clip;
+  background: #000;
+  border-top: 2px solid #555;
   box-sizing: border-box;
 }
 
 .chip-label {
-  color: #6e5050;
+  color: #555;
   margin-right: 2px;
 }
 
 .chip {
+  flex: none;
   background: transparent;
-  border: 1px solid #6e0b12;
-  color: #e8d5d5;
+  border: 1px solid #aaa;
+  color: #aaa;
   font-family: inherit;
-  font-size: 15px;
+  font-size: inherit;
   padding: 4px 8px;
   cursor: pointer;
   line-height: 1;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .chip:hover,
 .chip:focus-visible {
-  border-color: #ff2a36;
-  color: #ff2a36;
+  border-color: #ff5;
+  color: #000;
+  background: #ff5;
   outline: none;
 }
 
-.chip-hint {
-  margin-left: auto;
-  color: #6e5050;
-  font-size: 14px;
+/* The power-on screens sit over the shell until they finish or are skipped. */
+.boot {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  padding: 16px 20px;
+  overflow: clip;
+  background: #000;
+  color: #aaa;
+  cursor: pointer;
 }
 
-.sr-only {
+.boot:focus-visible {
+  outline: 2px solid #ff5;
+  outline-offset: -6px;
+}
+
+.boot-line {
+  white-space: pre;
+  min-height: 22px;
+}
+
+.boot-logo {
+  font-size: 24px;
+  line-height: 26px;
+  min-height: 26px;
+}
+
+.boot-hint {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  right: 20px;
+  bottom: 14px;
+  font-size: 16px;
+  color: #555;
+}
+
+.tone-dim {
+  color: #555;
+}
+
+.tone-ok {
+  color: #5f5;
+}
+
+.tone-warn {
+  color: #ff5;
+}
+
+.tone-bright {
+  color: #fff;
+}
+
+.tone-red,
+.tone-logo {
+  color: #f55;
+}
+
+.cursor::after {
+  content: "_";
+  color: #aaa;
+  animation: blink 1s steps(1) infinite;
+}
+
+.boot[data-active="false"] .cursor::after {
+  animation-play-state: paused;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }

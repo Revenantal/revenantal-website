@@ -39,7 +39,7 @@ ffmpeg + Python, run with `pnpm assets:sounds` (`tools/assets/tv_sounds.py`): mo
 
 ## Fonts
 
-Self-hosted through pinned `@fontsource` packages: import the Latin-subset CSS for each weight used (for example `@fontsource/michroma/latin-400.css`). Vite bundles the WOFF2 files with hashed names, so they cache long-term; the CSS uses `font-display: swap`. No Google Fonts requests and no separate subsetting tool. The TV shell and List mode import theirs from the entry; each channel imports its own fonts inside its lazy chunk. Add each new font to the credits when it ships.
+Self-hosted through pinned `@fontsource` packages: import the Latin-subset CSS for each weight used (for example `@fontsource/michroma/latin-400.css`). Vite bundles the WOFF2 files with hashed names, so they cache long-term; the CSS uses `font-display: swap`. No Google Fonts requests and no separate subsetting tool. The TV shell and List mode import theirs from the entry; each channel imports its own fonts inside its lazy chunk. Add each new font to the credits when it ships. A font with no `@fontsource` package may be bundled inside its channel folder instead (the Terminal's VGA font, `src/channels/terminal/fonts/`, with its licence text beside it).
 
 | Font                                | Used by                                       |
 | ----------------------------------- | --------------------------------------------- |
@@ -47,7 +47,8 @@ Self-hosted through pinned `@fontsource` packages: import the Latin-subset CSS f
 | Archivo Black                       | TV Guide, Night Drive                         |
 | Pixelify Sans                       | Revscape                                      |
 | Press Start 2P                      | Side Quest, Night Drive HUD, Status LED signs |
-| VT323                               | Terminal, Status displays                     |
+| VT323                               | Status displays                               |
+| PxPlus IBM VGA 8x16                 | Terminal (bundled with the channel, CC BY-SA) |
 | Bungee                              | Coin Drop, Paid Programming                   |
 | IM Fell English, IM Fell English SC | The Late Show                                 |
 | JetBrains Mono                      | Status readouts                               |

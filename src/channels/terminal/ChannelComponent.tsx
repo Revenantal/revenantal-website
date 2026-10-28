@@ -1,6 +1,7 @@
 import type { JSX, TargetedKeyboardEvent } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import type { ChannelProps } from "../_shared/types";
+import { Boot } from "./Boot";
 import {
   autocomplete,
   executeCommand,
@@ -8,27 +9,12 @@ import {
   type TerminalContext,
 } from "./commands";
 import styles from "./Terminal.module.css";
+import { useKeyClack } from "./use-key-clack";
 
 const MAX_LINES = 200;
 
 function createInitialLines(projects: ChannelProps["projects"]): OutputLine[] {
   return [
-    {
-      id: "boot-1",
-      kind: "system",
-      text: "REVENANTAL BIOS v4.04 · memory check 640K ........ enough",
-    },
-    {
-      id: "boot-2",
-      kind: "system",
-      children: (
-        <span>
-          [ <span className={styles.ok}>OK</span> ] mounting /dev/nvme0n1{"   "}
-          [ <span className={styles.ok}>OK</span> ] waking the servers{"   "}[{" "}
-          <span className={styles.question}>??</span> ] summoning motivation
-        </span>
-      ),
-    },
     {
       id: "logo-banner",
       kind: "system",
@@ -36,13 +22,14 @@ function createInitialLines(projects: ChannelProps["projects"]): OutputLine[] {
         <div className={styles.logo}>
           {"   ▄▄▄▄▄     revenantal.sh\n  █ ▀ ▀ █    "}
           <span className={styles["logo-sub"]}>
-            a directory of things I host. type{" "}
+            a directory of things I host.
           </span>
+          {"\n  █▄▀▄▀▄█    "}
+          <span className={styles["logo-sub"]}>type </span>
           <span className={styles.question}>help</span>
           <span className={styles["logo-sub"]}>
             , or click a command below.
           </span>
-          {"\n  █▄▀▄▀▄█"}
         </div>
       ),
     },
@@ -64,12 +51,15 @@ function createInitialLines(projects: ChannelProps["projects"]): OutputLine[] {
 }
 
 /**
- * CH 03 Terminal: retro phosphor command-line interface.
+ * CH 03 Terminal: a DOS-era boot screen that hands over to a retro command shell.
  *
  * @param props - Channel properties from the TV host.
  * @returns Preact component.
  */
 export function ChannelComponent(props: ChannelProps): JSX.Element {
+  const [booting, setBooting] = useState(!props.reducedMotion);
+  // True when the viewer skipped the boot, so the cursor goes to the input once it ends.
+  const [focusInput, setFocusInput] = useState(false);
   const [cwd, setCwd] = useState<string>("~");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
@@ -80,12 +70,22 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const clack = useKeyClack(props.active, props.play);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [lines]);
+
+  useEffect(() => {
+    if (!booting && focusInput) inputRef.current?.focus();
+  }, [booting, focusInput]);
+
+  const finishBoot = useCallback((focus: boolean) => {
+    setFocusInput(focus);
+    setBooting(false);
+  }, []);
 
   const copyDiscord = async (): Promise<boolean> => {
     if (!props.links.discord) return false;
@@ -129,9 +129,15 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
     setInput("");
   };
 
+  const runChip = (commandStr: string) => {
+    clack({ key: "Enter", ctrlKey: false, metaKey: false, altKey: false });
+    runCommand(commandStr);
+  };
+
   const handleKeyDown = (e: TargetedKeyboardEvent<HTMLInputElement>) => {
     // Keep keys inside terminal input; do not let arrow keys turn the TV dial
     e.stopPropagation();
+    clack(e);
 
     const currentVal = e.currentTarget.value;
 
@@ -231,118 +237,122 @@ export function ChannelComponent(props: ChannelProps): JSX.Element {
   };
 
   const firstProjId = props.projects[0]?.id;
+  // The chip must fit the bar, so a long name is shortened on the button but run in full.
+  const firstProjLabel =
+    firstProjId && firstProjId.length > 12
+      ? `${firstProjId.slice(0, 10)}..`
+      : firstProjId;
 
   return (
-    <div className={styles.root} data-focus-first>
-      {/* Off-screen semantic link directory so projects are always accessible in the DOM */}
-      <nav aria-label="Projects directory" className={styles["sr-only"]}>
-        {props.projects.map((p) => (
-          <a key={p.id} href={p.url} target="_blank" rel="noopener noreferrer">
-            {p.name}
-          </a>
-        ))}
-      </nav>
-
+    <div className={styles.root} data-active={String(props.active)}>
+      {/* The shell is always mounted, so its project links exist; it stays hidden until the boot ends. */}
       <div
-        ref={scrollRef}
-        className={styles.terminal}
-        role="log"
-        aria-live="polite"
+        className={styles.screen}
+        data-booting={booting ? "" : undefined}
+        aria-hidden={booting ? "true" : undefined}
       >
-        {lines.map(renderLine)}
+        <div
+          ref={scrollRef}
+          className={styles.terminal}
+          role="log"
+          aria-live="polite"
+        >
+          {lines.map(renderLine)}
 
-        <div className={styles["input-row"]}>
-          <span className={styles["prompt-user"]}>guest@revenantal</span>
-          <span className={styles["prompt-sep"]}>:</span>
-          <span className={styles["prompt-dir"]}>{cwd}</span>
-          <span className={styles["prompt-sep"]}>$</span>
-          <input
-            ref={inputRef}
-            type="text"
-            className={styles["cmd-input"]}
-            value={input}
-            onInput={(e) => {
-              setInput((e.target as HTMLInputElement).value);
-            }}
-            onKeyDown={handleKeyDown}
-            aria-label="Terminal command"
-            spellcheck={false}
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect="off"
-          />
+          <div className={styles["input-row"]}>
+            <span className={styles["prompt-user"]}>guest@revenantal</span>
+            <span className={styles["prompt-sep"]}>:</span>
+            <span className={styles["prompt-dir"]}>{cwd}</span>
+            <span className={styles["prompt-sep"]}>$</span>
+            <input
+              ref={inputRef}
+              type="text"
+              className={styles["cmd-input"]}
+              value={input}
+              onInput={(e) => {
+                setInput((e.target as HTMLInputElement).value);
+              }}
+              onKeyDown={handleKeyDown}
+              aria-label="Terminal command"
+              spellcheck={false}
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect="off"
+            />
+          </div>
         </div>
-      </div>
 
-      <div className={styles["chips-bar"]}>
-        <span className={styles["chip-label"]}>try:</span>
-        <button
-          type="button"
-          className={styles.chip}
-          onClick={() => {
-            runCommand("help");
-          }}
-        >
-          help
-        </button>
-        <button
-          type="button"
-          className={styles.chip}
-          onClick={() => {
-            runCommand("ls");
-          }}
-        >
-          ls
-        </button>
-        {firstProjId ? (
+        <div className={styles["chips-bar"]}>
+          <span className={styles["chip-label"]}>try:</span>
           <button
             type="button"
             className={styles.chip}
             onClick={() => {
-              runCommand(`open ${firstProjId}`);
+              runChip("help");
             }}
           >
-            open {firstProjId}
+            help
           </button>
-        ) : null}
-        <button
-          type="button"
-          className={styles.chip}
-          onClick={() => {
-            runCommand("servers");
-          }}
-        >
-          servers
-        </button>
-        <button
-          type="button"
-          className={styles.chip}
-          onClick={() => {
-            runCommand("git log");
-          }}
-        >
-          git log
-        </button>
-        <button
-          type="button"
-          className={styles.chip}
-          onClick={() => {
-            runCommand("discord");
-          }}
-        >
-          discord
-        </button>
-        <button
-          type="button"
-          className={styles.chip}
-          onClick={() => {
-            runCommand("credits");
-          }}
-        >
-          credits
-        </button>
-        <span className={styles["chip-hint"]}>tab completes · ↑ history</span>
+          <button
+            type="button"
+            className={styles.chip}
+            onClick={() => {
+              runChip("ls");
+            }}
+          >
+            ls
+          </button>
+          {firstProjId ? (
+            <button
+              type="button"
+              className={styles.chip}
+              onClick={() => {
+                runChip(`open ${firstProjId}`);
+              }}
+            >
+              open {firstProjLabel}
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className={styles.chip}
+            onClick={() => {
+              runChip("servers");
+            }}
+          >
+            servers
+          </button>
+          <button
+            type="button"
+            className={styles.chip}
+            onClick={() => {
+              runChip("git log");
+            }}
+          >
+            git log
+          </button>
+          <button
+            type="button"
+            className={styles.chip}
+            onClick={() => {
+              runChip("discord");
+            }}
+          >
+            discord
+          </button>
+          <button
+            type="button"
+            className={styles.chip}
+            onClick={() => {
+              runChip("credits");
+            }}
+          >
+            credits
+          </button>
+        </div>
       </div>
+
+      {booting ? <Boot active={props.active} onDone={finishBoot} /> : null}
     </div>
   );
 }

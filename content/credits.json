@@ -91,6 +91,16 @@
     "edits": "Latin subset, weight 400"
   },
   {
+    "title": "PxPlus IBM VGA 8x16",
+    "url": "https://int10h.org/oldschool-pc-fonts/",
+    "author": "VileR",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "usedFor": "Terminal channel text",
+    "department": "Typography Department",
+    "edits": "Web font from the Ultimate Oldschool PC Font Pack, used unmodified"
+  },
+  {
     "title": "CRT TV Switches On",
     "url": "https://freesound.org/people/Fission9/sounds/693860/",
     "author": "Fission9",
@@ -179,6 +189,51 @@
     "usedFor": "Credits music",
     "department": "Sound Department",
     "edits": "short fades at the loop join, mono, level-matched, AAC"
+  },
+  {
+    "title": "Single Key Presses on Mechanical Keyboard",
+    "url": "https://freesound.org/people/Xemptful/sounds/660387/",
+    "author": "Xemptful",
+    "license": "CC0 1.0",
+    "usedFor": "Terminal key clicks",
+    "department": "Sound Department",
+    "edits": "four presses cut out, faded, normalised, AAC"
+  },
+  {
+    "title": "Keyboard_Tactile_8",
+    "url": "https://freesound.org/people/StavSounds/sounds/766639/",
+    "author": "StavSounds",
+    "license": "CC0 1.0",
+    "usedFor": "Terminal key click",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "mechanical key hard.wav",
+    "url": "https://freesound.org/people/bigmonmulgrew/sounds/378085/",
+    "author": "bigmonmulgrew",
+    "license": "CC0 1.0",
+    "usedFor": "Terminal key click",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "Single_Key_Stroke_Large_Key",
+    "url": "https://freesound.org/people/Capt.Jack/sounds/813210/",
+    "author": "Capt.Jack",
+    "license": "CC0 1.0",
+    "usedFor": "Terminal Enter and Space",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
+  },
+  {
+    "title": "Keyboard - Press down",
+    "url": "https://freesound.org/people/Foxfire-/sounds/570754/",
+    "author": "Foxfire-",
+    "license": "CC0 1.0",
+    "usedFor": "Terminal Backspace",
+    "department": "Sound Department",
+    "edits": "trimmed, faded, normalised, AAC"
   },
   {
     "title": "Halo main menu music",

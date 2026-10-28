@@ -331,6 +331,15 @@ The owner approved building the TV Guide (tasks 3.4 and 3.5) on 2026-10-19 with 
 - Font is VT323; display profile uses `scan: 1`, `flicker: true`, `glow: 0.7`, `safe: true`.
 - Silent at launch (mains hum and CRT whine carry the channel); mechanical keyboard typing sounds and error beeps may be proposed for approval later.
 
+### CH 03 Terminal: DOS-era boot, VGA font and key sounds (2026-10-28)
+
+The owner widened the approved scope on 2026-10-28 after seeing the first build, with three choices made in the plan review:
+
+- **Boot sequence (about 6 s, skippable):** a BIOS-style self test (memory count-up, device detection) replaces the earlier "mounting / waking / summoning" lines, then a larger loading screen with a block-letter logo and progress bar flips to the prompt. Click or any key skips; reduced motion skips it; it plays on every tune-in. See [the channel specification](../channels/03-terminal.md).
+- **Font:** an authentic IBM VGA text font, **PxPlus IBM VGA 8x16** by VileR (Ultimate Oldschool PC Font Pack, CC BY-SA 4.0), replacing VT323 in this channel. It has no `@fontsource` package, so the unmodified `WebPlus` woff is bundled in `src/channels/terminal/fonts/` with its licence text and credited. The share-alike term covers the font file only, not the site's code. The channel also moves to the VGA text palette on pure black.
+- **Key sounds:** every keypress clicks, using five CC0 Freesound recordings processed by `pnpm assets:terminal` (six clicks, Enter/Space, Backspace; 25 KB). This replaces "silent at launch" and the planned error beep and modem sound, which are not built. Real recordings, as the brief prefers; the owner approves the picks by listening on the real TV.
+- Font size is 20 px (72 columns) rather than the VGA-native 16 px, so text stays legible at the 1280×650 minimum; the owner can change it.
+
 ## Clarifications
 
 - **Pelican version (2026-10-18).** The owner reports Panel 1.0.0-beta38 and is considering a move to v1. Guide collection step by step using the installed panel's Client API documentation. Record redacted real responses before finalizing the agent mapper; recheck them after an upgrade. No direct panel access, API key or upgrade authorization has been supplied. Redacted list/resources responses were subsequently supplied and recorded above.
