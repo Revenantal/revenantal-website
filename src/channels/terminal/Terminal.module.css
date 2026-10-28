@@ -8,12 +8,18 @@
 }
 
 .root {
+  /* One phosphor green in five brightnesses, like a monochrome monitor. */
+  --fg: #33d65a;
+  --bright: #5fff7a;
+  --max: #d2ffdc;
+  --dim: #1f8a38;
+
   position: relative;
   width: 760px;
   height: 570px;
   overflow: clip;
   background: #000;
-  color: #aaa;
+  color: var(--fg);
   font-family: "PxPlus IBM VGA 8x16", ui-monospace, monospace;
   font-size: 20px;
   line-height: 22px;
@@ -44,27 +50,27 @@
 }
 
 .system {
-  color: #555;
+  color: var(--dim);
   white-space: pre-wrap;
 }
 
 .ok {
-  color: #5f5;
+  color: var(--bright);
 }
 
 .question {
-  color: #ff5;
+  color: var(--max);
 }
 
 .logo {
-  color: #f55;
+  color: var(--bright);
   white-space: pre;
   line-height: 22px;
   margin: 4px 0 10px;
 }
 
 .logo-sub {
-  color: #aaa;
+  color: var(--fg);
 }
 
 .prompt-row {
@@ -75,57 +81,57 @@
 }
 
 .prompt-user {
-  color: #f55;
+  color: var(--bright);
 }
 
 .prompt-sep {
-  color: #aaa;
+  color: var(--fg);
 }
 
 .prompt-dir {
-  color: #ff5;
+  color: var(--fg);
 }
 
 .prompt-cmd {
-  color: #fff;
+  color: var(--max);
   margin-left: 8px;
 }
 
 .text {
-  color: #aaa;
+  color: var(--fg);
   white-space: pre-wrap;
 }
 
 .highlight {
-  color: #fff;
+  color: var(--max);
   white-space: pre-wrap;
 }
 
 .error {
-  color: #f55;
+  color: var(--max);
   white-space: pre-wrap;
 }
 
 .folder {
-  color: #6aa5ff;
+  color: var(--bright);
   text-decoration: none;
   display: inline-block;
 }
 
 .folder:hover,
 .folder:focus-visible {
-  color: #fff;
-  background: #6aa5ff;
+  color: #000;
+  background: var(--bright);
   outline: none;
 }
 
 .file {
-  color: #555;
+  color: var(--dim);
   display: inline-block;
 }
 
 .executable {
-  color: #5f5;
+  color: var(--bright);
   display: inline-block;
 }
 
@@ -151,8 +157,8 @@
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
-  color: #fff;
-  caret-color: #f55;
+  color: var(--max);
+  caret-color: var(--bright);
   margin-left: 8px;
   padding: 0;
 }
@@ -167,20 +173,20 @@
   padding: 0 16px;
   overflow: clip;
   background: #000;
-  border-top: 2px solid #555;
+  border-top: 2px solid var(--dim);
   box-sizing: border-box;
 }
 
 .chip-label {
-  color: #555;
+  color: var(--dim);
   margin-right: 2px;
 }
 
 .chip {
   flex: none;
   background: transparent;
-  border: 1px solid #aaa;
-  color: #aaa;
+  border: 1px solid var(--fg);
+  color: var(--fg);
   font-family: inherit;
   font-size: inherit;
   padding: 4px 8px;
@@ -191,9 +197,9 @@
 
 .chip:hover,
 .chip:focus-visible {
-  border-color: #ff5;
+  border-color: var(--bright);
   color: #000;
-  background: #ff5;
+  background: var(--bright);
   outline: none;
 }
 
@@ -205,12 +211,12 @@
   padding: 16px 20px;
   overflow: clip;
   background: #000;
-  color: #aaa;
+  color: var(--fg);
   cursor: pointer;
 }
 
 .boot:focus-visible {
-  outline: 2px solid #ff5;
+  outline: 2px solid var(--bright);
   outline-offset: -6px;
 }
 
@@ -230,33 +236,33 @@
   right: 20px;
   bottom: 14px;
   font-size: 16px;
-  color: #555;
+  color: var(--dim);
 }
 
 .tone-dim {
-  color: #555;
+  color: var(--dim);
 }
 
 .tone-ok {
-  color: #5f5;
+  color: var(--bright);
 }
 
 .tone-warn {
-  color: #ff5;
+  color: var(--max);
 }
 
 .tone-bright {
-  color: #fff;
+  color: var(--max);
 }
 
 .tone-red,
 .tone-logo {
-  color: #f55;
+  color: var(--bright);
 }
 
 .cursor::after {
   content: "_";
-  color: #aaa;
+  color: var(--fg);
   animation: blink 1s steps(1) infinite;
 }
 

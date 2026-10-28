@@ -48,7 +48,7 @@ Unknown commands get a friendly "command not found" with a suggestion.
 
 ## Look
 
-- Pure black background with the VGA text palette: light grey text, white for emphasis and typed commands, bright red prompt and errors, yellow for the path and highlights, green for executables and OK, blue folders.
+- Pure black background and one phosphor green in four brightnesses, like a monochrome monitor (owner request, 2026-10-28): normal `#33d65a` for text, bright `#5fff7a` (the TV's own on-screen green) for the prompt, folders, executables, OK and the logo, near-white green `#d2ffdc` for emphasis, typed commands and errors, and dim `#1f8a38` for files and secondary text. Hover and focus use inverse video (black on bright green).
 - Font: **PxPlus IBM VGA 8x16** by VileR, from the Ultimate Oldschool PC Font Pack (CC BY-SA 4.0), bundled unmodified with the channel in `src/channels/terminal/fonts/` with its licence text, credited in the Typography Department. The `WebPlus` variant is used because the original-DOS set lacks the em dash, ellipsis and curly quotes the output uses. 20 px with 22 px lines gives 72 columns across the content box.
 - Display profile: scan 1, flicker, glow 0.7. `safe: true`.
 

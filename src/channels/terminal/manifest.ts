@@ -17,7 +17,7 @@ export const manifest: ChannelManifest = {
   name: "TERMINAL",
   kind: "directory",
   bg: "#000000",
-  glow: "rgba(255, 85, 85, 0.35)",
+  glow: "rgba(95, 255, 122, 0.35)",
   safe: true,
   display: {
     scan: 1,
