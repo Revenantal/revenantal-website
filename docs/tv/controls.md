@@ -17,6 +17,8 @@ Every control maps to one store action, so mouse, touch, keyboard and URL all be
 | Power LED                             | Click                                                                   | Off: picture collapses, afterglow dot fades over 3.2 s, TV fades out, List mode fades in                                                |
 | Hint note                             | Click, or any channel change                                            | Tape peels, note falls off screen (1.4 s); returns on the next page load                                                                |
 
+While a game channel has captured the keyboard (after its PRESS START), the arrow keys go to the game and the dial keys stand down; Esc, a press outside the picture, tuning away, power-off or a hidden tab hands them back. Volume +/− keep working. See the [host interface](../channels/host-interface.md).
+
 The dial is unnumbered at every viewport size. Its position count and step angle come from the configured channel slots, including blanks; see [dial configuration](dial-configuration.md). No UHF dial.
 
 Do not render numeral buttons, numeral hit zones or their Tab stops. The knob supports click, drag, wheel and arrow keys. The OSD and accessible dial label identify the current channel or NO SIGNAL.

@@ -1,5 +1,11 @@
 import { readFileSync } from "node:fs";
-import { act, cleanup, render } from "@testing-library/preact";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/preact";
 import type { ComponentType } from "preact";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { manifestProblems } from "../manifest-check";
@@ -20,6 +26,11 @@ export type ContractOptions = {
   manifestPath?: string;
   /** A decorative background: the channel may play muted `<video>` elements, and nothing audible. */
   allowMutedVideo?: boolean;
+  /**
+   * Whether the channel takes the keyboard through the shared PRESS START screen. Defaults to
+   * true for `game` channels; a `toy` that captures keys sets it to true.
+   */
+  pressStart?: boolean;
 };
 
 type Channel = ComponentType<ChannelProps>;
@@ -347,6 +358,38 @@ export function checkStopsOnUnmount(Channel: Channel) {
 }
 
 /**
+ * PRESS START: a game never asks for the keyboard on its own. A click on PRESS START requests
+ * capture once; while captured it shows "ESC to release"; when released PRESS START returns.
+ *
+ * @param Channel - The channel component.
+ */
+export function checkPressStart(Channel: Channel) {
+  const props = frozenProps();
+  const { rerender, unmount } = render(<Channel {...props} />);
+  expect(
+    props.requestCapture,
+    "requestCapture() before any click",
+  ).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("button", { name: /press start/i }));
+  expect(
+    props.requestCapture,
+    "requestCapture() after PRESS START",
+  ).toHaveBeenCalledTimes(1);
+
+  rerender(<Channel {...props} captured />);
+  expect(screen.queryByRole("button", { name: /press start/i })).toBeNull();
+  expect(document.body.textContent).toMatch(/ESC to release/);
+  expect(
+    props.requestCapture,
+    "requestCapture() while already captured",
+  ).toHaveBeenCalledTimes(1);
+
+  rerender(<Channel {...props} captured={false} />);
+  expect(screen.getByRole("button", { name: /press start/i })).toBeTruthy();
+  unmount();
+}
+
+/**
  * The shared contract every channel passes. Call it from the channel's own test file (with
  * `// @vitest-environment jsdom`), so `pnpm test:channel <id>` runs it alone.
  *
@@ -377,6 +420,11 @@ export function describeChannelContract(
     if (manifest.kind === "directory" || manifest.kind === "game")
       it("links every project in a new tab", async () => {
         checkProjectLinks(await loadChannel(manifest));
+      });
+
+    if (options.pressStart ?? manifest.kind === "game")
+      it("takes the keyboard only through PRESS START", async () => {
+        checkPressStart(await loadChannel(manifest));
       });
 
     it("uses no global listeners, network, storage or audio of its own", async () => {

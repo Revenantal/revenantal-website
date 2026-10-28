@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { createChannelSave } from "./channel-save";
+import type { SaveStorage } from "./channel-save";
 import { filterFreshData } from "./freshness";
 import { loadLive, loadSite } from "./loaders";
 import { CHANNEL_KEY, POWER_KEY, remember } from "./persistence";
@@ -33,7 +35,7 @@ export type StoreSnapshot = {
 
 /** Injectable boundaries keep storage and network failures testable. */
 export type StoreOptions = {
-  storage?: Pick<Storage, "getItem" | "setItem">;
+  storage?: SaveStorage;
   fetcher?: typeof fetch;
   now?: Date;
   positionCount?: number;
@@ -153,6 +155,9 @@ export function createStore(options: StoreOptions = {}) {
       // Dismissal lasts for this page load only; the note returns on the next load.
       if (!snapshot.hintDismissed) update({ hintDismissed: true });
     },
+    // One channel's save access under `rv-save-<id>`; failures are contained.
+    saveFor: (channelId: string) =>
+      createChannelSave(options.storage, channelId),
     setPerf: (perf: number) => {
       if (Number.isInteger(perf) && perf >= 0 && perf <= 2) update({ perf });
     },

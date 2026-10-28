@@ -24,15 +24,17 @@ function ownsKeys(target: EventTarget | null): boolean {
 
 /**
  * Listens for the TV's keys while the TV is mounted: ↑/→ next channel, ↓/← previous,
- * +/− volume. Text fields, sliders and modified keys keep their own behaviour.
+ * +/− volume. Text fields, sliders and modified keys keep their own behaviour. While a
+ * channel has captured the keyboard the arrows belong to it; volume still works.
  * Lives in the TV input layer, which owns window listeners.
  *
  * @param handlers - Channel and volume commands.
+ * @param captured - Whether the tuned channel holds the keyboard.
  */
-export function useTvKeys(handlers: TvKeyHandlers) {
-  const latestRef = useRef(handlers);
+export function useTvKeys(handlers: TvKeyHandlers, captured = false) {
+  const latestRef = useRef({ handlers, captured });
   useEffect(() => {
-    latestRef.current = handlers;
+    latestRef.current = { handlers, captured };
   });
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -44,14 +46,16 @@ export function useTvKeys(handlers: TvKeyHandlers) {
       )
         return;
       if (ownsKeys(event.target)) return;
-      const channel = CHANNEL_KEYS[event.key];
+      const channel = latestRef.current.captured
+        ? undefined
+        : CHANNEL_KEYS[event.key];
       const volume = VOLUME_KEYS[event.key];
       if (channel !== undefined) {
         event.preventDefault();
-        latestRef.current.channel(channel);
+        latestRef.current.handlers.channel(channel);
       } else if (volume !== undefined) {
         event.preventDefault();
-        latestRef.current.volume(volume);
+        latestRef.current.handlers.volume(volume);
       }
     };
     document.addEventListener("keydown", onKeyDown);

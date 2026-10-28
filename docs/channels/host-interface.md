@@ -127,7 +127,11 @@ The effective `volume` prop is zero when inactive, power is off, SND is off, vol
 
 `requestCapture()` is accepted only for an explicit user activation within the current active glass. It supports games/toys, Status selection and keyboard-driven Rev OS toys without granting global event access. The host keeps Esc, outside clicks, tune-away, power-off and hidden-tab release. `releaseCapture()` is safe to call repeatedly. Focused text inputs keep their own editing keys without needing game capture.
 
-Saves are always scoped to `rv-save-<manifest.id>`. `load(version, parse)` validates the versioned envelope and runs the supplied parser on unknown data, returning null for absent, mismatched, malformed or rejected saves. `store` accepts finite JSON data and returns false for invalid values or blocked/quota-limited storage. `reset` removes only that channel’s save. All storage and parser failures are contained; they never break tuning. Save flushing and capture release are allowed during cleanup of the owned scope; obsolete scopes cannot write after disposal.
+**How capture works.** The TV input layer (`src/tv/controls/capture.ts`) holds the capture state for the shown position and owns the Esc and outside-press listeners, so channels add none. A request is granted only while the channel is the active glass and, where the browser reports it (`navigator.userActivation`), only right after a user gesture; a request from an ended or inactive scope is ignored. While captured, the TV's own arrow keys stand down (volume +/− still work) and `captured` is true. The host never forwards key events: the channel focuses its game surface (`useCaptureFocus`) and handles keys with its own `onKeyDown` there. Capture is dropped on Esc, a pointer press outside the picture, a new tune, power-off, a hidden tab or detuning. `requestCapture` and `releaseCapture` are bound to the position they were handed out for, so an old scope can never take or drop a newer scope's keys.
+
+**PRESS START.** Game channels show the shared `CaptureOverlay` (`channels/_shared/CaptureOverlay.tsx`): a PRESS START button over the picture until `captured` is true, then a small "ESC to release" tag. The button needs a click, Enter or Space. A channel never requests capture on its own.
+
+Saves are always scoped to `rv-save-<manifest.id>`. `load(version, parse)` validates the versioned envelope and runs the supplied parser on unknown data, returning null for absent, mismatched, malformed or rejected saves. `store` accepts finite JSON data and returns false for invalid values or blocked/quota-limited storage. `reset` removes only that channel’s save. The envelope is `{ version, data }`, at most 100,000 characters, and `data` must be finite JSON (no NaN, Infinity, undefined, class instances or cycles). The helper is `src/data/channel-save.ts`; the store hands it out as `saveFor(id)`. All storage and parser failures are contained; they never break tuning. Save flushing and capture release are allowed during cleanup of the owned scope; obsolete scopes cannot write after disposal.
 
 ## Required Verification
 
@@ -140,6 +144,7 @@ During tasks 2.4/2.6 and 3.1, verify:
 - Repeated loop requests create one voice; unknown sound IDs are harmless; music ducking, manual loops, mute/unlock and gain multiplication behave as specified.
 - Tune-away, hidden tabs and power-off pause video and stop every sound, release keys and reject stale callbacks. Media resumes at schedule position.
 - Versioned saves reject malformed values, cannot access another namespace, and handle quota/storage/parser errors.
+- Capture follows the rules above: gesture-only, bound to the live scope, released by Esc, outside press, tune-away, power-off and hidden tab, with the dial keys standing down only while captured (`src/tv/capture.test.tsx`).
 
 Type-check the contract and positive/negative consumer examples under strict TypeScript with `noUncheckedIndexedAccess`. Runtime assertions above remain required when the host is implemented; a type check cannot prove lifecycle cleanup.
 

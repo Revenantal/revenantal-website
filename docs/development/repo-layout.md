@@ -27,7 +27,7 @@ revenantal/
 │  │  └─ effects/          # scanlines, phosphor filter, static, warm-up, profile resolver
 │  ├─ channels/
 │  │  ├─ index.ts          # explicit dial positions: the only channel registry
-│  │  ├─ _shared/          # ChannelProps, input capture, save helper, broadcast player, fixtures
+│  │  ├─ _shared/          # ChannelProps, PRESS START overlay, broadcast player, fixtures
 │  │  ├─ tv-guide/
 │  │  │  ├─ manifest.ts
 │  │  │  ├─ TvGuide.tsx

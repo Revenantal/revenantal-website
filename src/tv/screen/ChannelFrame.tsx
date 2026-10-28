@@ -8,6 +8,7 @@ import {
 import type { ComponentType } from "preact";
 import type {
   ChannelHost,
+  ChannelSave,
   ChannelManifest,
   ChannelProps,
 } from "@channels/_shared/types";
@@ -76,13 +77,32 @@ export function ChannelFrame({
     () => void,
   ];
   const disposedRef = useRef(false);
-  const latestRef = useRef({ active: props.active, onTune, onPowerOff });
+  // Saves stay open while the scope cleans up, so a channel can flush on unmount.
+  const saveOpenRef = useRef(true);
+  const latestRef = useRef({
+    active: props.active,
+    onTune,
+    onPowerOff,
+    requestCapture: props.requestCapture,
+    releaseCapture: props.releaseCapture,
+    save: props.save,
+  });
   useEffect(() => {
-    latestRef.current = { active: props.active, onTune, onPowerOff };
+    latestRef.current = {
+      active: props.active,
+      onTune,
+      onPowerOff,
+      requestCapture: props.requestCapture,
+      releaseCapture: props.releaseCapture,
+      save: props.save,
+    };
   });
   useEffect(
     () => () => {
       disposedRef.current = true;
+      queueMicrotask(() => {
+        saveOpenRef.current = false;
+      });
     },
     [],
   );
@@ -145,6 +165,30 @@ export function ChannelFrame({
     onFocusTaken?.();
   }, [takeFocus, props.active, load.status, onFocusTaken]);
 
+  // Capture and saves for this scope only: no capture unless it is the active glass, no
+  // writes once the scope has ended. Releasing is always allowed and safe to repeat.
+  const input = useMemo(
+    () => ({
+      requestCapture: () => {
+        const latest = latestRef.current;
+        if (!disposedRef.current && latest.active) latest.requestCapture();
+      },
+      releaseCapture: () => {
+        latestRef.current.releaseCapture();
+      },
+      save: {
+        load: <T,>(version: number, parse: (value: unknown) => T | null) =>
+          saveOpenRef.current
+            ? latestRef.current.save.load(version, parse)
+            : null,
+        store: (version: number, value: Parameters<ChannelSave["store"]>[1]) =>
+          saveOpenRef.current && latestRef.current.save.store(version, value),
+        reset: () => saveOpenRef.current && latestRef.current.save.reset(),
+      } satisfies ChannelSave,
+    }),
+    [],
+  );
+
   const host = useMemo<ChannelHost>(
     () => ({
       tune: (id) => {
@@ -191,6 +235,7 @@ export function ChannelFrame({
       <Component
         {...props}
         {...sound}
+        {...input}
         volume={props.active ? props.volume : 0}
         host={host}
       />

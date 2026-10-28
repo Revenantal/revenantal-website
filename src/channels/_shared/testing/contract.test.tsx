@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { ChannelProps } from "../types";
 import {
   checkPausesWhenInactive,
+  checkPressStart,
   checkProjectLinks,
   checkRendersEveryCase,
   checkSideEffects,
@@ -13,6 +14,7 @@ import {
   eagerImports,
 } from "./contract";
 import { FIXTURE_CASES, channelProps } from "./fixtures";
+import { sampleGameManifest } from "./sample/gameManifest";
 import { sampleManifest } from "./sample/manifest";
 
 afterEach(() => {
@@ -22,6 +24,11 @@ afterEach(() => {
 // The reference channel passes the whole contract, exactly as a real channel's test runs it.
 describeChannelContract(sampleManifest, {
   manifestPath: "src/channels/_shared/testing/sample/manifest.ts",
+});
+
+// A game that uses the shared PRESS START screen passes the whole contract too.
+describeChannelContract(sampleGameManifest, {
+  manifestPath: "src/channels/_shared/testing/sample/gameManifest.ts",
 });
 
 const Links = ({ projects }: ChannelProps) => (
@@ -71,6 +78,22 @@ describe("channel contract catches broken channels", () => {
     };
     expect(() => {
       checkRendersEveryCase(NeedsLive);
+    }).toThrow();
+  });
+
+  it("fails a game that grabs the keyboard on its own or has no PRESS START", () => {
+    const Grabs = ({ requestCapture }: ChannelProps) => {
+      useEffect(() => {
+        requestCapture();
+      }, [requestCapture]);
+      return <p>grabbed</p>;
+    };
+    const NoStart = () => <p>no start button</p>;
+    expect(() => {
+      checkPressStart(Grabs);
+    }).toThrow(/before any click/);
+    expect(() => {
+      checkPressStart(NoStart);
     }).toThrow();
   });
 
