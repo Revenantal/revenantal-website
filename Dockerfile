@@ -1,4 +1,4 @@
-FROM caddy:2.11.7-alpine@sha256:d8542f48d34a9cf4e4c11a478865229840e87e4c96ea3f439101f31a5d35f75f
+FROM caddy:2.11.8-alpine@sha256:f6228111e5fafa1a5238258d0858e103f10599b8d1659a146e7726681a002bb9
 
 # The upstream binary carries cap_net_bind_service, which cannot exec under
 # cap-drop ALL with no-new-privileges. Port 8080 needs no capability; a plain
